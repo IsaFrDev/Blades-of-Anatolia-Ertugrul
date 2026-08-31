@@ -1,4 +1,9 @@
-﻿<#
+<#
+  ESKIRGAN — ishlatmang.
+  Bu skript Windows SAPI ni ishlatadi va hamma personajni ayol rus
+  ovozi bilan o'qiydi. O'rniga: python tools/gen_voice.py --lang uz,tr,en
+#>
+<#
 ================================================================================
  gen_voice.ps1 — Cutscene replikalari uchun oldindan WAV ovoz fayllarini yaratadi
 ================================================================================

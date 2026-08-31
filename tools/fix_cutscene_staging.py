@@ -9,10 +9,11 @@ Ishlatish:  python tools/fix_cutscene_staging.py [--check]
 """
 import json, io, os, math, sys, glob
 
-DEFAULT_LEVEL = 'oba_camp'
-KNOWN_LEVELS = ('oba_camp', 'forest_pass', 'aleppo_road')
+DEFAULT_LEVEL = 'oba_valley'
+KNOWN_LEVELS = ('oba_valley', 'oba_camp', 'forest_pass',
+                'aleppo_road', 'sogut_village')
 CAM_CLEAR   = 2.6       # kamera uchun qo'shimcha bo'shliq (m)
-ACTOR_CLEAR = 0.7       # aktyor uchun (yelka kengligi)
+ACTOR_CLEAR = 0.95      # aktyor uchun (yelka kengligi + o'tovlar kattaroq)
 SEG_SAMPLES = 8         # kalitlar orasidagi tekshiruv nuqtalari
 
 
@@ -110,6 +111,35 @@ def process(path, check_only):
                         key['pos'][2] = round(kz + dz / d * (bad * 0.6 + 0.1), 2)
                     fixed += 1
                 break
+
+    # Aktyor kesmalari: ikki kalit orasida chodir ichidan o'tmasin.
+    # Ilgari faqat KAMERA kesmalari tekshirilardi.
+    for actor in scene.get('actors', []):
+        keys = actor.get('keys', [])
+        for i in range(len(keys) - 1):
+            a, b = keys[i]['pos'], keys[i + 1]['pos']
+            for sidx in range(1, SEG_SAMPLES):
+                t = sidx / float(SEG_SAMPLES)
+                x = a[0] + (b[0] - a[0]) * t
+                z = a[2] + (b[2] - a[2]) * t
+                bad, who = worst(props, x, z, ACTOR_CLEAR)
+                if bad > 1e-3:
+                    issues += 1
+                    if not check_only:
+                        px, pz, _ = who
+                        for key in (keys[i], keys[i + 1]):
+                            kx, kz = key['pos'][0], key['pos'][2]
+                            dx, dz = kx - px, kz - pz
+                            d = math.hypot(dx, dz) or 1.0
+                            key['pos'][0] = round(kx + dx / d * (bad * 0.7 + 0.1), 2)
+                            key['pos'][2] = round(kz + dz / d * (bad * 0.7 + 0.1), 2)
+                        # surilgandan keyin uchlar prop ichida qolmasin
+                        for key in (keys[i], keys[i + 1]):
+                            nx, nz = push_out(props, key['pos'][0], key['pos'][2], ACTOR_CLEAR)
+                            key['pos'][0] = round(nx, 2)
+                            key['pos'][2] = round(nz, 2)
+                        fixed += 1
+                    break
 
     if fixed and not check_only:
         io.open(path, 'w', encoding='utf-8', newline='\n').write(

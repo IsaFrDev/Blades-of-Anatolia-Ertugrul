@@ -489,6 +489,34 @@ bo'ylab yuradi va har bosqichda `shots\NN_*.png` saqlaydi.
 Oynani old planga chiqarmaydi, shuning uchun fonda boshqa dastur ishlayotgan
 bo'lsa ham ishlaydi.
 
+## Ovoz — personajga qarab erkak/ayol/bola
+
+Ilgari Windows SAPI ishlatilardi: bu kompyuterda faqat Zira (en) va Irina (ru)
+ovozlari bor, shuning uchun o'zbek va turk matnlari KIRILLGA o'girilib RUS ovozi
+bilan o'qilardi. Natijada talaffuz noto'g'ri edi va **hamma personaj — hatto
+Ertug'rul ham — ayol ovozida gapirardi**.
+
+Endi `tools/gen_voice.py` ishlatiladi:
+
+| Til | Erkak | Ayol | Bola |
+|---|---|---|---|
+| uz | uz-UZ-SardorNeural | uz-UZ-MadinaNeural | Madina, ohang +22 Gts |
+| tr | tr-TR-AhmetNeural | tr-TR-EmelNeural | Emel, ohang +22 Gts |
+| en | en-US-AndrewNeural | en-US-AvaNeural | en-US-AnaNeural (haqiqiy bola ovozi) |
+
+Ovozlar `edge-tts` (Microsoft neural) orqali olinadi — **bepul, API kalit kerak emas**.
+
+`data/voice_cast.json` har personajning rolini va ohangini belgilaydi:
+Ertug'rul bosiq (-8 Gts, -4%), Turgut qalin (-16 Gts), Bamsi shovqinli (+7, +9%),
+No'yon sovuq va sekin (-11, -9%), Ibn Arabiy juda sekin (-13%). Ro'yxatda yo'q
+personajning ohangi uning id sidan determinatsiyalangan tarzda hisoblanadi —
+shunda 40 ta erkak personaj bir xil ovozda gapirmaydi.
+
+**AISHA (aisha.group)** ham qo'llab-quvvatlanadi (`--engine aisha`), lekin
+uning o'zbek TTS sida **faqat bitta ayol ovozi bor (Gulnoza)** va turkcha
+umuman yo'q. Shuning uchun standart engine — edge-tts. Kalitlar repoga
+yozilmaydi, `--aisha-keys <fayl>` orqali beriladi.
+
 ## Demo xarita — "Qayi obasi, vodiy"
 
 `data/levels/oba_valley.json` — kinematik demo xarita, `tools/make_valley_level.py`

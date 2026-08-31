@@ -1,0 +1,48 @@
+{
+  "_izoh": [
+    "Har personajning OVOZ ROLI va ohang sozlamalari.",
+    "role: male | female | boy",
+    "pitch_hz: asosiy chastota siljishi (manfiy = past/qalinroq ovoz)",
+    "rate_pct: nutq tezligi (manfiy = sekinroq)",
+    "Bu yerda ko'rsatilmagan personaj standart 'male' bo'ladi va uning",
+    "ohangi id sidan determinatsiyalangan tarzda hisoblanadi — shunda 40 ta",
+    "erkak personaj bir xil ovozda gapirmaydi."
+  ],
+  "default_role": "male",
+  "actors": {
+    "ertugrul":      { "role": "male",   "pitch_hz":  -8, "rate_pct": -4,  "izoh": "Qahramon — bosiq, o'lchovli" },
+    "turgut":        { "role": "male",   "pitch_hz": -16, "rate_pct": -2,  "izoh": "Eng yirik alp — qalin ovoz" },
+    "bamsi":         { "role": "male",   "pitch_hz":  7, "rate_pct": 9,  "izoh": "Shovqinli, quvnoq" },
+    "dogan":         { "role": "male",   "pitch_hz":  -2, "rate_pct": 2 },
+    "noyan":         { "role": "male",   "pitch_hz": -11, "rate_pct": -9,  "izoh": "Mo'g'ul — sovuq va sekin" },
+    "kopek":         { "role": "male",   "pitch_hz":  3, "rate_pct": 1,  "izoh": "Saroy fitnachisi — silliq" },
+    "suleyman_shah": { "role": "male",   "pitch_hz": -13, "rate_pct": -11, "izoh": "Keksa bey — vazmin" },
+    "gunduz":        { "role": "male",   "pitch_hz":  -5, "rate_pct": -3 },
+    "gundogdu":      { "role": "male",   "pitch_hz":  -7, "rate_pct": -4 },
+    "dundar":        { "role": "male",   "pitch_hz":  4, "rate_pct": 4 },
+    "titus":         { "role": "male",   "pitch_hz":  -6, "rate_pct": -7,  "izoh": "Templar — quruq, rasmiy" },
+    "kayqubad":      { "role": "male",   "pitch_hz":  -9, "rate_pct": -8,  "izoh": "Sulton" },
+    "alauddin":      { "role": "male",   "pitch_hz":  -9, "rate_pct": -8 },
+    "keyhusrev":     { "role": "male",   "pitch_hz":  -3, "rate_pct": -2 },
+    "kaykhusraw":    { "role": "male",   "pitch_hz":  -3, "rate_pct": -2 },
+    "ibn_arabi":     { "role": "male",   "pitch_hz": -10, "rate_pct": -13, "izoh": "Shayx — juda sekin" },
+    "rumi":          { "role": "male",   "pitch_hz":  -8, "rate_pct": -12 },
+    "bektas":        { "role": "male",   "pitch_hz":  -9, "rate_pct": -11 },
+    "ahi_evren":     { "role": "male",   "pitch_hz":  -6, "rate_pct": -6 },
+    "deli_demir":    { "role": "male",   "pitch_hz": -12, "rate_pct": 3,  "izoh": "Temirchi" },
+    "kurdoglu":      { "role": "male",   "pitch_hz":  -4, "rate_pct": -1 },
+    "jallod":        { "role": "male",   "pitch_hz": -15, "rate_pct": -6,  "izoh": "Jallod" },
+    "darugachi":     { "role": "male",   "pitch_hz":  -7, "rate_pct": -5 },
+    "theodoros":     { "role": "male",   "pitch_hz":  2, "rate_pct": -3 },
+    "kosta":         { "role": "male",   "pitch_hz":  -4, "rate_pct": -9,  "izoh": "Keksa" },
+
+    "halime":        { "role": "female", "pitch_hz":  4, "rate_pct": -2,  "izoh": "Halima Sulton" },
+    "hayme_ana":     { "role": "female", "pitch_hz": -11, "rate_pct": -7,  "izoh": "Hayma Ona — keksa ayol" },
+    "gulbahor":      { "role": "female", "pitch_hz":  -8, "rate_pct": -5,  "izoh": "Keksa ayol" },
+    "aykiz":         { "role": "female", "pitch_hz":  7, "rate_pct": 4,  "izoh": "Yosh qiz" },
+
+    "orphan_boy":    { "role": "boy",    "pitch_hz": 26, "rate_pct": 5,  "izoh": "Yetim bola" },
+    "bola":          { "role": "boy",    "pitch_hz": 24, "rate_pct": 6,  "izoh": "Bola" },
+    "tashchi_bola":  { "role": "boy",    "pitch_hz": 22, "rate_pct": 7,  "izoh": "Toshkash bola" }
+  }
+}

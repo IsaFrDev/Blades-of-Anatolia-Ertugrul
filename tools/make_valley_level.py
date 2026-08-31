@@ -33,6 +33,24 @@ def jit(a, b):
     return random.uniform(a, b)
 
 
+# ---------------------------------------------------------------- yo'lak
+# Obaning JANUBIY tomonida kirish yo'lagi ochiq qoladi. Ikki sabab:
+#   1. Haqiqiy obada kirish og'zi bo'ladi — chodirlar halqasi uzilgan
+#   2. Cutscene sahnalashtirishi aynan shu sektorda kechadi (o'lchandi:
+#      burchak +-40 gradus, radius 15-46). Bu yerda to'qnashuvchi rekvizit
+#      qo'ysak, aktyorlar chodir ichidan o'tib ketadi.
+CORR_HALF_DEG = 42.0
+CORR_R0, CORR_R1 = 9.0, 48.0
+
+
+def in_corridor(x, z):
+    r = math.hypot(x, z)
+    if r < CORR_R0 or r > CORR_R1:
+        return False
+    ang = abs(math.degrees(math.atan2(x, z)))     # +Z o'qidan burchak
+    return ang <= CORR_HALF_DEG
+
+
 FELT   = (0.70, 0.55, 0.40)     # kigiz — iliq oq
 FELT_D = (0.58, 0.44, 0.32)
 WOOD   = (0.50, 0.35, 0.24)
@@ -68,6 +86,8 @@ for ri, (rad, cnt) in enumerate(ring):
         else:
             mesh = SMALL_C if (i % 2) else SMALL_O
             sc = jit(4.8, 6.2)
+        if in_corridor(x, z):
+            continue                      # kirish og'zi ochiq qoladi
         t = FELT if (i % 2) else FELT_D
         P(mesh, x, z, yaw + jit(-8, 8), sc,
           (t[0] * jit(0.92, 1.06), t[1] * jit(0.92, 1.06), t[2] * jit(0.92, 1.06)),
@@ -76,6 +96,8 @@ for ri, (rad, cnt) in enumerate(ring):
 # ---------------------------------------------------------------- gulxanlar
 fires = [(0.0, 6.0), (-16.0, 14.0), (17.0, 12.0), (-19.0, -12.0), (18.0, -14.0)]
 for (fx, fz) in fires:
+    if in_corridor(fx, fz):
+        continue
     P(NAT + "campfire_stones.obj", fx, fz, jit(0, 360), 2.9, (0.46, 0.44, 0.42))
     P(NAT + "campfire_logs.obj",   fx, fz, jit(0, 360), 2.6, (0.42, 0.28, 0.18))
     for k in range(3):
@@ -87,11 +109,11 @@ for (fx, fz) in fires:
 
 # ---------------------------------------------------------------- darvoza va devor
 # Janubda kirish darvozasi — video shu yerdan boshlanadi
-P(TOWN + "fence-gate.obj", 0.0, 44.0, 0.0, 5.2, WOOD_L, True, 2.2)
-P(TOWN + "pillar-wood.obj", -3.4, 44.0, 0.0, 4.6, WOOD, True, 0.7)
-P(TOWN + "pillar-wood.obj",  3.4, 44.0, 0.0, 4.6, WOOD, True, 0.7)
-P(TOWN + "banner-green.obj", -3.4, 43.2, 0.0, 3.6, (0.26, 0.46, 0.34))
-P(TOWN + "banner-green.obj",  3.4, 43.2, 0.0, 3.6, (0.26, 0.46, 0.34))
+# Darvoza YO'LAKDAN TASHQARIDA — ikki ustun keng ochiq turadi, o'rtasi bo'sh.
+P(TOWN + "pillar-wood.obj", -12.0, 49.5, 0.0, 5.4, WOOD, True, 0.8)
+P(TOWN + "pillar-wood.obj",  12.0, 49.5, 0.0, 5.4, WOOD, True, 0.8)
+P(TOWN + "banner-green.obj", -12.0, 48.6, 0.0, 4.0, (0.26, 0.46, 0.34))
+P(TOWN + "banner-green.obj",  12.0, 48.6, 0.0, 4.0, (0.26, 0.46, 0.34))
 
 # Yog'och panjara — darvozadan ikki tomonga yoy bo'lib ketadi
 for side in (-1, 1):
@@ -99,19 +121,23 @@ for side in (-1, 1):
         a = math.radians(90 - side * (10 + i * 7.0))
         x, z = math.cos(a) * 44.5, math.sin(a) * 44.5
         yaw = math.degrees(a) + 90
+        if in_corridor(x, z):
+            continue
         P(TOWN + "fence.obj", x, z, yaw, 4.2, WOOD, True, 1.5)
 
 # ---------------------------------------------------------------- turmush
 carts = [(-11.0, 26.0, 40), (13.0, 27.0, -35), (-26.0, 4.0, 95), (27.0, -3.0, -80)]
 for (x, z, yw) in carts:
+    if in_corridor(x, z):
+        continue
     P(TOWN + "cart.obj", x, z, yw, 3.4, WOOD_L, True, 1.4)
 P(TOWN + "cart-high.obj", -21.0, 20.0, 20, 3.2, WOOD, True, 1.4)
 
-for i, (x, z) in enumerate([(-8.0, 18.0), (9.0, 19.0), (-14.0, -20.0), (15.0, -19.0)]):
+for i, (x, z) in enumerate([(-22.0, 18.0), (23.0, 19.0), (-14.0, -20.0), (15.0, -19.0)]):
     P(NAT + "log_stack.obj", x, z, jit(0, 360), 2.4, WOOD)
     P(NAT + "log_stackLarge.obj", x + jit(-3, 3), z + jit(-3, 3), jit(0, 360), 2.0, WOOD_L)
 
-for i, (x, z) in enumerate([(-5.0, 30.0), (6.0, 31.0)]):
+for i, (x, z) in enumerate([(-24.0, 30.0), (25.0, 31.0)]):
     P(TOWN + "stall-red.obj" if i % 2 else TOWN + "stall-green.obj",
       x, z, 180 + jit(-20, 20), 3.0, (0.55, 0.34, 0.28) if i % 2 else (0.34, 0.48, 0.34),
       True, 1.4)
@@ -119,7 +145,7 @@ for i, (x, z) in enumerate([(-5.0, 30.0), (6.0, 31.0)]):
     P(TOWN + "stall-stool.obj", x - 1.8, z + 1.6, jit(0, 360), 2.0, WOOD)
 
 # obelisk — markaziy nishon, uzoqdan ko'rinadi
-P(NAT + "statue_obelisk.obj", 0.0, 0.0, 0.0, 4.6, (0.52, 0.50, 0.46), True, 1.2)
+P(NAT + "statue_obelisk.obj", -6.5, -4.0, 0.0, 4.6, (0.52, 0.50, 0.46), True, 1.2)
 
 # ---------------------------------------------------------------- katta toshlar
 for i in range(26):
@@ -127,7 +153,10 @@ for i in range(26):
     rad = jit(46.0, 92.0)
     mesh = random.choice([NAT + "rock_largeA.obj", NAT + "rock_largeB.obj",
                           NAT + "rock_largeC.obj"])
-    P(mesh, math.cos(a) * rad, math.sin(a) * rad, jit(0, 360), jit(3.2, 6.4),
+    rx, rz = math.cos(a) * rad, math.sin(a) * rad
+    if in_corridor(rx, rz):
+        continue
+    P(mesh, rx, rz, jit(0, 360), jit(3.2, 6.4),
       (jit(0.44, 0.56), jit(0.42, 0.52), jit(0.40, 0.48)), True, 2.2)
 
 # ---------------------------------------------------------------- scatter
@@ -152,23 +181,23 @@ scatter = [
         "meshes": [NAT + "plant_bushLarge.obj", NAT + "plant_bushDetailed.obj",
                    NAT + "plant_bush.obj", NAT + "plant_bushSmall.obj"],
         "count": 240, "min_radius": 14, "max_radius": 64,
-        "scale_min": 1.6, "scale_max": 3.4,
+        "scale_min": 1.1, "scale_max": 2.3,
         "tint": [0.38, 0.46, 0.26], "tint_jitter": 0.18,
         "collide": False, "radius": 0.6, "min_gap": 1.6, "min_slope_y": 0.4,
     },
     {   # o't — eng zich qatlam, yerni jonlantiradi
         "meshes": [NAT + "grass.obj", NAT + "grass_large.obj",
                    NAT + "grass_leafs.obj", NAT + "grass_leafsLarge.obj"],
-        "count": 620, "min_radius": 8, "max_radius": 78,
-        "scale_min": 1.4, "scale_max": 3.0,
+        "count": 700, "min_radius": 8, "max_radius": 78,
+        "scale_min": 0.7, "scale_max": 1.5,
         "tint": [0.46, 0.50, 0.26], "tint_jitter": 0.22,
         "collide": False, "radius": 0.3, "min_gap": 0.9, "min_slope_y": 0.35,
     },
     {   # gullar — kichik rang urg'usi
         "meshes": [NAT + "flower_yellowA.obj", NAT + "flower_redA.obj",
                    NAT + "flower_purpleA.obj"],
-        "count": 170, "min_radius": 10, "max_radius": 58,
-        "scale_min": 1.4, "scale_max": 2.4,
+        "count": 200, "min_radius": 10, "max_radius": 58,
+        "scale_min": 0.8, "scale_max": 1.4,
         "tint": [0.92, 0.82, 0.44], "tint_jitter": 0.30,
         "collide": False, "radius": 0.25, "min_gap": 1.1, "min_slope_y": 0.35,
     },
