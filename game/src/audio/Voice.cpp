@@ -20,6 +20,7 @@
 #include <sapi.h>
 
 #include "ertugrul/audio/Voice.h"
+#include <cstdio>
 #include "ertugrul/audio/Audio.h"
 
 #include <atomic>
@@ -482,7 +483,20 @@ float VoiceBank::speak(const std::string& lineId, const std::string& utf8Text,
         }
     }
 
-    // --- 2) SAPI (TTS) -----------------------------------------------------
+    // --- 2) SAPI (TTS) — ZAXIRA YO'L -------------------------------------
+    // Barcha replikalar uchun oldindan yozilgan WAV bor (912 ta: 304 x 3 til),
+    // shuning uchun bu yerga TUSHMASLIK kerak. Tushdi degani — WAV yo'q yoki
+    // buzuq. SAPI esa noto'g'ri ovoz beradi (bu mashinada faqat rus/ingliz
+    // ayol ovozi bor), shuning uchun buni JIM o'tkazib yubormaymiz.
+    {
+        static bool warned = false;
+        if (!warned) {
+            warned = true;
+            std::printf("[Ovoz] OGOHLANTIRISH: '%s' uchun WAV topilmadi -> SAPI.\n"
+                        "       Tuzatish: python tools/gen_voice.py --lang uz,tr,en\n",
+                        lineId.c_str());
+        }
+    }
     if (S.sapiOk.load() != 0) {
         std::wstring w = widen(utf8Text);
         if (!w.empty()) {

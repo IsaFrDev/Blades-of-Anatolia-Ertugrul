@@ -506,6 +506,21 @@ Endi `tools/gen_voice.py` ishlatiladi:
 
 Ovozlar `edge-tts` (Microsoft neural) orqali olinadi — **bepul, API kalit kerak emas**.
 
+**Tarmoq kerak emas.** Ovozlar bir marta yaratilib `assets/audio/vo/<til>/`
+ga WAV qilib yoziladi va o'yin faqat shu fayllarni diskdan o'qiydi.
+edge-tts yoki AISHA FAQAT generatsiya paytida kerak, o'yin ishlaganda emas.
+
+| Til | Fayl | Davomiylik |
+|---|---|---|
+| uz | 304 | 24.6 daqiqa |
+| tr | 304 | 28.1 daqiqa |
+| en | 304 | 18.5 daqiqa |
+
+Jami 912 fayl, 71 daqiqa, 198 MB (24 kGts mono 16-bit). Tekshirildi: 0 nosoz
+fayl, uchala tilda ham SAPI zaxira yo'liga hech qachon tushmaydi.
+Agar biror WAV yo'qolsa, o'yin konsolda ochiq ogohlantirish beradi —
+jimgina noto'g'ri ovoz bilan o'qimaydi.
+
 `data/voice_cast.json` har personajning rolini va ohangini belgilaydi:
 Ertug'rul bosiq (-8 Gts, -4%), Turgut qalin (-16 Gts), Bamsi shovqinli (+7, +9%),
 No'yon sovuq va sekin (-11, -9%), Ibn Arabiy juda sekin (-13%). Ro'yxatda yo'q
