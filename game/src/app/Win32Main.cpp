@@ -26,6 +26,7 @@ namespace {
 bool  g_running   = true;
 bool  g_mouseLook = false;
 bool  g_hasFocus  = true;
+float g_filmOrbit = 0.0f;   // film rejimida kamera aylanish tezligi (grad/s)
 HWND  g_hwnd      = nullptr;
 
 // Sichqonchani oyna markaziga qaytarib, kamera uchun delta olamiz
@@ -51,8 +52,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
     case WM_CLOSE:
     case WM_DESTROY:
         g_running = false;
-        std::printf("[chiqish] oyna yopildi (WM_CLOSE/WM_DESTROY)
-");
+        std::printf("[chiqish] oyna yopildi (WM_CLOSE/WM_DESTROY)\n");
         return 0;
 
     case WM_SIZE:
@@ -100,8 +100,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
     case WM_KEYDOWN:
         if (wp == VK_ESCAPE || wp < 256) in.onKey((int)wp, true);
         if (wp == 'Q' && (GetKeyState(VK_CONTROL) & 0x8000)) {
-            g_running = false; std::printf("[chiqish] Ctrl+Q
-"); }
+            g_running = false; std::printf("[chiqish] Ctrl+Q\n"); }
         return 0;
 
     case WM_KEYUP:
@@ -145,6 +144,9 @@ struct Args {
     bool check   = false;
     std::string shotsDir;      // --shots <papka>: skriptlangan sayohat + PNG saqlash
     bool locoTour = false;     // --loco: yurish mexanikasi sayohati
+    std::string filmDir;       // --film <papka>: video uchun kadr yozish
+    float filmSeconds = 0.0f;  // --filmlen <s>
+    int   filmPart = 0;        // --filmpart 1 (daraja) yoki 2 (jang)
 };
 
 Args parseArgs(int argc, char** argv) {
@@ -165,6 +167,9 @@ Args parseArgs(int argc, char** argv) {
         else if (s == "--check")                 a.check            = true;
         else if (s == "--shots")                 a.shotsDir         = next("shots");
         else if (s == "--loco")                  a.locoTour         = true;
+        else if (s == "--film")                  a.filmDir          = next("film");
+        else if (s == "--filmlen")               a.filmSeconds      = (float)std::atof(next("90").c_str());
+        else if (s == "--filmpart")              a.filmPart         = std::atoi(next("1").c_str());
         else if (s == "--level")                 a.cfg.startLevel   = next("sogut_village");
         else if (s == "--help" || s == "-h") {
             std::printf("Ertugrul 3D\n"
@@ -356,6 +361,93 @@ const TourStep kTourCombat[] = {
     { 54.0f, "53_end.png",          17 },
 };
 
+// ---------------------------------------------------------------------------
+//  FILM SSENARIYSI — loyiha videosi uchun
+//  Vaqt QAT'IY qadam bilan yuradi (1/30 s), shuning uchun natija har safar
+//  bir xil chiqadi va kadr chastotasiga bog'liq emas.
+// ---------------------------------------------------------------------------
+struct FilmStep { float at; int action; };
+
+// 1-qism: daraja, harakat, parkur (sogut_village)
+const FilmStep kFilm1[] = {
+    {  0.0f, 75 }, {  0.1f, 76 },   // yuqoridan keng plan + sekin aylanish
+    {  9.0f, 70 },                  // kran planiga tushamiz
+    { 13.0f, 78 },                  // aylanish to'xtaydi
+    { 14.0f, 74 }, { 14.2f, 36 },   // standart plan, Alt — past profil yurish
+    { 19.0f, 71 },                  // o'rta plan
+    { 20.0f, 30 },                  // Alt qo'yiladi -> yugurish
+    { 25.0f, 73 },                  // past burchak — sprint qahramonona ko'rinsin
+    { 26.0f, 31 },                  // Shift -> sprint
+    { 31.0f, 34 },                  // W+D -> yoy va bank
+    { 35.0f, 74 },
+    { 36.0f, 67 },                  // spawn ga qaytish
+    { 37.0f, 15 },                  // free-run: parkur
+    { 42.0f, 71 },
+    { 45.0f, 67 }, { 46.0f, 15 },   // yana parkur
+    { 51.0f, 73 },
+    { 54.0f, 67 }, { 55.0f, 30 },   // yugurish
+    { 59.0f, 32 },                  // W qo'yiladi -> run-out
+    { 61.0f, 72 },                  // yaqin plan — to'xtash
+    { 63.0f, 37 },                  // cho'kkalab yurish
+    { 68.0f, 64 }, { 68.2f, 74 },
+    { 70.0f, 16 },                  // Bilge Ko'z
+    { 74.0f, 70 }, { 74.2f, 76 },   // kran + aylanish
+    { 80.0f, 78 }, { 80.2f, 67 }, { 80.4f, 15 },
+    { 86.0f, 17 },
+};
+
+// 2-qism: jang, kamon, yakunlovchi zarba, o'lim va qayta tug'ilish (EP003)
+const FilmStep kFilm2[] = {
+    {  4.0f, 18 },                  // cutscene o'tkazib yuboriladi
+    {  5.0f, 70 },                  // keng plan — jang maydoni ko'rinsin
+    {  8.0f, 71 }, {  8.5f, 38 },   // o'rta plan, kamon tortiladi
+    { 12.0f, 39 },                  // o'q otiladi
+    { 14.0f, 72 }, { 14.5f, 38 },   // yaqin plan — tortish va titrash ko'rinsin
+    { 18.0f, 39 },
+    { 20.0f, 71 }, { 20.5f, 38 },
+    { 24.0f, 39 },
+    { 26.0f, 73 },                  // past burchak — qilich jangi
+    { 27.0f, 19 },
+    { 30.0f, 19 },
+    { 33.0f, 20 },                  // oldinga yurib hujum
+    { 37.0f, 17 }, { 37.2f, 74 },   // W ni bo'shatish SHART
+    { 38.0f, 19 },
+    { 41.0f, 65 },                  // parry
+    { 44.0f, 19 },
+    { 47.0f, 72 },                  // yaqin plan
+    { 48.0f, 19 },
+    { 52.0f, 20 },
+    { 56.0f, 17 }, { 56.2f, 73 },
+    { 57.0f, 19 },
+    { 61.0f, 19 },
+    { 65.0f, 19 },
+    { 70.0f, 19 },
+    { 75.0f, 17 },
+};
+
+// 3-qism: o'lim va nazorat nuqtasidan qayta tug'ilish.
+// DIQQAT: halokatdan KEYIN hech qanday kirish yuborilmaydi — aks holda
+// LMB bosishlari yakuniy ekranda tanlovni surib yuboradi va o'yin
+// "Bosh menyuga" ni tanlab qo'yadi.
+const FilmStep kFilm3[] = {
+    {  3.0f, 18 },                  // cutscene o'tkazib yuboriladi
+    {  4.0f, 73 },                  // past burchak
+    {  7.0f, 19 },
+    { 10.0f, 19 },
+    { 13.0f, 20 },                  // oldinga yurib hujum
+    { 17.0f, 17 }, { 17.2f, 72 },   // W ni bo'shatish SHART, yaqin plan
+    { 18.0f, 19 },
+    { 22.0f, 19 },
+    { 26.0f, 74 }, { 26.2f, 19 },
+    { 30.0f, 19 },
+    { 33.0f, 17 },                  // OXIRGI kirish — halokat kutiladi
+    { 45.0f, 21 },                  // nazorat nuqtasidan qayta urinish
+    { 46.0f, 70 },                  // keng plan — qayta tug'ilish ko'rinsin
+    { 50.0f, 73 }, { 50.2f, 19 },
+    { 54.0f, 19 },
+    { 58.0f, 17 },
+};
+
 void tourApply(int action) {
     ert::MenuSystem& menu = ert::MenuSystem::get();
     switch (action) {
@@ -389,6 +481,63 @@ void tourApply(int action) {
             in.onKey(kb.key(ert::Action::Run),         true);
             in.onKey(kb.key(ert::Action::ParkourUp),   true);
             break;   // muzlatishni OCHIQ qoldiramiz — tugmalar bosilgan turishi kerak
+        }
+    case 60:     // xarita ko'rinishi: kamera sekin aylanadi
+        g_filmOrbit = 26.0f;   // gradus/s
+        break;
+    case 61:
+        g_filmOrbit = 0.0f;
+        break;
+    // --- Kinematik kamera (film uchun) ---
+    case 70: ert::App::get().filmCamera(26.0f, 16.0f); break;   // keng kran plani
+    case 71: ert::App::get().filmCamera(10.0f,  7.0f); break;   // o'rta plan
+    case 72: ert::App::get().filmCamera( 4.0f,  4.2f); break;   // yaqin plan
+    case 73: ert::App::get().filmCamera(-6.0f,  5.6f); break;   // past burchak (qahramonlik)
+    case 74: ert::App::get().filmCamera(14.0f,  5.4f); break;   // standart uchinchi shaxs
+    case 75: ert::App::get().filmCamera(42.0f, 22.0f); break;   // yuqoridan — xarita ko'rinishi
+    case 76: g_filmOrbit =  16.0f; break;                       // sekin aylanish
+    case 77: g_filmOrbit = -11.0f; break;                       // teskari aylanish
+    case 78: g_filmOrbit =   0.0f; break;
+
+    case 67: {   // spawn nuqtasiga qaytish — segmentlar orasida
+            ert::Input& in = ert::Input::get();
+            for (int vk = 0; vk < 256; ++vk) in.onKey(vk, false);
+            ert::App::get().respawnHere();
+            in.setFrozen(false);
+            break;
+        }
+    case 66: {   // D ni bosish — yoy bo'ylab burilish (qolganlari saqlanadi)
+            ert::Input& in = ert::Input::get();
+            in.setFrozen(false);
+            in.onKey(ert::Bindings::get().key(ert::Action::MoveRight), true);
+            break;
+        }
+    case 62: {   // faqat oldinga (D qo'yiladi)
+            ert::Input& in = ert::Input::get();
+            in.setFrozen(false);
+            in.onKey(ert::Bindings::get().key(ert::Action::MoveRight), false);
+            break;
+        }
+    case 63: {   // parkur tugmasi qo'yib yuboriladi
+            ert::Input& in = ert::Input::get();
+            in.setFrozen(false);
+            in.onKey(ert::Bindings::get().key(ert::Action::ParkourUp), false);
+            break;
+        }
+    case 64: {   // cho'kkalashdan chiqish
+            ert::Input& in = ert::Input::get();
+            const ert::Bindings& kb = ert::Bindings::get();
+            in.setFrozen(false);
+            in.onKey(kb.key(ert::Action::Crouch), true);
+            in.onKey(kb.key(ert::Action::Crouch), false);
+            break;
+        }
+    case 65: {   // blok / parry
+            ert::Input& in = ert::Input::get();
+            const int vk = ert::Bindings::get().key(ert::Action::Parry);
+            in.setFrozen(false);
+            in.onKey(vk, true); in.onKey(vk, false);
+            break;
         }
     case 38: {   // kamonni tortish (G ushlash)
             ert::Input& in = ert::Input::get();
@@ -643,6 +792,25 @@ int main(int argc, char** argv) {
     bool cursorHidden = false;
     float tourTime = 0.0f;
     size_t tourIdx = 0;
+    // --- FILM rejimi: qat'iy qadam bilan kadr yozish ---
+    const bool  filmMode  = !args.filmDir.empty();
+    const FilmStep* film  = (args.filmPart == 3) ? kFilm3
+                          : ((args.filmPart == 2) ? kFilm2 : kFilm1);
+    const size_t filmCount = (args.filmPart == 3)
+                           ? sizeof(kFilm3) / sizeof(kFilm3[0])
+                           : ((args.filmPart == 2) ? sizeof(kFilm2) / sizeof(kFilm2[0])
+                                                   : sizeof(kFilm1) / sizeof(kFilm1[0]));
+    const float filmDt    = 1.0f / 30.0f;
+    const float filmLen   = (args.filmSeconds > 1.0f) ? args.filmSeconds : 88.0f;
+    size_t filmIdx = 0;
+    int    filmFrame = 0;
+    float  filmTime = 0.0f;
+    if (filmMode) {
+        CreateDirectoryA(args.filmDir.c_str(), nullptr);
+        std::printf("[film] %d-qism, %.0f s, 30 k/s -> %s\n",
+                    (args.filmPart >= 2) ? args.filmPart : 1, filmLen, args.filmDir.c_str());
+    }
+
     const bool locoTour    = args.locoTour && !args.cfg.startLevel.empty();
     const bool parkourTour = !locoTour && !args.cfg.startLevel.empty();
     const bool combatTour  = !locoTour && !parkourTour && !args.cfg.startEpisode.empty();
@@ -666,8 +834,7 @@ int main(int argc, char** argv) {
         MSG msg;
         while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) {
             if (msg.message == WM_QUIT) { g_running = false;
-                std::printf("[chiqish] WM_QUIT
-"); break; }
+                std::printf("[chiqish] WM_QUIT\n"); break; }
             TranslateMessage(&msg);
             DispatchMessageW(&msg);
         }
@@ -700,9 +867,37 @@ int main(int argc, char** argv) {
         prev = now;
         if (dt > 0.25f) dt = 1.0f / 60.0f;   // debugger/oyna sudralishi
 
+        // FILM: haqiqiy vaqt e'tiborsiz — qat'iy 1/30 s qadam. Shunda video
+        // silliq chiqadi va natija mashinaning tezligiga bog'liq bo'lmaydi.
+        if (filmMode) {
+            dt = filmDt;
+            while (filmIdx < filmCount && filmTime >= film[filmIdx].at) {
+                tourApply(film[filmIdx].action);
+                ++filmIdx;
+            }
+            if (g_filmOrbit != 0.0f) ert::App::get().nudgeCamYaw(g_filmOrbit * filmDt);
+            // 2-qism — uzun jang: o'yinchi halok bo'lmasin (faqat trailer uchun).
+            // 3-qism ataylab halokat va qayta tug'ilishni ko'rsatadi, unga tegmaymiz.
+            if (args.filmPart == 2) ert::App::get().filmSustain(0.42f);
+            filmTime += filmDt;
+        }
+
         ert::App::get().update(dt);
         ert::App::get().render();
         SwapBuffers(hdc);
+
+        if (filmMode) {
+            char fp[512];
+            std::snprintf(fp, sizeof(fp), "%s/f%05d.jpg", args.filmDir.c_str(), filmFrame);
+            ert::App::get().captureFrameJpeg(fp, 90);
+            ++filmFrame;
+            if ((filmFrame % 150) == 0)
+                std::printf("[film] %d kadr (%.1f s)\n", filmFrame, filmTime);
+            if (filmTime >= filmLen) {
+                std::printf("[film] tugadi: %d kadr\n", filmFrame);
+                g_running = false;
+            }
+        }
 
         // --shots: belgilangan lahzalarda kadrni saqlaymiz
         if (tourCount > 0) {
@@ -727,3 +922,11 @@ int main(int argc, char** argv) {
     }
 
     if (cursorHidden) ShowCursor(TRUE);
+    ert::App::get().shutdown();
+    wglMakeCurrent(nullptr, nullptr);
+    wglDeleteContext(glrc);
+    ReleaseDC(g_hwnd, hdc);
+    DestroyWindow(g_hwnd);
+    return 0;
+}
+

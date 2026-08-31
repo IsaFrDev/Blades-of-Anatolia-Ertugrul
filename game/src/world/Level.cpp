@@ -396,6 +396,23 @@ void Level::applyTimeOfDay(const std::string& tod, const std::string& weather) {
             s.ambient[c] = amb[c];     s.fogColor[c] = fog[c];
         }
         s.fogStart = 45.0f; s.fogEnd = 205.0f;
+    } else if (t == "golden" || t == "oltin") {
+        // OLTIN SOAT — demo xarita uchun. dusk dan farqi: quyosh ufqdan biroz
+        // yuqoriroq (soyalar uzun, lekin yer qorayib ketmaydi) va MUHIT
+        // yorug'ligi ancha kuchli — aks holda oba maydonining tuprog'i qop-qora
+        // bo'lib qolardi.
+        const float horizon[3] = { 1.00f, 0.72f, 0.44f };
+        const float zenith [3] = { 0.30f, 0.44f, 0.70f };
+        const float sun    [3] = { -0.55f, 0.34f, -0.46f };
+        const float sunC   [3] = { 1.00f, 0.86f, 0.64f };
+        const float amb    [3] = { 0.46f, 0.43f, 0.44f };
+        const float fog    [3] = { 0.88f, 0.70f, 0.54f };
+        for (int c = 0; c < 3; ++c) {
+            s.horizon[c] = horizon[c]; s.zenith[c] = zenith[c];
+            s.sunDir[c]  = sun[c];     s.sunColor[c] = sunC[c];
+            s.ambient[c] = amb[c];     s.fogColor[c] = fog[c];
+        }
+        s.fogStart = 72.0f; s.fogEnd = 300.0f;
     } else if (t == "night" || t == "tun") {
         // Tunda ancha qorong'i va ko'kish; "quyosh" o'rnida oy
         const float horizon[3] = { 0.09f, 0.12f, 0.22f };

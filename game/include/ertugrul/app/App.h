@@ -53,6 +53,12 @@ public:
     void enterLevel(const std::string& levelId);
     // Skrinshot sayohati uchun: kamerani burish (joyida burilishni sinash)
     void nudgeCamYaw(float deltaDeg);
+    // Film uchun: kamera qiyaligi va masofasi (manfiy = o'zgarmasin)
+    void filmCamera(float pitchDeg, float dist);
+    // Joriy darajada spawn nuqtasiga qaytish
+    void respawnHere();
+    // Film rejimi: sog'liqni ushlab turish (faqat yozib olishda)
+    void filmSustain(float minPct);
     void returnToMenu();
 
     const AppConfig& config() const;
@@ -65,6 +71,9 @@ public:
     const std::string& lastEpisode() const;
     // Kadr buferini PNG ga saqlaydi (GDI+ orqali). Avtomatlashtirish va nosozlik izlash uchun.
     bool captureScreenshot(const std::string& pngPath) const;
+    // Video uchun: kadrni JPEG qilib saqlaydi (PNG dan ~12x kichik).
+    // quality 1..100. Uzun yozuvda disk hajmi hal qiluvchi ahamiyatga ega.
+    bool captureFrameJpeg(const std::string& jpgPath, int quality = 88) const;
     bool saveConfig(const std::string& path) const;
     bool loadConfig(const std::string& path);
 

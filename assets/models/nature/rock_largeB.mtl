@@ -7,5 +7,5 @@ newmtl _defaultMat
 Kd 1 1 1
 
 newmtl grass
-Kd 0.172549 0.8470588 0.7215686
+Kd 0.721569 0.847059 0.172549
 

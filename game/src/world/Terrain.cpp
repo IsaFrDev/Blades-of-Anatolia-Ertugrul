@@ -282,15 +282,20 @@ bool Terrain::build(int gridN, float worldSize, uint32_t seed, float hillHeight,
             const float d = std::sqrt(wx * wx + wz * wz);
             const float dirtCenter = 1.0f - smoothstepf((d - inner * 0.82f) / std::max(4.0f, inner * 0.55f));
             const float dirtPatch  = smoothstepf((nCol[k] - 0.70f) / 0.20f) * 0.45f;
-            const float dirtW      = saturate(std::max(dirtCenter, dirtPatch) * (1.0f - rockW));
+            // 0.78: oba maydonida ham o't qisman ko'rinib tursin — butun markaz
+            // yalang'och tuproq bo'lib qolmasin.
+            const float dirtW      = saturate(std::max(dirtCenter * 0.78f, dirtPatch) * (1.0f - rockW));
             const float grassW     = saturate(1.0f - rockW - dirtW);
 
             // --- ranglar (fbm shovqini bilan xilma-xillik) ---
             const float var = nCol[k];
-            static const float grassLo[3] = { 0.22f, 0.36f, 0.15f };
-            static const float grassHi[3] = { 0.44f, 0.57f, 0.25f };
-            static const float dirtLo [3] = { 0.34f, 0.26f, 0.16f };
-            static const float dirtHi [3] = { 0.54f, 0.42f, 0.27f };
+            // Ranglar YORQINLASHTIRILDI. Ilgari oba maydonining tuprog'i
+            // (0.34, 0.26, 0.16) past muhit yorug'ligida qop-qora bo'lib
+            // ko'rinardi — yer butunlay o'lik edi. Endi bu quruq dasht tuprog'i.
+            static const float grassLo[3] = { 0.30f, 0.44f, 0.20f };
+            static const float grassHi[3] = { 0.52f, 0.64f, 0.31f };
+            static const float dirtLo [3] = { 0.50f, 0.41f, 0.28f };
+            static const float dirtHi [3] = { 0.70f, 0.59f, 0.42f };
             static const float rockLo [3] = { 0.36f, 0.36f, 0.34f };
             static const float rockHi [3] = { 0.62f, 0.60f, 0.56f };
 

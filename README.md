@@ -17,6 +17,7 @@ ovozli kino sahnalar (cutscene) va uchinchi shaxs erkin yurish rejimi.
 | Jang | 3 resurs, 6 dushman turi, AI, parry/blok/kombo | ishlaydi |
 | Kamon | ballistik o'q, tana zonalari, yashirin otish | ishlaydi |
 | Iymon | 4 daraja, mexanik ta'sir, «Sukunat» sekinlashuvi | ishlaydi |
+| Zarba qaytarmasi | muzlash, kamera silkinishi, uchqun, protsedural tovush | ishlaydi |
 | Epizod halqasi | maqsadlar, to'lqinlar, nazorat nuqtasi, o'lim va qayta tug'ilish | ishlaydi |
 
 > **Eslatma:** `game/legacy/` — eski prototip (300 qatorli `main.cpp`), qurilishga kirmaydi.
@@ -275,6 +276,64 @@ ham zarba tegardi. Endi zarba faqat yetib boradigan masofada va oldingi
 sektorda tegadi. Qalqonli serjant esa endi ORQADAN kelgan zarbani to'sa
 olmaydi (blok faqat oldingi 120 gradus sektorda).
 
+**Zarba qaytarmasi — nima uchun jang «bo'sh» edi.** Uchta uzilgan sim topildi:
+
+1. `setClip()` bir martalik klipni **har kadr qayta boshlardi**. `Character::update()`
+   va `Enemy::update()` klipni har kadr so'raydi, `setClip` esa mahalliy vaqtni nolga
+   qaytarardi — natijada zarba, zarba yeyish, muvozanat buzilishi, parkur va
+   yakunlovchi zarba animatsiyalari **birinchi kadrida muzlab** turardi. Poza `lt = dt`
+   da qotgani uchun natija kadr chastotasiga ham bog'liq edi: 60 Гц da bosh 21°,
+   30 Гц da 33° orqaga tashlangan holda 0.35 s qotardi — «kaltak yesa boshi qiyshayadi»
+   shikoyatining asosiy sababi shu edi. Endi qayta boshlash faqat `playClip()` orqali,
+   ya'ni holat almashganda.
+   O'lchash: `ERT_SKIN_STATS=1` → `oneLocal` **o'zgarib turishi** kerak. Doim `0.016`
+   bo'lsa tuzatish ishlamagan.
+2. `HitResult` `(void)hr;` bilan **tashlab yuborilardi** — zarba tekkani hech qayerga
+   bildirilmasdi.
+3. `Attack::knockback` butun loyihada **hech qachon o'qilmasdi** — dushman zarba
+   yeganda haykal edi.
+
+Endi har zarba to'rt kanaldan qaytaradi:
+
+| Kanal | Tegdi | Bloklandi | O'ldirdi | O'zi zarba yedi | Parry |
+|---|---|---|---|---|---|
+| Muzlash (hitstop) | 55 ms | 35 ms | 100 ms | 70 ms | 130 ms |
+| Kamera turtkisi | 0.28 | 0.18 | 0.45 | **0.65** | 0.40 |
+| Uchqun | feruza | zarhal | ikki qavat | feruza | zarhal |
+| Tovush | past «chuq» | metall jarang | og'ir zarba | kuchliroq | yorqin jarang |
+
+Muzlash HAQIQIY `dt` bilan so'nadi (`tickFeedback`) — aks holda o'zi sekinlashtirgan
+vaqt bilan kamayib, cheksiz cho'zilardi. Kamera silkinishi `camSmooth` ga
+**yozilmaydi**: agar yozilsa keyingi kadrda damp silkigan joydan tortadi va turtkilar
+qo'shilib kamerani joyidan surib yuborardi.
+
+**Zarba yeyish endi YO'NALISHLI.** `poseHurt` zarba burchagini oladi: oldindan zarba —
+tana orqaga, yon tomondan — tanani chetga, orqadan — oldinga cho'zilish. Bosh siljishi
+**geometrik byudjet** bilan cheklangan: `.obj` dan o'lchangan bo'yin radiusi
+9.6 sm (ottoman) / 7.8 sm (crusader), `TORSO.rz = 5°` esa boshni 5.5–5.8 sm suradi —
+ya'ni bosh bo'yindan chiqmaydi. Ilgari `rz = 6°` va **yo'nalishsiz** edi: zarba
+qayerdan kelsa ham bosh doim bir tomonga qiyshayardi.
+Bundan tashqari `computeXforms()` da anatomik chegara qo'yildi — bo'yin ±50/70/40°,
+tizza faqat orqaga, tirsak faqat oldinga bukiladi. Hech qanday poza buni buza olmaydi.
+
+**Tovushlar protsedural — tovush fayli yo'q.** `game/src/audio/Sfx.cpp` 9 ta jang
+tovushini sintez qiladi (jami 289 KB, ishga tushganda bir marta):
+
+| Tovush | Qurilishi | Spektral markaz |
+|---|---|---|
+| o'lim | past pasayuvchi sinus + filtrlangan shovqin | 1108 Гц |
+| o'ldiruvchi zarba | 230→48 Гц pasayish + past qismlar | 1387 Гц |
+| tanaga zarba | 190→72 Гц + quruq shovqin | 1922 Гц |
+| qalqonga zarba | **garmonik bo'lmagan** qismlar 1 : 1.52 : 2.14 : 2.84 | 2227 Гц |
+| parry | o'sha nisbat, yuqoriroq va uzunroq ring | 3291 Гц |
+| qilich yoyi | o'rtada ochiladigan filtr + qo'ng'iroq konvert | 3524 Гц |
+
+Metall jarangi aynan **butun sonli bo'lmagan** nisbatdan chiqadi — garmonik qismlar
+«musiqiy» eshitiladi va zarbaga o'xshamaydi. Shovqin determinatsiyalangan (qat'iy seed),
+shuning uchun tovushlar har ishga tushirishda bir xil. Ovoz masofa bilan so'nadi va
+har chalinishda ohangi jadval bo'yicha biroz o'zgaradi — takrorlanish quloqni charchatmaydi.
+`ERT_SFX_DUMP=<papka>` ularni WAV qilib yozadi (`assets/audio/sfx/` da tayyor turibdi).
+
 **Jang — uch resurs.** GDD (04_CORE_SYSTEMS) jadvali bo'yicha, jang OG'IR va
 JAZOLOVCHI: uch kishi o'ldirishi mumkin, beshtasi — albatta.
 
@@ -366,10 +425,11 @@ game/include/ertugrul/     header'lar = modullar orasidagi kontrakt
   game/Enemy.h             6 dushman turi, AI, sezish, EnemyManager
   game/Encounter.h         maqsadlar, to'lqinlar, nazorat nuqtasi, taraqqiyot
   game/Projectile.h        ballistik o'q, tana zonalari, ArrowPool
+  audio/Sfx.h              protsedural jang tovushlari (9 ta)
   ui/Menu.h                menyu ekranlari
   app/App.h, Input.h       holat mashinasi, kiritish
   app/Bindings.h           sozlanadigan klavish bog'lamalari
-game/src/                  amalga oshirish (23 ta .cpp)
+game/src/                  amalga oshirish (24 ta .cpp)
 game/legacy/               eski prototip (qurilishga kirmaydi)
 data/episodes/             episodes_v2.json (48 epizod)
 data/cutscenes/            48 ta sahna (har epizod uchun)
@@ -428,3 +488,69 @@ O'yin o'zi menyu -> til -> epizodlar -> sozlamalar -> boshqaruv -> cutscene -> o
 bo'ylab yuradi va har bosqichda `shots\NN_*.png` saqlaydi.
 Oynani old planga chiqarmaydi, shuning uchun fonda boshqa dastur ishlayotgan
 bo'lsa ham ishlaydi.
+
+## Demo xarita — "Qayi obasi, vodiy"
+
+`data/levels/oba_valley.json` — kinematik demo xarita, `tools/make_valley_level.py`
+bilan generatsiya qilinadi.
+
+| Element | Tafsilot |
+|---|---|
+| Kompozitsiya | Markazda tekis maydon, atrofda tepaliklar — ufq ramkalanadi |
+| O'tovlar | Ikki halqa (12 + 16), eshiklar markazga qaraydi, markazda bey chodiri |
+| Yoritish | Yangi `golden` (oltin soat) preseti: quyosh past, muhit yorug'ligi kuchli |
+| Hajm | 134 prop + 1 750 scatter = ~1 884 obyekt, 1 457 to'qnashuv qutisi |
+
+Yo'l-yo'lakay ikkita aktiv nuqsoni tuzatildi:
+
+1. **Material ranglari.** Kenney nature to'plamining `grass`, `leafsGreen`,
+   `leafsDark`, `stone`, `stoneDark` materiallarida Kd ning R va B kanallari
+   almashib ketgan edi — o't feruza (0.17, 0.85, 0.72), barglar ko'kimtir chiqardi.
+   `tools/fix_material_colors.py` 51 faylda 54 ta materialni tuzatdi
+   (zaxira nusxa: `<fayl>.mtl.bak`).
+   Daraja JSON dagi `tint` bu muammoni yecha olmasdi: `Mesh::draw()` har submesh
+   uchun `glColor4f(sm.kd)` chaqirib prop tintini bekor qiladi, ustiga mesh
+   display list ga "pishiriladi".
+2. **Chodir rangi.** Kenney chodirining materiali yorqin qizil (`colorRed`).
+   `tools/make_felt_tents.py` kigiz rangli variantlar yaratadi
+   (`yurt_felt_*.obj/.mtl`) — geometriya o'zgarmaydi, faqat ranglar.
+
+Relyef ranglari ham yorqinlashtirildi: oba maydonining tuprog'i ilgari past
+muhit yorug'ligida qop-qora bo'lib ko'rinardi.
+
+## Taqdimot va brend
+
+| Fayl | Nima |
+|---|---|
+| `docs/Blades_of_Anatolia_Ertugrul.pptx` | Loyiha taqdimoti, 24 slayd |
+| `docs/Blades_of_Anatolia_demo.mp4` | Demo video, 2:55, 1280x720, 30 k/s |
+| `docs/brand/logo_mark.png` | Belgi (kvadrat) |
+| `docs/brand/logo_full.png` | Vertikal qulf |
+| `docs/brand/logo_wordmark.png` | Gorizontal qulf |
+| `docs/brand/logo_generate.py` | Logoni qayta yaratadi |
+| `docs/brand/deck_generate.py` | Taqdimotni qayta quradi |
+| `docs/brand/video_generate.py` | Videoni qayta yig'adi |
+
+Video o'yin ichidan yozib olinadi: `--film <papka> --filmpart 1|2|3 --filmlen <s>`.
+Kinematik planlar (kran, o'rta, yaqin, past burchak) film ssenariysida
+`filmCamera()` orqali boshqariladi. 2-qismda `filmSustain()` o'yinchining
+sog'lig'ini ushlab turadi — bu FAQAT trailer yozish uchun, o'yin balansiga tegmaydi.
+Bu rejim vaqtni QAT'IY 1/30 s qadam bilan yuritadi, shuning uchun natija
+mashina tezligiga bog'liq emas va har safar bir xil chiqadi.
+
+## Ma'lum cheklovlar
+
+Bular hali bajarilmagan — halol ro'yxat.
+
+| Cheklov | Tafsilot |
+|---|---|
+| Skelet animatsiya yo'q | Modellarda suyak yo'q; quti bo'yicha avtomatik rigging o'z chegarasiga ega |
+| Shader yo'q | Fixed-function OpenGL 1.1 — soya xaritasi va PBR imkonsiz |
+| Faqat Windows | Win32 ga bevosita bog'langan |
+| Git Bash segfault | PowerShell va Explorer dan ishlaydi, Git Bash dan yo'q — sabab aniqlanmagan |
+| O'q yig'ish yo'q | Jasadga qadalgan o'qni qaytarib olib bo'lmaydi |
+| Nishab hisobga olinmaydi | Tepalikda qadam tekis yerdagidek |
+| Sukunat kamerani ham sekinlashtiradi | Ghost of Tsushima da kamera normal tezlikda qoladi; bizda `dt` bitta joydan o'tadi |
+
+Tuzatilganlar (shu bosqichda): jang jadvalidagi yashirin `x0.70` poza koeffitsiyenti,
+bepul parry, dushman blokining burchak tekshiruvi va zarbaning balandlik tekshiruvi.

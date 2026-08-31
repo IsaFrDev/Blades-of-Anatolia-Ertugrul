@@ -1219,6 +1219,15 @@ HitResult EnemyManager::playerAttack(const Vec3& from, float yaw, const Attack& 
         const Vec3 ep = e.position();
         const float d = distanceXZ(from, ep);
         if (!std::isfinite(d) || d > a.reach) continue;
+        // BALANDLIK: ilgari faqat XZ masofa tekshirilardi — tomdagi yoki
+        // jardagi dushmanga ham qilich yetardi. Dushmanning bo'yi kamida
+        // yarmi o'yinchining zarba sathi bilan kesishishi kerak.
+        {
+            const EnemyStats& est = enemyStats(e.kind());
+            const float eh = (est.scale > 0.2f && goodF(est.scale)) ? est.scale : 1.8f;
+            const float dy = ep.y - from.y;
+            if (!goodF(dy) || dy > eh * 0.65f || dy < -eh * 0.65f) continue;
+        }
         // Juda yaqinda burchak shovqinli bo'ladi — o'tkazib yuboramiz
         if (d > 0.15f && offAngle(from, yaw, ep) > halfArc) continue;
         if (d < bestD) { bestD = d; bestI = (int)i; }

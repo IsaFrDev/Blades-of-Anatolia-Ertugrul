@@ -1037,7 +1037,15 @@ void Character::update(const CharacterInput& in, float dt) {
         //     Tartib: parry -> og'ir zarba -> yengil zarba -> tepish.
         //     Hammasi faqat yerda va cho'kkalamagan holda.
         if (!consumed && !crouched_ && !bowHold) {
-            if (pParry) {
+            // Parry ham nafas sarflaydi. Ilgari BEPUL edi: blok 4/s + zarbada 15
+            // yeyardi, parry esa hech nima — shuning uchun blok qilishning ma'nosi
+            // yo'q edi, o'yinchi doim parry bosaverardi.
+            if (pParry && !vitals.spendBreath(6.0f)) {
+                // Nafas yetmadi — parry ochilmaydi, oddiy blokka tushamiz
+                blockHold = true;
+                state_    = MS::Blocking;
+                consumed  = true;
+            } else if (pParry) {
                 // Parry oynasi ochiladi (qo'l butunligi oynani qisqartiradi)
                 float w = vitals.parryWindow();
                 if (!goodF(w) || w < 0.0f) w = 0.0f;

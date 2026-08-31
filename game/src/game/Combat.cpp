@@ -46,42 +46,42 @@ struct AttackTable {
     AttackTable() {
         // --- Yengil kombo 0: tez ochilish ---
         light[0].type = DamageType::LightAttack;
-        light[0].damage = 9.0f;   light[0].postureDamage = 12.0f;
+        light[0].damage = 9.0f;   light[0].postureDamage =  8.4f;
         light[0].breathCost = 8.0f; light[0].handCost = 0.0f; light[0].selfPosture = 0.0f;
         light[0].windup = 0.16f;  light[0].active = 0.10f;  light[0].recovery = 0.24f;
         light[0].reach = 2.1f;    light[0].arcDeg = 90.0f;  light[0].knockback = 0.6f;
 
         // --- Yengil kombo 1: teskari tomondan, biroz uzunroq ---
         light[1].type = DamageType::LightAttack;
-        light[1].damage = 10.0f;  light[1].postureDamage = 13.0f;
+        light[1].damage = 10.0f;  light[1].postureDamage =  9.1f;
         light[1].breathCost = 8.0f; light[1].handCost = 0.0f; light[1].selfPosture = 0.0f;
         light[1].windup = 0.13f;  light[1].active = 0.10f;  light[1].recovery = 0.22f;
         light[1].reach = 2.2f;    light[1].arcDeg = 100.0f; light[1].knockback = 0.7f;
 
         // --- Yengil kombo 2: yakunlovchi — sekin va jazolanadigan ---
         light[2].type = DamageType::LightAttack;
-        light[2].damage = 14.0f;  light[2].postureDamage = 16.0f;
+        light[2].damage = 14.0f;  light[2].postureDamage = 11.2f;
         light[2].breathCost = 10.0f; light[2].handCost = 1.0f; light[2].selfPosture = 2.0f;
         light[2].windup = 0.20f;  light[2].active = 0.12f;  light[2].recovery = 0.34f;
         light[2].reach = 2.4f;    light[2].arcDeg = 110.0f; light[2].knockback = 1.4f;
 
         // --- Og'ir zarba: qalqonni ham silkitadi, lekin o'zingizni ochadi ---
         heavy.type = DamageType::HeavyAttack;
-        heavy.damage = 26.0f;     heavy.postureDamage = 30.0f;
+        heavy.damage = 26.0f;     heavy.postureDamage = 21.0f;
         heavy.breathCost = 22.0f; heavy.handCost = 8.0f;    heavy.selfPosture = 5.0f;
         heavy.windup = 0.38f;     heavy.active = 0.14f;     heavy.recovery = 0.42f;
         heavy.reach = 2.6f;       heavy.arcDeg = 80.0f;     heavy.knockback = 3.2f;
 
         // --- Tepish: zarar kam, lekin qalqonni ochadi (poza 18) ---
         kick.type = DamageType::Kick;
-        kick.damage = 4.0f;       kick.postureDamage = 18.0f;
+        kick.damage = 4.0f;       kick.postureDamage = 12.6f;
         kick.breathCost = 10.0f;  kick.handCost = 0.0f;     kick.selfPosture = 0.0f;
         kick.windup = 0.14f;      kick.active = 0.10f;      kick.recovery = 0.20f;
         kick.reach = 1.8f;        kick.arcDeg = 60.0f;      kick.knockback = 4.5f;
 
         // --- Kamon: uzoq, aniq, lekin tortish sekin (windup tashqarida) ---
         arrow.type = DamageType::Arrow;
-        arrow.damage = 22.0f;     arrow.postureDamage = 6.0f;
+        arrow.damage = 22.0f;     arrow.postureDamage =  4.2f;
         arrow.breathCost = 18.0f; arrow.handCost = 3.0f;    arrow.selfPosture = 0.0f;
         arrow.windup = 0.0f;      arrow.active = 0.05f;     arrow.recovery = 0.30f;
         arrow.reach = 60.0f;      arrow.arcDeg = 4.0f;      arrow.knockback = 1.0f;
@@ -267,7 +267,11 @@ HitResult Vitals::receive(const Attack& a, bool blocked, bool parried, const Vec
     } else {
         r.outcome = HitOutcome::Hit;
         dmg       = inDmg;
-        post      = inPost * 0.7f;
+        // Ilgari bu yerda yashirin `* 0.7f` turardi: jadvaldagi 12 amalda 8.4
+        // bo'lardi va balanslashda jadvalga ishonib bo'lmasdi. Koeffitsiyent
+        // olib tashlandi, jadval qiymatlari esa 0.7 ga oldindan ko'paytirildi —
+        // ya'ni xulq AYNI, lekin endi jadvaldagi son haqiqiy son.
+        post      = inPost;
     }
 
     if (dmg  < 0.0f) dmg  = 0.0f;

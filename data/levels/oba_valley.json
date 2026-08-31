@@ -1,0 +1,2472 @@
+{
+ "id": "oba_valley",
+ "loc_name": "Qayi obasi — vodiy",
+ "terrain": {
+  "grid": 160,
+  "size": 400,
+  "seed": 90210,
+  "hill_height": 15,
+  "flat_radius": 46
+ },
+ "sky": {
+  "time_of_day": "golden",
+  "weather": "clear"
+ },
+ "spawns": [
+  {
+   "id": "player",
+   "pos": [
+    0.0,
+    0.0,
+    38.0
+   ],
+   "yaw": 180.0
+  },
+  {
+   "id": "enemy_a",
+   "pos": [
+    -9.0,
+    0.0,
+    14.0
+   ],
+   "yaw": 200.0
+  },
+  {
+   "id": "enemy_b",
+   "pos": [
+    10.0,
+    0.0,
+    15.0
+   ],
+   "yaw": 160.0
+  },
+  {
+   "id": "enemy_c",
+   "pos": [
+    0.0,
+    0.0,
+    22.0
+   ],
+   "yaw": 180.0
+  }
+ ],
+ "props": [
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    0.0,
+    0.0,
+    -9.0
+   ],
+   "yaw": 180.0,
+   "scale": 9.6,
+   "tint": [
+    0.7,
+    0.55,
+    0.4
+   ],
+   "collide": true,
+   "radius": 3.9
+  },
+  {
+   "mesh": "assets/models/town/banner-red.obj",
+   "pos": [
+    -3.6,
+    0.0,
+    -9.4
+   ],
+   "yaw": 176.0,
+   "scale": 3.4,
+   "tint": [
+    0.62,
+    0.2,
+    0.18
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/banner-red.obj",
+   "pos": [
+    3.6,
+    0.0,
+    -9.4
+   ],
+   "yaw": 184.0,
+   "scale": 3.4,
+   "tint": [
+    0.62,
+    0.2,
+    0.18
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedOpen.obj",
+   "pos": [
+    22.84,
+    0.0,
+    -0.85
+   ],
+   "yaw": 265.3,
+   "scale": 8.19,
+   "tint": [
+    0.602,
+    0.456,
+    0.324
+   ],
+   "collide": true,
+   "radius": 3.28
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    20.24,
+    0.0,
+    12.31
+   ],
+   "yaw": 239.2,
+   "scale": 6.97,
+   "tint": [
+    0.71,
+    0.544,
+    0.373
+   ],
+   "collide": true,
+   "radius": 2.79
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    10.24,
+    0.0,
+    18.76
+   ],
+   "yaw": 214.3,
+   "scale": 7.58,
+   "tint": [
+    0.553,
+    0.415,
+    0.306
+   ],
+   "collide": true,
+   "radius": 3.03
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedOpen.obj",
+   "pos": [
+    -1.31,
+    0.0,
+    23.42
+   ],
+   "yaw": 174.3,
+   "scale": 7.36,
+   "tint": [
+    0.65,
+    0.527,
+    0.372
+   ],
+   "collide": true,
+   "radius": 2.94
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    -10.51,
+    0.0,
+    19.61
+   ],
+   "yaw": 149.6,
+   "scale": 7.61,
+   "tint": [
+    0.58,
+    0.46,
+    0.314
+   ],
+   "collide": true,
+   "radius": 3.04
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    -20.08,
+    0.0,
+    10.95
+   ],
+   "yaw": 120.8,
+   "scale": 7.31,
+   "tint": [
+    0.736,
+    0.51,
+    0.386
+   ],
+   "collide": true,
+   "radius": 2.92
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedOpen.obj",
+   "pos": [
+    -22.52,
+    0.0,
+    0.49
+   ],
+   "yaw": 94.1,
+   "scale": 8.07,
+   "tint": [
+    0.595,
+    0.415,
+    0.318
+   ],
+   "collide": true,
+   "radius": 3.23
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    -20.29,
+    0.0,
+    -12.59
+   ],
+   "yaw": 61.3,
+   "scale": 7.12,
+   "tint": [
+    0.685,
+    0.563,
+    0.384
+   ],
+   "collide": true,
+   "radius": 2.85
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    -11.29,
+    0.0,
+    -20.05
+   ],
+   "yaw": 33.0,
+   "scale": 7.83,
+   "tint": [
+    0.592,
+    0.436,
+    0.312
+   ],
+   "collide": true,
+   "radius": 3.13
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedOpen.obj",
+   "pos": [
+    0.71,
+    0.0,
+    -22.24
+   ],
+   "yaw": 359.7,
+   "scale": 7.1,
+   "tint": [
+    0.719,
+    0.538,
+    0.387
+   ],
+   "collide": true,
+   "radius": 2.84
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    10.54,
+    0.0,
+    -20.82
+   ],
+   "yaw": 333.2,
+   "scale": 7.87,
+   "tint": [
+    0.546,
+    0.444,
+    0.323
+   ],
+   "collide": true,
+   "radius": 3.15
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_detailedClosed.obj",
+   "pos": [
+    20.0,
+    0.0,
+    -10.67
+   ],
+   "yaw": 300.3,
+   "scale": 6.8,
+   "tint": [
+    0.72,
+    0.558,
+    0.408
+   ],
+   "collide": true,
+   "radius": 2.72
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    34.0,
+    0.0,
+    5.62
+   ],
+   "yaw": 264.3,
+   "scale": 5.65,
+   "tint": [
+    0.568,
+    0.448,
+    0.296
+   ],
+   "collide": true,
+   "radius": 2.26
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    29.14,
+    0.0,
+    18.08
+   ],
+   "yaw": 245.7,
+   "scale": 5.46,
+   "tint": [
+    0.666,
+    0.51,
+    0.376
+   ],
+   "collide": true,
+   "radius": 2.18
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    19.62,
+    0.0,
+    27.65
+   ],
+   "yaw": 211.4,
+   "scale": 5.77,
+   "tint": [
+    0.588,
+    0.457,
+    0.33
+   ],
+   "collide": true,
+   "radius": 2.31
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    7.48,
+    0.0,
+    32.43
+   ],
+   "yaw": 188.7,
+   "scale": 4.91,
+   "tint": [
+    0.655,
+    0.559,
+    0.38
+   ],
+   "collide": true,
+   "radius": 1.96
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    -4.82,
+    0.0,
+    34.91
+   ],
+   "yaw": 173.3,
+   "scale": 5.52,
+   "tint": [
+    0.581,
+    0.411,
+    0.314
+   ],
+   "collide": true,
+   "radius": 2.21
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    -17.86,
+    0.0,
+    30.12
+   ],
+   "yaw": 157.1,
+   "scale": 5.07,
+   "tint": [
+    0.687,
+    0.52,
+    0.377
+   ],
+   "collide": true,
+   "radius": 2.03
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    -26.38,
+    0.0,
+    21.08
+   ],
+   "yaw": 121.7,
+   "scale": 5.36,
+   "tint": [
+    0.584,
+    0.434,
+    0.306
+   ],
+   "collide": true,
+   "radius": 2.14
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    -32.4,
+    0.0,
+    7.25
+   ],
+   "yaw": 99.2,
+   "scale": 5.76,
+   "tint": [
+    0.67,
+    0.58,
+    0.371
+   ],
+   "collide": true,
+   "radius": 2.3
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    -33.04,
+    0.0,
+    -5.78
+   ],
+   "yaw": 87.0,
+   "scale": 5.05,
+   "tint": [
+    0.581,
+    0.456,
+    0.335
+   ],
+   "collide": true,
+   "radius": 2.02
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    -28.56,
+    0.0,
+    -18.5
+   ],
+   "yaw": 64.4,
+   "scale": 6.05,
+   "tint": [
+    0.65,
+    0.562,
+    0.418
+   ],
+   "collide": true,
+   "radius": 2.42
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    -19.82,
+    0.0,
+    -26.36
+   ],
+   "yaw": 39.3,
+   "scale": 6.16,
+   "tint": [
+    0.589,
+    0.413,
+    0.333
+   ],
+   "collide": true,
+   "radius": 2.47
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    -8.36,
+    0.0,
+    -34.12
+   ],
+   "yaw": 10.5,
+   "scale": 5.95,
+   "tint": [
+    0.73,
+    0.574,
+    0.424
+   ],
+   "collide": true,
+   "radius": 2.38
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    5.43,
+    0.0,
+    -33.31
+   ],
+   "yaw": 349.9,
+   "scale": 5.7,
+   "tint": [
+    0.584,
+    0.431,
+    0.334
+   ],
+   "collide": true,
+   "radius": 2.28
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    17.5,
+    0.0,
+    -30.1
+   ],
+   "yaw": 335.3,
+   "scale": 5.26,
+   "tint": [
+    0.718,
+    0.558,
+    0.423
+   ],
+   "collide": true,
+   "radius": 2.11
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallOpen.obj",
+   "pos": [
+    27.44,
+    0.0,
+    -20.21
+   ],
+   "yaw": 299.6,
+   "scale": 5.81,
+   "tint": [
+    0.588,
+    0.464,
+    0.333
+   ],
+   "collide": true,
+   "radius": 2.32
+  },
+  {
+   "mesh": "assets/models/nature/yurt_felt_smallClosed.obj",
+   "pos": [
+    32.54,
+    0.0,
+    -9.14
+   ],
+   "yaw": 288.9,
+   "scale": 5.45,
+   "tint": [
+    0.718,
+    0.559,
+    0.375
+   ],
+   "collide": true,
+   "radius": 2.18
+  },
+  {
+   "mesh": "assets/models/nature/campfire_stones.obj",
+   "pos": [
+    0.0,
+    0.0,
+    6.0
+   ],
+   "yaw": 269.3,
+   "scale": 2.9,
+   "tint": [
+    0.46,
+    0.44,
+    0.42
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_logs.obj",
+   "pos": [
+    0.0,
+    0.0,
+    6.0
+   ],
+   "yaw": 34.5,
+   "scale": 2.6,
+   "tint": [
+    0.42,
+    0.28,
+    0.18
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -2.86,
+    0.0,
+    4.81
+   ],
+   "yaw": 292.6,
+   "scale": 1.82,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -3.09,
+    0.0,
+    6.2
+   ],
+   "yaw": 266.3,
+   "scale": 1.68,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    0.67,
+    0.0,
+    2.97
+   ],
+   "yaw": 12.5,
+   "scale": 2.17,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/lantern.obj",
+   "pos": [
+    -0.53,
+    0.0,
+    9.62
+   ],
+   "yaw": 249.0,
+   "scale": 2.4,
+   "tint": [
+    0.78,
+    0.64,
+    0.4
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_stones.obj",
+   "pos": [
+    -16.0,
+    0.0,
+    14.0
+   ],
+   "yaw": 111.5,
+   "scale": 2.9,
+   "tint": [
+    0.46,
+    0.44,
+    0.42
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_logs.obj",
+   "pos": [
+    -16.0,
+    0.0,
+    14.0
+   ],
+   "yaw": 9.6,
+   "scale": 2.6,
+   "tint": [
+    0.42,
+    0.28,
+    0.18
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -15.4,
+    0.0,
+    17.04
+   ],
+   "yaw": 168.9,
+   "scale": 1.88,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -13.03,
+    0.0,
+    14.89
+   ],
+   "yaw": 106.6,
+   "scale": 1.98,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -13.47,
+    0.0,
+    15.8
+   ],
+   "yaw": 125.4,
+   "scale": 1.96,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/lantern.obj",
+   "pos": [
+    -11.68,
+    0.0,
+    15.31
+   ],
+   "yaw": 261.1,
+   "scale": 2.4,
+   "tint": [
+    0.78,
+    0.64,
+    0.4
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_stones.obj",
+   "pos": [
+    17.0,
+    0.0,
+    12.0
+   ],
+   "yaw": 295.1,
+   "scale": 2.9,
+   "tint": [
+    0.46,
+    0.44,
+    0.42
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_logs.obj",
+   "pos": [
+    17.0,
+    0.0,
+    12.0
+   ],
+   "yaw": 276.7,
+   "scale": 2.6,
+   "tint": [
+    0.42,
+    0.28,
+    0.18
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    15.86,
+    0.0,
+    9.12
+   ],
+   "yaw": 338.4,
+   "scale": 2.05,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    18.09,
+    0.0,
+    14.9
+   ],
+   "yaw": 159.5,
+   "scale": 1.98,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    19.53,
+    0.0,
+    13.79
+   ],
+   "yaw": 125.2,
+   "scale": 2.1,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/lantern.obj",
+   "pos": [
+    18.23,
+    0.0,
+    8.86
+   ],
+   "yaw": 3.2,
+   "scale": 2.4,
+   "tint": [
+    0.78,
+    0.64,
+    0.4
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_stones.obj",
+   "pos": [
+    -19.0,
+    0.0,
+    -12.0
+   ],
+   "yaw": 357.8,
+   "scale": 2.9,
+   "tint": [
+    0.46,
+    0.44,
+    0.42
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_logs.obj",
+   "pos": [
+    -19.0,
+    0.0,
+    -12.0
+   ],
+   "yaw": 222.1,
+   "scale": 2.6,
+   "tint": [
+    0.42,
+    0.28,
+    0.18
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -21.29,
+    0.0,
+    -9.91
+   ],
+   "yaw": 227.5,
+   "scale": 2.11,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -15.9,
+    0.0,
+    -11.94
+   ],
+   "yaw": 91.2,
+   "scale": 1.7,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    -21.7,
+    0.0,
+    -10.47
+   ],
+   "yaw": 240.4,
+   "scale": 2.13,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/lantern.obj",
+   "pos": [
+    -19.7,
+    0.0,
+    -14.21
+   ],
+   "yaw": 356.6,
+   "scale": 2.4,
+   "tint": [
+    0.78,
+    0.64,
+    0.4
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_stones.obj",
+   "pos": [
+    18.0,
+    0.0,
+    -14.0
+   ],
+   "yaw": 160.3,
+   "scale": 2.9,
+   "tint": [
+    0.46,
+    0.44,
+    0.42
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/campfire_logs.obj",
+   "pos": [
+    18.0,
+    0.0,
+    -14.0
+   ],
+   "yaw": 40.7,
+   "scale": 2.6,
+   "tint": [
+    0.42,
+    0.28,
+    0.18
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    21.06,
+    0.0,
+    -13.53
+   ],
+   "yaw": 98.7,
+   "scale": 1.68,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    20.88,
+    0.0,
+    -12.86
+   ],
+   "yaw": 111.5,
+   "scale": 2.16,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log.obj",
+   "pos": [
+    16.26,
+    0.0,
+    -16.57
+   ],
+   "yaw": 325.9,
+   "scale": 2.06,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/lantern.obj",
+   "pos": [
+    13.84,
+    0.0,
+    -16.64
+   ],
+   "yaw": 254.0,
+   "scale": 2.4,
+   "tint": [
+    0.78,
+    0.64,
+    0.4
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/fence-gate.obj",
+   "pos": [
+    0.0,
+    0.0,
+    44.0
+   ],
+   "yaw": 0.0,
+   "scale": 5.2,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/town/pillar-wood.obj",
+   "pos": [
+    -3.4,
+    0.0,
+    44.0
+   ],
+   "yaw": 0.0,
+   "scale": 4.6,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 0.7
+  },
+  {
+   "mesh": "assets/models/town/pillar-wood.obj",
+   "pos": [
+    3.4,
+    0.0,
+    44.0
+   ],
+   "yaw": 0.0,
+   "scale": 4.6,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 0.7
+  },
+  {
+   "mesh": "assets/models/town/banner-green.obj",
+   "pos": [
+    -3.4,
+    0.0,
+    43.2
+   ],
+   "yaw": 0.0,
+   "scale": 3.6,
+   "tint": [
+    0.26,
+    0.46,
+    0.34
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/banner-green.obj",
+   "pos": [
+    3.4,
+    0.0,
+    43.2
+   ],
+   "yaw": 0.0,
+   "scale": 3.6,
+   "tint": [
+    0.26,
+    0.46,
+    0.34
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -7.73,
+    0.0,
+    43.82
+   ],
+   "yaw": 190.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -13.01,
+    0.0,
+    42.56
+   ],
+   "yaw": 197.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -18.1,
+    0.0,
+    40.65
+   ],
+   "yaw": 204.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -22.92,
+    0.0,
+    38.14
+   ],
+   "yaw": 211.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -27.4,
+    0.0,
+    35.07
+   ],
+   "yaw": 218.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -31.47,
+    0.0,
+    31.47
+   ],
+   "yaw": 225.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -35.07,
+    0.0,
+    27.4
+   ],
+   "yaw": 232.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -38.14,
+    0.0,
+    22.92
+   ],
+   "yaw": 239.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -40.65,
+    0.0,
+    18.1
+   ],
+   "yaw": 246.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -42.56,
+    0.0,
+    13.01
+   ],
+   "yaw": 253.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    -43.82,
+    0.0,
+    7.73
+   ],
+   "yaw": 260.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    7.73,
+    0.0,
+    43.82
+   ],
+   "yaw": 170.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    13.01,
+    0.0,
+    42.56
+   ],
+   "yaw": 163.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    18.1,
+    0.0,
+    40.65
+   ],
+   "yaw": 156.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    22.92,
+    0.0,
+    38.14
+   ],
+   "yaw": 149.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    27.4,
+    0.0,
+    35.07
+   ],
+   "yaw": 142.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    31.47,
+    0.0,
+    31.47
+   ],
+   "yaw": 135.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    35.07,
+    0.0,
+    27.4
+   ],
+   "yaw": 128.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    38.14,
+    0.0,
+    22.92
+   ],
+   "yaw": 121.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    40.65,
+    0.0,
+    18.1
+   ],
+   "yaw": 114.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    42.56,
+    0.0,
+    13.01
+   ],
+   "yaw": 107.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/fence.obj",
+   "pos": [
+    43.82,
+    0.0,
+    7.73
+   ],
+   "yaw": 100.0,
+   "scale": 4.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.5
+  },
+  {
+   "mesh": "assets/models/town/cart.obj",
+   "pos": [
+    -11.0,
+    0.0,
+    26.0
+   ],
+   "yaw": 40.0,
+   "scale": 3.4,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": true,
+   "radius": 1.4
+  },
+  {
+   "mesh": "assets/models/town/cart.obj",
+   "pos": [
+    13.0,
+    0.0,
+    27.0
+   ],
+   "yaw": 325.0,
+   "scale": 3.4,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": true,
+   "radius": 1.4
+  },
+  {
+   "mesh": "assets/models/town/cart.obj",
+   "pos": [
+    -26.0,
+    0.0,
+    4.0
+   ],
+   "yaw": 95.0,
+   "scale": 3.4,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": true,
+   "radius": 1.4
+  },
+  {
+   "mesh": "assets/models/town/cart.obj",
+   "pos": [
+    27.0,
+    0.0,
+    -3.0
+   ],
+   "yaw": 280.0,
+   "scale": 3.4,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": true,
+   "radius": 1.4
+  },
+  {
+   "mesh": "assets/models/town/cart-high.obj",
+   "pos": [
+    -21.0,
+    0.0,
+    20.0
+   ],
+   "yaw": 20.0,
+   "scale": 3.2,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": true,
+   "radius": 1.4
+  },
+  {
+   "mesh": "assets/models/nature/log_stack.obj",
+   "pos": [
+    -8.0,
+    0.0,
+    18.0
+   ],
+   "yaw": 211.2,
+   "scale": 2.4,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log_stackLarge.obj",
+   "pos": [
+    -10.07,
+    0.0,
+    20.12
+   ],
+   "yaw": 212.3,
+   "scale": 2.0,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log_stack.obj",
+   "pos": [
+    9.0,
+    0.0,
+    19.0
+   ],
+   "yaw": 329.1,
+   "scale": 2.4,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log_stackLarge.obj",
+   "pos": [
+    6.36,
+    0.0,
+    16.41
+   ],
+   "yaw": 141.3,
+   "scale": 2.0,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log_stack.obj",
+   "pos": [
+    -14.0,
+    0.0,
+    -20.0
+   ],
+   "yaw": 312.5,
+   "scale": 2.4,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log_stackLarge.obj",
+   "pos": [
+    -11.37,
+    0.0,
+    -17.59
+   ],
+   "yaw": 131.4,
+   "scale": 2.0,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log_stack.obj",
+   "pos": [
+    15.0,
+    0.0,
+    -19.0
+   ],
+   "yaw": 99.1,
+   "scale": 2.4,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/log_stackLarge.obj",
+   "pos": [
+    14.42,
+    0.0,
+    -20.8
+   ],
+   "yaw": 255.4,
+   "scale": 2.0,
+   "tint": [
+    0.62,
+    0.46,
+    0.31
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/stall-green.obj",
+   "pos": [
+    -5.0,
+    0.0,
+    30.0
+   ],
+   "yaw": 184.0,
+   "scale": 3.0,
+   "tint": [
+    0.34,
+    0.48,
+    0.34
+   ],
+   "collide": true,
+   "radius": 1.4
+  },
+  {
+   "mesh": "assets/models/town/stall-bench.obj",
+   "pos": [
+    -2.8,
+    0.0,
+    31.4
+   ],
+   "yaw": 53.1,
+   "scale": 2.4,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/stall-stool.obj",
+   "pos": [
+    -6.8,
+    0.0,
+    31.6
+   ],
+   "yaw": 319.7,
+   "scale": 2.0,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/stall-red.obj",
+   "pos": [
+    6.0,
+    0.0,
+    31.0
+   ],
+   "yaw": 185.0,
+   "scale": 3.0,
+   "tint": [
+    0.55,
+    0.34,
+    0.28
+   ],
+   "collide": true,
+   "radius": 1.4
+  },
+  {
+   "mesh": "assets/models/town/stall-bench.obj",
+   "pos": [
+    8.2,
+    0.0,
+    32.4
+   ],
+   "yaw": 62.8,
+   "scale": 2.4,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/town/stall-stool.obj",
+   "pos": [
+    4.2,
+    0.0,
+    32.6
+   ],
+   "yaw": 142.4,
+   "scale": 2.0,
+   "tint": [
+    0.5,
+    0.35,
+    0.24
+   ],
+   "collide": false,
+   "radius": 0.5
+  },
+  {
+   "mesh": "assets/models/nature/statue_obelisk.obj",
+   "pos": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "yaw": 0.0,
+   "scale": 4.6,
+   "tint": [
+    0.52,
+    0.5,
+    0.46
+   ],
+   "collide": true,
+   "radius": 1.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeA.obj",
+   "pos": [
+    -3.37,
+    0.0,
+    53.09
+   ],
+   "yaw": 43.5,
+   "scale": 6.4,
+   "tint": [
+    0.454,
+    0.493,
+    0.436
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeA.obj",
+   "pos": [
+    -85.38,
+    0.0,
+    1.44
+   ],
+   "yaw": 59.1,
+   "scale": 4.7,
+   "tint": [
+    0.458,
+    0.5,
+    0.459
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    43.05,
+    0.0,
+    -20.0
+   ],
+   "yaw": 133.3,
+   "scale": 4.89,
+   "tint": [
+    0.45,
+    0.501,
+    0.447
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    59.26,
+    0.0,
+    35.46
+   ],
+   "yaw": 292.0,
+   "scale": 4.5,
+   "tint": [
+    0.539,
+    0.429,
+    0.441
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    -21.88,
+    0.0,
+    46.2
+   ],
+   "yaw": 274.2,
+   "scale": 5.21,
+   "tint": [
+    0.445,
+    0.468,
+    0.45
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    66.01,
+    0.0,
+    48.1
+   ],
+   "yaw": 341.9,
+   "scale": 5.9,
+   "tint": [
+    0.518,
+    0.504,
+    0.479
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    78.08,
+    0.0,
+    -14.66
+   ],
+   "yaw": 49.9,
+   "scale": 5.59,
+   "tint": [
+    0.451,
+    0.465,
+    0.428
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    51.12,
+    0.0,
+    64.68
+   ],
+   "yaw": 75.1,
+   "scale": 6.16,
+   "tint": [
+    0.54,
+    0.486,
+    0.42
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    -34.25,
+    0.0,
+    75.25
+   ],
+   "yaw": 215.7,
+   "scale": 5.15,
+   "tint": [
+    0.482,
+    0.478,
+    0.474
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    -13.75,
+    0.0,
+    -65.71
+   ],
+   "yaw": 68.6,
+   "scale": 3.22,
+   "tint": [
+    0.445,
+    0.487,
+    0.45
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    55.04,
+    0.0,
+    -67.47
+   ],
+   "yaw": 246.1,
+   "scale": 5.69,
+   "tint": [
+    0.537,
+    0.457,
+    0.464
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    83.03,
+    0.0,
+    -29.82
+   ],
+   "yaw": 35.1,
+   "scale": 6.14,
+   "tint": [
+    0.558,
+    0.421,
+    0.445
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    -9.09,
+    0.0,
+    52.79
+   ],
+   "yaw": 233.7,
+   "scale": 5.78,
+   "tint": [
+    0.461,
+    0.432,
+    0.412
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    -72.6,
+    0.0,
+    -21.58
+   ],
+   "yaw": 167.7,
+   "scale": 3.73,
+   "tint": [
+    0.499,
+    0.427,
+    0.417
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeA.obj",
+   "pos": [
+    -28.26,
+    0.0,
+    40.35
+   ],
+   "yaw": 58.4,
+   "scale": 6.05,
+   "tint": [
+    0.489,
+    0.433,
+    0.405
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    -25.39,
+    0.0,
+    -47.99
+   ],
+   "yaw": 82.2,
+   "scale": 6.35,
+   "tint": [
+    0.464,
+    0.459,
+    0.459
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    19.23,
+    0.0,
+    -89.54
+   ],
+   "yaw": 224.7,
+   "scale": 3.61,
+   "tint": [
+    0.523,
+    0.434,
+    0.462
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    69.72,
+    0.0,
+    41.67
+   ],
+   "yaw": 356.0,
+   "scale": 4.76,
+   "tint": [
+    0.441,
+    0.442,
+    0.411
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeC.obj",
+   "pos": [
+    -67.85,
+    0.0,
+    3.68
+   ],
+   "yaw": 156.0,
+   "scale": 3.85,
+   "tint": [
+    0.514,
+    0.429,
+    0.454
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeA.obj",
+   "pos": [
+    -42.79,
+    0.0,
+    -34.89
+   ],
+   "yaw": 355.9,
+   "scale": 3.98,
+   "tint": [
+    0.478,
+    0.457,
+    0.469
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeA.obj",
+   "pos": [
+    56.95,
+    0.0,
+    23.42
+   ],
+   "yaw": 318.8,
+   "scale": 5.56,
+   "tint": [
+    0.494,
+    0.454,
+    0.411
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeA.obj",
+   "pos": [
+    66.06,
+    0.0,
+    18.38
+   ],
+   "yaw": 321.4,
+   "scale": 5.06,
+   "tint": [
+    0.447,
+    0.476,
+    0.428
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    -13.81,
+    0.0,
+    84.95
+   ],
+   "yaw": 281.7,
+   "scale": 5.6,
+   "tint": [
+    0.448,
+    0.424,
+    0.435
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeA.obj",
+   "pos": [
+    -23.29,
+    0.0,
+    68.35
+   ],
+   "yaw": 194.4,
+   "scale": 4.55,
+   "tint": [
+    0.492,
+    0.485,
+    0.452
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    -20.18,
+    0.0,
+    -67.43
+   ],
+   "yaw": 156.0,
+   "scale": 4.77,
+   "tint": [
+    0.473,
+    0.514,
+    0.446
+   ],
+   "collide": true,
+   "radius": 2.2
+  },
+  {
+   "mesh": "assets/models/nature/rock_largeB.obj",
+   "pos": [
+    50.17,
+    0.0,
+    4.29
+   ],
+   "yaw": 338.7,
+   "scale": 4.22,
+   "tint": [
+    0.509,
+    0.453,
+    0.436
+   ],
+   "collide": true,
+   "radius": 2.2
+  }
+ ],
+ "scatter": [
+  {
+   "meshes": [
+    "assets/models/nature/tree_pineTallA.obj",
+    "assets/models/nature/tree_pineDefaultA.obj",
+    "assets/models/nature/tree_pineRoundA.obj",
+    "assets/models/nature/tree_pineTallA_detailed.obj"
+   ],
+   "count": 420,
+   "min_radius": 58,
+   "max_radius": 176,
+   "scale_min": 3.8,
+   "scale_max": 7.6,
+   "tint": [
+    0.3,
+    0.44,
+    0.28
+   ],
+   "tint_jitter": 0.2,
+   "collide": true,
+   "radius": 1.4,
+   "min_gap": 3.0,
+   "min_slope_y": 0.55
+  },
+  {
+   "meshes": [
+    "assets/models/nature/tree_oak.obj",
+    "assets/models/nature/tree_default.obj",
+    "assets/models/nature/tree_fat.obj",
+    "assets/models/nature/tree_detailed.obj"
+   ],
+   "count": 150,
+   "min_radius": 50,
+   "max_radius": 140,
+   "scale_min": 3.4,
+   "scale_max": 6.2,
+   "tint": [
+    0.52,
+    0.46,
+    0.24
+   ],
+   "tint_jitter": 0.22,
+   "collide": true,
+   "radius": 1.5,
+   "min_gap": 4.0,
+   "min_slope_y": 0.55
+  },
+  {
+   "meshes": [
+    "assets/models/nature/plant_bushLarge.obj",
+    "assets/models/nature/plant_bushDetailed.obj",
+    "assets/models/nature/plant_bush.obj",
+    "assets/models/nature/plant_bushSmall.obj"
+   ],
+   "count": 240,
+   "min_radius": 14,
+   "max_radius": 64,
+   "scale_min": 1.6,
+   "scale_max": 3.4,
+   "tint": [
+    0.38,
+    0.46,
+    0.26
+   ],
+   "tint_jitter": 0.18,
+   "collide": false,
+   "radius": 0.6,
+   "min_gap": 1.6,
+   "min_slope_y": 0.4
+  },
+  {
+   "meshes": [
+    "assets/models/nature/grass.obj",
+    "assets/models/nature/grass_large.obj",
+    "assets/models/nature/grass_leafs.obj",
+    "assets/models/nature/grass_leafsLarge.obj"
+   ],
+   "count": 620,
+   "min_radius": 8,
+   "max_radius": 78,
+   "scale_min": 1.4,
+   "scale_max": 3.0,
+   "tint": [
+    0.46,
+    0.5,
+    0.26
+   ],
+   "tint_jitter": 0.22,
+   "collide": false,
+   "radius": 0.3,
+   "min_gap": 0.9,
+   "min_slope_y": 0.35
+  },
+  {
+   "meshes": [
+    "assets/models/nature/flower_yellowA.obj",
+    "assets/models/nature/flower_redA.obj",
+    "assets/models/nature/flower_purpleA.obj"
+   ],
+   "count": 170,
+   "min_radius": 10,
+   "max_radius": 58,
+   "scale_min": 1.4,
+   "scale_max": 2.4,
+   "tint": [
+    0.92,
+    0.82,
+    0.44
+   ],
+   "tint_jitter": 0.3,
+   "collide": false,
+   "radius": 0.25,
+   "min_gap": 1.1,
+   "min_slope_y": 0.35
+  },
+  {
+   "meshes": [
+    "assets/models/nature/rock_smallA.obj",
+    "assets/models/nature/rock_smallB.obj",
+    "assets/models/nature/stump_round.obj",
+    "assets/models/nature/stump_old.obj"
+   ],
+   "count": 150,
+   "min_radius": 12,
+   "max_radius": 86,
+   "scale_min": 1.6,
+   "scale_max": 3.2,
+   "tint": [
+    0.48,
+    0.45,
+    0.41
+   ],
+   "tint_jitter": 0.16,
+   "collide": false,
+   "radius": 0.5,
+   "min_gap": 2.0,
+   "min_slope_y": 0.4
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+# Qayi o'tovi — kigiz rangli variant.
+# Manba: tent_detailedOpen.mtl (Kenney). Faqat Kd ranglari o'zgartirilgan.
+# Created by Kenney (www.kenney.nl)
+
+newmtl colorRed
+Kd 0.780000 0.720000 0.625000
+
+newmtl wood
+Kd 0.560000 0.400000 0.268000
+

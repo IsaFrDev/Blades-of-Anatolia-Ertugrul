@@ -577,6 +577,9 @@ std::string pickLevel(const Episode* e, const CutScene* cs) {
             if (levelFileExists("forest_pass")) return "forest_pass";
         }
     }
+    // Standart lager darajasi — yangi "vodiy" xaritasi (oba_camp dan chiroyliroq:
+    // haqiqiy tepaliklar, qalin o'rmon, oltin soat yoritishi, kigiz o'tovlar).
+    if (levelFileExists("oba_valley")) return "oba_valley";
     return "oba_camp";
 }
 
@@ -691,6 +694,70 @@ void App::applyDisplayConfig() {
 }
 
 const std::string& App::lastEpisode() const { return I().lastEpisode; }
+
+// Kadr piksellarini BGRA holida o'qiydi (GL pastdan yuqoriga beradi -> ag'dariladi)
+static bool readFrameBGRA(int w, int h, std::vector<unsigned char>& bgra) {
+    if (w <= 0 || h <= 0) return false;
+    std::vector<unsigned char> px((size_t)w * (size_t)h * 4u);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadBuffer(GL_FRONT);
+    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, px.data());
+    bgra.resize((size_t)w * (size_t)h * 4u);
+    for (int y = 0; y < h; ++y) {
+        const unsigned char* src = px.data() + (size_t)(h - 1 - y) * (size_t)w * 4u;
+        unsigned char* dst = bgra.data() + (size_t)y * (size_t)w * 4u;
+        for (int x = 0; x < w; ++x) {
+            dst[x * 4 + 0] = src[x * 4 + 2];
+            dst[x * 4 + 1] = src[x * 4 + 1];
+            dst[x * 4 + 2] = src[x * 4 + 0];
+            dst[x * 4 + 3] = 255;
+        }
+    }
+    return true;
+}
+
+// GDI+ kodlovchi CLSID sini MIME turi bo'yicha topadi
+static bool encoderClsid(const wchar_t* mime, CLSID* out) {
+    UINT num = 0, sz = 0;
+    Gdiplus::GetImageEncodersSize(&num, &sz);
+    if (sz == 0) return false;
+    std::vector<unsigned char> buf(sz);
+    Gdiplus::ImageCodecInfo* info = reinterpret_cast<Gdiplus::ImageCodecInfo*>(buf.data());
+    Gdiplus::GetImageEncoders(num, sz, info);
+    for (UINT i = 0; i < num; ++i) {
+        if (wcscmp(info[i].MimeType, mime) == 0) { *out = info[i].Clsid; return true; }
+    }
+    return false;
+}
+
+bool App::captureFrameJpeg(const std::string& jpgPath, int quality) const {
+    const Impl& im = I();
+    std::vector<unsigned char> bgra;
+    if (!readFrameBGRA(im.w, im.h, bgra)) return false;
+
+    static CLSID jpgClsid;
+    static bool  haveClsid = encoderClsid(L"image/jpeg", &jpgClsid);
+    if (!haveClsid) return false;
+
+    Gdiplus::Bitmap bmp(im.w, im.h, im.w * 4, PixelFormat32bppARGB, bgra.data());
+    if (bmp.GetLastStatus() != Gdiplus::Ok) return false;
+
+    ULONG q = (ULONG)clampf((float)quality, 1.0f, 100.0f);
+    Gdiplus::EncoderParameters ep;
+    ep.Count = 1;
+    ep.Parameter[0].Guid           = Gdiplus::EncoderQuality;
+    ep.Parameter[0].Type           = Gdiplus::EncoderParameterValueTypeLong;
+    ep.Parameter[0].NumberOfValues = 1;
+    ep.Parameter[0].Value          = &q;
+
+    wchar_t wpath[512] = {0};
+    if (MultiByteToWideChar(CP_UTF8, 0, jpgPath.c_str(), -1, wpath, 511) <= 0) return false;
+    std::string dir = jpgPath;
+    const size_t slash = dir.find_last_of("/\\");
+    if (slash != std::string::npos) { dir.resize(slash); CreateDirectoryA(dir.c_str(), nullptr); }
+
+    return bmp.Save(wpath, &jpgClsid, &ep) == Gdiplus::Ok;
+}
 
 bool App::captureScreenshot(const std::string& pngPath) const {
     const Impl& im = I();
@@ -851,7 +918,7 @@ bool App::init(void* hwnd, void* hdc, const AppConfig& cfg) {
     CutsceneDirector::get().loadDirectory("data/cutscenes");
 
     // --- Daraja ---
-    im.levelId = "oba_camp";
+    im.levelId = levelFileExists("oba_valley") ? "oba_valley" : "oba_camp";
     im.level.load(im.levelId);
     {
         Vec3 sp0{0, 0, 0};
@@ -983,6 +1050,37 @@ void App::returnToMenu() {
 }
 
 // --------------------------------------------------------------- yangilash
+
+// Film uchun kamera boshqaruvi: qiyalik va masofa. Manfiy qiymat = tegilmasin.
+// Joriy darajaga qayta kirish (film sayohatida segmentlar orasida).
+// Ilgari sayohat "sogut_village" ni QATTIQ yozib qo'ygan edi va yangi
+// xaritada yarim yo'lda eski qishloqqa o'tib ketardi.
+// FILM REJIMI uchun: o'yinchining sog'lig'ini ushlab turadi.
+// Trailer uchun uzun, uzluksiz jang kerak — aks holda o'yinchi 30 soniyada
+// halok bo'lib, videoning yarmi yakuniy ekran bo'lib qoladi.
+// Bu FAQAT --film bilan yozib olishda ishlatiladi, o'yin balansiga tegmaydi.
+void App::filmSustain(float minPct) {
+    Impl& im = I();
+    if (!im.initialized || im.state != AppState::Gameplay) return;
+    Vitals& v = im.player.vitals;
+    const float floorHp = v.healthMax * clampf(minPct, 0.1f, 1.0f);
+    if (v.health < floorHp) v.health = floorHp;
+    if (v.breath < v.breathMax * 0.45f) v.breath = v.breathMax * 0.45f;
+    if (v.posture > v.postureMax * 0.80f) v.posture = v.postureMax * 0.55f;
+}
+
+void App::respawnHere() {
+    Impl& im = I();
+    if (!im.initialized) return;
+    enterLevel(im.levelId);
+}
+
+void App::filmCamera(float pitchDeg, float dist) {
+    Impl& im = I();
+    if (!im.initialized) return;
+    if (pitchDeg > -900.0f) im.camPitch = clampf(pitchDeg, -35.0f, 70.0f);
+    if (dist > 0.0f) { im.camDistTarget = clampf(dist, 2.0f, 30.0f); im.camDist = im.camDistTarget; }
+}
 
 void App::nudgeCamYaw(float deltaDeg) {
     Impl& im = I();

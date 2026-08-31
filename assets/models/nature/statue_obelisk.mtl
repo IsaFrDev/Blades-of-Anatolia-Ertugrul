@@ -1,8 +1,8 @@
 # Created by Kenney (www.kenney.nl)
 
 newmtl stoneDark
-Kd 0.6039216 0.7098039 0.7294118
+Kd 0.729412 0.709804 0.603922
 
 newmtl stone
-Kd 0.7215686 0.8862745 0.9098039
+Kd 0.909804 0.886274 0.721569
 
