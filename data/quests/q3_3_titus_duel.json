@@ -1,0 +1,51 @@
+{
+  "id": "q3_3_titus_duel",
+  "episode": 2,
+  "title_key": "Q3_3_TITLE",
+  "giver": "story",
+  "type": "boss",
+  "location": "amanos_tower",
+  "gdd_ref": "Epizod 3 / Kvest 3.3 - Final boss: Titus",
+  "systems": [
+    "ABossAIController",
+    "UBossPhaseComponent",
+    "UShieldBreakComponent"
+  ],
+  "objectives": [
+    {
+      "id": "break_shield",
+      "text_key": "Q3_3_OBJ_SHIELD",
+      "optional": false
+    },
+    {
+      "id": "phase_longsword",
+      "text_key": "Q3_3_OBJ_LONGSWORD",
+      "optional": false
+    },
+    {
+      "id": "phase_wounded_rage",
+      "text_key": "Q3_3_OBJ_RAGE",
+      "optional": false
+    },
+    {
+      "id": "finisher_alp_strike",
+      "text_key": "Q3_3_OBJ_FINISHER",
+      "optional": false
+    },
+    {
+      "id": "save_halima",
+      "text_key": "Q3_3_OBJ_HALIMA",
+      "optional": false
+    },
+    {
+      "id": "mourn_suleyman",
+      "text_key": "Q3_3_OBJ_MOURNING",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 20,
+    "skill_points": 3
+  },
+  "next": "q4_1_border_ambush"
+}

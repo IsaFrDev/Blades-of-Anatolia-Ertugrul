@@ -1,0 +1,60 @@
+{
+  "id": "q1_1_deer_hunt",
+  "episode": 0,
+  "title_key": "Q1_1_TITLE",
+  "giver": "hayme_ana",
+  "type": "main",
+  "location": "forest_pine",
+  "gdd_ref": "Epizod 1 / Kvest 1.1 - Kiyik ovi",
+  "systems": [
+    "UHorseComponent",
+    "URangedComponent",
+    "UTrackingSenseComponent"
+  ],
+  "objectives": [
+    {
+      "id": "leave_oba",
+      "text_key": "Q1_1_OBJ_LEAVE",
+      "optional": false
+    },
+    {
+      "id": "call_horse",
+      "text_key": "Q1_1_OBJ_HORSE",
+      "optional": false
+    },
+    {
+      "id": "find_tracks",
+      "text_key": "Q1_1_OBJ_TRACKS",
+      "optional": false
+    },
+    {
+      "id": "bow_tutorial",
+      "text_key": "Q1_1_OBJ_BOW",
+      "optional": false
+    },
+    {
+      "id": "chase_deer",
+      "text_key": "Q1_1_OBJ_CHASE",
+      "optional": false
+    },
+    {
+      "id": "load_prey",
+      "text_key": "Q1_1_OBJ_LOAD",
+      "optional": false
+    },
+    {
+      "id": "hunt_wolves",
+      "text_key": "Q1_1_OBJ_WOLVES",
+      "optional": true
+    }
+  ],
+  "rewards": {
+    "honor": 5,
+    "skill_points": 1,
+    "resources": {
+      "meat": 12,
+      "hide": 4
+    }
+  },
+  "next": "q1_2_forest_ambush"
+}

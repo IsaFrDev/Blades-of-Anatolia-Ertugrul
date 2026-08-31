@@ -1,0 +1,65 @@
+{
+  "id": "q2_1_journey_to_aleppo",
+  "episode": 1,
+  "title_key": "Q2_1_TITLE",
+  "giver": "suleyman_shah",
+  "type": "main",
+  "location": "aleppo",
+  "gdd_ref": "Epizod 2 / Kvest 2.1 - Halabga sayohat",
+  "systems": [
+    "UParkourComponent",
+    "UStealthComponent",
+    "UCrowdSubsystem",
+    "UDialogueSubsystem"
+  ],
+  "objectives": [
+    {
+      "id": "ride_to_aleppo",
+      "text_key": "Q2_1_OBJ_RIDE",
+      "optional": false
+    },
+    {
+      "id": "surrender_weapons",
+      "text_key": "Q2_1_OBJ_WEAPONS",
+      "optional": false
+    },
+    {
+      "id": "lose_pursuers",
+      "text_key": "Q2_1_OBJ_CROWD",
+      "optional": false
+    },
+    {
+      "id": "parkour_rooftops",
+      "text_key": "Q2_1_OBJ_ROOFS",
+      "optional": false
+    },
+    {
+      "id": "meet_ibn_arabi",
+      "text_key": "Q2_1_OBJ_IBN_ARABI",
+      "optional": false
+    },
+    {
+      "id": "palace_audience",
+      "text_key": "Q2_1_OBJ_PALACE",
+      "optional": false
+    },
+    {
+      "id": "search_nasir_room",
+      "text_key": "Q2_1_OBJ_NASIR",
+      "optional": true
+    },
+    {
+      "id": "save_caravan",
+      "text_key": "Q2_1_OBJ_CARAVAN",
+      "optional": true
+    }
+  ],
+  "rewards": {
+    "honor": 8,
+    "skill_points": 1,
+    "resources": {
+      "gold": 60
+    }
+  },
+  "next": "q2_2_caravanserai_ambush"
+}

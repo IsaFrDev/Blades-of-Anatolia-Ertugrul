@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "id": "c_kayi_tamga",
+      "category": "culture",
+      "title": "Qayi Tamg'asi (IYI)",
+      "text": "Turkman gilamlari (Kilim) — ulardagi har bir naqsh qabilaning tarixi va e'tiqodini bildiradi. Qayi tamg'asi IYI (Ikki o'q va bir yoy) degan ma'noni anglatadi."
+    },
+    {
+      "id": "c_seljuk_caravanserai",
+      "category": "location",
+      "title": "Saljuqiy Karvonsaroylari",
+      "text": "Saljuqiy karvonsaroylari o'rta asrlarning mehmonxonalari bo'lib, har bir karvonsaroy orasidagi masofa tuya 1 kunda bosib o'tadigan masofada qurilgan. Bu yerda barcha savdogarlar 3 kun bepul ovqatlangan."
+    },
+    {
+      "id": "c_templars",
+      "category": "faction",
+      "title": "Templarlar (Ma'bad Ritsarlari)",
+      "text": "Templarlar ziyoratchilarni himoya qilish uchun tuzilgan bo'lsa-da, keyinchalik Yevropadagi eng katta moliyaviy va harbiy kuchga aylangan. Ular Amanos tog'larida mustahkam qal'alar qurgan."
+    },
+    {
+      "id": "c_tengrism",
+      "category": "culture",
+      "title": "Tengrichilik va Shomonizm",
+      "text": "Mo'g'ullar Osmon xudosi - Tengriga ishongan. Shomonlar ruhlar bilan gaplashuvchi vositachilar hisoblangan va ularning marosimlari g'alabaga olib keladi deb ishonilgan."
+    },
+    {
+      "id": "c_ibn_arabi",
+      "category": "person",
+      "title": "Muhyiddin Ibn Arabiy",
+      "text": "Ibn Arabiy — Andalusiyada tug'ilib, Damashqqacha piyoda kelgan buyuk faylasuf. Uning 'Futuhat al-Makkiyya' asari tasavvufning eng muhim asarlaridan hisoblanadi."
+    }
+  ]
+}

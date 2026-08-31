@@ -1,0 +1,482 @@
+{
+  "id": "ep026_intro",
+  "episode": "EP026",
+  "level": "forest_pass",
+  "music": "MUS_EP026",
+  "ambience": "Ambience.Winter.Fog",
+  "letterbox": true,
+  "fade_in": 1.2,
+  "fade_out": 1.0,
+  "time_of_day": "day",
+  "weather": "fog",
+  "duration": 0,
+  "actors": [
+    {
+      "id": "ertugrul",
+      "char": "ertugrul",
+      "model": "assets/models/ottoman/ottoman.obj",
+      "loc_name": "chr.ertugrul.name",
+      "scale": 1.82,
+      "tint": [
+        0.94,
+        0.9,
+        0.84
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            -0.4,
+            0.0,
+            34.4
+          ],
+          "yaw": 180.0,
+          "clip": "Walk"
+        },
+        {
+          "t": 5.0,
+          "pos": [
+            -0.4,
+            0.0,
+            31.6
+          ],
+          "yaw": 175.6,
+          "clip": "Walk"
+        },
+        {
+          "t": 10.0,
+          "pos": [
+            -0.2,
+            0.0,
+            29.0
+          ],
+          "yaw": 168.7,
+          "clip": "Walk"
+        },
+        {
+          "t": 14.0,
+          "pos": [
+            0.2,
+            0.0,
+            27.0
+          ],
+          "yaw": -149.5,
+          "clip": "Idle"
+        },
+        {
+          "t": 19.0,
+          "pos": [
+            -0.6,
+            0.0,
+            25.6
+          ],
+          "yaw": -149.0,
+          "clip": "Sit"
+        },
+        {
+          "t": 26.0,
+          "pos": [
+            -0.6,
+            0.0,
+            25.6
+          ],
+          "yaw": -149.0,
+          "clip": "Sit"
+        },
+        {
+          "t": 31.0,
+          "pos": [
+            -1.4,
+            0.0,
+            26.6
+          ],
+          "yaw": -172.4,
+          "clip": "Idle"
+        },
+        {
+          "t": 36.0,
+          "pos": [
+            -2.6,
+            0.0,
+            28.0
+          ],
+          "yaw": -36.9,
+          "clip": "Walk"
+        },
+        {
+          "t": 40.0,
+          "pos": [
+            -3.2,
+            0.0,
+            28.8
+          ],
+          "yaw": 152.4,
+          "clip": "Idle"
+        }
+      ]
+    },
+    {
+      "id": "bektas",
+      "char": "haci_bektas",
+      "model": "assets/models/characters/character-i.obj",
+      "loc_name": "chr.haci_bektas.name",
+      "scale": 1.6,
+      "tint": [
+        0.9,
+        0.88,
+        0.82
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            -1.8,
+            0.0,
+            23.6
+          ],
+          "yaw": 9.5,
+          "clip": "Sit"
+        },
+        {
+          "t": 8.0,
+          "pos": [
+            -1.8,
+            0.0,
+            23.6
+          ],
+          "yaw": 12.3,
+          "clip": "Sit"
+        },
+        {
+          "t": 13.0,
+          "pos": [
+            -1.2,
+            0.0,
+            24.8
+          ],
+          "yaw": 32.5,
+          "clip": "Idle"
+        },
+        {
+          "t": 18.0,
+          "pos": [
+            -0.6,
+            0.0,
+            26.0
+          ],
+          "yaw": 180.0,
+          "clip": "Talk"
+        },
+        {
+          "t": 24.0,
+          "pos": [
+            -2.0,
+            0.0,
+            26.8
+          ],
+          "yaw": -116.6,
+          "clip": "Walk"
+        },
+        {
+          "t": 29.0,
+          "pos": [
+            -3.6,
+            0.0,
+            26.0
+          ],
+          "yaw": -159.4,
+          "clip": "Walk"
+        },
+        {
+          "t": 34.0,
+          "pos": [
+            -4.2,
+            0.0,
+            24.4
+          ],
+          "yaw": 24.0,
+          "clip": "Talk"
+        },
+        {
+          "t": 38.0,
+          "pos": [
+            -3.0,
+            0.0,
+            23.6
+          ],
+          "yaw": 90.0,
+          "clip": "Walk"
+        },
+        {
+          "t": 41.0,
+          "pos": [
+            -2.2,
+            0.0,
+            23.6
+          ],
+          "yaw": -10.9,
+          "clip": "Idle"
+        }
+      ]
+    },
+    {
+      "id": "darvesh",
+      "char": "darvesh",
+      "model": "assets/models/characters/character-e.obj",
+      "loc_name": "chr.darvesh.name",
+      "scale": 1.68,
+      "tint": [
+        0.84,
+        0.86,
+        0.88
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            3.6,
+            0.0,
+            22.4
+          ],
+          "yaw": -19.0,
+          "clip": "Idle"
+        },
+        {
+          "t": 5.0,
+          "pos": [
+            3.0,
+            0.0,
+            24.0
+          ],
+          "yaw": -26.6,
+          "clip": "Walk"
+        },
+        {
+          "t": 10.0,
+          "pos": [
+            2.0,
+            0.0,
+            26.0
+          ],
+          "yaw": -21.8,
+          "clip": "Walk"
+        },
+        {
+          "t": 15.0,
+          "pos": [
+            1.2,
+            0.0,
+            28.0
+          ],
+          "yaw": -58.0,
+          "clip": "Idle"
+        },
+        {
+          "t": 21.0,
+          "pos": [
+            2.4,
+            0.0,
+            26.4
+          ],
+          "yaw": 138.4,
+          "clip": "Walk"
+        },
+        {
+          "t": 27.0,
+          "pos": [
+            4.0,
+            0.0,
+            24.6
+          ],
+          "yaw": 143.1,
+          "clip": "Walk"
+        },
+        {
+          "t": 33.0,
+          "pos": [
+            5.2,
+            0.0,
+            23.0
+          ],
+          "yaw": -65.9,
+          "clip": "Idle"
+        },
+        {
+          "t": 41.0,
+          "pos": [
+            5.2,
+            0.0,
+            23.0
+          ],
+          "yaw": -65.9,
+          "clip": "Idle"
+        }
+      ]
+    }
+  ],
+  "camera": [
+    {
+      "t": 0.0,
+      "pos": [
+        1.5,
+        2.2,
+        38.0
+      ],
+      "look": [
+        -0.4,
+        1.5,
+        32.0
+      ],
+      "fov": 44
+    },
+    {
+      "t": 6.0,
+      "pos": [
+        -4.0,
+        2.0,
+        33.0
+      ],
+      "look": [
+        -0.4,
+        1.55,
+        29.5
+      ],
+      "fov": 40
+    },
+    {
+      "t": 12.0,
+      "pos": [
+        3.5,
+        1.9,
+        29.0
+      ],
+      "look": [
+        -0.8,
+        1.5,
+        26.0
+      ],
+      "fov": 38
+    },
+    {
+      "t": 17.0,
+      "pos": [
+        -3.5,
+        1.8,
+        27.5
+      ],
+      "look": [
+        -1.2,
+        1.5,
+        24.6
+      ],
+      "fov": 34
+    },
+    {
+      "t": 23.0,
+      "pos": [
+        1.8,
+        1.75,
+        24.0
+      ],
+      "look": [
+        -1.0,
+        1.45,
+        25.8
+      ],
+      "fov": 30
+    },
+    {
+      "t": 29.0,
+      "pos": [
+        -4.5,
+        1.9,
+        29.5
+      ],
+      "look": [
+        -2.0,
+        1.5,
+        26.0
+      ],
+      "fov": 36
+    },
+    {
+      "t": 35.0,
+      "pos": [
+        -6.5,
+        2.0,
+        26.0
+      ],
+      "look": [
+        -3.4,
+        1.5,
+        27.2
+      ],
+      "fov": 34
+    },
+    {
+      "t": 41.5,
+      "pos": [
+        2.5,
+        3.4,
+        32.5
+      ],
+      "look": [
+        -2.6,
+        1.4,
+        26.0
+      ],
+      "fov": 48
+    }
+  ],
+  "lines": [
+    {
+      "t": 1.8,
+      "actor": "darvesh",
+      "loc": "cut.ep026_intro.01",
+      "vo": "ep026_intro_01",
+      "dur": 0
+    },
+    {
+      "t": 7.0,
+      "actor": "bektas",
+      "loc": "cut.ep026_intro.02",
+      "vo": "ep026_intro_02",
+      "dur": 0
+    },
+    {
+      "t": 12.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep026_intro.03",
+      "vo": "ep026_intro_03",
+      "dur": 0
+    },
+    {
+      "t": 17.0,
+      "actor": "bektas",
+      "loc": "cut.ep026_intro.04",
+      "vo": "ep026_intro_04",
+      "dur": 0
+    },
+    {
+      "t": 22.5,
+      "actor": "ertugrul",
+      "loc": "cut.ep026_intro.05",
+      "vo": "ep026_intro_05",
+      "dur": 0
+    },
+    {
+      "t": 28.0,
+      "actor": "bektas",
+      "loc": "cut.ep026_intro.06",
+      "vo": "ep026_intro_06",
+      "dur": 0
+    },
+    {
+      "t": 34.0,
+      "actor": "bektas",
+      "loc": "cut.ep026_intro.07",
+      "vo": "ep026_intro_07",
+      "dur": 0
+    }
+  ]
+}

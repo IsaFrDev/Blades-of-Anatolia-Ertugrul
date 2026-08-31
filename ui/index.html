@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blades of Anatolia: Ertugrul - UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Video / Image Simulator -->
+    <div class="bg-layer"></div>
+    <div class="particles"></div>
+
+    <div id="app">
+        <!-- Bosh Menyu (Main Menu) -->
+        <section id="main-menu" class="screen active">
+            <div class="menu-container">
+                <div class="brand">
+                    <h2 class="subtitle">Diriliş</h2>
+                    <h1 class="title">BLADES OF ANATOLIA</h1>
+                    <h3 class="hero-name">ERTUĞRUL</h3>
+                </div>
+                <nav class="main-nav">
+                    <button class="nav-btn primary" onclick="navigateTo('hud')">
+                        <span class="btn-text">Davom etish</span>
+                        <span class="btn-glow"></span>
+                    </button>
+                    <button class="nav-btn" onclick="navigateTo('shell')">Yangi O'yin</button>
+                    <button class="nav-btn" onclick="navigateTo('settings')">Sozlamalar</button>
+                    <button class="nav-btn exit">Chiqish</button>
+                </nav>
+            </div>
+            <div class="version-info">v2.0.4 Alpha Build</div>
+        </section>
+
+        <!-- Shell UI (Loadout / Episode Select) -->
+        <section id="shell" class="screen hidden">
+            <div class="top-bar">
+                <button class="icon-btn back" onclick="navigateTo('main-menu')">← Qaytish</button>
+                <h2>QAHRAMON & EPIZODLAR</h2>
+            </div>
+            <div class="shell-layout">
+                <div class="side-panel">
+                    <h3>Epizodlar</h3>
+                    <ul class="episode-list">
+                        <li class="active">EPIZOD 1: Qaytib Kelish</li>
+                        <li>EPIZOD 2: Xoinning Izi</li>
+                        <li class="locked">EPIZOD 3: Templar Qamali 🔒</li>
+                    </ul>
+                </div>
+                <div class="character-preview">
+                    <!-- 3D qahramon ko'rinadigan joy simulyatsiyasi -->
+                    <div class="char-hologram"></div>
+                    <div class="stats">
+                        <div class="stat"><span class="label">Sog'lik:</span> <span class="val">100%</span></div>
+                        <div class="stat"><span class="label">Zirh:</span> <span class="val">O'rta</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-bar">
+                <button class="nav-btn primary" onclick="navigateTo('hud')">O'YINNI BOSHLASH</button>
+            </div>
+        </section>
+
+        <!-- Sozlamalar (Settings) -->
+        <section id="settings" class="screen hidden">
+            <div class="top-bar">
+                <button class="icon-btn back" onclick="navigateTo('main-menu')">← Qaytish</button>
+                <h2>SOZLAMALAR</h2>
+            </div>
+            <div class="settings-container">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('grafika')">Grafika</button>
+                    <button class="tab-btn" onclick="switchTab('oyin')">O'yin Tabi</button>
+                    <button class="tab-btn" onclick="switchTab('ovoz')">Ovoz</button>
+                </div>
+                <div class="tab-content" id="grafika-tab">
+                    <div class="setting-row">
+                        <label>Ruxsat (Resolution)</label>
+                        <select><option>1920x1080</option><option>2560x1440</option><option>3840x2160</option></select>
+                    </div>
+                    <div class="setting-row">
+                        <label>Sifat (Quality)</label>
+                        <select><option>O'rta</option><option>Yuqori</option><option selected>Ultra (AAA)</option></select>
+                    </div>
+                    <div class="setting-row">
+                        <label>Ray Tracing</label>
+                        <input type="checkbox" checked class="toggle">
+                    </div>
+                </div>
+                <div class="tab-content hidden" id="oyin-tab">
+                    <div class="setting-row">
+                        <label>Qiyinlik Darajasi</label>
+                        <select><option>Oson</option><option selected>Haqiqiy (Hardcore)</option></select>
+                    </div>
+                    <div class="setting-row">
+                        <label>Subtitrlar</label>
+                        <input type="checkbox" checked class="toggle">
+                    </div>
+                </div>
+                <div class="tab-content hidden" id="ovoz-tab">
+                    <div class="setting-row">
+                        <label>Asosiy Ovoz</label>
+                        <input type="range" min="0" max="100" value="80">
+                    </div>
+                    <div class="setting-row">
+                        <label>Musiqa</label>
+                        <input type="range" min="0" max="100" value="100">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HUD (O'yin ichi interfeysi) -->
+        <section id="hud" class="screen hidden hud-mode">
+            <div class="top-left">
+                <div class="health-bar-container">
+                    <div class="health-bar"></div>
+                    <div class="stamina-bar"></div>
+                </div>
+                <div class="player-name">ERTUĞRUL BEY</div>
+            </div>
+            <div class="top-right">
+                <div class="minimap-circle">
+                    <div class="compass">N</div>
+                    <div class="marker objective"></div>
+                </div>
+            </div>
+            <div class="bottom-left">
+                <div class="weapon-slot">
+                    <div class="icon sword"></div>
+                    <span>Kayi Qilichi</span>
+                </div>
+            </div>
+            <div class="bottom-right">
+                <div class="quest-tracker">
+                    <h4>Asosiy Vazifa</h4>
+                    <p>Karvonsaroydagi xoinlarni toping</p>
+                    <small>0/3 yo'q qilindi</small>
+                </div>
+            </div>
+            <div class="pause-hint">PAUZA UCHUN 'ESC' TUGMASINI BOSING</div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

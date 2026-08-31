@@ -1,0 +1,54 @@
+{
+  "id": "q2_2_caravanserai_ambush",
+  "episode": 1,
+  "title_key": "Q2_2_TITLE",
+  "giver": "turgut",
+  "type": "main",
+  "location": "caravanserai",
+  "gdd_ref": "Epizod 2 / Kvest 2.2 - Karvonsaroy tungi pistirmasi",
+  "systems": [
+    "UAssassinationComponent",
+    "ULightingAwarenessSubsystem",
+    "UCompanionCommandSubsystem"
+  ],
+  "objectives": [
+    {
+      "id": "wake_alps",
+      "text_key": "Q2_2_OBJ_WAKE",
+      "optional": false
+    },
+    {
+      "id": "extinguish_torches",
+      "text_key": "Q2_2_OBJ_TORCHES",
+      "optional": false
+    },
+    {
+      "id": "silent_kills",
+      "text_key": "Q2_2_OBJ_SILENT",
+      "optional": false
+    },
+    {
+      "id": "command_companions",
+      "text_key": "Q2_2_OBJ_ORDERS",
+      "optional": false
+    },
+    {
+      "id": "duel_bisol",
+      "text_key": "Q2_2_OBJ_DUEL",
+      "optional": false
+    },
+    {
+      "id": "bisol_fate",
+      "text_key": "Q2_2_OBJ_FATE",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 10,
+    "skill_points": 1,
+    "resources": {
+      "iron": 6
+    }
+  },
+  "next": "q2_3_expose_traitor"
+}

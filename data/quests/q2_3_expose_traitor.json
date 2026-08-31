@@ -1,0 +1,51 @@
+{
+  "id": "q2_3_expose_traitor",
+  "episode": 1,
+  "title_key": "Q2_3_TITLE",
+  "giver": "halima",
+  "type": "main",
+  "location": "kayi_oba",
+  "gdd_ref": "Epizod 2 / Kvest 2.3 - Xoinni fosh qilish",
+  "systems": [
+    "UInvestigationSubsystem",
+    "UTailingObjectiveComponent",
+    "UEavesdropComponent"
+  ],
+  "objectives": [
+    {
+      "id": "gather_evidence",
+      "text_key": "Q2_3_OBJ_EVIDENCE",
+      "optional": false
+    },
+    {
+      "id": "tail_kurdoglu",
+      "text_key": "Q2_3_OBJ_TAIL",
+      "optional": false
+    },
+    {
+      "id": "eavesdrop_mill",
+      "text_key": "Q2_3_OBJ_EAVESDROP",
+      "optional": false
+    },
+    {
+      "id": "council_accusation",
+      "text_key": "Q2_3_OBJ_COUNCIL",
+      "optional": false
+    },
+    {
+      "id": "kurdoglu_chase",
+      "text_key": "Q2_3_OBJ_CHASE",
+      "optional": false
+    },
+    {
+      "id": "kurdoglu_fate",
+      "text_key": "Q2_3_OBJ_FATE",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 12,
+    "skill_points": 2
+  },
+  "next": "q3_1_infiltrate_amanos"
+}

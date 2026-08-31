@@ -1,0 +1,51 @@
+{
+  "id": "q4_1_border_ambush",
+  "episode": 3,
+  "title_key": "Q4_1_TITLE",
+  "giver": "korkut_bey",
+  "type": "main",
+  "location": "snow_pass",
+  "gdd_ref": "Epizod 4 / Kvest 4.1 - Chegaradagi pistirma",
+  "systems": [
+    "UMountedCombatComponent",
+    "USnowDeformationSubsystem",
+    "UScriptedDefeatSubsystem"
+  ],
+  "objectives": [
+    {
+      "id": "ride_snow_pass",
+      "text_key": "Q4_1_OBJ_RIDE",
+      "optional": false
+    },
+    {
+      "id": "track_mongols",
+      "text_key": "Q4_1_OBJ_TRACKS",
+      "optional": false
+    },
+    {
+      "id": "mounted_combat",
+      "text_key": "Q4_1_OBJ_MOUNTED",
+      "optional": false
+    },
+    {
+      "id": "fight_lasso_riders",
+      "text_key": "Q4_1_OBJ_LASSO",
+      "optional": false
+    },
+    {
+      "id": "tugtekin_combo",
+      "text_key": "Q4_1_OBJ_TUGTEKIN",
+      "optional": false
+    },
+    {
+      "id": "hamza_betrayal",
+      "text_key": "Q4_1_OBJ_BETRAYAL",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 6,
+    "skill_points": 1
+  },
+  "next": "q4_2_nail_scene"
+}

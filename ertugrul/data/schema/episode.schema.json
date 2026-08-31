@@ -1,0 +1,392 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fayzinc.com/ertugrul/schema/episodes.v2.json",
+  "title": "Diriliş: The Last March — Episode Data (v2)",
+  "description": "48 epizodli tarixiy action-adventure uchun production ma'lumot sxemasi. v1 (sizning asl JSON) dan farqi: loc-key'lar, tarixiy ishonchlilik, mix tizimi, o'ynaladigan intro, branching, telemetriya.",
+  "type": "object",
+  "required": ["schema_version", "game_id", "timeline", "seasons", "episodes"],
+  "additionalProperties": false,
+
+  "properties": {
+    "schema_version": { "type": "integer", "const": 2 },
+    "game_id":        { "type": "string", "const": "dirilis_last_march" },
+    "generated_at":   { "type": "string", "format": "date-time" },
+
+    "timeline": {
+      "type": "object",
+      "required": ["start_year_gregorian", "end_year_gregorian"],
+      "properties": {
+        "start_year_gregorian": { "type": "integer", "const": 1227 },
+        "end_year_gregorian":   { "type": "integer", "const": 1261 },
+        "note": { "type": "string" }
+      }
+    },
+
+    "seasons": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": { "$ref": "#/$defs/season" }
+    },
+
+    "episodes": {
+      "type": "array", "minItems": 48, "maxItems": 48,
+      "items": { "$ref": "#/$defs/episode" }
+    },
+
+    "side_quest_chains": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/side_quest_chain" }
+    },
+
+    "uncertainty_scenes": {
+      "type": "array", "minItems": 7, "maxItems": 7,
+      "items": { "$ref": "#/$defs/uncertainty_scene" }
+    },
+
+    "archetype_budget":  { "type": "object", "additionalProperties": { "type": "integer" } },
+    "traversal_budget":  { "type": "object", "additionalProperties": { "type": "integer" } }
+  },
+
+  "$defs": {
+
+    "confidence": {
+      "type": "string",
+      "enum": ["DOCUMENTED", "DISPUTED", "LEGEND"],
+      "description": "Tarixiy ishonchlilik darajasi. O'yin ichida [HUJJATLI]/[BAHSLI]/[RIVOYAT] deb ko'rsatiladi."
+    },
+
+    "episode_archetype": {
+      "type": "string",
+      "enum": ["INFILTRATION","SIEGE","SURVIVAL","INVESTIGATION","COURT","ESCORT","DEFENSE","CHASE","RITUAL"]
+    },
+
+    "intro_archetype": {
+      "type": "string",
+      "enum": ["WALK","HANDS","OTHER_EYES","PLUNGE","WATCH","LABOUR","BREATH"],
+      "description": "O'ynaladigan intro turi. ❗ Pre-rendered video YO'Q."
+    },
+
+    "traversal": {
+      "type": "string",
+      "enum": ["FOOT_PARKOUR","HORSE","SEWER_CAVE","SWIM","ROPE_GRAPPLE","SNOW_ICE",
+               "MOVING_PLATFORM","BOAT","FALCON","CAMEL","VERTICAL_SIEGE","CAMP_SOCIAL"]
+    },
+
+    "faction": {
+      "type": "string",
+      "enum": ["SELJUK","AYYUBID","TEMPLAR","MONGOL","AHI","BYZANTINE"]
+    },
+
+    "mih_beat_kind": {
+      "type": "string",
+      "enum": ["OBJECT","ON_OTHER","CORPSE","MECHANICAL","DIALOGUE","CAMERA","THREAT","ADVANTAGE","RITUAL_ACT","EVENT"],
+      "description": "⭐ Mix (mıh) tizimining shu epizoddagi ko'rinish turi. HAR epizodda majburiy."
+    },
+
+    "hand_phase": {
+      "type": "string",
+      "enum": ["INTACT","FRESH","CHRONIC","ADAPTED"]
+    },
+
+    "season": {
+      "type": "object",
+      "required": ["id","index","loc_key_title","year_from","year_to","setting","tier_range","boss","world_change"],
+      "additionalProperties": false,
+      "properties": {
+        "id":            { "type": "string", "pattern": "^S[1-4]$" },
+        "index":         { "type": "integer", "minimum": 1, "maximum": 4 },
+        "loc_key_title": { "type": "string" },
+        "codename":      { "type": "string" },
+        "year_from":     { "type": "integer", "minimum": 1227, "maximum": 1261 },
+        "year_to":       { "type": "integer", "minimum": 1227, "maximum": 1261 },
+        "setting":       { "type": "string", "enum": ["autumn","winter","spring","summer","full_cycle"] },
+        "tier_range":    { "type": "array", "items": { "type": "integer", "minimum": 1, "maximum": 5 },
+                           "minItems": 2, "maxItems": 2 },
+        "boss":          { "type": "string" },
+        "region":        { "type": "string" },
+        "new_enemy_archetype": { "type": "string" },
+        "world_change":  { "type": "string" },
+        "episode_ids":   { "type": "array", "items": { "type": "string", "pattern": "^EP0[0-4][0-9]$" },
+                           "minItems": 12, "maxItems": 12 }
+      }
+    },
+
+    "historical_anchor": {
+      "type": "object",
+      "required": ["hijri","gregorian","year_gregorian","confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "hijri":          { "type": "string", "description": "masalan '641 Muharram'" },
+        "gregorian":      { "type": "string", "description": "masalan '26 Iyun 1243'" },
+        "year_gregorian": { "type": "integer", "minimum": 1227, "maximum": 1261 },
+        "confidence":     { "$ref": "#/$defs/confidence" },
+        "loc_key_note":   { "type": "string" },
+        "scholar_note":   { "type": "string",
+                            "description": "❗ confidence != DOCUMENTED bo'lsa MAJBURIY" },
+        "sources":        { "type": "array", "items": { "type": "string" } }
+      },
+      "allOf": [{
+        "if":   { "properties": { "confidence": { "enum": ["DISPUTED","LEGEND"] } } },
+        "then": { "required": ["scholar_note"] }
+      }]
+    },
+
+    "intro": {
+      "type": "object",
+      "required": ["archetype","duration_sec","date_display","loc_key_description"],
+      "additionalProperties": false,
+      "properties": {
+        "archetype":           { "$ref": "#/$defs/intro_archetype" },
+        "duration_sec":        { "type": "integer", "minimum": 90, "maximum": 400 },
+        "date_display":        { "type": "string", "enum": ["DIEGETIC","OVERLAY","SPOKEN","COMBINED"] },
+        "diegetic_actor_tag":  { "type": "string" },
+        "loc_key_description": { "type": "string" },
+        "allow_movement":      { "type": "boolean", "default": true },
+        "allow_combat":        { "type": "boolean", "default": false },
+        "override_pawn":       { "type": "string", "description": "EP010 = Turgut" },
+        "director_camera_weight_max": { "type": "number", "minimum": 0, "maximum": 0.35 }
+      }
+    },
+
+    "objective": {
+      "type": "object",
+      "required": ["id","loc_key","kind"],
+      "additionalProperties": false,
+      "properties": {
+        "id":       { "type": "string", "pattern": "^OBJ_[A-Z0-9_]+$" },
+        "loc_key":  { "type": "string" },
+        "kind":     { "type": "string",
+                      "enum": ["REACH","ELIMINATE","PROTECT","STEALTH","INVESTIGATE","DIALOGUE",
+                               "CRAFT","SURVIVE","ESCORT","HOLD","GATHER","CHOICE"] },
+        "optional": { "type": "boolean", "default": false },
+        "scripted_failure": { "type": "boolean", "default": false,
+                              "description": "⭐ EP010 Turgut, EP035 Köse Dağ — o'yinchi yuta olmaydi va u buni biladi" }
+      }
+    },
+
+    "enemy_composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "archetypes":       { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "max_simultaneous": { "type": "integer", "minimum": 0, "maximum": 8,
+                              "description": "❗ 8 dan ko'p = o'lim tuzog'i" },
+        "background_agents":{ "type": "integer", "minimum": 0, "maximum": 4000,
+                              "description": "Mass Framework — Köse Dağ 3000" }
+      }
+    },
+
+    "mih_beat": {
+      "type": "object",
+      "required": ["kind","loc_key"],
+      "additionalProperties": false,
+      "properties": {
+        "kind":                 { "$ref": "#/$defs/mih_beat_kind" },
+        "loc_key":              { "type": "string" },
+        "tag":                  { "type": "string" },
+        "hand_integrity_delta": { "type": "number" },
+        "is_major":             { "type": "boolean", "default": false }
+      }
+    },
+
+    "wound_state": {
+      "type": "object",
+      "required": ["phase","expected_integrity_at_start","max_integrity","drain_multiplier"],
+      "additionalProperties": false,
+      "properties": {
+        "phase":                       { "$ref": "#/$defs/hand_phase" },
+        "expected_integrity_at_start": { "type": "number", "minimum": 0, "maximum": 100 },
+        "max_integrity":               { "type": "number", "minimum": 0, "maximum": 100 },
+        "drain_multiplier":            { "type": "number", "minimum": 0, "maximum": 4 },
+        "parry_window_ms":             { "type": "number", "minimum": 90, "maximum": 200 }
+      }
+    },
+
+    "choice": {
+      "type": "object",
+      "required": ["id","loc_key_prompt","options"],
+      "additionalProperties": false,
+      "properties": {
+        "id":                    { "type": "string", "pattern": "^(SS_[1-7]|CH_EP0[0-4][0-9]_[A-Z0-9_]+)$" },
+        "loc_key_prompt":        { "type": "string" },
+        "is_uncertainty_scene":  { "type": "boolean", "default": false },
+        "weight":                { "type": "string", "enum": ["LIGHT","HEAVY","IRREVERSIBLE"] },
+        "options": {
+          "type": "array", "minItems": 2, "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["id","loc_key","result_flags"],
+            "additionalProperties": false,
+            "properties": {
+              "id":            { "type": "string" },
+              "loc_key":       { "type": "string" },
+              "result_flags":  { "type": "array", "items": { "type": "string" } },
+              "codex_unlocks": { "type": "array", "items": { "type": "string" } },
+              "reputation_deltas": {
+                "type": "object",
+                "propertyNames": { "$ref": "#/$defs/faction" },
+                "additionalProperties": { "type": "number", "minimum": -100, "maximum": 100 }
+              },
+              "iman_delta": { "type": "number", "minimum": -50, "maximum": 50 }
+            }
+          }
+        }
+      }
+    },
+
+    "episode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id","season_id","global_index","season_index",
+        "loc_key_title","loc_key_synopsis","loc_key_cliffhanger",
+        "anchor","intro","archetype","difficulty_tier","estimated_minutes",
+        "objectives","enemy_composition","traversal","mechanics_introduced",
+        "mih_beat","wound_state","codex_unlocks","prerequisites","unlocks",
+        "checkpoints","fail_conditions","world_state_deltas",
+        "environment","audio","telemetry","content"
+      ],
+      "properties": {
+        "id":            { "type": "string", "pattern": "^EP0[0-4][0-9]$" },
+        "season_id":     { "type": "string", "pattern": "^S[1-4]$" },
+        "global_index":  { "type": "integer", "minimum": 0, "maximum": 47 },
+        "season_index":  { "type": "integer", "minimum": 0, "maximum": 11 },
+
+        "loc_key_title":       { "type": "string" },
+        "loc_key_synopsis":    { "type": "string" },
+        "loc_key_cliffhanger": { "type": "string" },
+
+        "anchor":  { "$ref": "#/$defs/historical_anchor" },
+        "intro":   { "$ref": "#/$defs/intro" },
+
+        "archetype":         { "$ref": "#/$defs/episode_archetype" },
+        "difficulty_tier":   { "type": "integer", "minimum": 1, "maximum": 5 },
+        "estimated_minutes": { "type": "integer", "minimum": 35, "maximum": 90 },
+
+        "objectives":        { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/objective" } },
+        "enemy_composition": { "$ref": "#/$defs/enemy_composition" },
+
+        "traversal":            { "type": "array", "minItems": 1,
+                                  "items": { "$ref": "#/$defs/traversal" },
+                                  "description": "traversal[0] = ASOSIY harakat turi" },
+        "mechanics_introduced": { "type": "array", "items": { "type": "string" } },
+
+        "mih_beat":    { "$ref": "#/$defs/mih_beat" },
+        "wound_state": { "$ref": "#/$defs/wound_state" },
+
+        "codex_unlocks": { "type": "array",
+                           "items": { "type": "string", "pattern": "^CDX_[A-Z0-9_]+$" } },
+
+        "prerequisites": { "type": "array", "items": { "type": "string" } },
+        "unlocks":       { "type": "array", "items": { "type": "string" } },
+        "choices":       { "type": "array", "items": { "$ref": "#/$defs/choice" } },
+
+        "checkpoints":        { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "fail_conditions":    { "type": "array", "items": { "type": "string" } },
+        "world_state_deltas": { "type": "array", "items": { "type": "string" } },
+
+        "levels": { "type": "array", "items": { "type": "string", "pattern": "^LVL_[A-Z0-9_]+$" } },
+        "characters": { "type": "array", "items": { "type": "string", "pattern": "^CHR_[A-Z0-9_]+$" } },
+
+        "environment": {
+          "type": "object",
+          "required": ["season","time_of_day","weather"],
+          "additionalProperties": false,
+          "properties": {
+            "season":      { "type": "string", "enum": ["autumn","winter","spring","summer"] },
+            "time_of_day": { "type": "string", "enum": ["dawn","day","dusk","night","varies"] },
+            "weather":     { "type": "string", "enum": ["clear","rain","snow","fog","storm","dust","varies"] },
+            "region":      { "type": "string" }
+          }
+        },
+
+        "audio": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "music_cue":     { "type": "string" },
+            "ambience_tag":  { "type": "string" },
+            "silence_scene": { "type": "boolean", "default": false,
+                               "description": "⭐ EP024, EP034, EP046 — musiqasiz sahnalar" }
+          }
+        },
+
+        "telemetry": {
+          "type": "object",
+          "required": ["funnel_id"],
+          "additionalProperties": false,
+          "properties": {
+            "funnel_id":            { "type": "string" },
+            "target_completion_pct":{ "type": "number", "minimum": 0, "maximum": 100 },
+            "watch_metrics":        { "type": "array", "items": { "type": "string" } }
+          }
+        },
+
+        "content": {
+          "type": "object",
+          "required": ["warnings"],
+          "additionalProperties": false,
+          "properties": {
+            "warnings":          { "type": "array", "items": { "type": "string" } },
+            "has_torture_scene": { "type": "boolean", "default": false },
+            "skippable_scene_id":{ "type": "string" }
+          }
+        },
+
+        "retention_hook": { "type": "string" }
+      }
+    },
+
+    "side_quest_chain": {
+      "type": "object",
+      "required": ["id","giver","stages","loc_key_summary","affects_main_story"],
+      "additionalProperties": false,
+      "properties": {
+        "id":                 { "type": "string", "pattern": "^SQC_[A-Z0-9_]+$" },
+        "giver":              { "type": "string", "pattern": "^CHR_[A-Z0-9_]+$" },
+        "loc_key_summary":    { "type": "string" },
+        "stages": {
+          "type": "array", "minItems": 3, "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["stage","episode_gate","loc_key"],
+            "additionalProperties": false,
+            "properties": {
+              "stage":        { "type": "integer", "minimum": 1, "maximum": 5 },
+              "episode_gate": { "type": "string", "pattern": "^EP0[0-4][0-9]$" },
+              "loc_key":      { "type": "string" }
+            }
+          }
+        },
+        "affects_main_story": { "type": "string" },
+        "reward_tags":        { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "uncertainty_scene": {
+      "type": "object",
+      "required": ["id","episode_id","loc_key_question","options"],
+      "additionalProperties": false,
+      "properties": {
+        "id":               { "type": "string", "pattern": "^SS_[1-7]$" },
+        "episode_id":       { "type": "string", "pattern": "^EP0[0-4][0-9]$" },
+        "loc_key_question": { "type": "string" },
+        "options": {
+          "type": "array", "minItems": 2, "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["id","loc_key","confidence","codex_unlocks"],
+            "additionalProperties": false,
+            "properties": {
+              "id":            { "type": "string" },
+              "loc_key":       { "type": "string" },
+              "confidence":    { "$ref": "#/$defs/confidence" },
+              "codex_unlocks": { "type": "array", "items": { "type": "string" } },
+              "scholar_note":  { "type": "string" }
+            }
+          }
+        },
+        "affects": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

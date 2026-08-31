@@ -1,0 +1,46 @@
+{
+  "id": "q3_2_castle_courtyard",
+  "episode": 2,
+  "title_key": "Q3_2_TITLE",
+  "giver": "gundogdu",
+  "type": "main",
+  "location": "amanos_castle",
+  "gdd_ref": "Epizod 3 / Kvest 3.2 - Qala hovlisi jangi",
+  "systems": [
+    "ULargeBattleSubsystem",
+    "UCompanionCommandSubsystem",
+    "UCrowdCombatLOD"
+  ],
+  "objectives": [
+    {
+      "id": "hold_gate_zone",
+      "text_key": "Q3_2_OBJ_GATE",
+      "optional": false
+    },
+    {
+      "id": "kill_priest_officer",
+      "text_key": "Q3_2_OBJ_PRIEST",
+      "optional": false
+    },
+    {
+      "id": "church_zone",
+      "text_key": "Q3_2_OBJ_CHURCH",
+      "optional": false
+    },
+    {
+      "id": "use_burning_cart",
+      "text_key": "Q3_2_OBJ_CART",
+      "optional": true
+    },
+    {
+      "id": "tower_stairs",
+      "text_key": "Q3_2_OBJ_STAIRS",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 8,
+    "skill_points": 1
+  },
+  "next": "q3_3_titus_duel"
+}

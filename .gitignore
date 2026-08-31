@@ -1,0 +1,27 @@
+# Yig'ilgan fayllar
+build/
+backend/out/
+saves/
+*.exe
+build/**/*.o
+build/**/*.obj
+
+# CMake
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+
+# Backend ma'lumot ombori (lokal)
+backend/data/players/
+backend/data/saves/
+backend/data/telemetry.jsonl
+
+# Yuklab olingan original asset arxivlari (modellar assets/models da saqlanadi)
+assets/downloads/
+
+# Kompilyator chiqishi (assets/**/*.obj 3D modellar - ular saqlanadi!)
+
+# IDE
+.vscode/
+.idea/
+*.user

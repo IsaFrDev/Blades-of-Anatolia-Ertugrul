@@ -1,0 +1,627 @@
+{
+  "id": "aleppo_road",
+  "loc_name": "Halab yo'li (dasht)",
+  "terrain": {
+    "grid": 128,
+    "size": 340,
+    "seed": 9001,
+    "hill_height": 5,
+    "flat_radius": 22
+  },
+  "sky": {
+    "time_of_day": "dusk",
+    "weather": "clear"
+  },
+  "spawns": [
+    {
+      "id": "player",
+      "pos": [
+        0,
+        0,
+        20
+      ],
+      "yaw": 180
+    },
+    {
+      "id": "cutscene",
+      "pos": [
+        -10,
+        0,
+        40
+      ],
+      "yaw": 200
+    },
+    {
+      "id": "caravan",
+      "pos": [
+        6,
+        0,
+        -6
+      ],
+      "yaw": 0
+    },
+    {
+      "id": "enemy",
+      "pos": [
+        -38,
+        0,
+        -34
+      ],
+      "yaw": 40
+    },
+    {
+      "id": "checkpoint",
+      "pos": [
+        0,
+        0,
+        -60
+      ],
+      "yaw": 180
+    }
+  ],
+  "props": [
+    {
+      "mesh": "assets/models/town/cart-high.obj",
+      "pos": [
+        4,
+        0,
+        -2
+      ],
+      "yaw": 6,
+      "scale": 3.02,
+      "tint": [
+        0.6,
+        0.46,
+        0.3
+      ],
+      "collide": true,
+      "radius": 1.21
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        -3,
+        0,
+        -12
+      ],
+      "yaw": 172,
+      "scale": 3.36,
+      "tint": [
+        0.58,
+        0.44,
+        0.29
+      ],
+      "collide": true,
+      "radius": 1.32
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        5,
+        0,
+        -22
+      ],
+      "yaw": 14,
+      "scale": 3.36,
+      "tint": [
+        0.62,
+        0.48,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.32
+    },
+    {
+      "mesh": "assets/models/town/cart-high.obj",
+      "pos": [
+        -4,
+        0,
+        -32
+      ],
+      "yaw": 190,
+      "scale": 3.02,
+      "tint": [
+        0.57,
+        0.43,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.21
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        7,
+        0,
+        10
+      ],
+      "yaw": 352,
+      "scale": 3.36,
+      "tint": [
+        0.61,
+        0.47,
+        0.3
+      ],
+      "collide": true,
+      "radius": 1.42
+    },
+    {
+      "mesh": "assets/models/nature/tent_smallOpen.obj",
+      "pos": [
+        -14,
+        0,
+        -4
+      ],
+      "yaw": 92,
+      "scale": 5.17,
+      "tint": [
+        0.74,
+        0.58,
+        0.38
+      ],
+      "collide": true,
+      "radius": 1.68
+    },
+    {
+      "mesh": "assets/models/nature/tent_smallClosed.obj",
+      "pos": [
+        -16,
+        0,
+        -16
+      ],
+      "yaw": 78,
+      "scale": 5.17,
+      "tint": [
+        0.7,
+        0.52,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.68
+    },
+    {
+      "mesh": "assets/models/nature/tent_detailedOpen.obj",
+      "pos": [
+        16,
+        0,
+        -14
+      ],
+      "yaw": 264,
+      "scale": 6.59,
+      "tint": [
+        0.68,
+        0.5,
+        0.33
+      ],
+      "collide": true,
+      "radius": 2.2
+    },
+    {
+      "mesh": "assets/models/nature/campfire_stones.obj",
+      "pos": [
+        -8,
+        0,
+        -10
+      ],
+      "yaw": 0,
+      "scale": 4.5,
+      "tint": [
+        0.62,
+        0.58,
+        0.52
+      ],
+      "collide": false,
+      "radius": 0.9
+    },
+    {
+      "mesh": "assets/models/nature/campfire_planks.obj",
+      "pos": [
+        -8,
+        0,
+        -10
+      ],
+      "yaw": 30,
+      "scale": 8.75,
+      "tint": [
+        0.54,
+        0.38,
+        0.23
+      ],
+      "collide": true,
+      "radius": 1.87
+    },
+    {
+      "mesh": "assets/models/town/stall.obj",
+      "pos": [
+        13,
+        0,
+        4
+      ],
+      "yaw": 268,
+      "scale": 6.02,
+      "tint": [
+        0.72,
+        0.6,
+        0.4
+      ],
+      "collide": true,
+      "radius": 3.01
+    },
+    {
+      "mesh": "assets/models/town/stall-red.obj",
+      "pos": [
+        14,
+        0,
+        -4
+      ],
+      "yaw": 272,
+      "scale": 2.43,
+      "tint": [
+        0.74,
+        0.38,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.22
+    },
+    {
+      "mesh": "assets/models/town/stall-bench.obj",
+      "pos": [
+        10,
+        0,
+        0
+      ],
+      "yaw": 90,
+      "scale": 2.22,
+      "tint": [
+        0.62,
+        0.48,
+        0.31
+      ],
+      "collide": false,
+      "radius": 0.65
+    },
+    {
+      "mesh": "assets/models/town/stall-stool.obj",
+      "pos": [
+        9,
+        0,
+        -7
+      ],
+      "yaw": 0,
+      "scale": 2.0,
+      "tint": [
+        0.62,
+        0.48,
+        0.31
+      ],
+      "collide": false,
+      "radius": 0.46
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -2,
+        0,
+        2
+      ],
+      "yaw": 0,
+      "scale": 1.12,
+      "tint": [
+        0.92,
+        0.74,
+        0.42
+      ],
+      "collide": false,
+      "radius": 0.19
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        2,
+        0,
+        -26
+      ],
+      "yaw": 0,
+      "scale": 1.12,
+      "tint": [
+        0.92,
+        0.74,
+        0.42
+      ],
+      "collide": false,
+      "radius": 0.19
+    },
+    {
+      "mesh": "assets/models/town/fence-broken.obj",
+      "pos": [
+        -11,
+        0,
+        12
+      ],
+      "yaw": 12,
+      "scale": 3.16,
+      "tint": [
+        0.6,
+        0.48,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.13
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-broken.obj",
+      "pos": [
+        -20,
+        0,
+        8
+      ],
+      "yaw": 40,
+      "scale": 2.4,
+      "tint": [
+        0.58,
+        0.46,
+        0.31
+      ],
+      "collide": true,
+      "radius": 0.94
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -6,
+        0,
+        24
+      ],
+      "yaw": 8,
+      "scale": 2.0,
+      "tint": [
+        0.62,
+        0.5,
+        0.33
+      ],
+      "collide": false,
+      "radius": 0.5
+    },
+    {
+      "mesh": "assets/models/town/planks-half.obj",
+      "pos": [
+        4,
+        0,
+        28
+      ],
+      "yaw": 190,
+      "scale": 2.0,
+      "tint": [
+        0.62,
+        0.5,
+        0.33
+      ],
+      "collide": false,
+      "radius": 0.45
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        -9,
+        0,
+        -24
+      ],
+      "yaw": 0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.45,
+        0.3
+      ],
+      "collide": true,
+      "radius": 0.43
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        10,
+        0,
+        -30
+      ],
+      "yaw": 0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.45,
+        0.3
+      ],
+      "collide": true,
+      "radius": 0.43
+    },
+    {
+      "mesh": "assets/models/nature/statue_obelisk.obj",
+      "pos": [
+        24,
+        0,
+        18
+      ],
+      "yaw": 24,
+      "scale": 3.66,
+      "tint": [
+        0.68,
+        0.62,
+        0.5
+      ],
+      "collide": true,
+      "radius": 0.98
+    },
+    {
+      "mesh": "assets/models/nature/statue_obelisk.obj",
+      "pos": [
+        -26,
+        0,
+        -46
+      ],
+      "yaw": 200,
+      "scale": 3.66,
+      "tint": [
+        0.66,
+        0.6,
+        0.48
+      ],
+      "collide": true,
+      "radius": 1.1
+    },
+    {
+      "mesh": "assets/models/town/banner-red.obj",
+      "pos": [
+        18,
+        0,
+        12
+      ],
+      "yaw": 250,
+      "scale": 5.0,
+      "tint": [
+        0.76,
+        0.24,
+        0.18
+      ],
+      "collide": false,
+      "radius": 0.42
+    },
+    {
+      "mesh": "assets/models/town/banner-green.obj",
+      "pos": [
+        -19,
+        0,
+        -28
+      ],
+      "yaw": 70,
+      "scale": 5.0,
+      "tint": [
+        0.34,
+        0.5,
+        0.28
+      ],
+      "collide": false,
+      "radius": 0.42
+    }
+  ],
+  "scatter": [
+    {
+      "meshes": [
+        "assets/models/nature/rock_largeA.obj",
+        "assets/models/nature/rock_largeB.obj",
+        "assets/models/nature/rock_largeC.obj",
+        "assets/models/nature/rock_smallA.obj",
+        "assets/models/nature/rock_smallB.obj"
+      ],
+      "count": 230,
+      "min_radius": 24,
+      "max_radius": 164,
+      "scale_min": 1.8,
+      "scale_max": 6.5,
+      "tint": [
+        0.72,
+        0.64,
+        0.5
+      ],
+      "tint_jitter": 0.16,
+      "collide": true,
+      "radius": 1.4,
+      "min_gap": 2.2,
+      "snap": true,
+      "seed": 2101
+    },
+    {
+      "meshes": [
+        "assets/models/nature/tree_thin_fall.obj",
+        "assets/models/nature/tree_default_fall.obj",
+        "assets/models/nature/tree_simple_fall.obj",
+        "assets/models/nature/tree_oak_fall.obj"
+      ],
+      "count": 54,
+      "min_radius": 30,
+      "max_radius": 160,
+      "scale_min": 3.0,
+      "scale_max": 5.2,
+      "tint": [
+        0.72,
+        0.6,
+        0.34
+      ],
+      "tint_jitter": 0.2,
+      "collide": true,
+      "radius": 1.2,
+      "min_gap": 12.0,
+      "min_slope_y": 0.7,
+      "snap": true,
+      "seed": 2102
+    },
+    {
+      "meshes": [
+        "assets/models/nature/plant_bushSmall.obj",
+        "assets/models/nature/plant_bushTriangle.obj",
+        "assets/models/nature/grass.obj",
+        "assets/models/nature/grass_large.obj"
+      ],
+      "count": 210,
+      "min_radius": 20,
+      "max_radius": 164,
+      "scale_min": 1.4,
+      "scale_max": 3.0,
+      "tint": [
+        0.66,
+        0.62,
+        0.34
+      ],
+      "tint_jitter": 0.22,
+      "collide": false,
+      "radius": 0.4,
+      "min_slope_y": 0.6,
+      "snap": true,
+      "seed": 2103
+    },
+    {
+      "meshes": [
+        "assets/models/nature/stump_old.obj",
+        "assets/models/nature/log.obj",
+        "assets/models/nature/log_stack.obj"
+      ],
+      "count": 44,
+      "min_radius": 26,
+      "max_radius": 150,
+      "scale_min": 1.64,
+      "scale_max": 2.94,
+      "tint": [
+        0.62,
+        0.5,
+        0.32
+      ],
+      "tint_jitter": 0.18,
+      "collide": true,
+      "radius": 0.82,
+      "min_gap": 6.0,
+      "snap": true,
+      "seed": 2104
+    },
+    {
+      "meshes": [
+        "assets/models/nature/flower_yellowA.obj",
+        "assets/models/nature/flower_redA.obj"
+      ],
+      "count": 34,
+      "min_radius": 26,
+      "max_radius": 120,
+      "scale_min": 1.6,
+      "scale_max": 2.6,
+      "tint": [
+        0.92,
+        0.82,
+        0.5
+      ],
+      "tint_jitter": 0.2,
+      "collide": false,
+      "radius": 0.3,
+      "min_slope_y": 0.7,
+      "snap": true,
+      "seed": 2105
+    }
+  ]
+}

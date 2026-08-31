@@ -1,0 +1,51 @@
+{
+  "id": "q6_3_noyan_duel",
+  "episode": 5,
+  "title_key": "Q6_3_TITLE",
+  "giver": "story",
+  "type": "boss",
+  "location": "mongol_camp_shaman_ground",
+  "gdd_ref": "Epizod 6 / Kvest 6.3 - Final boss: Bayju Noyan",
+  "systems": [
+    "ABossAIController",
+    "UBossPhaseComponent",
+    "UGrabAttackComponent"
+  ],
+  "objectives": [
+    {
+      "id": "unhorse_noyan",
+      "text_key": "Q6_3_OBJ_UNHORSE",
+      "optional": false
+    },
+    {
+      "id": "survive_whip",
+      "text_key": "Q6_3_OBJ_WHIP",
+      "optional": false
+    },
+    {
+      "id": "bloody_duel",
+      "text_key": "Q6_3_OBJ_BLOODY",
+      "optional": false
+    },
+    {
+      "id": "faith_finisher",
+      "text_key": "Q6_3_OBJ_FINISHER",
+      "optional": false
+    },
+    {
+      "id": "noyan_fate",
+      "text_key": "Q6_3_OBJ_FATE",
+      "optional": false
+    },
+    {
+      "id": "epilogue_wedding",
+      "text_key": "Q6_3_OBJ_EPILOGUE",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 25,
+    "skill_points": 4
+  },
+  "next": ""
+}

@@ -1,0 +1,6888 @@
+{
+  "id": "sogut_village",
+  "loc_name": "So'g'ut qishlog'i",
+  "terrain": {
+    "grid": 128,
+    "size": 320,
+    "seed": 4242,
+    "hill_height": 6,
+    "flat_radius": 40
+  },
+  "sky": {
+    "time_of_day": "day",
+    "weather": "clear"
+  },
+  "spawns": [
+    {
+      "id": "player",
+      "pos": [
+        0.0,
+        0.0,
+        32.0
+      ],
+      "yaw": 180.0
+    },
+    {
+      "id": "cutscene",
+      "pos": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "yaw": 145.0
+    },
+    {
+      "id": "rooftop",
+      "pos": [
+        0.0,
+        3.18,
+        15.0
+      ],
+      "yaw": 180.0,
+      "y_offset": 3.18
+    },
+    {
+      "id": "tower",
+      "pos": [
+        7.5,
+        9.18,
+        1.5
+      ],
+      "yaw": 270.0,
+      "y_offset": 9.18
+    }
+  ],
+  "props": [
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -3.0,
+        0.0,
+        -18.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -3.0,
+        0.0,
+        -15.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -3.0,
+        0.0,
+        -12.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        0.0,
+        0.0,
+        -18.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        0.0,
+        0.0,
+        -12.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        3.0,
+        0.0,
+        -18.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        3.0,
+        0.0,
+        -15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        3.0,
+        0.0,
+        -12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -3.0,
+        3.0,
+        -18.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-window-shutters.obj",
+      "pos": [
+        -3.0,
+        3.0,
+        -15.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -3.0,
+        3.0,
+        -12.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        0.0,
+        3.0,
+        -18.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-window-shutters.obj",
+      "pos": [
+        0.0,
+        3.0,
+        -12.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        3.0,
+        3.0,
+        -18.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        3.0,
+        3.0,
+        -15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        3.0,
+        3.0,
+        -12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -3.0,
+        6.0,
+        -18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -3.0,
+        6.0,
+        -15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -3.0,
+        6.0,
+        -12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        0.0,
+        6.0,
+        -18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        0.0,
+        6.0,
+        -15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        0.0,
+        6.0,
+        -12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        3.0,
+        6.0,
+        -18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        3.0,
+        6.0,
+        -15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        3.0,
+        6.0,
+        -12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -3.3,
+        6.18,
+        -18.429
+      ],
+      "yaw": 180.0,
+      "scale": 2.0,
+      "tint": [
+        0.422,
+        0.31,
+        0.217
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -1.1,
+        6.18,
+        -18.429
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.422,
+        0.31,
+        0.217
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        1.1,
+        6.18,
+        -18.429
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.422,
+        0.31,
+        0.217
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        3.3,
+        6.18,
+        -18.429
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.422,
+        0.31,
+        0.217
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        12.0,
+        0.0,
+        -3.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        12.0,
+        0.0,
+        0.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        12.0,
+        0.0,
+        3.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        15.0,
+        0.0,
+        -3.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        15.0,
+        0.0,
+        3.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        18.0,
+        0.0,
+        -3.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        18.0,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        18.0,
+        0.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        12.0,
+        3.0,
+        -3.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        12.0,
+        3.0,
+        0.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        12.0,
+        3.0,
+        3.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        15.0,
+        3.0,
+        -3.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        15.0,
+        3.0,
+        3.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        18.0,
+        3.0,
+        -3.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        18.0,
+        3.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        18.0,
+        3.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        12.0,
+        6.0,
+        -3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        12.0,
+        6.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        12.0,
+        6.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        15.0,
+        6.0,
+        -3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        15.0,
+        6.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        15.0,
+        6.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        18.0,
+        6.0,
+        -3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        18.0,
+        6.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        18.0,
+        6.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        18.429,
+        6.18,
+        -3.3
+      ],
+      "yaw": 270.0,
+      "scale": 2.0,
+      "tint": [
+        0.384,
+        0.285,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        18.429,
+        6.18,
+        -1.1
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.384,
+        0.285,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        18.429,
+        6.18,
+        1.1
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.384,
+        0.285,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        18.429,
+        6.18,
+        3.3
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.384,
+        0.285,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -16.5,
+        0.0,
+        10.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -16.5,
+        0.0,
+        13.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -16.5,
+        0.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -13.5,
+        0.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -13.5,
+        0.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -10.5,
+        0.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        -10.5,
+        0.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -10.5,
+        0.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -16.5,
+        3.0,
+        10.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -16.5,
+        3.0,
+        13.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -16.5,
+        3.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -13.5,
+        3.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -13.5,
+        3.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -10.5,
+        3.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-window-shutters.obj",
+      "pos": [
+        -10.5,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -10.5,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -16.5,
+        6.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -16.5,
+        6.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -16.5,
+        6.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -13.5,
+        6.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -13.5,
+        6.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -13.5,
+        6.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -10.5,
+        6.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -10.5,
+        6.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -10.5,
+        6.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -16.8,
+        6.18,
+        16.929
+      ],
+      "yaw": 180.0,
+      "scale": 2.0,
+      "tint": [
+        0.446,
+        0.322,
+        0.223
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -14.6,
+        6.18,
+        16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.446,
+        0.322,
+        0.223
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -12.4,
+        6.18,
+        16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.446,
+        0.322,
+        0.223
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -10.2,
+        6.18,
+        16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.446,
+        0.322,
+        0.223
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -6.0,
+        0.0,
+        -18.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-window-small.obj",
+      "pos": [
+        -6.0,
+        0.0,
+        -15.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -6.0,
+        0.0,
+        -12.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.68,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -6.0,
+        3.0,
+        -18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -6.0,
+        3.0,
+        -15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -6.0,
+        3.0,
+        -12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.544,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        12.0,
+        0.0,
+        6.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        15.0,
+        0.0,
+        6.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        18.0,
+        0.0,
+        6.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.62,
+        0.46,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        12.0,
+        3.0,
+        6.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        15.0,
+        3.0,
+        6.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        18.0,
+        3.0,
+        6.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.496,
+        0.368,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -7.5,
+        0.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -7.5,
+        0.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -7.5,
+        0.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.72,
+        0.52,
+        0.36
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -7.5,
+        3.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -7.5,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -7.5,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.576,
+        0.416,
+        0.288
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -3.0,
+        0.0,
+        12.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -3.0,
+        0.0,
+        15.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -3.0,
+        0.0,
+        18.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        0.0,
+        0.0,
+        12.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        0.0,
+        0.0,
+        18.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        3.0,
+        0.0,
+        12.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-window-small.obj",
+      "pos": [
+        3.0,
+        0.0,
+        15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        3.0,
+        0.0,
+        18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.58,
+        0.44,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -3.0,
+        3.0,
+        12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -3.0,
+        3.0,
+        15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -3.0,
+        3.0,
+        18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        0.0,
+        3.0,
+        12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks-opening.obj",
+      "pos": [
+        0.0,
+        3.0,
+        15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        0.0,
+        3.0,
+        18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        3.0,
+        3.0,
+        12.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        3.0,
+        3.0,
+        15.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        3.0,
+        3.0,
+        18.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.464,
+        0.352,
+        0.256
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -3.3,
+        3.18,
+        18.429
+      ],
+      "yaw": 180.0,
+      "scale": 2.0,
+      "tint": [
+        0.36,
+        0.273,
+        0.198
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -1.1,
+        3.18,
+        18.429
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.36,
+        0.273,
+        0.198
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        1.1,
+        3.18,
+        18.429
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.36,
+        0.273,
+        0.198
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        3.3,
+        3.18,
+        18.429
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.36,
+        0.273,
+        0.198
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -18.0,
+        0.0,
+        -3.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -18.0,
+        0.0,
+        0.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -18.0,
+        0.0,
+        3.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -15.0,
+        0.0,
+        -3.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -15.0,
+        0.0,
+        3.0
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -12.0,
+        0.0,
+        -3.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        -12.0,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -12.0,
+        0.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.66,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -18.0,
+        3.0,
+        -3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -18.0,
+        3.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -18.0,
+        3.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -15.0,
+        3.0,
+        -3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -15.0,
+        3.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -15.0,
+        3.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -12.0,
+        3.0,
+        -3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -12.0,
+        3.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -12.0,
+        3.0,
+        3.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.528,
+        0.384,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -18.429,
+        3.18,
+        -3.3
+      ],
+      "yaw": 270.0,
+      "scale": 2.0,
+      "tint": [
+        0.409,
+        0.298,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -18.429,
+        3.18,
+        -1.1
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.409,
+        0.298,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -18.429,
+        3.18,
+        1.1
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.409,
+        0.298,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -18.429,
+        3.18,
+        3.3
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.409,
+        0.298,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        10.5,
+        0.0,
+        10.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        10.5,
+        0.0,
+        13.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        10.5,
+        0.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        13.5,
+        0.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        13.5,
+        0.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        16.5,
+        0.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        16.5,
+        0.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        16.5,
+        0.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.7,
+        0.5,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        10.5,
+        3.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        10.5,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        10.5,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        13.5,
+        3.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        13.5,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        13.5,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        16.5,
+        3.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        16.5,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        16.5,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.4,
+        0.272
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        10.2,
+        3.18,
+        16.929
+      ],
+      "yaw": 180.0,
+      "scale": 2.0,
+      "tint": [
+        0.434,
+        0.31,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        12.4,
+        3.18,
+        16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.434,
+        0.31,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        14.6,
+        3.18,
+        16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.434,
+        0.31,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        16.8,
+        3.18,
+        16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.434,
+        0.31,
+        0.211
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        10.5,
+        0.0,
+        -16.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        10.5,
+        0.0,
+        -13.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        10.5,
+        0.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        13.5,
+        0.0,
+        -16.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        13.5,
+        0.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        16.5,
+        0.0,
+        -16.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        16.5,
+        0.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        16.5,
+        0.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.6,
+        0.45,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        10.5,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        10.5,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        10.5,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        13.5,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        13.5,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        13.5,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks-opening.obj",
+      "pos": [
+        16.5,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        16.5,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        16.5,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.48,
+        0.36,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        16.929,
+        3.18,
+        -16.8
+      ],
+      "yaw": 270.0,
+      "scale": 2.0,
+      "tint": [
+        0.372,
+        0.279,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        16.929,
+        3.18,
+        -14.6
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.372,
+        0.279,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        16.929,
+        3.18,
+        -12.4
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.372,
+        0.279,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        16.929,
+        3.18,
+        -10.2
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.372,
+        0.279,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -16.5,
+        0.0,
+        -16.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -16.5,
+        0.0,
+        -13.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -16.5,
+        0.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-window-small.obj",
+      "pos": [
+        -13.5,
+        0.0,
+        -16.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        -13.5,
+        0.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -10.5,
+        0.0,
+        -16.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -10.5,
+        0.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -10.5,
+        0.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.74,
+        0.54,
+        0.37
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -16.5,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -16.5,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -16.5,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -13.5,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -13.5,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -13.5,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -10.5,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -10.5,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -10.5,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.592,
+        0.432,
+        0.296
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -16.8,
+        3.18,
+        -16.929
+      ],
+      "yaw": 180.0,
+      "scale": 2.0,
+      "tint": [
+        0.459,
+        0.335,
+        0.229
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -14.6,
+        3.18,
+        -16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.459,
+        0.335,
+        0.229
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -12.4,
+        3.18,
+        -16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.459,
+        0.335,
+        0.229
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -10.2,
+        3.18,
+        -16.929
+      ],
+      "yaw": 0.0,
+      "scale": 2.0,
+      "tint": [
+        0.459,
+        0.335,
+        0.229
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        24.0,
+        0.0,
+        10.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        24.0,
+        0.0,
+        13.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        24.0,
+        0.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        27.0,
+        0.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        27.0,
+        0.0,
+        16.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        30.0,
+        0.0,
+        10.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        30.0,
+        0.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        30.0,
+        0.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.64,
+        0.47,
+        0.33
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        24.0,
+        3.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        24.0,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        24.0,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        27.0,
+        3.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        27.0,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        27.0,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        30.0,
+        3.0,
+        10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        30.0,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        30.0,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.512,
+        0.376,
+        0.264
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        30.429,
+        3.18,
+        10.2
+      ],
+      "yaw": 270.0,
+      "scale": 2.0,
+      "tint": [
+        0.397,
+        0.291,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        30.429,
+        3.18,
+        12.4
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.397,
+        0.291,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        30.429,
+        3.18,
+        14.6
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.397,
+        0.291,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        30.429,
+        3.18,
+        16.8
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.397,
+        0.291,
+        0.205
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -30.0,
+        0.0,
+        -16.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-window-small.obj",
+      "pos": [
+        -30.0,
+        0.0,
+        -13.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -30.0,
+        0.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -27.0,
+        0.0,
+        -16.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood.obj",
+      "pos": [
+        -27.0,
+        0.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -24.0,
+        0.0,
+        -16.5
+      ],
+      "yaw": 90.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-door.obj",
+      "pos": [
+        -24.0,
+        0.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-corner.obj",
+      "pos": [
+        -24.0,
+        0.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.56,
+        0.43,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -30.0,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -30.0,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -30.0,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -27.0,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -27.0,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -27.0,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -24.0,
+        3.0,
+        -16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -24.0,
+        3.0,
+        -13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        -24.0,
+        3.0,
+        -10.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.448,
+        0.344,
+        0.248
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -30.429,
+        3.18,
+        -16.8
+      ],
+      "yaw": 270.0,
+      "scale": 2.0,
+      "tint": [
+        0.347,
+        0.267,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -30.429,
+        3.18,
+        -14.6
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.347,
+        0.267,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable.obj",
+      "pos": [
+        -30.429,
+        3.18,
+        -12.4
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.347,
+        0.267,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/roof-gable-end.obj",
+      "pos": [
+        -30.429,
+        3.18,
+        -10.2
+      ],
+      "yaw": 90.0,
+      "scale": 2.0,
+      "tint": [
+        0.347,
+        0.267,
+        0.192
+      ],
+      "collide": true,
+      "radius": 1.1,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        0.0,
+        -2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        0.0,
+        2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        0.0,
+        -2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        0.0,
+        2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        3.18,
+        -2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        3.18,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        3.18,
+        2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        3.18,
+        -2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        3.18,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        3.18,
+        2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        6.18,
+        -2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        6.18,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.15,
+        6.18,
+        2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        6.18,
+        -2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        6.18,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.85,
+        6.18,
+        2.85
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.3,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        7.5,
+        3.0,
+        -1.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.46,
+        0.34,
+        0.24
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        7.5,
+        3.0,
+        1.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.46,
+        0.34,
+        0.24
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        7.5,
+        6.0,
+        -1.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.46,
+        0.34,
+        0.24
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/planks.obj",
+      "pos": [
+        7.5,
+        9.0,
+        1.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.46,
+        0.34,
+        0.24
+      ],
+      "collide": true,
+      "radius": 1.62,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        7.5,
+        3.18,
+        1.5
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.75,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        7.5,
+        6.18,
+        -1.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.75,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.3,
+        9.18,
+        0.4
+      ],
+      "yaw": 0.0,
+      "scale": 1.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": false,
+      "radius": 0.12,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        6.3,
+        9.18,
+        2.6
+      ],
+      "yaw": 0.0,
+      "scale": 1.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": false,
+      "radius": 0.12,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.7,
+        9.18,
+        0.4
+      ],
+      "yaw": 0.0,
+      "scale": 1.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": false,
+      "radius": 0.12,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/pillar-wood.obj",
+      "pos": [
+        8.7,
+        9.18,
+        2.6
+      ],
+      "yaw": 0.0,
+      "scale": 1.0,
+      "tint": [
+        0.52,
+        0.38,
+        0.26
+      ],
+      "collide": false,
+      "radius": 0.12,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/banner-red.obj",
+      "pos": [
+        8.5,
+        9.18,
+        1.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.78,
+        0.2,
+        0.16
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/banner-green.obj",
+      "pos": [
+        6.5,
+        6.18,
+        -1.5
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.3,
+        0.52,
+        0.28
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/nature/bridge_wood.obj",
+      "pos": [
+        5.65,
+        2.3,
+        14.0
+      ],
+      "yaw": 0.0,
+      "scale": 2.2,
+      "tint": [
+        0.52,
+        0.39,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.15,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/nature/bridge_wood.obj",
+      "pos": [
+        7.85,
+        2.3,
+        14.0
+      ],
+      "yaw": 0.0,
+      "scale": 2.2,
+      "tint": [
+        0.52,
+        0.39,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.15,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        1.6,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.6,
+      "tint": [
+        0.55,
+        0.42,
+        0.3
+      ],
+      "collide": true,
+      "radius": 0.8,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        3.2,
+        0.0,
+        0.0
+      ],
+      "yaw": 90.0,
+      "scale": 2.985,
+      "tint": [
+        0.58,
+        0.44,
+        0.31
+      ],
+      "collide": true,
+      "radius": 1.4,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        4.8,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 2.4,
+      "tint": [
+        0.55,
+        0.42,
+        0.3
+      ],
+      "collide": true,
+      "radius": 1.2,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/log_stack.obj",
+      "pos": [
+        -25.3,
+        0.0,
+        0.0
+      ],
+      "yaw": 20.0,
+      "scale": 2.312,
+      "tint": [
+        0.48,
+        0.34,
+        0.21
+      ],
+      "collide": true,
+      "radius": 0.75,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        -23.2,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 2.985,
+      "tint": [
+        0.57,
+        0.42,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.4,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        -20.7,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.0,
+      "scale": 2.4,
+      "tint": [
+        0.55,
+        0.42,
+        0.3
+      ],
+      "collide": true,
+      "radius": 1.2,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        0.0,
+        0.0,
+        24.4
+      ],
+      "yaw": 0.0,
+      "scale": 1.6,
+      "tint": [
+        0.55,
+        0.42,
+        0.3
+      ],
+      "collide": true,
+      "radius": 0.8,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        0.0,
+        0.0,
+        22.9
+      ],
+      "yaw": 0.0,
+      "scale": 1.6,
+      "tint": [
+        0.55,
+        0.42,
+        0.3
+      ],
+      "collide": true,
+      "radius": 0.8,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/cart-high.obj",
+      "pos": [
+        0.0,
+        0.0,
+        20.75
+      ],
+      "yaw": 0.0,
+      "scale": 2.788,
+      "tint": [
+        0.56,
+        0.41,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.25,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/log_stack.obj",
+      "pos": [
+        23.3,
+        0.0,
+        -13.5
+      ],
+      "yaw": 55.0,
+      "scale": 2.312,
+      "tint": [
+        0.48,
+        0.34,
+        0.21
+      ],
+      "collide": true,
+      "radius": 0.75,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        21.2,
+        0.0,
+        -13.5
+      ],
+      "yaw": 90.0,
+      "scale": 2.985,
+      "tint": [
+        0.55,
+        0.4,
+        0.26
+      ],
+      "collide": true,
+      "radius": 1.4,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-red.obj",
+      "pos": [
+        18.97,
+        0.0,
+        -13.5
+      ],
+      "yaw": 90.0,
+      "scale": 1.94,
+      "tint": [
+        0.72,
+        0.32,
+        0.26
+      ],
+      "collide": true,
+      "radius": 0.97,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        -6.0,
+        3.18,
+        -13.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.54,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.75,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        15.0,
+        3.18,
+        6.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.54,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.75,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block.obj",
+      "pos": [
+        -7.5,
+        3.18,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.54,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.75,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        -15.0,
+        3.18,
+        2.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.4,
+      "tint": [
+        0.53,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.7,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        13.5,
+        3.18,
+        11.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.4,
+      "tint": [
+        0.53,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.7,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        0.0,
+        3.18,
+        17.5
+      ],
+      "yaw": 0.0,
+      "scale": 1.2,
+      "tint": [
+        0.53,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        -13.5,
+        3.18,
+        -11.5
+      ],
+      "yaw": 0.0,
+      "scale": 1.4,
+      "tint": [
+        0.53,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.7,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        27.0,
+        3.18,
+        11.5
+      ],
+      "yaw": 0.0,
+      "scale": 1.2,
+      "tint": [
+        0.53,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/wall-wood-block-half.obj",
+      "pos": [
+        -27.0,
+        3.18,
+        -15.5
+      ],
+      "yaw": 0.0,
+      "scale": 1.2,
+      "tint": [
+        0.53,
+        0.4,
+        0.28
+      ],
+      "collide": true,
+      "radius": 0.6,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/stall.obj",
+      "pos": [
+        -5.5,
+        0,
+        -3.5
+      ],
+      "yaw": 90.0,
+      "scale": 4.0,
+      "tint": [
+        0.64,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall.obj",
+      "pos": [
+        -5.5,
+        0,
+        3.5
+      ],
+      "yaw": 90.0,
+      "scale": 4.0,
+      "tint": [
+        0.62,
+        0.48,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall.obj",
+      "pos": [
+        4.0,
+        0,
+        -6.0
+      ],
+      "yaw": 0.0,
+      "scale": 4.0,
+      "tint": [
+        0.66,
+        0.5,
+        0.35
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall.obj",
+      "pos": [
+        4.0,
+        0,
+        6.0
+      ],
+      "yaw": 0.0,
+      "scale": 4.0,
+      "tint": [
+        0.63,
+        0.49,
+        0.34
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-red.obj",
+      "pos": [
+        0.0,
+        0,
+        -7.5
+      ],
+      "yaw": 0.0,
+      "scale": 2.4,
+      "tint": [
+        0.72,
+        0.32,
+        0.26
+      ],
+      "collide": true,
+      "radius": 1.2,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-green.obj",
+      "pos": [
+        0.0,
+        0,
+        7.5
+      ],
+      "yaw": 180.0,
+      "scale": 2.4,
+      "tint": [
+        0.34,
+        0.54,
+        0.32
+      ],
+      "collide": true,
+      "radius": 1.2,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-red.obj",
+      "pos": [
+        -8.5,
+        0,
+        -6.5
+      ],
+      "yaw": 45.0,
+      "scale": 2.4,
+      "tint": [
+        0.7,
+        0.3,
+        0.25
+      ],
+      "collide": true,
+      "radius": 1.2,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-green.obj",
+      "pos": [
+        -8.5,
+        0,
+        6.5
+      ],
+      "yaw": 135.0,
+      "scale": 2.4,
+      "tint": [
+        0.32,
+        0.52,
+        0.3
+      ],
+      "collide": true,
+      "radius": 1.2,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-bench.obj",
+      "pos": [
+        -2.6,
+        0,
+        -4.4
+      ],
+      "yaw": 15.0,
+      "scale": 2.4,
+      "tint": [
+        0.55,
+        0.41,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-bench.obj",
+      "pos": [
+        2.6,
+        0,
+        -4.4
+      ],
+      "yaw": 345.0,
+      "scale": 2.4,
+      "tint": [
+        0.55,
+        0.41,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-bench.obj",
+      "pos": [
+        -2.6,
+        0,
+        4.4
+      ],
+      "yaw": 165.0,
+      "scale": 2.4,
+      "tint": [
+        0.55,
+        0.41,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-bench.obj",
+      "pos": [
+        2.6,
+        0,
+        4.4
+      ],
+      "yaw": 195.0,
+      "scale": 2.4,
+      "tint": [
+        0.55,
+        0.41,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-bench.obj",
+      "pos": [
+        -7.0,
+        0,
+        0.0
+      ],
+      "yaw": 90.0,
+      "scale": 2.4,
+      "tint": [
+        0.55,
+        0.41,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-stool.obj",
+      "pos": [
+        -1.4,
+        0,
+        -2.2
+      ],
+      "yaw": 282.0,
+      "scale": 2.2,
+      "tint": [
+        0.54,
+        0.4,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-stool.obj",
+      "pos": [
+        1.4,
+        0,
+        -2.2
+      ],
+      "yaw": 285.0,
+      "scale": 2.2,
+      "tint": [
+        0.54,
+        0.4,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-stool.obj",
+      "pos": [
+        -1.4,
+        0,
+        2.2
+      ],
+      "yaw": 253.0,
+      "scale": 2.2,
+      "tint": [
+        0.54,
+        0.4,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-stool.obj",
+      "pos": [
+        1.4,
+        0,
+        2.2
+      ],
+      "yaw": 60.0,
+      "scale": 2.2,
+      "tint": [
+        0.54,
+        0.4,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-stool.obj",
+      "pos": [
+        -6.2,
+        0,
+        -1.6
+      ],
+      "yaw": 312.0,
+      "scale": 2.2,
+      "tint": [
+        0.54,
+        0.4,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/stall-stool.obj",
+      "pos": [
+        5.0,
+        0,
+        2.0
+      ],
+      "yaw": 154.0,
+      "scale": 2.2,
+      "tint": [
+        0.54,
+        0.4,
+        0.27
+      ],
+      "collide": false,
+      "radius": 0.3,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/blade.obj",
+      "pos": [
+        -5.0,
+        0,
+        -5.6
+      ],
+      "yaw": 200.0,
+      "scale": 0.55,
+      "tint": [
+        0.72,
+        0.74,
+        0.78
+      ],
+      "collide": false,
+      "radius": 0.1,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/log_stack.obj",
+      "pos": [
+        -9.5,
+        0,
+        2.4
+      ],
+      "yaw": 25.0,
+      "scale": 2.6,
+      "tint": [
+        0.48,
+        0.34,
+        0.21
+      ],
+      "collide": true,
+      "radius": 0.85,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/log_stackLarge.obj",
+      "pos": [
+        9.0,
+        0,
+        -7.5
+      ],
+      "yaw": 105.0,
+      "scale": 2.6,
+      "tint": [
+        0.47,
+        0.33,
+        0.21
+      ],
+      "collide": true,
+      "radius": 0.95,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        8.31,
+        0,
+        3.44
+      ],
+      "yaw": 22.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        3.44,
+        0,
+        8.31
+      ],
+      "yaw": 67.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -3.44,
+        0,
+        8.31
+      ],
+      "yaw": 112.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -8.31,
+        0,
+        3.44
+      ],
+      "yaw": 157.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -8.31,
+        0,
+        -3.44
+      ],
+      "yaw": 202.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -3.44,
+        0,
+        -8.31
+      ],
+      "yaw": 247.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        3.44,
+        0,
+        -8.31
+      ],
+      "yaw": 292.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        8.31,
+        0,
+        -3.44
+      ],
+      "yaw": 337.5,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -2.2,
+        0,
+        24.6
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        2.2,
+        0,
+        24.6
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -21.0,
+        0,
+        -6.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        21.0,
+        0,
+        6.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        -21.0,
+        0,
+        8.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/lantern.obj",
+      "pos": [
+        21.0,
+        0,
+        -8.0
+      ],
+      "yaw": 0.0,
+      "scale": 1.5,
+      "tint": [
+        0.86,
+        0.72,
+        0.45
+      ],
+      "collide": false,
+      "radius": 0.22,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/banner-red.obj",
+      "pos": [
+        0.0,
+        3.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.78,
+        0.2,
+        0.16
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/banner-green.obj",
+      "pos": [
+        3.0,
+        3.0,
+        -10.5
+      ],
+      "yaw": 270.0,
+      "scale": 3.0,
+      "tint": [
+        0.3,
+        0.52,
+        0.28
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/banner-red.obj",
+      "pos": [
+        10.5,
+        3.0,
+        0.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.78,
+        0.2,
+        0.16
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/banner-green.obj",
+      "pos": [
+        10.5,
+        3.0,
+        3.0
+      ],
+      "yaw": 180.0,
+      "scale": 3.0,
+      "tint": [
+        0.3,
+        0.52,
+        0.28
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/banner-red.obj",
+      "pos": [
+        -9.0,
+        3.0,
+        13.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.78,
+        0.2,
+        0.16
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/banner-green.obj",
+      "pos": [
+        -9.0,
+        3.0,
+        16.5
+      ],
+      "yaw": 0.0,
+      "scale": 3.0,
+      "tint": [
+        0.3,
+        0.52,
+        0.28
+      ],
+      "collide": false,
+      "radius": 0.4,
+      "snap": false
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        -3.42,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        3.42,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        -6.84,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        6.84,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        -10.26,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        10.26,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        -13.68,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        13.68,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence-gate.obj",
+      "pos": [
+        0.0,
+        0,
+        26.0
+      ],
+      "yaw": 90.0,
+      "scale": 3.42,
+      "tint": [
+        0.56,
+        0.43,
+        0.29
+      ],
+      "collide": false,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        -26.0,
+        0,
+        2.58
+      ],
+      "yaw": 0.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        26.0,
+        0,
+        2.58
+      ],
+      "yaw": 0.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        -26.0,
+        0,
+        -0.84
+      ],
+      "yaw": 0.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        26.0,
+        0,
+        -0.84
+      ],
+      "yaw": 0.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        -26.0,
+        0,
+        -4.26
+      ],
+      "yaw": 0.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/fence.obj",
+      "pos": [
+        26.0,
+        0,
+        -4.26
+      ],
+      "yaw": 0.0,
+      "scale": 3.42,
+      "tint": [
+        0.52,
+        0.4,
+        0.27
+      ],
+      "collide": true,
+      "radius": 1.6,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        -21.0,
+        0,
+        20.0
+      ],
+      "yaw": 145.0,
+      "scale": 3.2,
+      "tint": [
+        0.55,
+        0.4,
+        0.26
+      ],
+      "collide": true,
+      "radius": 1.45,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/cart-high.obj",
+      "pos": [
+        21.5,
+        0,
+        -20.0
+      ],
+      "yaw": 220.0,
+      "scale": 3.0,
+      "tint": [
+        0.53,
+        0.39,
+        0.26
+      ],
+      "collide": true,
+      "radius": 1.35,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/town/cart.obj",
+      "pos": [
+        30.0,
+        0,
+        -6.0
+      ],
+      "yaw": 75.0,
+      "scale": 3.2,
+      "tint": [
+        0.57,
+        0.42,
+        0.28
+      ],
+      "collide": true,
+      "radius": 1.45,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/log_stack.obj",
+      "pos": [
+        -30.0,
+        0,
+        4.0
+      ],
+      "yaw": 40.0,
+      "scale": 2.8,
+      "tint": [
+        0.48,
+        0.34,
+        0.21
+      ],
+      "collide": true,
+      "radius": 0.9,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/log_stackLarge.obj",
+      "pos": [
+        24.0,
+        0,
+        22.0
+      ],
+      "yaw": 15.0,
+      "scale": 2.8,
+      "tint": [
+        0.47,
+        0.33,
+        0.21
+      ],
+      "collide": true,
+      "radius": 1.0,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/rock_largeA.obj",
+      "pos": [
+        -33.0,
+        0,
+        18.0
+      ],
+      "yaw": 223.0,
+      "scale": 4.2,
+      "tint": [
+        0.6,
+        0.58,
+        0.54
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/rock_largeB.obj",
+      "pos": [
+        33.0,
+        0,
+        -22.0
+      ],
+      "yaw": 266.0,
+      "scale": 4.6,
+      "tint": [
+        0.6,
+        0.58,
+        0.54
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/rock_largeC.obj",
+      "pos": [
+        -36.0,
+        0,
+        -24.0
+      ],
+      "yaw": 74.0,
+      "scale": 4.0,
+      "tint": [
+        0.6,
+        0.58,
+        0.54
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    },
+    {
+      "mesh": "assets/models/nature/rock_largeA.obj",
+      "pos": [
+        34.0,
+        0,
+        26.0
+      ],
+      "yaw": 146.0,
+      "scale": 3.8,
+      "tint": [
+        0.6,
+        0.58,
+        0.54
+      ],
+      "collide": true,
+      "radius": 1.5,
+      "snap": true
+    }
+  ],
+  "scatter": [
+    {
+      "meshes": [
+        "assets/models/nature/tree_pineDefaultA.obj",
+        "assets/models/nature/tree_pineTallA.obj",
+        "assets/models/nature/tree_pineRoundA.obj",
+        "assets/models/nature/tree_pineTallA_detailed.obj"
+      ],
+      "count": 260,
+      "min_radius": 48,
+      "max_radius": 150,
+      "scale_min": 3.4,
+      "scale_max": 6.4,
+      "tint": [
+        0.42,
+        0.58,
+        0.34
+      ],
+      "tint_jitter": 0.18,
+      "collide": true,
+      "radius": 1.3,
+      "min_gap": 3.2,
+      "min_slope_y": 0.6,
+      "snap": true,
+      "seed": 4243
+    },
+    {
+      "meshes": [
+        "assets/models/nature/tree_oak.obj",
+        "assets/models/nature/tree_default.obj",
+        "assets/models/nature/tree_detailed.obj",
+        "assets/models/nature/tree_fat.obj"
+      ],
+      "count": 40,
+      "min_radius": 45,
+      "max_radius": 78,
+      "scale_min": 3.0,
+      "scale_max": 4.8,
+      "tint": [
+        0.46,
+        0.6,
+        0.36
+      ],
+      "tint_jitter": 0.16,
+      "collide": true,
+      "radius": 1.25,
+      "min_gap": 5.0,
+      "min_slope_y": 0.6,
+      "snap": true,
+      "seed": 4244
+    },
+    {
+      "meshes": [
+        "assets/models/nature/rock_largeA.obj",
+        "assets/models/nature/rock_largeB.obj",
+        "assets/models/nature/rock_largeC.obj",
+        "assets/models/nature/rock_smallA.obj",
+        "assets/models/nature/rock_smallB.obj"
+      ],
+      "count": 95,
+      "min_radius": 46,
+      "max_radius": 150,
+      "scale_min": 2.0,
+      "scale_max": 5.6,
+      "tint": [
+        0.6,
+        0.58,
+        0.54
+      ],
+      "tint_jitter": 0.12,
+      "collide": true,
+      "radius": 1.4,
+      "min_gap": 2.5,
+      "snap": true,
+      "seed": 4245
+    },
+    {
+      "meshes": [
+        "assets/models/nature/plant_bush.obj",
+        "assets/models/nature/plant_bushLarge.obj",
+        "assets/models/nature/plant_bushSmall.obj",
+        "assets/models/nature/grass_large.obj",
+        "assets/models/nature/grass.obj"
+      ],
+      "count": 200,
+      "min_radius": 45,
+      "max_radius": 150,
+      "scale_min": 1.6,
+      "scale_max": 3.8,
+      "tint": [
+        0.44,
+        0.6,
+        0.3
+      ],
+      "tint_jitter": 0.2,
+      "collide": false,
+      "radius": 0.5,
+      "min_slope_y": 0.55,
+      "snap": true,
+      "seed": 4246
+    },
+    {
+      "meshes": [
+        "assets/models/nature/flower_redA.obj",
+        "assets/models/nature/flower_yellowA.obj",
+        "assets/models/nature/flower_purpleA.obj",
+        "assets/models/nature/stump_old.obj",
+        "assets/models/nature/mushroom_tanGroup.obj"
+      ],
+      "count": 70,
+      "min_radius": 46,
+      "max_radius": 120,
+      "scale_min": 1.8,
+      "scale_max": 3.2,
+      "tint": [
+        0.9,
+        0.85,
+        0.7
+      ],
+      "tint_jitter": 0.22,
+      "collide": false,
+      "radius": 0.4,
+      "min_slope_y": 0.6,
+      "snap": true,
+      "seed": 4247
+    },
+    {
+      "meshes": [
+        "assets/models/nature/fence_simple.obj",
+        "assets/models/nature/fence_simpleLow.obj",
+        "assets/models/nature/fence_simpleDiagonal.obj"
+      ],
+      "count": 26,
+      "center_x": -40.0,
+      "center_z": 34.0,
+      "min_radius": 2,
+      "max_radius": 16,
+      "scale_min": 3.0,
+      "scale_max": 3.4,
+      "tint": [
+        0.54,
+        0.42,
+        0.29
+      ],
+      "tint_jitter": 0.1,
+      "collide": true,
+      "radius": 1.2,
+      "min_gap": 2.0,
+      "min_slope_y": 0.7,
+      "snap": true,
+      "seed": 4248
+    }
+  ]
+}

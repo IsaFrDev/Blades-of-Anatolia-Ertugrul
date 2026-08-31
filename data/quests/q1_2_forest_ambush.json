@@ -1,0 +1,51 @@
+{
+  "id": "q1_2_forest_ambush",
+  "episode": 0,
+  "title_key": "Q1_2_TITLE",
+  "giver": "story",
+  "type": "main",
+  "location": "forest_clearing",
+  "gdd_ref": "Epizod 1 / Kvest 1.2 - Ormondagi pistirma",
+  "systems": [
+    "UMeleeCombatComponent",
+    "UTargetLockComponent",
+    "ABossAIController"
+  ],
+  "objectives": [
+    {
+      "id": "reach_screams",
+      "text_key": "Q1_2_OBJ_REACH",
+      "optional": false
+    },
+    {
+      "id": "dismount_attack",
+      "text_key": "Q1_2_OBJ_DISMOUNT",
+      "optional": false
+    },
+    {
+      "id": "parry_tutorial",
+      "text_key": "Q1_2_OBJ_PARRY",
+      "optional": false
+    },
+    {
+      "id": "dodge_tutorial",
+      "text_key": "Q1_2_OBJ_DODGE",
+      "optional": false
+    },
+    {
+      "id": "defeat_bisol",
+      "text_key": "Q1_2_OBJ_BISOL",
+      "optional": false
+    },
+    {
+      "id": "protect_strangers",
+      "text_key": "Q1_2_OBJ_PROTECT",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 8,
+    "skill_points": 1
+  },
+  "next": "q1_3_first_blood"
+}

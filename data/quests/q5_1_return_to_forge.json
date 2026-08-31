@@ -1,0 +1,55 @@
+{
+  "id": "q5_1_return_to_forge",
+  "episode": 4,
+  "title_key": "Q5_1_TITLE",
+  "giver": "geyikli_baba",
+  "type": "main",
+  "location": "kayi_oba_winter",
+  "gdd_ref": "Epizod 5 / Kvest 5.1 - Temirchilikka qaytish",
+  "systems": [
+    "UBlacksmithMinigame",
+    "UBindingSwordComponent",
+    "UFaithMeterComponent"
+  ],
+  "objectives": [
+    {
+      "id": "craft_medicine",
+      "text_key": "Q5_1_OBJ_MEDICINE",
+      "optional": false
+    },
+    {
+      "id": "forest_walk",
+      "text_key": "Q5_1_OBJ_FOREST",
+      "optional": false
+    },
+    {
+      "id": "return_to_oba",
+      "text_key": "Q5_1_OBJ_RETURN",
+      "optional": false
+    },
+    {
+      "id": "blacksmith_rhythm",
+      "text_key": "Q5_1_OBJ_FORGE",
+      "optional": false
+    },
+    {
+      "id": "bind_sword_qte",
+      "text_key": "Q5_1_OBJ_BIND",
+      "optional": false
+    },
+    {
+      "id": "rage_strike_tutorial",
+      "text_key": "Q5_1_OBJ_RAGE",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 15,
+    "skill_points": 2,
+    "abilities": [
+      "binding_sword",
+      "rage_strike"
+    ]
+  },
+  "next": "q5_2_test_of_faith"
+}

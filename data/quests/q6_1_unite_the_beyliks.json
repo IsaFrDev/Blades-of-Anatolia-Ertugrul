@@ -1,0 +1,54 @@
+{
+  "id": "q6_1_unite_the_beyliks",
+  "episode": 5,
+  "title_key": "Q6_1_TITLE",
+  "giver": "sungurtekin",
+  "type": "main",
+  "location": "konya",
+  "gdd_ref": "Epizod 6 / Kvest 6.1 - Beyliklarni birlashtirish",
+  "systems": [
+    "UInvestigationSubsystem",
+    "UAllyForceSubsystem",
+    "UFastTravelSubsystem"
+  ],
+  "objectives": [
+    {
+      "id": "investigate_aytolun",
+      "text_key": "Q6_1_OBJ_INVESTIGATE",
+      "optional": false
+    },
+    {
+      "id": "dodurga_sparring",
+      "text_key": "Q6_1_OBJ_DODURGA",
+      "optional": false
+    },
+    {
+      "id": "cavdar_bandits",
+      "text_key": "Q6_1_OBJ_CAVDAR",
+      "optional": false
+    },
+    {
+      "id": "konya_audience",
+      "text_key": "Q6_1_OBJ_KONYA",
+      "optional": false
+    },
+    {
+      "id": "expose_gumustekin",
+      "text_key": "Q6_1_OBJ_GUMUSTEKIN",
+      "optional": false
+    },
+    {
+      "id": "gather_forces",
+      "text_key": "Q6_1_OBJ_FORCES",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 14,
+    "skill_points": 2,
+    "resources": {
+      "gold": 150
+    }
+  },
+  "next": "q6_2_night_raid"
+}

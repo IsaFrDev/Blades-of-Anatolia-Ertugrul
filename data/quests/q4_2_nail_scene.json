@@ -1,0 +1,40 @@
+{
+  "id": "q4_2_nail_scene",
+  "episode": 3,
+  "title_key": "Q4_2_TITLE",
+  "giver": "story",
+  "type": "cutscene",
+  "location": "mongol_camp",
+  "gdd_ref": "Epizod 4 / Kvest 4.2 - Qiynoq va mix sahnasi",
+  "systems": [
+    "UCutsceneDirector",
+    "UQTESubsystem",
+    "UInjuryStateComponent"
+  ],
+  "objectives": [
+    {
+      "id": "breathing_qte",
+      "text_key": "Q4_2_OBJ_BREATH",
+      "optional": false
+    },
+    {
+      "id": "resist_qte",
+      "text_key": "Q4_2_OBJ_RESIST",
+      "optional": false
+    },
+    {
+      "id": "answer_noyan",
+      "text_key": "Q4_2_OBJ_ANSWER",
+      "optional": false
+    },
+    {
+      "id": "endure_nail",
+      "text_key": "Q4_2_OBJ_NAIL",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 15
+  },
+  "next": "q4_3_one_handed_escape"
+}

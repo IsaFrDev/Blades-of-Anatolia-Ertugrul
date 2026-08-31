@@ -1,0 +1,261 @@
+{
+  "seasons": [
+    {
+      "index": 1,
+      "title": "1-mavsum: Templar fitnasi va Amanos qalasi",
+      "setting": "autumn",
+      "episodes": [
+        {
+          "id": "e1", "index": 0, "title": "Ov va qutqarilgan begonalar",
+          "historical_year": "1225",
+          "intro_text": "Suleyman Shoh boshchiligidagi Qayi obasi ocharchilikdan qiynalmoqda. Ertug'rul alp ovga chiqib, qismatini o'zgartiruvchi asirlarni uchratadi...",
+          "intro_video": "assets/videos/ep1_intro.mp4",
+          "goal": "Kiyik ovi, Halima va Yigitni qutqarish, Templar ritsarlarini yengish",
+          "quests": ["q1_1_deer_hunt", "q1_2_forest_ambush", "q1_3_first_blood"],
+          "levels": ["level_oba_kayi", "level_forest_hunt", "level_night_camp"],
+          "cliffhanger": "Begonalar obaga keltirildi, ammo bu Templarlarning g'azabini uyg'otdi."
+        },
+        {
+          "id": "e2", "index": 1, "title": "Oba ichidagi zahar",
+          "historical_year": "1225",
+          "intro_text": "Tashqi dushmandan ko'ra ichki dushman xavfliroq. Kurdo'g'lu obada o'z hokimiyatini o'rnatish uchun yashirin ish boshladi...",
+          "intro_video": "assets/videos/ep2_intro.mp4",
+          "goal": "Kurdoglu odamlarining sirlarini topish, xabarchini to'xtatish",
+          "quests": ["q2_1_spy_in_oba", "q2_2_intercept_messenger"],
+          "levels": ["level_oba_kayi", "level_valley_path"],
+          "cliffhanger": "Ertug'rul xabarni o'qib qoladi, lekin aniq ism yo'q."
+        },
+        {
+          "id": "e3", "index": 2, "title": "Halab yo'lidagi Karvonsaroy",
+          "historical_year": "1225",
+          "intro_text": "Yangi yurt va oziq-ovqat so'rash uchun Halabga otlangan karvon karvonsaroyda to'xtadi. Ammo tun o'z sirlarini yashirgan...",
+          "intro_video": "assets/videos/ep3_intro.mp4",
+          "goal": "Karvonsaroyni himoya qilish, tunda yashirinib kelgan qotillarni topish",
+          "quests": ["q3_1_caravan_guard", "q3_2_midnight_assassins"],
+          "levels": ["level_caravanserai"],
+          "cliffhanger": "Karvonsaroy egasi aslida Templar josusi bo'lib chiqdi."
+        },
+        {
+          "id": "e4", "index": 3, "title": "Halab Saroyidagi Fitna",
+          "historical_year": "1225",
+          "intro_text": "Mintaqaning eng qudratli shahri Halab. Amir Al-Aziz yosh va ishonuvchan, saroy esa ilonlar uyasi...",
+          "intro_video": "assets/videos/ep4_intro.mp4",
+          "goal": "Amir bilan uchrashish, saroy a'yonining fitnasini fosh qilish",
+          "quests": ["q4_1_enter_aleppo", "q4_2_palace_intrigue", "q4_3_save_the_emir"],
+          "levels": ["level_aleppo_bazaar", "level_aleppo_palace"],
+          "cliffhanger": "Ertug'rul Amir hayotini saqlab qoladi, yer beriladi."
+        },
+        {
+          "id": "e5", "index": 4, "title": "Ruhiy uchrashuv",
+          "historical_year": "1225",
+          "intro_text": "Moddiy janglar qatorida ma'naviy jang ham bor. Ibn Arabiy bilan uchrashuv Ertug'rulning ko'zini ochadi...",
+          "intro_video": "assets/videos/ep5_intro.mp4",
+          "goal": "Ibn Arabiy chodirini topish, o'g'irlangan sandiqni qaytarish",
+          "quests": ["q5_1_find_arabi", "q5_2_holy_relics"],
+          "levels": ["level_desert_outskirts"],
+          "cliffhanger": "Ibn Arabiy Ertug'rulga 'Ilohiy yo'l' sirlarini beradi."
+        },
+        {
+          "id": "e6", "index": 5, "title": "Turgutning asir tushishi",
+          "historical_year": "1225",
+          "intro_text": "O'rmondagi shafqatsiz pistirma. Eng sodiq alplar o'z qoniga belandi...",
+          "intro_video": "assets/videos/ep6_intro.mp4",
+          "goal": "Pistirmada omon qolish, Turgutni olib ketishlariga to'sqinlik qilish (Lekin imkonsiz)",
+          "quests": ["q6_1_forest_blood", "q6_2_protect_the_wounded"],
+          "levels": ["level_pine_forest"],
+          "cliffhanger": "Turgut Alp va Yigit Amanos qal'asiga olib ketildi."
+        },
+        {
+          "id": "e7", "index": 6, "title": "Zindondagi Azob",
+          "historical_year": "1225",
+          "intro_text": "Amanos qal'asi yerto'lasi. Templarlar Turgutning xotirasini o'chirish uchun shaytoniy dorilardan foydalanmoqda...",
+          "intro_video": "assets/videos/ep7_intro.mp4",
+          "goal": "Turgutni qiynoqlardan qutqarish uchun reja tuzish, yashirin qochqinlardan ma'lumot olish",
+          "quests": ["q7_1_interrogate_guard", "q7_2_find_map"],
+          "levels": ["level_oba_kayi", "level_amanos_outskirts"],
+          "cliffhanger": "Qal'aning zaif nuqtasi, kanalizatsiya yo'li topildi."
+        },
+        {
+          "id": "e8", "index": 7, "title": "Kanalizatsiya orqali Qal'aga",
+          "historical_year": "1225",
+          "intro_text": "Hech kim kira olmaydigan Amanosga suv yo'li orqali suqilib kirish. Yashirinish (Stealth) vaqti keldi...",
+          "intro_video": "assets/videos/ep8_intro.mp4",
+          "goal": "Suv yo'li orqali qal'aga kirish, qorovullarni bildirmasdan o'ldirish",
+          "quests": ["q8_1_stealth_entry", "q8_2_dungeon_breach"],
+          "levels": ["level_amanos_sewers"],
+          "cliffhanger": "Ertug'rul zindonga yetib bordi, ammo Turgut unga hujum qiladi!"
+        },
+        {
+          "id": "e9", "index": 8, "title": "Xoinning fosh bo'lishi",
+          "historical_year": "1225",
+          "intro_text": "Kurdo'g'lu obada isyon ko'tarib, Sulaymon Shohni taxtdan tushirmoqchi. Haqiqat yuzaga chiqish vaqti...",
+          "intro_video": "assets/videos/ep9_intro.mp4",
+          "goal": "Obaga yetib kelib isyonni to'xtatish, Kurdo'g'lu bilan duel",
+          "quests": ["q9_1_stop_rebellion", "q9_2_kurdoglu_duel"],
+          "levels": ["level_oba_kayi"],
+          "cliffhanger": "Kurdo'g'lu jazosini oladi. Oba birlashdi."
+        },
+        {
+          "id": "e10", "index": 9, "title": "Amanos Qamali - Titusning O'limi",
+          "historical_year": "1225",
+          "intro_text": "Barcha qo'shin Amanos ostonasida. Buyuk urush. Templarlar va Qayi urushining yakuni...",
+          "intro_video": "assets/videos/ep10_intro.mp4",
+          "goal": "Qal'a eshigini portlatish, ichkariga bostirib kirish, Titus bilan qonli jang",
+          "quests": ["q10_1_gate_breach", "q10_2_courtyard_battle", "q10_3_titus_final"],
+          "levels": ["level_amanos_castle", "level_amanos_tower"],
+          "cliffhanger": "Titus o'ldirildi. Sulaymon Shoh vafot etdi. Qayi yangi safarga otlanadi."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "2-mavsum: Mo'g'ul bosqini va qayta tug'ilish",
+      "setting": "winter",
+      "episodes": [
+        {
+          "id": "e11", "index": 10, "title": "Yangi Yerlar va Yangi Dushman",
+          "historical_year": "1226",
+          "intro_text": "Sharqiy Anadolu sarhadlari. Qayi obasi ko'chib bormoqda, ammo qarshisidan kutilmagan iblis chiqadi: Bayju Noyan.",
+          "intro_video": "assets/videos/ep11_intro.mp4",
+          "goal": "Karvonni himoya qilish, Mo'g'ul elita askarlari bilan ilk jang",
+          "quests": ["q11_1_caravan_defense", "q11_2_mongol_scouts"],
+          "levels": ["level_snow_pass"],
+          "cliffhanger": "O'nlab alplar halok bo'ldi, Ertug'rul Noyanga asir tushdi."
+        },
+        {
+          "id": "e12", "index": 11, "title": "Mix Sahnasi - Chidamlilik sinovi",
+          "historical_year": "1226",
+          "intro_text": "Noyanning qorli qarorgohi. O'limdan battar qiynoqlar. Qilich tutadigan o'ng qo'lga pichoq sanchildi...",
+          "intro_video": "assets/videos/ep12_intro.mp4",
+          "goal": "Qafasdan qochish, yalang'och holda sovuqda yashirinib harakatlanish",
+          "quests": ["q12_1_escape_cage", "q12_2_stealth_camp"],
+          "levels": ["level_mongol_camp"],
+          "cliffhanger": "Ertug'rul bir qo'li ishlamaydigan holatda o'rmonga qochib kiradi."
+        },
+        {
+          "id": "e13", "index": 12, "title": "Geyikli Bobo va Tabiat G'ori",
+          "historical_year": "1226",
+          "intro_text": "Qorda yiqilib qolgan yaradorni tabiatning o'zi asrab qoldi. Geyikli Boboning issiq g'ori umid uchqunini yoqdi...",
+          "intro_video": "assets/videos/ep13_intro.mp4",
+          "goal": "Dorivor o'tlar terish, hayvonlardan himoyalanish, Iymon shkalasini to'ldirish",
+          "quests": ["q13_1_gather_herbs", "q13_2_meditation"],
+          "levels": ["level_geyikli_cave", "level_snow_forest"],
+          "cliffhanger": "Ertug'rulning qo'li tuzala boshlaydi, ammo u qilich tutolmaydi."
+        },
+        {
+          "id": "e14", "index": 13, "title": "Qilichning qayta tug'ilishi",
+          "historical_year": "1226",
+          "intro_text": "Agar qo'l qilich tutolmasa, qilichni qo'lga bog'lash kerak! Zikr va bolg'a zarbasi ostida iroda toblandi.",
+          "intro_video": "assets/videos/ep14_intro.mp4",
+          "goal": "Temirchilik minigame (Zikr ritmida 100% sifat), qilichni bilakka bog'lab mashq qilish",
+          "quests": ["q14_1_forge_sword", "q14_2_train_one_handed"],
+          "levels": ["level_geyikli_cave"],
+          "cliffhanger": "Ertug'rul qaytishga tayyor."
+        },
+        {
+          "id": "e15", "index": 14, "title": "Dodurga Obasiga Qaytish",
+          "historical_year": "1226 (Qish)",
+          "intro_text": "Qayi va Dodurga obasi birlashgan, ham hamma Ertug'rulni o'ldi deb o'ylamoqda. Uning qaytishi hammani larzaga soldi.",
+          "intro_video": "assets/videos/ep15_intro.mp4",
+          "goal": "Obaga kirish, hayratda qolgan a'yonlar bilan gaplashish, xoinlarni aniqlash",
+          "quests": ["q15_1_grand_return", "q15_2_find_allies"],
+          "levels": ["level_dodurga_oba"],
+          "cliffhanger": "Noyan uning tirikligini eshitib, qattiq g'azablanadi."
+        },
+        {
+          "id": "e16", "index": 15, "title": "Aytolun Fitnasi",
+          "historical_year": "1226",
+          "intro_text": "Dodurga bekining xotini Aytolun va uning akasi Gumushtekin o'z taxtini qurish uchun Qayi beklarini qirmoqchi...",
+          "intro_video": "assets/videos/ep16_intro.mp4",
+          "goal": "Uzuk siri, zaharlangan ichimlikni to'xtatish, yashirin uchrashuvlarni kuzatish",
+          "quests": ["q16_1_spy_aytolun", "q16_2_poison_plot"],
+          "levels": ["level_dodurga_oba"],
+          "cliffhanger": "Gumushtekinning asl niyati fosh bo'ldi."
+        },
+        {
+          "id": "e17", "index": 16, "title": "Hamzaning Xiyonati",
+          "historical_year": "1226",
+          "intro_text": "Gundog'duning eng ishongan alpi Hamza, kamsitishlarga chidayolmay Noyan safiga qo'shildi...",
+          "intro_video": "assets/videos/ep17_intro.mp4",
+          "goal": "Hamzani qidirib topish, u bilan jang qilish, lekin o'ldirmaslik",
+          "quests": ["q17_1_track_hamza", "q17_2_duel_of_brothers"],
+          "levels": ["level_rocky_valley"],
+          "cliffhanger": "Hamza pushaymon bo'la boshlaydi, Noyan unga shubha qiladi."
+        },
+        {
+          "id": "e18", "index": 17, "title": "Karvon Yo'lidagi Qirg'in",
+          "historical_year": "1226",
+          "intro_text": "Mo'g'ullar iqtisodiy qamal qilish uchun obaning barcha savdo karvonlariga hujum qilmoqda...",
+          "intro_video": "assets/videos/ep18_intro.mp4",
+          "goal": "Katta jang sahnasi. 30 ta mo'g'ul askariga qarshi Ertug'rul va Alplar",
+          "quests": ["q18_1_protect_goods", "q18_2_slay_tangut"],
+          "levels": ["level_trade_route"],
+          "cliffhanger": "Tangut (Noyanning o'ng qo'li) yaralanib qochadi."
+        },
+        {
+          "id": "e19", "index": 18, "title": "Konya Saroyidagi O'yinlar",
+          "historical_year": "1226 (Bahor)",
+          "intro_text": "Saljuqiylar poytaxti Konya. Amir Saadettin Köpek davlatni ichidan emirmoqda, Mo'g'ullar bilan til biriktirmoqda.",
+          "intro_video": "assets/videos/ep19_intro.mp4",
+          "goal": "Konyaga yashirin kirish, Sulton Alauddinni ogohlantirish (Stealth/Dialogue)",
+          "quests": ["q19_1_infiltrate_konya", "q19_2_meet_sultan"],
+          "levels": ["level_konya_palace"],
+          "cliffhanger": "Kopak Ertug'rulga qarshi suiqasd buyuradi."
+        },
+        {
+          "id": "e20", "index": 19, "title": "Beyliklarni Birlashtirish",
+          "historical_year": "1226",
+          "intro_text": "Parokanda bo'lgan Qayi va Dodurga alplarini bitta tug' ostida birlashtirish vaqti keldi.",
+          "intro_video": "assets/videos/ep20_intro.mp4",
+          "goal": "Nutq so'zlash (Reputation check), alp yig'ish, qurol-yarog' tayyorlash",
+          "quests": ["q20_1_rally_troops", "q20_2_armory_prep"],
+          "levels": ["level_dodurga_oba"],
+          "cliffhanger": "Qo'shin tayyor, tungi hujum boshlanadi!"
+        },
+        {
+          "id": "e21", "index": 20, "title": "Tungi Reyd - Olov va Qon",
+          "historical_year": "1226",
+          "intro_text": "Noyanning qarorgohiga tun yarmida hujum. Mo'g'ullarning chodirlari yonmoqda, osmonni olov yoritdi.",
+          "intro_video": "assets/videos/ep21_intro.mp4",
+          "goal": "Qarorgohga bostirib kirish, Shomon Ulubilgeni yo'q qilish, qafasdagi asirlarni ozod qilish",
+          "quests": ["q21_1_burn_tents", "q21_2_kill_shaman"],
+          "levels": ["level_mongol_camp_raid"],
+          "cliffhanger": "Noyan jinniga aylanib, markaziy chodirdan chiqib keladi."
+        },
+        {
+          "id": "e22", "index": 21, "title": "Yakuniy Hisob-Kitob",
+          "historical_year": "1226",
+          "intro_text": "Ertug'rul va Bayju Noyan. Ikki daho jangchi o'rtasidagi so'nggi nafasgacha bo'lgan duel.",
+          "intro_video": "assets/videos/ep22_intro.mp4",
+          "goal": "Noyan bilan 3 fazali Boss Fight. Og'ir hujumlar, qochish (dodge) va parry.",
+          "quests": ["q22_1_noyan_final_duel"],
+          "levels": ["level_shaman_ground"],
+          "cliffhanger": "Noyan mag'lub etildi. Tanlov: O'ldirish yoki Qo'lini mixlash."
+        },
+        {
+          "id": "e23", "index": 22, "title": "Yangi Erkinlik - G'arbga Ko'chish",
+          "historical_year": "1226 (Yoz)",
+          "intro_text": "Zulmat ortda qoldi. Endi Qayi qabilasining bir qismi Mustaqil Davlat qurish niyatida Vizantiya chegarasi - G'arbga (Söğüt) yo'l oladi.",
+          "intro_video": "assets/videos/ep23_intro.mp4",
+          "goal": "Obani yig'ish, Halima bilan nikoh, katta olov atrofida zikr va bayram.",
+          "quests": ["q23_1_pack_camp", "q23_2_celebration"],
+          "levels": ["level_oba_summer"],
+          "cliffhanger": "O'yinning 2-mavsumi tugadi. Keyingi bekat - Ertug'rul Beyligi!"
+        }
+      ]
+    }
+  ],
+  "side_quests": [
+    {"id": "sq_aykiz_tears", "season": 1, "giver": "aykiz", "summary": "Kurdogli Turgutni ayblaydi - dalil topish"},
+    {"id": "sq_claudius_to_omar", "season": 1, "giver": "ibn_arabi", "summary": "Templar ritsarini qutqarish, etiqod dialoglari"},
+    {"id": "sq_wolf_hunt", "season": 1, "giver": "deli_demir", "summary": "Oba podasini qoriqlash, teri -> zirh"},
+    {"id": "sq_aleppo_caravan", "season": 1, "giver": "gundogdu", "summary": "Savdo karvonini himoya - oltin, reputatsiya"},
+    {"id": "sq_trail_of_eftelya", "season": 1, "giver": "afsin_bey", "summary": "Josus ayolni kuzatish (stealth)"},
+    {"id": "sq_selcan_secrets", "season": 0, "giver": "selcan", "summary": "Tavba yoli - uzun munosabat chizigi"},
+    {"id": "sq_goncagul_trap", "season": 2, "giver": "banu_cicek", "summary": "Dodurgadagi fitna dalillari"},
+    {"id": "sq_geyikli_wisdom", "season": 2, "giver": "geyikli_baba", "summary": "Meditatsiya - Iymon shkalasini oshirish"},
+    {"id": "sq_artuk_apothecary", "season": 2, "giver": "artuk_bey", "summary": "Osimlik toplash, crafting retseptlari"},
+    {"id": "sq_dundar_first_sword", "season": 2, "giver": "dundar", "summary": "Ukani orgatish - sparring minigame"},
+    {"id": "sq_hamza_conscience", "season": 2, "giver": "hamza", "summary": "Xoinga ikkinchi imkon"}
+  ]
+}

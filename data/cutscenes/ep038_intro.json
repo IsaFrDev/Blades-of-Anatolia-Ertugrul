@@ -1,0 +1,482 @@
+{
+  "id": "ep038_intro",
+  "episode": "EP038",
+  "level": "aleppo_road",
+  "music": "MUS_EP038",
+  "ambience": "Ambience.Summer.Clear",
+  "letterbox": true,
+  "fade_in": 1.2,
+  "fade_out": 1.0,
+  "time_of_day": "day",
+  "weather": "clear",
+  "duration": 0,
+  "actors": [
+    {
+      "id": "ertugrul",
+      "char": "ertugrul",
+      "model": "assets/models/ottoman/ottoman.obj",
+      "loc_name": "chr.ertugrul.name",
+      "scale": 1.82,
+      "tint": [
+        1.0,
+        0.95,
+        0.85
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            2.8,
+            0.0,
+            36.8
+          ],
+          "yaw": 200,
+          "clip": "Idle"
+        },
+        {
+          "t": 4.5,
+          "pos": [
+            2.0,
+            0.0,
+            34.6
+          ],
+          "yaw": 195,
+          "clip": "Walk"
+        },
+        {
+          "t": 10.0,
+          "pos": [
+            0.6,
+            0.0,
+            31.0
+          ],
+          "yaw": 190,
+          "clip": "Walk"
+        },
+        {
+          "t": 15.0,
+          "pos": [
+            -0.6,
+            0.0,
+            28.0
+          ],
+          "yaw": 188,
+          "clip": "Walk"
+        },
+        {
+          "t": 20.0,
+          "pos": [
+            -1.6,
+            0.0,
+            25.4
+          ],
+          "yaw": 185,
+          "clip": "Walk"
+        },
+        {
+          "t": 25.0,
+          "pos": [
+            -2.2,
+            0.0,
+            23.6
+          ],
+          "yaw": 120,
+          "clip": "Point"
+        },
+        {
+          "t": 31.0,
+          "pos": [
+            -2.2,
+            0.0,
+            23.6
+          ],
+          "yaw": 60,
+          "clip": "Talk"
+        },
+        {
+          "t": 36.0,
+          "pos": [
+            -1.0,
+            0.0,
+            24.8
+          ],
+          "yaw": 30,
+          "clip": "Walk"
+        },
+        {
+          "t": 41.0,
+          "pos": [
+            0.4,
+            0.0,
+            26.4
+          ],
+          "yaw": 20,
+          "clip": "Idle"
+        }
+      ]
+    },
+    {
+      "id": "halime",
+      "char": "halime",
+      "model": "assets/models/characters/character-c.obj",
+      "loc_name": "chr.halime.name",
+      "scale": 1.62,
+      "tint": [
+        0.98,
+        0.9,
+        0.94
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            4.6,
+            0.0,
+            38.2
+          ],
+          "yaw": 200,
+          "clip": "Idle"
+        },
+        {
+          "t": 5.0,
+          "pos": [
+            3.8,
+            0.0,
+            36.0
+          ],
+          "yaw": 198,
+          "clip": "Walk"
+        },
+        {
+          "t": 11.0,
+          "pos": [
+            2.6,
+            0.0,
+            32.4
+          ],
+          "yaw": 194,
+          "clip": "Walk"
+        },
+        {
+          "t": 16.5,
+          "pos": [
+            1.4,
+            0.0,
+            29.2
+          ],
+          "yaw": 192,
+          "clip": "Walk"
+        },
+        {
+          "t": 22.0,
+          "pos": [
+            0.4,
+            0.0,
+            26.6
+          ],
+          "yaw": 190,
+          "clip": "Walk"
+        },
+        {
+          "t": 27.0,
+          "pos": [
+            -0.4,
+            0.0,
+            25.0
+          ],
+          "yaw": 230,
+          "clip": "Talk"
+        },
+        {
+          "t": 33.0,
+          "pos": [
+            -1.2,
+            0.0,
+            24.4
+          ],
+          "yaw": 250,
+          "clip": "Listen"
+        },
+        {
+          "t": 38.5,
+          "pos": [
+            -0.2,
+            0.0,
+            25.6
+          ],
+          "yaw": 40,
+          "clip": "Walk"
+        },
+        {
+          "t": 41.0,
+          "pos": [
+            0.8,
+            0.0,
+            26.6
+          ],
+          "yaw": 30,
+          "clip": "Idle"
+        }
+      ]
+    },
+    {
+      "id": "hayme_ana",
+      "char": "hayme_ana",
+      "model": "assets/models/characters/character-e.obj",
+      "loc_name": "chr.hayme_ana.name",
+      "scale": 1.56,
+      "tint": [
+        0.92,
+        0.88,
+        0.96
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            6.8,
+            0.0,
+            34.0
+          ],
+          "yaw": 210,
+          "clip": "Idle"
+        },
+        {
+          "t": 6.0,
+          "pos": [
+            5.8,
+            0.0,
+            32.2
+          ],
+          "yaw": 205,
+          "clip": "Walk"
+        },
+        {
+          "t": 12.0,
+          "pos": [
+            4.2,
+            0.0,
+            29.4
+          ],
+          "yaw": 200,
+          "clip": "Walk"
+        },
+        {
+          "t": 18.0,
+          "pos": [
+            2.8,
+            0.0,
+            26.8
+          ],
+          "yaw": 198,
+          "clip": "Walk"
+        },
+        {
+          "t": 24.0,
+          "pos": [
+            1.8,
+            0.0,
+            24.6
+          ],
+          "yaw": 195,
+          "clip": "Walk"
+        },
+        {
+          "t": 30.0,
+          "pos": [
+            1.2,
+            0.0,
+            23.0
+          ],
+          "yaw": 160,
+          "clip": "Talk"
+        },
+        {
+          "t": 36.0,
+          "pos": [
+            1.8,
+            0.0,
+            24.4
+          ],
+          "yaw": 20,
+          "clip": "Walk"
+        },
+        {
+          "t": 41.0,
+          "pos": [
+            2.6,
+            0.0,
+            26.2
+          ],
+          "yaw": 15,
+          "clip": "Idle"
+        }
+      ]
+    }
+  ],
+  "camera": [
+    {
+      "t": 0.0,
+      "pos": [
+        8.0,
+        4.4,
+        44.0
+      ],
+      "look": [
+        3.0,
+        1.5,
+        36.0
+      ],
+      "fov": 56
+    },
+    {
+      "t": 6.0,
+      "pos": [
+        6.4,
+        2.6,
+        38.0
+      ],
+      "look": [
+        2.6,
+        1.5,
+        34.0
+      ],
+      "fov": 46
+    },
+    {
+      "t": 12.0,
+      "pos": [
+        4.6,
+        2.1,
+        33.6
+      ],
+      "look": [
+        1.2,
+        1.5,
+        30.6
+      ],
+      "fov": 40
+    },
+    {
+      "t": 18.0,
+      "pos": [
+        -4.0,
+        2.0,
+        30.0
+      ],
+      "look": [
+        -0.4,
+        1.55,
+        27.6
+      ],
+      "fov": 38
+    },
+    {
+      "t": 24.0,
+      "pos": [
+        -5.09,
+        1.8,
+        27.02
+      ],
+      "look": [
+        -2.0,
+        1.6,
+        24.4
+      ],
+      "fov": 32
+    },
+    {
+      "t": 30.0,
+      "pos": [
+        0.6,
+        1.8,
+        21.6
+      ],
+      "look": [
+        -1.6,
+        1.6,
+        24.0
+      ],
+      "fov": 30
+    },
+    {
+      "t": 36.0,
+      "pos": [
+        -4.6,
+        2.8,
+        21.0
+      ],
+      "look": [
+        0.0,
+        1.45,
+        25.4
+      ],
+      "fov": 44
+    },
+    {
+      "t": 41.5,
+      "pos": [
+        -9.0,
+        4.5,
+        22.0
+      ],
+      "look": [
+        1.4,
+        1.35,
+        27.0
+      ],
+      "fov": 58
+    }
+  ],
+  "lines": [
+    {
+      "t": 1.8,
+      "actor": "hayme_ana",
+      "loc": "cut.ep038_intro.01",
+      "vo": "ep038_intro_01",
+      "dur": 0
+    },
+    {
+      "t": 8.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep038_intro.02",
+      "vo": "ep038_intro_02",
+      "dur": 0
+    },
+    {
+      "t": 14.0,
+      "actor": "halime",
+      "loc": "cut.ep038_intro.03",
+      "vo": "ep038_intro_03",
+      "dur": 0
+    },
+    {
+      "t": 20.4,
+      "actor": "hayme_ana",
+      "loc": "cut.ep038_intro.04",
+      "vo": "ep038_intro_04",
+      "dur": 0
+    },
+    {
+      "t": 26.6,
+      "actor": "ertugrul",
+      "loc": "cut.ep038_intro.05",
+      "vo": "ep038_intro_05",
+      "dur": 0
+    },
+    {
+      "t": 33.2,
+      "actor": "halime",
+      "loc": "cut.ep038_intro.06",
+      "vo": "ep038_intro_06",
+      "dur": 0
+    },
+    {
+      "t": 38.4,
+      "actor": "ertugrul",
+      "loc": "cut.ep038_intro.07",
+      "vo": "ep038_intro_07",
+      "dur": 0
+    }
+  ]
+}

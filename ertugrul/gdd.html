@@ -1,0 +1,1015 @@
+<title>Diriliş: The Last March</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   IRON & FIRUZE — palitra XIII asr Anadolusi materiallaridan:
+   oksidlangan temir, Konya koshinining feruza ko'ki, qo'lyozma zarhali,
+   ohaktosh. Yara rangi (--wound) FAQAT mix chizig'i uchun ishlatiladi.
+   ═══════════════════════════════════════════════════════════════════════ */
+:root{
+  --ground:#E3E6E5; --surface:#EFF1F0; --surface-2:#D8DDDC; --sunken:#CFD5D4;
+  --line:#BCC4C3; --line-soft:#CDD4D3;
+  --ink:#141A1C; --ink-2:#3D4A4D; --dim:#67767A;
+  --accent:#1F7A86; --accent-soft:#1F7A8618; --accent-line:#1F7A8640;
+  --gold:#8A6420; --wound:#9A3F2C; --wound-soft:#9A3F2C18;
+  --shadow:0 1px 2px #141a1c0f, 0 6px 18px #141a1c0d;
+  --t1:'Zilla Slab',Georgia,serif;
+  --t2:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --t3:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171A; --surface:#1A2125; --surface-2:#222B30; --sunken:#0D1214;
+    --line:#2E393E; --line-soft:#252F34;
+    --ink:#E2E8E8; --ink-2:#B5C0C2; --dim:#7E8D91;
+    --accent:#48A9B5; --accent-soft:#48A9B51a; --accent-line:#48A9B540;
+    --gold:#C09550; --wound:#BC5A44; --wound-soft:#BC5A441c;
+    --shadow:0 1px 2px #0006, 0 8px 28px #0004;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171A; --surface:#1A2125; --surface-2:#222B30; --sunken:#0D1214;
+  --line:#2E393E; --line-soft:#252F34;
+  --ink:#E2E8E8; --ink-2:#B5C0C2; --dim:#7E8D91;
+  --accent:#48A9B5; --accent-soft:#48A9B51a; --accent-line:#48A9B540;
+  --gold:#C09550; --wound:#BC5A44; --wound-soft:#BC5A441c;
+  --shadow:0 1px 2px #0006, 0 8px 28px #0004;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font:400 16.5px/1.62 var(--t2);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--t1); text-wrap:balance; margin:0; line-height:1.14; letter-spacing:-.012em}
+p{margin:0}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-line)}
+a:hover{border-bottom-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ── Karkas ──────────────────────────────────────────────────────────── */
+.wrap{max-width:1180px; margin:0 auto; padding:0 28px}
+.col{max-width:70ch}
+section{padding:76px 0; border-top:1px solid var(--line-soft)}
+section:first-of-type{border-top:0}
+
+.eyebrow{
+  font:500 11.5px/1 var(--t3); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--dim); display:flex; align-items:center; gap:10px; margin-bottom:18px;
+}
+.eyebrow::after{content:''; flex:1; height:1px; background:var(--line-soft)}
+h2{font-size:clamp(28px,3.4vw,40px); font-weight:700; margin-bottom:14px}
+h3{font-size:20px; font-weight:600; margin-bottom:8px}
+.lede{font-size:18px; color:var(--ink-2); line-height:1.6}
+.note{font-size:14.5px; color:var(--dim); line-height:1.6}
+.mono{font-family:var(--t3); font-variant-numeric:tabular-nums}
+
+/* ── Spine (chap ustun) ──────────────────────────────────────────────── */
+.spine{
+  position:fixed; left:20px; top:50%; transform:translateY(-50%);
+  display:none; flex-direction:column; gap:3px; z-index:40;
+}
+@media(min-width:1360px){.spine{display:flex}}
+.spine a{
+  display:flex; align-items:center; gap:9px; border:0; padding:5px 0;
+  font:500 10.5px/1 var(--t3); letter-spacing:.1em; color:var(--dim);
+  text-transform:uppercase; transition:color .2s;
+}
+.spine a:hover,.spine a.on{color:var(--accent)}
+.spine i{display:block; width:2px; height:26px; background:var(--line); transition:background .2s}
+.spine a:hover i,.spine a.on i{background:var(--accent)}
+.spine a.nail i{background:var(--wound)}
+
+/* ── HERO ────────────────────────────────────────────────────────────── */
+header{padding:64px 0 20px; position:relative}
+.kicker{
+  font:500 11.5px/1 var(--t3); letter-spacing:.2em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:22px;
+}
+h1{
+  font-size:clamp(40px,7.4vw,84px); font-weight:700; letter-spacing:-.028em;
+  line-height:.98; margin-bottom:6px;
+}
+h1 em{font-style:normal; color:var(--dim)}
+.sub{
+  font:500 15px/1.55 var(--t3); color:var(--ink-2); letter-spacing:.01em;
+  margin:20px 0 30px; max-width:64ch;
+}
+.hero-meta{display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.hero-meta div{
+  flex:1 1 130px; padding:16px 20px 16px 0; border-right:1px solid var(--line-soft);
+}
+.hero-meta div:last-child{border-right:0}
+.hero-meta b{display:block; font:600 26px/1 var(--t3); font-variant-numeric:tabular-nums; margin-bottom:6px}
+.hero-meta span{font:400 12px/1.35 var(--t3); letter-spacing:.06em; text-transform:uppercase; color:var(--dim)}
+
+/* ── Mix egri chizig'i (hero instrument) ─────────────────────────────── */
+.curve-block{margin:52px 0 0; padding:26px 0 0; border-top:1px solid var(--line-soft)}
+.curve-head{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:14px; margin-bottom:20px}
+.curve-head h3{font-family:var(--t3); font-size:12px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:0}
+.curve-legend{display:flex; gap:18px; font:400 12px/1 var(--t3); color:var(--dim); flex-wrap:wrap}
+.curve-legend i{display:inline-block; width:16px; height:2px; vertical-align:middle; margin-right:6px}
+#curve{width:100%; height:200px; display:block}
+
+/* ── Kartalar ────────────────────────────────────────────────────────── */
+.grid{display:grid; gap:1px; background:var(--line-soft); border:1px solid var(--line-soft)}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.cell{background:var(--surface); padding:22px 24px}
+.cell h3{margin-bottom:7px}
+.cell p{font-size:14.5px; color:var(--ink-2); line-height:1.58}
+
+/* ── Audit ───────────────────────────────────────────────────────────── */
+.finding{display:grid; grid-template-columns:auto 1fr; gap:0 18px; padding:18px 0; border-bottom:1px solid var(--line-soft)}
+.finding:last-child{border-bottom:0}
+.sev{
+  font:600 10.5px/1 var(--t3); letter-spacing:.08em; padding:5px 8px; border-radius:2px;
+  align-self:start; white-space:nowrap;
+}
+.sev.p0{background:var(--wound-soft); color:var(--wound); border:1px solid var(--wound)}
+.sev.p1{background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent-line)}
+.finding h4{font-family:var(--t2); font-size:15.5px; font-weight:600; margin-bottom:4px; line-height:1.4}
+.finding p{font-size:14px; color:var(--ink-2); line-height:1.55}
+.finding .fix{margin-top:7px; font-size:13.5px; color:var(--accent); font-family:var(--t3)}
+
+/* ── Timeline solishtiruv ────────────────────────────────────────────── */
+.tl{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); margin-top:26px}
+.tl > div{background:var(--surface); padding:22px 24px}
+.tl .was{background:var(--sunken)}
+.tl h4{font:500 11px/1 var(--t3); letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:0 0 14px}
+.tl ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px}
+.tl li{font-size:14px; line-height:1.5; display:flex; gap:10px; align-items:flex-start}
+.tl li b{font-family:var(--t3); font-size:12.5px; font-weight:500; color:var(--dim); min-width:66px; padding-top:2px}
+.tl .was li{color:var(--dim); text-decoration:line-through; text-decoration-color:var(--wound); text-decoration-thickness:1px}
+.tl .was li b{text-decoration:none}
+
+/* ── 48 epizod instrumenti ───────────────────────────────────────────── */
+.epi-tools{display:flex; flex-wrap:wrap; gap:8px; margin:26px 0 18px; align-items:center}
+.chip{
+  font:500 12px/1 var(--t3); letter-spacing:.04em; padding:8px 12px;
+  background:var(--surface); border:1px solid var(--line); color:var(--ink-2);
+  cursor:pointer; border-radius:2px; transition:.16s;
+}
+.chip:hover{border-color:var(--accent); color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--ground)}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:var(--sunken)}
+
+.epi-scroll{overflow-x:auto; padding-bottom:6px; margin:0 -28px; padding-left:28px; padding-right:28px}
+.epi-strip{display:flex; gap:2px; min-width:940px; align-items:flex-end}
+.ep{
+  flex:1; min-width:16px; border:0; padding:0; cursor:pointer; background:none;
+  display:flex; flex-direction:column; justify-content:flex-end; gap:2px;
+}
+.ep .bar{width:100%; border-radius:1px 1px 0 0; transition:.16s; opacity:.9}
+.ep:hover .bar,.ep[aria-pressed="true"] .bar{opacity:1; filter:brightness(1.25)}
+.ep .hand{width:100%; height:4px; border-radius:0 0 1px 1px}
+.ep .num{font:400 9px/1 var(--t3); color:var(--dim); text-align:center; padding-top:5px}
+.ep.dim{opacity:.22}
+.ep[aria-pressed="true"] .num{color:var(--accent); font-weight:600}
+
+.detail{
+  margin-top:22px; background:var(--surface); border:1px solid var(--line);
+  padding:26px 28px; border-left:3px solid var(--accent); min-height:210px;
+}
+.detail.major{border-left-color:var(--wound)}
+.detail-top{display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; margin-bottom:6px}
+.detail-id{font:600 12px/1 var(--t3); letter-spacing:.1em; color:var(--accent)}
+.detail.major .detail-id{color:var(--wound)}
+.detail h3{font-size:25px; font-weight:700; margin:0 0 4px}
+.detail-date{font:400 13px/1 var(--t3); color:var(--dim); margin-bottom:18px}
+.badge{
+  font:500 10px/1 var(--t3); letter-spacing:.08em; padding:4px 7px; border-radius:2px;
+  border:1px solid var(--line); color:var(--dim); text-transform:uppercase;
+}
+.badge.doc{color:var(--gold); border-color:var(--gold)}
+.badge.dis{color:var(--dim)}
+.badge.leg{color:var(--accent); border-color:var(--accent-line)}
+.badge.ss{color:var(--wound); border-color:var(--wound)}
+.dl{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:18px 22px; margin-top:4px}
+.dl div{border-top:1px solid var(--line-soft); padding-top:9px}
+.dl dt{font:400 10.5px/1 var(--t3); letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin-bottom:5px}
+.dl dd{margin:0; font:500 14px/1.4 var(--t3)}
+.dl dd small{display:block; font:400 12px/1.4 var(--t2); color:var(--dim); margin-top:3px}
+
+/* ── Mavsum kartalari ────────────────────────────────────────────────── */
+.season{display:grid; grid-template-columns:auto 1fr; gap:0 26px; padding:28px 0; border-bottom:1px solid var(--line-soft)}
+.season:last-child{border-bottom:0}
+.season-n{font:700 46px/1 var(--t1); color:var(--line); font-variant-numeric:tabular-nums}
+.season-head{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:baseline; margin-bottom:10px}
+.season h3{font-size:24px; font-weight:700; margin:0}
+.season .yr{font:500 13px/1 var(--t3); color:var(--accent); letter-spacing:.06em}
+.season p{font-size:15px; color:var(--ink-2); max-width:66ch; line-height:1.6}
+.season .facts{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.fact{font:400 12px/1 var(--t3); padding:6px 9px; background:var(--surface); border:1px solid var(--line-soft); border-radius:2px; color:var(--ink-2)}
+.fact b{color:var(--ink); font-weight:600}
+
+/* ── Jadval ──────────────────────────────────────────────────────────── */
+.tbl-scroll{overflow-x:auto; border:1px solid var(--line-soft); margin-top:22px}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:14px}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--line-soft)}
+th{font:500 10.5px/1 var(--t3); letter-spacing:.1em; text-transform:uppercase; color:var(--dim); background:var(--surface-2)}
+td{background:var(--surface)}
+tr:last-child td{border-bottom:0}
+td.n{font-family:var(--t3); font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap}
+.barcell{display:flex; align-items:center; gap:9px}
+.barcell i{display:block; height:7px; background:var(--accent); border-radius:1px; min-width:2px}
+.barcell i.hot{background:var(--wound)}
+
+/* ── Hotkeys ─────────────────────────────────────────────────────────── */
+.keys{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); margin-top:22px}
+.keys > div{background:var(--surface); padding:9px 16px; display:flex; gap:12px; align-items:baseline; font-size:14px}
+kbd{
+  font:500 12px/1 var(--t3); padding:4px 7px; background:var(--surface-2);
+  border:1px solid var(--line); border-bottom-width:2px; border-radius:3px;
+  color:var(--ink); white-space:nowrap; min-width:34px; text-align:center;
+}
+.keys span{color:var(--ink-2)}
+.keys .star{color:var(--accent)}
+
+/* ── Kod bloki ───────────────────────────────────────────────────────── */
+pre{
+  background:var(--sunken); border:1px solid var(--line-soft); border-left:3px solid var(--accent);
+  padding:18px 20px; overflow-x:auto; margin:20px 0 0;
+  font:400 13px/1.62 var(--t3); color:var(--ink-2);
+}
+pre b{color:var(--accent); font-weight:500}
+pre em{color:var(--dim); font-style:normal}
+pre u{color:var(--wound); text-decoration:none}
+
+/* ── Fayllar ─────────────────────────────────────────────────────────── */
+.files{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); margin-top:22px}
+.file{background:var(--surface); padding:15px 18px}
+.file code{font:500 13px/1.4 var(--t3); color:var(--accent); display:block; margin-bottom:4px; word-break:break-all}
+.file span{font-size:13px; color:var(--dim); line-height:1.5}
+
+footer{padding:56px 0 76px; border-top:1px solid var(--line); color:var(--dim); font-size:13.5px}
+footer p{max-width:70ch; line-height:1.65}
+footer p + p{margin-top:12px}
+
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  section{padding:56px 0}
+  .epi-scroll{margin:0 -18px; padding-left:18px; padding-right:18px}
+  .season{grid-template-columns:1fr; gap:12px}
+  .season-n{font-size:30px}
+}
+</style>
+
+<nav class="spine" aria-label="Bo'limlar">
+  <a href="#audit"><i></i>Audit</a>
+  <a href="#tarix"><i></i>Tarix</a>
+  <a href="#mavsum"><i></i>4 mavsum</a>
+  <a href="#epizod"><i></i>48 epizod</a>
+  <a href="#mix" class="nail"><i></i>Mix</a>
+  <a href="#tizim"><i></i>Tizimlar</a>
+  <a href="#intro"><i></i>Intro</a>
+  <a href="#keys"><i></i>Hotkeys</a>
+  <a href="#arch"><i></i>Arxitektura</a>
+</nav>
+
+<div class="wrap">
+
+<header>
+  <div class="kicker">Game Design Document · v2 · FayzInc</div>
+  <h1>Diriliş<br><em>The Last March</em></h1>
+  <p class="sub">XIII asr Anadolu chegarasi. 48 epizod, 4 mavsum, 1227–1261.<br>Unreal Engine 5 · C++ · Java meta-servislar.</p>
+
+  <div class="hero-meta">
+    <div><b>48</b><span>Epizod</span></div>
+    <div><b>49.4</b><span>Soat kontent</span></div>
+    <div><b>147</b><span>Kodeks yozuvi</span></div>
+    <div><b>7</b><span>Shubha sahnasi</span></div>
+    <div><b>15%</b><span>Ot bilan harakat</span></div>
+  </div>
+
+  <div class="curve-block">
+    <div class="curve-head">
+      <h3>Qo'l butunligi — 48 epizod bo'ylab</h3>
+      <div class="curve-legend">
+        <span><i style="background:var(--accent)"></i>HandIntegrity</span>
+        <span><i style="background:var(--wound)"></i>MaxIntegrity (ship)</span>
+        <span><i style="background:var(--gold)"></i>Qiyinlik (T1–T5)</span>
+      </div>
+    </div>
+    <canvas id="curve" aria-label="Ertug'rulning qo'l butunligi 48 epizod bo'ylab: EP001-023 da 100%, EP024 da nolga tushadi va shipi 55 ga qulaydi, EP043 da protez bilan 70 ga ko'tariladi, lekin hech qachon 100 ga qaytmaydi."></canvas>
+    <p class="note" style="margin-top:14px;max-width:68ch">Bu chiziq — o'yinning o'zi. 23 epizod ogohlantiradi, EP024 da mix qoqiladi, qolgan 24 epizod oqibatini ko'taradi. Ship (qizil) faqat bir marta — EP043 dagi suyak protezi bilan — ko'tariladi va hech qachon 100 ga qaytmaydi.</p>
+  </div>
+</header>
+
+<!-- ══════════════════════════ AUDIT ══════════════════════════ -->
+<section id="audit">
+  <div class="eyebrow">Auditingiz natijasi</div>
+  <div class="col">
+    <h2>Mavjud JSON'da 57 ta kamchilik</h2>
+    <p class="lede">Sizning fayl yaxshi hikoya skeleti edi, lekin u ma'lumot fayli emas — konspekt. Eng jiddiylari quyida; to'liq ro'yxat <code class="mono">00_AUDIT.md</code> da.</p>
+  </div>
+
+  <div style="margin-top:34px">
+    <div class="finding">
+      <span class="sev p0">P0 · TARIX</span>
+      <div>
+        <h4>Bayju Noyan 1226-yilda Anadoluda yo'q edi</h4>
+        <p>Butun 2-mavsumingiz unga qurilgan. Bayju 1241-yil qishida qo'mondon etib tayinlangan; Anadoluga birinchi kirish 1242, hal qiluvchi jang Köse Dağ — 26-iyun 1243. Farq: 17 yil.</p>
+        <p class="fix">→ Timeline 1227–1261 ga ko'chirildi. Noyan endi haqiqiy boss (S3–S4).</p>
+      </div>
+    </div>
+    <div class="finding">
+      <span class="sev p0">P0 · TARIX</span>
+      <div>
+        <h4>Ibn Arabiy chodirda emas, Damashqda yashagan</h4>
+        <p>1223-yildan umrining oxirigacha (16-noyabr 1240) Damashqda. Anadoludagi davri 1215–1221 edi. U ko'chib yuruvchi shayx emas, kitob yozayotgan olim.</p>
+        <p class="fix">→ EP008 Sham yo'liga ko'chirildi — Damashq shahri, tuya karvoni, haqiqiy joy.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <span class="sev p0">P0 · TARIX</span>
+      <div>
+        <h4>"Mix qoqish" mo'g'ul usuli emas</h4>
+        <p>Mo'g'ul zo'ravonligi manbalarda ommaviy, individual qiynoq emas. Lekin <em>ṣalb</em> (mixlab qatl) — Christian Lange bo'yicha "saljuqiy xronikalarda eng ko'p tilga olinadigan qatl usuli"; <em>tasmīr</em> hujjatlashtirilgan (1248, Damashq).</p>
+        <p class="fix">→ Mixni saljuqiy jallodi qoqadi (EP024). Noyan uni keyin o'rganadi va takrorlaydi — tarixan to'g'ri va dramatik jihatdan kuchliroq.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <span class="sev p1">P1 · DIZAYN</span>
+      <div>
+        <h4>23 epizodning 17 tasi "bor → o'ldir" (74%)</h4>
+        <p>Bir xil fe'l. O'yinchi 6-epizodga borib zerikadi — retention'ning birinchi qotili.</p>
+        <p class="fix">→ 9 ta epizod arxetipi. Hech qaysi ketma-ket 2 martadan ko'p takrorlanmaydi (CI testi tekshiradi).</p>
+      </div>
+    </div>
+    <div class="finding">
+      <span class="sev p1">P1 · DIZAYN</span>
+      <div>
+        <h4>Deyarli hamma level ochiq maydon — ya'ni ot</h4>
+        <p>Siz o'zingiz aytdingiz va haqsiz: <code class="mono">forest</code>, <code class="mono">valley_path</code>, <code class="mono">trade_route</code>, <code class="mono">snow_pass</code>…</p>
+        <p class="fix">→ 11 xil harakat tizimi. Ot 48 epizoddan 7 tasida asosiy — 15%.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <span class="sev p0">P0 · SXEMA</span>
+      <div>
+        <h4><code class="mono">intro_video: "…mp4"</code> sizning o'z talabingizga zid</h4>
+        <p>Siz o'ynaladigan intro xohlaysiz, lekin sxema pre-rendered video talab qiladi. Bu ikkisi bir vaqtda bo'lolmaydi.</p>
+        <p class="fix">→ <code class="mono">.mp4</code> butunlay olib tashlandi. Interactive Prologue Director, 7 arxetip, ~3.1 soat o'ynaladigan intro.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <span class="sev p0">P0 · SXEMA</span>
+      <div>
+        <h4>23 ta yetishmayotgan maydon + dangling reference'lar</h4>
+        <p><code class="mono">"season": 0</code> (bunday mavsum yo'q) · ikki xil indekslash tizimi · 18 ta level ID va 0 ta ta'rif · matnlar hardcoded o'zbekcha (lokalizatsiya imkonsiz) · <code class="mono">codex_unlocks</code>, <code class="mono">difficulty_tier</code>, <code class="mono">checkpoints</code>, <code class="mono">hand_state</code> yo'q.</p>
+        <p class="fix">→ To'liq JSON Schema + generator + 14 ta CI tekshiruvi. Xato bo'lsa build to'xtaydi.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl">
+    <div class="was">
+      <h4>Sizda edi — 1225–1226</h4>
+      <ul>
+        <li><b>1225</b> Bayju Noyan Anadoluda</li>
+        <li><b>1225</b> Ibn Arabiy chodirda</li>
+        <li><b>1225</b> Amir al-Aziz kattalar kabi hukmronlik qiladi</li>
+        <li><b>1226</b> Saadettin Köpek xoin</li>
+        <li><b>1225</b> Geyikli Bobo g'orda</li>
+        <li><b>1226</b> 23 epizod ikki yilga siqilgan</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Endi — 1227–1261 · 0 anaxronizm</h4>
+      <ul>
+        <li><b>1229</b> al-Aziz Bagras'ni qamal qiladi — <em>haqiqiy jang</em></li>
+        <li><b>1230</b> Yassıçemen, 10-avgust</li>
+        <li><b>1237</b> Kayqubod zaharlanadi — <em>suyaklarida topilgan</em></li>
+        <li><b>1237–38</b> Köpek terrori, keyin o'ldiriladi</li>
+        <li><b>1241</b> Bayju qo'mondon etib tayinlanadi</li>
+        <li><b>1243</b> Köse Dağ, 26-iyun</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ TARIX ══════════════════════════ -->
+<section id="tarix">
+  <div class="eyebrow">Sizning asosiy maqsadingiz</div>
+  <div class="col">
+    <h2>Tarix o'rgatadi, va'z qilmaydi</h2>
+    <p class="lede">Siz aytdingiz: "odam kirganda bu o'yinda tarixni o'rganish kerak." Buning uchun matn o'qitish yetarli emas — tizim kerak.</p>
+  </div>
+
+  <div class="grid g2" style="margin-top:32px">
+    <div class="cell">
+      <h3>Rivoyat qatlami</h3>
+      <p>O'yinchi shuni <b>o'ynaydi</b>. Serial ruhi, dramatizm, qahramonlik. Turgut, Aykiz, Halima — badiiy personajlar. Bu yerda cheklov yo'q.</p>
+    </div>
+    <div class="cell">
+      <h3>Haqiqat qatlami — «Bilge Göz»</h3>
+      <p>O'yinchi shuni <b>o'rganadi</b>. Istalgan payt <kbd>H</kbd>. Har element uchun ishonchlilik darajasi, manba nomi va olimlar fikri.</p>
+    </div>
+  </div>
+
+  <div class="grid g3" style="margin-top:1px">
+    <div class="cell">
+      <h3 style="color:var(--gold)">HUJJATLI</h3>
+      <p>Zamondosh yoki ishonchli manbada tasdiqlangan. <b>39 epizod</b> — 81%.</p>
+    </div>
+    <div class="cell">
+      <h3 style="color:var(--dim)">BAHSLI</h3>
+      <p>Manbalar ziddiyatli, olimlar rozi emas. <b>7 epizod</b> — 15%. Bularda <code class="mono">scholar_note</code> majburiy.</p>
+    </div>
+    <div class="cell">
+      <h3 style="color:var(--accent)">RIVOYAT</h3>
+      <p>Keyingi asr an'anasi yoki badiiy ixtiro. <b>2 epizod</b> — 4%.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:44px" class="col">
+    <h3 style="font-size:22px">Shubha sahnalari</h3>
+    <p class="note" style="margin-top:8px;font-size:15.5px">Tarixda manbalar ziddiyatli bo'lgan 7 ta lahzada o'yin to'xtaydi va o'yinchidan so'raydi: <b>qaysi rivoyatni o'ynaysiz?</b> Ikkala javob ham Kodeksda to'liq yoziladi. Bu — tarixiy halollik, qayta o'ynash sababi, va hech kimni xafa qilmaydigan pozitsiya.</p>
+  </div>
+
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>#</th><th>Ep.</th><th>Savol</th><th>Variantlar</th></tr></thead>
+      <tbody>
+        <tr><td class="n">SS-1</td><td class="n">EP004</td><td>Ertug'rulning otasi kim?</td><td>Sulaymon Shoh <span class="badge leg">rivoyat</span> · Gunduz Alp <span class="badge dis">tanga dalili</span></td></tr>
+        <tr><td class="n">SS-2</td><td class="n">EP012</td><td>Qabilangiz nomi bormi?</td><td>Qayi · Nomsiz turkman jamoasi</td></tr>
+        <tr><td class="n">SS-3</td><td class="n">EP019</td><td>Kayqubodni kim zaharladi?</td><td>Köpek · Keyxusrav guruhi · Noma'lum</td></tr>
+        <tr><td class="n">SS-4</td><td class="n">EP026</td><td>Söğüt berildimi yoki olindimi?</td><td>Sulton in'omi · Uc bey sifatida egallash</td></tr>
+        <tr><td class="n">SS-5</td><td class="n">EP033</td><td>Köse Dağ'da nechta askar?</td><td>80 000 · 200 000 <span class="badge ss">jang miqyosi o'zgaradi</span></td></tr>
+        <tr><td class="n">SS-6</td><td class="n">EP041</td><td>Karacahisar kimniki?</td><td>Vizantiya · Germiyan (Wittek–Foss)</td></tr>
+        <tr><td class="n">SS-7</td><td class="n">EP048</td><td>Shajarangizni qanday aytasiz?</td><td>O'g'uzxongacha · Otamgacha · Shajarasiz</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════ MAVSUMLAR ══════════════════════════ -->
+<section id="mavsum">
+  <div class="eyebrow">Struktura</div>
+  <div class="col">
+    <h2>To'rt mavsum, o'ttiz to'rt yil</h2>
+    <p class="lede">Har mavsum oxirida dunyo o'zgaradi: yangi mintaqa, yangi fasl, yangi dushman arxetipi, yangi mexanika. Ertug'rul 28 yoshdan 62 yoshgacha.</p>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="season">
+      <div class="season-n">01</div>
+      <div>
+        <div class="season-head"><h3>Sarhad</h3><span class="yr mono">1227 – 1230 · EP001–012</span></div>
+        <p>Ocharchilik, janubga ko'chish, Halab siyosati, Amanos tog'laridagi templar qal'alari. Mavzu: <em>"Uy nima — yer, qabila, yoki yurgan yo'ling?"</em> Yakun: Bagras qamali — 1229-yilda haqiqatan bo'lgan va haqiqatan mag'lubiyat bilan tugagan jang.</p>
+        <div class="facts">
+          <span class="fact">Boss: <b>Frère Titus</b></span>
+          <span class="fact">Tier <b>1–2</b></span>
+          <span class="fact">Yangi dushman: <b>qalqonli sержant, arbaletchi</b></span>
+          <span class="fact">Mix: <b>oldindan ogohlantirish ×12</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="season">
+      <div class="season-n">02</div>
+      <div>
+        <div class="season-head"><h3>Sulton soyasi</h3><span class="yr mono">1230 – 1238 · EP013–024</span></div>
+        <p>Konya, Kubadabad, saljuqiy siyosati. Dushman endi qilich emas — so'z, zahar, hujjat, qarindosh. Saadettin Köpekni siz avval <b>do'st</b> sifatida tanishasiz. Yakun: EP024 — mix.</p>
+        <div class="facts">
+          <span class="fact">Boss: <b>Sa'd al-Din Köpek</b></span>
+          <span class="fact">Tier <b>3–4</b></span>
+          <span class="fact">Yangi dushman: <b>xorazmiy nayzachi, saroy qotili</b></span>
+          <span class="fact" style="border-color:var(--wound);color:var(--wound)">EP024: <b>mix qoqiladi</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="season">
+      <div class="season-n">03</div>
+      <div>
+        <div class="season-head"><h3>Qora bulut</h3><span class="yr mono">1238 – 1243 · EP025–036</span></div>
+        <p>O'yin mexanik jihatdan qayta tug'iladi: chap qo'lda o'ynash, yangi animset, yangi skill daraxti. Chormaqan → Bayju, Erzurum, Köse Dağ. Mavzu: <em>"Qo'l singanda nima qoladi?"</em></p>
+        <div class="facts">
+          <span class="fact">Boss: <b>Bayju Noyan</b></span>
+          <span class="fact">Tier <b>4–5</b></span>
+          <span class="fact">Yangi dushman: <b>otliq kamonchi, nerge</b></span>
+          <span class="fact">EP035: <b>3000 agent, soxta chekinish</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="season">
+      <div class="season-n">04</div>
+      <div>
+        <div class="season-head"><h3>So'nggi yurish</h3><span class="yr mono">1243 – 1261 · EP037–048</span></div>
+        <p>O'lpon, g'arbga ko'chish, Söğüt, Axiy birodarligi, Vizantiya chegarasi. Siz endi yolg'iz jangchi emas — rahbarsiz. Mavzu: <em>"Davlat nima — qal'ami, qonunmi, yoki eslab qolgan bolami?"</em></p>
+        <div class="facts">
+          <span class="fact">Boss: <b>Noyan (qaytish)</b></span>
+          <span class="fact">Tier <b>4–5</b></span>
+          <span class="fact">Yangi dushman: <b>keshikten, qamal mashinasi</b></span>
+          <span class="fact">Final: <b>Usmonning tangasi</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ 48 EPIZOD ══════════════════════════ -->
+<section id="epizod">
+  <div class="eyebrow">Ma'lumot</div>
+  <div class="col">
+    <h2>48 epizod</h2>
+    <p class="lede">Ustun balandligi — qiyinlik darajasi. Rangi — epizod arxetipi. Pastdagi chiziq — qo'l holati. Bosing.</p>
+  </div>
+
+  <div class="epi-tools" role="group" aria-label="Filtr">
+    <button class="chip" data-f="all" aria-pressed="true">Hammasi</button>
+    <button class="chip" data-f="S1" aria-pressed="false">S1</button>
+    <button class="chip" data-f="S2" aria-pressed="false">S2</button>
+    <button class="chip" data-f="S3" aria-pressed="false">S3</button>
+    <button class="chip" data-f="S4" aria-pressed="false">S4</button>
+    <button class="chip" data-f="major" aria-pressed="false">Mix kalit lahzalari</button>
+    <button class="chip" data-f="ss" aria-pressed="false">Shubha sahnalari</button>
+    <button class="chip" data-f="horse" aria-pressed="false">Ot bilan (7)</button>
+  </div>
+
+  <div class="epi-scroll">
+    <div class="epi-strip" id="strip" role="tablist" aria-label="48 epizod"></div>
+  </div>
+
+  <div class="detail" id="detail" role="tabpanel" aria-live="polite"></div>
+
+  <div class="grid g2" style="margin-top:44px">
+    <div class="cell">
+      <h3 style="font-family:var(--t3);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:16px">Epizod arxetiplari</h3>
+      <div id="archChart"></div>
+    </div>
+    <div class="cell">
+      <h3 style="font-family:var(--t3);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:16px">Asosiy harakat turi</h3>
+      <div id="travChart"></div>
+      <p class="note" style="margin-top:14px">Sizning talabingiz: "hammasi ham ot bilan bog'liq bo'lib qolmasin." Ot endi 7 epizodda asosiy — 15%. CI testi 12 dan oshmasligini tekshiradi.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ MIX ══════════════════════════ -->
+<section id="mix">
+  <div class="eyebrow">O'yinning yuragi</div>
+  <div class="col">
+    <h2>Mix</h2>
+    <p class="lede">Siz aytdingiz: mix qo'lga <b>hamma epizodda</b> tushsin. Mana buning tizimi — 48 epizodda 48 xil ko'rinish, bitta mexanika. Ko'pchilik o'yinda jarohat HP bar; bu yerda jarohat — o'yinchi o'zi bilan olib yuradigan tarix.</p>
+  </div>
+
+  <div class="grid g3" style="margin-top:32px">
+    <div class="cell">
+      <h3>Faza I — Soya</h3>
+      <p class="mono" style="font-size:12px;color:var(--dim);margin-bottom:8px">EP001 – EP023</p>
+      <p>Mix hali qoqilmagan, lekin har epizodda ko'rinadi: obyekt, boshqa odamning kaftidagi chandiq, tushda, so'zda. O'yinchi buni sezmaydi — keyin qayta o'ynaganda dahshatga tushadi.</p>
+    </div>
+    <div class="cell">
+      <h3>Faza II — Og'riq</h3>
+      <p class="mono" style="font-size:12px;color:var(--dim);margin-bottom:8px">EP025 – EP036</p>
+      <p>Jarohat — cheklov. Parry oynasi 180ms → 110ms. Og'ir qurol yo'q. Kamonda 3 o'q, keyin qon. Devorga chiqishda arqonni tishlab ushlash.</p>
+    </div>
+    <div class="cell">
+      <h3>Faza III — Belgi</h3>
+      <p class="mono" style="font-size:12px;color:var(--dim);margin-bottom:8px">EP037 – EP048</p>
+      <p>Jarohat — kuch. Odamlar uni taniydi. Ba'zi joylarda afzallik beradi: hech kim sizni jangchi deb hisoblamaydi, shuning uchun siz eng yaxshi josussiz.</p>
+    </div>
+  </div>
+
+  <div class="col" style="margin-top:48px">
+    <h3 style="font-size:22px">EP024 — nima uchun bu QTE emas</h3>
+    <p class="note" style="margin-top:10px;font-size:15.5px">Bog'langan holatda boshqaruv o'yinchida qoladi — u kamerani buradi va xonani 40 soniya davomida o'zi o'rganadi. Keyin ekranda: <b>«Tortib oling — [E] tez bosing»</b>. O'yinchi qanchalik tez bossa ham qo'l chiqmaydi. 20 soniyadan keyin tugma ko'rsatuvi o'chadi va yangi yozuv paydo bo'ladi:</p>
+  </div>
+
+  <pre><em>// EP024 — o'yinchi jismonan taslim bo'lishni TANLAYDI.</em>
+<em>// Bu — kinematik hech qachon bera olmaydigan narsa.</em>
+
+if (ElapsedSec &gt; 20.f &amp;&amp; !bReleasePromptShown)
+    ShowReleasePrompt();          <em>// "QO'YIB YUBORING."</em>
+
+<em>// Taymer yo'q. O'yin KUTADI. Tugma qo'yib yuborilgandan keyin:</em>
+<b>void</b> UErtWoundComponent::<b>TriggerNailEvent</b>(<b>float</b> NewCeiling)
+{
+    HandIntegrity = 0.f;
+    MaxIntegrity  = NewCeiling;   <u>// 55 — hech qachon qaytmaydi</u>
+    Phase         = EErtHandPhase::Fresh;
+    Sabr          = FMath::Min(Sabr, 20.f);
+
+    TraumaSubsystem-&gt;<b>OnNailDriven</b>(GetOwner());
+    <em>// → chap qo'l animset · "Qilich yo'li"ning 6 mahorati o'chadi</em>
+    <em>// → "Sol Yol" daraxti 6 bepul ochilish bilan ochiladi</em>
+    <em>// → IMC_Combat → IMC_Combat_Left · Post_EP024 data layer</em>
+
+    SaveSys-&gt;<b>WriteIrreversibleCheckpoint</b>(TEXT("EP024_NailDriven"));
+    <em>// Darhol saqlanadi — "qayta yuklab" bekor qilib bo'lmaydi.</em>
+}</pre>
+
+  <div class="grid g2" style="margin-top:36px">
+    <div class="cell">
+      <h3>Tarixiy asos</h3>
+      <p><b>Bu mo'g'ul usuli emas</b> — va o'yin buni ochiq aytadi. <em>Ṣalb</em> (mixlab qatl) Christian Lange tadqiqotiga ko'ra "saljuqiy xronikalarda eng ko'p tilga olinadigan qatl usuli". <em>Tasmīr</em> hujjatlashtirilgan: 1248-yil Damashq hodisasida qurbonning qo'llari, yelkalari va oyoqlari mixlangan.</p>
+      <p style="margin-top:10px">Mixni saljuqiy jallodi qoqadi. Noyan uni keyinroq <b>o'rganadi va takrorlaydi</b> — va bu uni kuchliroq qiladi.</p>
+    </div>
+    <div class="cell">
+      <h3>Accessibility</h3>
+      <p>Qiynoq sahnalarini yumshatish yoki butunlay o'tkazib yuborish · tez bosish → 3 soniya ushlab turish · qon darajasi · ekran silkinishi 0 · epizod boshida kontent ogohlantirishi. Natija saqlanadi, sahna o'tkazib yuboriladi.</p>
+      <p style="margin-top:10px"><b>Bir qo'lli boshqaruv rejimi</b> alohida ma'no kasb etadi: EP024 dan keyin Ertug'rul ham bir qo'lda o'ynaydi.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ TIZIMLAR ══════════════════════════ -->
+<section id="tizim">
+  <div class="eyebrow">Core gameplay</div>
+  <div class="col">
+    <h2>Uch resurs, o'n bir harakat</h2>
+    <p class="lede">Jang og'ir va jazolovchi: uch kishi sizni o'ldirishi mumkin, beshtasi — albatta. Referens uchburchagi: Ghost of Tsushima (oqim) × Kingdom Come (og'irlik) × Sekiro (poza).</p>
+  </div>
+
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Harakat</th><th>Nafas</th><th>Poza (o'zingiz)</th><th>Poza (dushman)</th><th>Qo'l</th></tr></thead>
+      <tbody>
+        <tr><td>Yengil zarba</td><td class="n">−8</td><td class="n">—</td><td class="n">+12</td><td class="n">—</td></tr>
+        <tr><td>Og'ir zarba</td><td class="n">−22</td><td class="n">−5</td><td class="n">+30</td><td class="n" style="color:var(--wound)">−8</td></tr>
+        <tr><td><b>Parry</b> (muvaffaqiyatli)</td><td class="n">−4</td><td class="n">−2</td><td class="n">+35</td><td class="n" style="color:var(--wound)">−3</td></tr>
+        <tr><td>Blok</td><td class="n">−15</td><td class="n">+25</td><td class="n">+5</td><td class="n" style="color:var(--wound)">−5</td></tr>
+        <tr><td>Dodge <span class="badge">i-frame emas — masofa</span></td><td class="n">−12</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr><td>Tepish <span class="badge leg">EP026 da ochiladi</span></td><td class="n">−10</td><td class="n">—</td><td class="n">+18</td><td class="n">—</td></tr>
+        <tr><td>Kamon tortish</td><td class="n">−18/s</td><td class="n">—</td><td class="n">—</td><td class="n" style="color:var(--wound)">−3</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note" style="margin-top:14px;max-width:70ch"><b>Muvaffaqiyatli parry ham qo'lni og'ritadi.</b> Bu — tizimning yuragi: o'yinchi parry-spam qila olmaydi, har parry qaror bo'ladi.</p>
+
+  <div class="grid g2" style="margin-top:40px">
+    <div class="cell">
+      <h3>Iymon — endi mexanika</h3>
+      <p>Sizning JSON'ingizda "Iymon shkalasi" so'z edi. Endi u ishlaydi: asirni ozod qilish +8, va'dani buzish −10, kechirish +15, qasoskorlik −25.</p>
+      <p style="margin-top:10px"><b>0–25:</b> alplar buyruqni sekin bajaradi, flashback ×1.5 · <b>51–75:</b> Sabr regen +50% · <b>76+:</b> «Sukunat» — jang oldidan 3 soniya sekinlashuv, va EP048 da eng yaxshi final.</p>
+    </div>
+    <div class="cell">
+      <h3>Fraksiyalar — neytral qololmaysiz</h3>
+      <p>6 fraksiya (Saljuqiy · Ayyubiy · Templar · Mo'g'ul · Axiy · Vizantiya), har biri −100…+100. Birida obro' oshsa, dushmanida tushadi — dushmanlik matritsasi bo'yicha.</p>
+      <p style="margin-top:10px">Templar–Mo'g'ul dushmanligi atigi −0.2: tarixan ular ittifoq izlagan. EP031 shu ustiga qurilgan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ INTRO ══════════════════════════ -->
+<section id="intro">
+  <div class="eyebrow">Sizning talabingiz</div>
+  <div class="col">
+    <h2>O'ynaladigan intro</h2>
+    <p class="lede">48 ta <code class="mono">.mp4</code> o'rniga 48 ta o'ynaladigan prolog. Kamera hech qachon o'yinchidan olinmaydi; yuklanish ekrani yo'q; yil har doim ko'rsatiladi.</p>
+  </div>
+
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th></th><th>Pre-rendered video</th><th>O'ynaladigan intro</th></tr></thead>
+      <tbody>
+        <tr><td>Disk hajmi</td><td class="n">~35 GB</td><td class="n" style="color:var(--accent)">~0 GB</td></tr>
+        <tr><td>Render vaqti</td><td class="n">~2400 GPU-soat</td><td class="n" style="color:var(--accent)">0</td></tr>
+        <tr><td>Lokalizatsiya (8 til)</td><td class="n">280 GB</td><td class="n" style="color:var(--accent)">faqat VO + subtitr</td></tr>
+        <tr><td>Patch qilish</td><td>qayta render + 35 GB</td><td style="color:var(--accent)">kod/data (~MB)</td></tr>
+        <tr><td>Xarajat (baholash)</td><td class="n">~$1.2M</td><td class="n" style="color:var(--accent)">~$380K</td></tr>
+        <tr><td>O'yinchi skip qiladi</td><td class="n">85%</td><td class="n" style="color:var(--accent)">~8%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid g3" style="margin-top:34px">
+    <div class="cell"><h3>Diegetik sana</h3><p>Karvonsaroy toshidagi kitoba <span class="mono">٦٢٦</span> · tanga · kotib sanani yozadi · qabr toshi. 40% epizodlarda.</p></div>
+    <div class="cell"><h3>Minimal overlay</h3><p><span class="mono" style="color:var(--gold)">٦٤١ محرم · 26 IYUN 1243 · KÖSE DAĞ</span> — pastki chapda, fade-in 1.2s. Hech qachon ekran markazida.</p></div>
+    <div class="cell"><h3>Dinamik rekap</h3><p>«Oldingi epizodda…» — oldindan render qilinmagan. O'yinchining <b>o'z</b> tanlovlaridan quriladi: Titusni qutqarganmisiz, kim o'lgan, qo'l qanday.</p></div>
+  </div>
+
+  <p class="note" style="margin-top:26px;max-width:70ch">Yetti arxetip xilma-xillikni kafolatlaydi: <b>Yurish</b> (10) · <b>Qo'l</b> (8) · <b>Boshqa ko'z</b> (5) · <b>Sho'ng'ish</b> (7) · <b>Kuzatuv</b> (6) · <b>Mehnat</b> (5) · <b>Nafas</b> (7). Bir xil arxetip ketma-ket ikki martadan ko'p kelmaydi.</p>
+</section>
+
+<!-- ══════════════════════════ HOTKEYS ══════════════════════════ -->
+<section id="keys">
+  <div class="eyebrow">Boshqaruv</div>
+  <div class="col">
+    <h2>Hotkeys</h2>
+    <p class="lede">To'liq ro'yxat, sozlamalar menyusi va sertifikatsiya checklisti — <code class="mono">07_SETTINGS_HOTKEYS.md</code>.</p>
+  </div>
+
+  <div class="keys">
+    <div><kbd>LMB</kbd><span>Yengil zarba</span></div>
+    <div><kbd>RMB</kbd><span>Parry (bosish) / Blok (ushlash)</span></div>
+    <div><kbd>Q</kbd><span>Dodge — masofa, i-frame emas</span></div>
+    <div><kbd>R</kbd><span class="star">Tepish — EP026 da ochiladi</span></div>
+    <div><kbd>G</kbd><span>Kamon — qo'l og'riydi</span></div>
+    <div><kbd>V</kbd><span>Takedown / rahm-shafqat</span></div>
+    <div><kbd>H</kbd><span class="star">Bilge Göz — tarix rejimi</span></div>
+    <div><kbd>H H</kbd><span>Bilge Göz — iz rejimi</span></div>
+    <div><kbd>J</kbd><span class="star">Safar Daftari</span></div>
+    <div><kbd>N</kbd><span>Timeline (hijriy / milodiy)</span></div>
+    <div><kbd>Y</kbd><span>Yil kartasini qayta ko'rsatish</span></div>
+    <div><kbd>Z</kbd><span class="star">Qo'lni bog'lash / yechish</span></div>
+    <div><kbd>Alt</kbd><span class="star">Qo'lni yashirish — ijtimoiy stealth</span></div>
+    <div><kbd>Ctrl+Z</kbd><span>Zikr — Sabr +, flashback −</span></div>
+    <div><kbd>Alt+1…5</kbd><span>Alplarga buyruq</span></div>
+    <div><kbd>L</kbd><span>Lochin — o'ynaladigan skautlik</span></div>
+  </div>
+
+  <p class="note" style="margin-top:22px;max-width:70ch">PS5 <b>adaptive trigger</b>: kamon tortish qarshiligi <code class="mono">HandIntegrity</code> pasayganda og'irlashadi — o'yinchi qo'l og'rig'ini barmog'ida his qiladi.</p>
+</section>
+
+<!-- ══════════════════════════ ARXITEKTURA ══════════════════════════ -->
+<section id="arch">
+  <div class="eyebrow">Texnik</div>
+  <div class="col">
+    <h2>Arxitektura</h2>
+    <p class="lede">To'qqiz UE5 moduli, bir tomonlama bog'liqliklar, data-driven epizodlar. Java tomonda faqat meta-servislar — o'yin to'liq offline ishlaydi.</p>
+  </div>
+
+  <pre>ErtugrulCore          <em>poydevor: tag, interfeys, save, world state</em>
+  ├── ErtugrulGameplay  <em>GAS, jang, harakat,</em> <u>ErtWoundComponent</u>
+  ├── ErtugrulHistory   <em>Kodeks, Bilge Göz, Safar Daftari</em>
+  └── ErtugrulOnline    <em>Java backend, telemetriya, live-ops</em>
+        │
+        └── ErtugrulNarrative  <b>UErtEpisodeDataAsset</b> · quest grafi
+              │                <b>UErtIntroDirector</b>  · dialog
+              ├── ErtugrulWorld  <em>streaming, ob-havo, oba, olomon</em>
+              │     └── ErtugrulAI  <em>nerge, Mass Framework, adaptive boss</em>
+              └── ErtugrulUI     <em>faqat o'qiydi, hech narsa o'zgartirmaydi</em>
+
+ErtugrulEditor        <u>epizod validatori — CI da build'ni to'xtatadi</u></pre>
+
+  <div class="grid g2" style="margin-top:36px">
+    <div class="cell">
+      <h3>Dizayner xato qila olmaydi</h3>
+      <p><code class="mono">IsDataValid()</code> build vaqtida tekshiradi: ID formati, indeks izchilligi (sizning <code class="mono">"season": 0</code> bug'ingiz), <b>har epizodda mix beat</b>, yil 1227–1261 oralig'ida, BAHSLI uchun <code class="mono">scholar_note</code>, dangling kodeks/prerequisite, 8+ dushman ogohlantirishi, arxetip takrorlanishi, kontent ogohlantirishi.</p>
+    </div>
+    <div class="cell">
+      <h3>Java: 101 fayl, ~14 900 qator</h3>
+      <p>Spring Boot 3.3 · Java 21 · Postgres + Flyway · Redis · Kafka · MinIO. Cloud save (vector clock konflikt yechimi), kodeks sinxroni, Safar Daftari PDF eksporti, telemetriya, live-ops balans (patchsiz), tanlov statistikasi.</p>
+      <p style="margin-top:10px"><b>Anti-cheat hech kimni jazolamaydi</b> — modifikatsiyalangan save faqat global statistikadan chiqariladi.</p>
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:26px;max-width:70ch"><b>Eng katta texnik risk:</b> ikkita to'liq jang animseti (o'ng va chap qo'l). Chap qo'l animatsiyalari mirror qilinmasligi kerak — mirror "noto'g'ri" ko'rinadi va o'yinchi buni sezadi. 6–8 kunlik alohida mocap, ~1.1 GB xotira, ikki barobar QA. Buni prototip bosqichida hal qilish shart.</p>
+</section>
+
+<!-- ══════════════════════════ FAYLLAR ══════════════════════════ -->
+<section id="fayl">
+  <div class="eyebrow">Yetkazilgan</div>
+  <div class="col"><h2>Nima yozildi</h2></div>
+  <div class="files">
+    <div class="file"><code>00_AUDIT.md</code><span>57 ta kamchilik, P0/P1 bo'yicha, tuzatish yo'llari bilan</span></div>
+    <div class="file"><code>01_VISION_PILLARS.md</code><span>5 dizayn ustuni, anti-ustunlar, KPI</span></div>
+    <div class="file"><code>02_HISTORY_LAYER.md</code><span>Haqiqat/Rivoyat tizimi, Bilge Göz, Discovery Tour</span></div>
+    <div class="file"><code>03A / 03B_NARRATIVE.md</code><span>48 epizod: sana, langar, intro, mexanika, tanlov, cliffhanger</span></div>
+    <div class="file"><code>04_CORE_SYSTEMS.md</code><span>Jang, stealth, 11 harakat, iymon, oba, fraksiyalar, iqtisod</span></div>
+    <div class="file"><code>05_MIH_SYSTEM.md</code><span>Mix — 48 epizodda 48 ko'rinish, C++ bilan</span></div>
+    <div class="file"><code>06_INTERACTIVE_INTRO.md</code><span>Intro Director, 7 arxetip, 48 epizod xaritasi</span></div>
+    <div class="file"><code>07_SETTINGS_HOTKEYS.md</code><span>Kirish oqimi, to'liq sozlamalar, KB+gamepad, sertifikatsiya</span></div>
+    <div class="file"><code>08_TECH_UE5.md</code><span>9 modul, data asset, validator, Mass, save, CI/CD</span></div>
+    <div class="file"><code>10_NOYAN_DIALOGUE.md</code><span>67 replika, shakal motivi 17 bosqichda, kasting yo'riqnomasi</span></div>
+    <div class="file"><code>data/episodes_v2.json</code><span>48 epizod, 165 KB, schema bo'yicha tekshirilgan</span></div>
+    <div class="file"><code>data/schema/episode.schema.json</code><span>JSON Schema draft 2020-12</span></div>
+    <div class="file"><code>data/build_episodes.py</code><span>Generator + 14 ta CI tekshiruvi</span></div>
+    <div class="file"><code>ue5/…/ErtWoundComponent.h/.cpp</code><span>Mix tizimining to'liq implementatsiyasi</span></div>
+    <div class="file"><code>ue5/…/ErtIntroDirector.h</code><span>O'ynaladigan intro direktori</span></div>
+    <div class="file"><code>ue5/Config/DefaultGameplayTags.ini</code><span>Izohlangan tag ierarxiyasi</span></div>
+    <div class="file"><code>backend/</code><span>101 fayl, Spring Boot 3.3, Postgres, Kafka, MinIO</span></div>
+  </div>
+</section>
+
+<footer>
+  <p><b>Tarixiy manbalar haqida.</b> Bu hujjatdagi barcha sanalar va tarixiy da'volar tekshirilgan: TDV İslâm Ansiklopedisi, Cemal Kafadar (<em>Between Two Worlds</em>), Halil İnalcık, Sara Nur Yıldız (Köpek, 2013), Christian Lange (<em>Torture and Public Executions in the Islamic Middle Period</em>), Ibn Bibi an'anasi, Yassıçemen va Köse Dağ bo'yicha zamonaviy tadqiqotlar.</p>
+  <p>Ertug'rul haqida bizga qolgan yagona ishonchli dalil — o'g'li Usmonning tangasi: <span class="mono" style="color:var(--gold)">«Osman bin Ertuğrul bin Gündüz Alp»</span>. Vizantiya tarixchilari va XIV asr islom mualliflari uni umuman tilga olmaydi. O'yin bu haqiqatni yashirmaydi — u shu haqiqat bilan tugaydi.</p>
+</footer>
+
+</div>
+
+<script>
+const EPS = /*DATA*/[{"n":1,"s":"S1","t":"Och qarg'alar","y":1227,"h":"624 Ramazon","g":"1227 Avgust","c":"DOC","a":"INVESTIGATION","d":1,"m":50,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"OBJECT","mj":false,"cx":3,"ia":"WALK","ss":"","bg":0,"ms":0},{"n":2,"s":"S1","t":"Ikki asir","y":1227,"h":"624 Shavvol","g":"1227 Sentabr","c":"DOC","a":"ESCORT","d":1,"m":55,"tr":"HORSE","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"ON_OTHER","mj":false,"cx":3,"ia":"WALK","ss":"","bg":0,"ms":4},{"n":3,"s":"S1","t":"Oq plash","y":1227,"h":"624 Zulqada","g":"1227 Oktabr","c":"DOC","a":"DEFENSE","d":1,"m":50,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"CORPSE","mj":true,"cx":3,"ia":"PLUNGE","ss":"","bg":0,"ms":5},{"n":4,"s":"S1","t":"Otaning ismi","y":1227,"h":"624 Zulhijja","g":"1227 Noyabr","c":"DIS","a":"COURT","d":1,"m":60,"tr":"CAMP_SOCIAL","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"CAMERA","mj":false,"cx":4,"ia":"WATCH","ss":"SS_1","bg":0,"ms":0},{"n":5,"s":"S1","t":"Qorli dovon","y":1227,"h":"625 Muharram","g":"1227 Dekabr","c":"DOC","a":"SURVIVAL","d":1,"m":65,"tr":"SNOW_ICE","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"MECHANICAL","mj":false,"cx":3,"ia":"HANDS","ss":"","bg":0,"ms":6},{"n":6,"s":"S1","t":"Sultan Han","y":1228,"h":"625 Safar","g":"1228 Yanvar","c":"DOC","a":"INVESTIGATION","d":2,"m":55,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"OBJECT","mj":false,"cx":4,"ia":"WALK","ss":"","bg":0,"ms":2},{"n":7,"s":"S1","t":"Halab: bola amir","y":1228,"h":"625 Rabiul-avval","g":"1228 Fevral","c":"DOC","a":"COURT","d":2,"m":65,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"OBJECT","mj":false,"cx":4,"ia":"WALK","ss":"","bg":0,"ms":4},{"n":8,"s":"S1","t":"Sham yo'li: Ibn Arabiy","y":1228,"h":"625 Jumadal-avval","g":"1228 Aprel","c":"DOC","a":"ESCORT","d":2,"m":60,"tr":"CAMEL","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"EVENT","mj":true,"cx":4,"ia":"WALK","ss":"","bg":0,"ms":5},{"n":9,"s":"S1","t":"Kurdo'g'lu iplari","y":1228,"h":"625 Rajab","g":"1228 Iyun","c":"DOC","a":"INVESTIGATION","d":2,"m":55,"tr":"CAMP_SOCIAL","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"OBJECT","mj":false,"cx":3,"ia":"WATCH","ss":"","bg":0,"ms":4},{"n":10,"s":"S1","t":"O'rmondagi qon","y":1228,"h":"625 Ramazon","g":"1228 Avgust","c":"DOC","a":"CHASE","d":2,"m":50,"tr":"HORSE","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"CAMERA","mj":false,"cx":3,"ia":"OTHER_EYES","ss":"","bg":0,"ms":6},{"n":11,"s":"S1","t":"Suv yo'li","y":1228,"h":"625 Zulqada","g":"1228 Oktabr","c":"DOC","a":"INFILTRATION","d":2,"m":70,"tr":"SWIM","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"ON_OTHER","mj":false,"cx":3,"ia":"PLUNGE","ss":"","bg":0,"ms":4},{"n":12,"s":"S1","t":"Bagras","y":1229,"h":"627 Safar","g":"1229 Dekabr","c":"DOC","a":"SIEGE","d":2,"m":80,"tr":"VERTICAL_SIEGE","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"DIALOGUE","mj":true,"cx":3,"ia":"LABOUR","ss":"SS_2","bg":400,"ms":6},{"n":13,"s":"S2","t":"Yassıçemen","y":1230,"h":"627 Ramazon","g":"10 Avgust 1230","c":"DOC","a":"SIEGE","d":3,"m":70,"tr":"HORSE","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"MECHANICAL","mj":false,"cx":4,"ia":"WALK","ss":"","bg":3000,"ms":7},{"n":14,"s":"S2","t":"Ov boshlig'i","y":1230,"h":"628 Muharram","g":"1230 Noyabr","c":"DOC","a":"INVESTIGATION","d":3,"m":55,"tr":"HORSE","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"OBJECT","mj":false,"cx":4,"ia":"WALK","ss":"","bg":0,"ms":4},{"n":15,"s":"S2","t":"Karacadağ: birinchi tosh","y":1232,"h":"629 Rabiul-oxir","g":"1232 Fevral","c":"LEG","a":"RITUAL","d":3,"m":60,"tr":"CAMP_SOCIAL","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"DIALOGUE","mj":false,"cx":3,"ia":"HANDS","ss":"","bg":0,"ms":0},{"n":16,"s":"S2","t":"Yetim qo'shin","y":1233,"h":"630 Shaban","g":"1233 May","c":"DOC","a":"ESCORT","d":3,"m":60,"tr":"MOVING_PLATFORM","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"ON_OTHER","mj":false,"cx":3,"ia":"WALK","ss":"","bg":120,"ms":6},{"n":17,"s":"S2","t":"Konya: sulton kutubxonasi","y":1233,"h":"631 Muharram","g":"1233 Oktabr","c":"DOC","a":"COURT","d":3,"m":55,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"OBJECT","mj":false,"cx":5,"ia":"WALK","ss":"","bg":0,"ms":3},{"n":18,"s":"S2","t":"Domaniç yozi","y":1235,"h":"632 Rajab","g":"1235 Aprel","c":"LEG","a":"SURVIVAL","d":3,"m":50,"tr":"HORSE","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"CAMERA","mj":false,"cx":3,"ia":"BREATH","ss":"","bg":0,"ms":5},{"n":19,"s":"S2","t":"Zaharlangan taom","y":1237,"h":"634 Zulhijja","g":"31 May 1237","c":"DOC","a":"INVESTIGATION","d":3,"m":65,"tr":"CAMP_SOCIAL","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"THREAT","mj":false,"cx":3,"ia":"WATCH","ss":"SS_3","bg":0,"ms":2},{"n":20,"s":"S2","t":"Köpek hukmronligi","y":1237,"h":"635 Muharram","g":"1237 Avgust","c":"DOC","a":"COURT","d":4,"m":60,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"CORPSE","mj":true,"cx":3,"ia":"WALK","ss":"","bg":0,"ms":5},{"n":21,"s":"S2","t":"Yolg'iz kelasan","y":1237,"h":"635 Rabiul-avval","g":"1237 Oktabr","c":"DOC","a":"INFILTRATION","d":4,"m":65,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"THREAT","mj":true,"cx":2,"ia":"WALK","ss":"","bg":0,"ms":0},{"n":22,"s":"S2","t":"Chegara yonmoqda","y":1238,"h":"635 Jumadal-oxir","g":"1238 Yanvar","c":"DOC","a":"DEFENSE","d":4,"m":60,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"MECHANICAL","mj":false,"cx":3,"ia":"WATCH","ss":"","bg":150,"ms":6},{"n":23,"s":"S2","t":"Köpekning oxiri","y":1238,"h":"636 Rabiul-avval","g":"1238 Sentabr","c":"DOC","a":"CHASE","d":4,"m":55,"tr":"FOOT_PARKOUR","hp":100.0,"mx":100.0,"ph":"INTACT","pw":180.0,"mk":"OBJECT","mj":true,"cx":2,"ia":"WALK","ss":"","bg":0,"ms":6},{"n":24,"s":"S2","t":"MIX","y":1238,"h":"636 Jumadal-avval","g":"1238 Dekabr","c":"DOC","a":"INFILTRATION","d":4,"m":75,"tr":"FOOT_PARKOUR","hp":0.0,"mx":55.0,"ph":"FRESH","pw":110.0,"mk":"EVENT","mj":true,"cx":3,"ia":"WATCH","ss":"","bg":0,"ms":6},{"n":25,"s":"S3","t":"Qorda uch kun","y":1238,"h":"636 Jumadal-oxir","g":"1238 Dekabr","c":"DOC","a":"SURVIVAL","d":4,"m":70,"tr":"SNOW_ICE","hp":0.0,"mx":55.0,"ph":"FRESH","pw":110.0,"mk":"MECHANICAL","mj":true,"cx":4,"ia":"PLUNGE","ss":"","bg":0,"ms":3},{"n":26,"s":"S3","t":"Chap qo'l yo'li","y":1239,"h":"636 Rajab","g":"1239 Fevral","c":"DIS","a":"RITUAL","d":4,"m":65,"tr":"SEWER_CAVE","hp":25.0,"mx":55.0,"ph":"FRESH","pw":130.8,"mk":"DIALOGUE","mj":true,"cx":4,"ia":"HANDS","ss":"SS_4","bg":0,"ms":0},{"n":27,"s":"S3","t":"O'z qabringni ko'rish","y":1240,"h":"637 Ramazon","g":"1240 Aprel","c":"DOC","a":"COURT","d":4,"m":55,"tr":"CAMP_SOCIAL","hp":40.0,"mx":55.0,"ph":"CHRONIC","pw":139.0,"mk":"DIALOGUE","mj":true,"cx":3,"ia":"WALK","ss":"","bg":0,"ms":1},{"n":28,"s":"S3","t":"Paiza","y":1240,"h":"638 Safar","g":"1240 Sentabr","c":"DOC","a":"INVESTIGATION","d":4,"m":60,"tr":"FOOT_PARKOUR","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"ADVANTAGE","mj":false,"cx":3,"ia":"WATCH","ss":"","bg":0,"ms":5},{"n":29,"s":"S3","t":"Nerge","y":1240,"h":"638 Jumadal-avval","g":"1240 Dekabr","c":"DOC","a":"CHASE","d":4,"m":65,"tr":"HORSE","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"MECHANICAL","mj":true,"cx":5,"ia":"WALK","ss":"","bg":0,"ms":8},{"n":30,"s":"S3","t":"Erzurum devorlari","y":1241,"h":"639 Muharram","g":"1241 Iyul","c":"DOC","a":"DEFENSE","d":5,"m":70,"tr":"VERTICAL_SIEGE","hp":40.0,"mx":55.0,"ph":"CHRONIC","pw":139.0,"mk":"MECHANICAL","mj":true,"cx":4,"ia":"LABOUR","ss":"","bg":300,"ms":8},{"n":31,"s":"S3","t":"Oq plash, qora bulut","y":1242,"h":"639 Rajab","g":"1242 Yanvar","c":"DOC","a":"COURT","d":5,"m":55,"tr":"FOOT_PARKOUR","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"DIALOGUE","mj":true,"cx":2,"ia":"WALK","ss":"","bg":0,"ms":0},{"n":32,"s":"S3","t":"Noyan","y":1242,"h":"640 Safar","g":"1242 Avgust","c":"DOC","a":"INFILTRATION","d":5,"m":60,"tr":"CAMP_SOCIAL","hp":42.0,"mx":55.0,"ph":"CHRONIC","pw":140.0,"mk":"THREAT","mj":true,"cx":4,"ia":"WALK","ss":"","bg":600,"ms":0},{"n":33,"s":"S3","t":"Sivas kengashi","y":1243,"h":"640 Shaban","g":"1243 Fevral","c":"DIS","a":"COURT","d":5,"m":55,"tr":"CAMP_SOCIAL","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"DIALOGUE","mj":false,"cx":3,"ia":"WATCH","ss":"SS_5","bg":0,"ms":0},{"n":34,"s":"S3","t":"Oxirgi tinch kun","y":1243,"h":"640 Zulhijja","g":"1243 May","c":"DOC","a":"RITUAL","d":5,"m":45,"tr":"CAMP_SOCIAL","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"RITUAL_ACT","mj":false,"cx":3,"ia":"BREATH","ss":"","bg":0,"ms":0},{"n":35,"s":"S3","t":"KÖSE DAĞ","y":1243,"h":"641 Muharram","g":"26 Iyun 1243","c":"DOC","a":"SIEGE","d":5,"m":85,"tr":"HORSE","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"MECHANICAL","mj":true,"cx":4,"ia":"WATCH","ss":"","bg":3000,"ms":8},{"n":36,"s":"S3","t":"Sanoq","y":1243,"h":"641 Safar","g":"1243 Iyul","c":"DOC","a":"INFILTRATION","d":5,"m":70,"tr":"CAMP_SOCIAL","hp":20.0,"mx":55.0,"ph":"CHRONIC","pw":127.8,"mk":"THREAT","mj":true,"cx":3,"ia":"WALK","ss":"","bg":800,"ms":4},{"n":37,"s":"S4","t":"O'n ikki million","y":1243,"h":"641 Rajab","g":"1243 Dekabr","c":"DOC","a":"COURT","d":5,"m":55,"tr":"CAMP_SOCIAL","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"ADVANTAGE","mj":false,"cx":3,"ia":"HANDS","ss":"","bg":0,"ms":4},{"n":38,"s":"S4","t":"G'arbga","y":1244,"h":"642 Muharram","g":"1244 Iyun","c":"DOC","a":"ESCORT","d":4,"m":70,"tr":"MOVING_PLATFORM","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"RITUAL_ACT","mj":false,"cx":3,"ia":"WALK","ss":"","bg":400,"ms":6},{"n":39,"s":"S4","t":"Söğüt","y":1245,"h":"642 Ramazon","g":"1245 Fevral","c":"DIS","a":"INVESTIGATION","d":4,"m":60,"tr":"FOOT_PARKOUR","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"RITUAL_ACT","mj":true,"cx":3,"ia":"WALK","ss":"","bg":0,"ms":4},{"n":40,"s":"S4","t":"Axiy o'chog'i","y":1245,"h":"643 Rabiul-avval","g":"1245 Avgust","c":"DOC","a":"RITUAL","d":4,"m":55,"tr":"CAMP_SOCIAL","hp":48.0,"mx":55.0,"ph":"CHRONIC","pw":142.9,"mk":"ADVANTAGE","mj":false,"cx":4,"ia":"HANDS","ss":"","bg":0,"ms":0},{"n":41,"s":"S4","t":"Karacahisar","y":1247,"h":"645 Shaban","g":"1247 Dekabr","c":"DIS","a":"SIEGE","d":5,"m":75,"tr":"VERTICAL_SIEGE","hp":42.0,"mx":55.0,"ph":"CHRONIC","pw":140.0,"mk":"MECHANICAL","mj":true,"cx":3,"ia":"HANDS","ss":"SS_6","bg":300,"ms":7},{"n":42,"s":"S4","t":"O'g'il","y":1250,"h":"648 Rajab","g":"1250 Oktabr","c":"DIS","a":"RITUAL","d":4,"m":50,"tr":"CAMP_SOCIAL","hp":45.0,"mx":55.0,"ph":"CHRONIC","pw":141.4,"mk":"DIALOGUE","mj":false,"cx":2,"ia":"BREATH","ss":"","bg":0,"ms":0},{"n":43,"s":"S4","t":"Vizantiya chegarasi","y":1252,"h":"650 Muharram","g":"1252 Mart","c":"DOC","a":"INFILTRATION","d":5,"m":65,"tr":"FOOT_PARKOUR","hp":45.0,"mx":70.0,"ph":"ADAPTED","pw":141.4,"mk":"ADVANTAGE","mj":true,"cx":4,"ia":"WALK","ss":"","bg":0,"ms":5},{"n":44,"s":"S4","t":"Ikkinchi mix","y":1255,"h":"653 Ramazon","g":"1255 Oktabr","c":"DOC","a":"DEFENSE","d":5,"m":70,"tr":"FOOT_PARKOUR","hp":55.0,"mx":70.0,"ph":"ADAPTED","pw":146.2,"mk":"THREAT","mj":true,"cx":2,"ia":"BREATH","ss":"","bg":600,"ms":8},{"n":45,"s":"S4","t":"Hamzaning kechirimi","y":1256,"h":"654 Safar","g":"1256 Mart","c":"DOC","a":"INVESTIGATION","d":5,"m":55,"tr":"FOOT_PARKOUR","hp":55.0,"mx":70.0,"ph":"ADAPTED","pw":146.2,"mk":"DIALOGUE","mj":true,"cx":2,"ia":"WALK","ss":"","bg":0,"ms":4},{"n":46,"s":"S4","t":"Tungi olov","y":1258,"h":"656 Zulhijja","g":"1258 Dekabr","c":"DOC","a":"INFILTRATION","d":5,"m":75,"tr":"SNOW_ICE","hp":30.0,"mx":70.0,"ph":"ADAPTED","pw":133.7,"mk":"MECHANICAL","mj":true,"cx":3,"ia":"PLUNGE","ss":"","bg":600,"ms":6},{"n":47,"s":"S4","t":"Uchinchi mix","y":1259,"h":"657 Muharram","g":"1259 Yanvar","c":"DIS","a":"SIEGE","d":5,"m":65,"tr":"FOOT_PARKOUR","hp":40.0,"mx":70.0,"ph":"ADAPTED","pw":139.0,"mk":"EVENT","mj":true,"cx":2,"ia":"WATCH","ss":"","bg":0,"ms":1},{"n":48,"s":"S4","t":"Tanga","y":1261,"h":"659 Rabiul-avval","g":"1261 Fevral","c":"DOC","a":"COURT","d":4,"m":70,"tr":"CAMP_SOCIAL","hp":50.0,"mx":70.0,"ph":"ADAPTED","pw":143.9,"mk":"RITUAL_ACT","mj":true,"cx":3,"ia":"WALK","ss":"SS_7","bg":0,"ms":0}]/*DATA*/;
+
+const ARCH = {
+  INFILTRATION:['Yashirin kirish','#4C8FA8'], SIEGE:['Qamal','#9A6B3E'],
+  SURVIVAL:['Omon qolish','#5E8C7A'], INVESTIGATION:['Tergov','#7B7FA8'],
+  COURT:['Saroy','#A88A4C'], ESCORT:['Yo’l boshlash','#6E9B6A'],
+  DEFENSE:['Mudofaa','#8C6A8C'], CHASE:['Ta’qib','#A85E52'], RITUAL:['Marosim','#4F8F92']
+};
+const TRAV = {
+  FOOT_PARKOUR:'Yayov parkur', HORSE:'Ot', SEWER_CAVE:'Kanalizatsiya / g’or',
+  SWIM:'Suvda suzish', ROPE_GRAPPLE:'Arqon va krük', SNOW_ICE:'Qor va muz',
+  MOVING_PLATFORM:'Arava ustida', BOAT:'Qayiq', FALCON:'Lochin', CAMEL:'Tuya',
+  VERTICAL_SIEGE:'Vertikal qamal', CAMP_SOCIAL:'Ijtimoiy / lager'
+};
+const PHASE = {INTACT:'Butun', FRESH:'Yangi jarohat', CHRONIC:'Surunkali', ADAPTED:'Moslashgan'};
+const MIH = {
+  OBJECT:'Obyekt sifatida ko’rinadi', ON_OTHER:'Boshqa odamning qo’lida',
+  CORPSE:'Mixlangan jasad', MECHANICAL:'Mexanik ta’sir', DIALOGUE:'Dialogda',
+  CAMERA:'Kamera qo’lda to’xtaydi', THREAT:'Tahdid', ADVANTAGE:'Afzallik beradi',
+  RITUAL_ACT:'O’zi mix qoqadi', EVENT:'Katta hodisa'
+};
+const CONF = {DOC:['HUJJATLI','doc'], DIS:['BAHSLI','dis'], LEG:['RIVOYAT','leg']};
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ── Hero: qo'l butunligi egri chizig'i ───────────────────────────────── */
+function drawCurve(){
+  const c = document.getElementById('curve');
+  if(!c || !EPS.length) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.clientWidth, H = 200;
+  c.width = W*dpr; c.height = H*dpr;
+  const x = c.getContext('2d'); x.scale(dpr,dpr); x.clearRect(0,0,W,H);
+
+  const PL=6, PR=6, PT=18, PB=26;
+  const iw = W-PL-PR, ih = H-PT-PB;
+  const px = i => PL + (i/(EPS.length-1))*iw;
+  const py = v => PT + (1-v/100)*ih;
+
+  /* setka */
+  x.strokeStyle = cssv('--line-soft'); x.lineWidth = 1;
+  [0,25,50,75,100].forEach(v=>{
+    x.beginPath(); x.moveTo(PL,py(v)+.5); x.lineTo(W-PR,py(v)+.5); x.stroke();
+  });
+
+  /* qiyinlik ustunlari (fon) */
+  const bw = iw/EPS.length;
+  x.fillStyle = cssv('--gold') + '33';
+  EPS.forEach((e,i)=>{
+    const h = (e.d/5)*ih*0.34;
+    x.fillRect(PL + i*bw + 1, PT+ih-h, bw-2, h);
+  });
+
+  /* ship (MaxIntegrity) */
+  x.strokeStyle = cssv('--wound'); x.lineWidth = 1.5; x.setLineDash([4,3]);
+  x.beginPath(); EPS.forEach((e,i)=>{ i?x.lineTo(px(i),py(e.mx)):x.moveTo(px(i),py(e.mx)); });
+  x.stroke(); x.setLineDash([]);
+
+  /* HandIntegrity to'ldirish */
+  const grad = x.createLinearGradient(0,PT,0,PT+ih);
+  grad.addColorStop(0, cssv('--accent')+'44');
+  grad.addColorStop(1, cssv('--accent')+'05');
+  x.beginPath(); x.moveTo(px(0), PT+ih);
+  EPS.forEach((e,i)=> x.lineTo(px(i), py(e.hp)));
+  x.lineTo(px(EPS.length-1), PT+ih); x.closePath();
+  x.fillStyle = grad; x.fill();
+
+  /* HandIntegrity chizig'i */
+  x.strokeStyle = cssv('--accent'); x.lineWidth = 2.2; x.lineJoin='round';
+  x.beginPath(); EPS.forEach((e,i)=>{ i?x.lineTo(px(i),py(e.hp)):x.moveTo(px(i),py(e.hp)); });
+  x.stroke();
+
+  /* EP024 — mix nuqtasi */
+  const i24 = 23;
+  x.strokeStyle = cssv('--wound'); x.lineWidth = 1.5;
+  x.beginPath(); x.moveTo(px(i24), PT-6); x.lineTo(px(i24), PT+ih); x.stroke();
+  x.fillStyle = cssv('--wound');
+  x.beginPath(); x.arc(px(i24), py(0), 4, 0, 7); x.fill();
+  x.font = '500 10px "IBM Plex Mono", monospace';
+  x.textAlign = px(i24) > W-100 ? 'right' : 'left';
+  x.fillText('EP024 · MIX', px(i24) + (x.textAlign==='left'?7:-7), PT-7);
+
+  /* EP043 — protez */
+  const i43 = 42;
+  x.fillStyle = cssv('--dim');
+  x.textAlign = 'right';
+  x.fillText('EP043 · protez', px(i43)-6, py(70)-7);
+  x.strokeStyle = cssv('--dim'); x.lineWidth=1; x.setLineDash([2,3]);
+  x.beginPath(); x.moveTo(px(i43), py(70)); x.lineTo(px(i43), PT+ih); x.stroke(); x.setLineDash([]);
+
+  /* o'q belgilari */
+  x.fillStyle = cssv('--dim'); x.font='400 10px "IBM Plex Mono", monospace';
+  x.textAlign='left';  x.fillText('1227', PL, H-8);
+  x.textAlign='right'; x.fillText('1261', W-PR, H-8);
+  x.textAlign='center';
+  ['S1','S2','S3','S4'].forEach((s,k)=> x.fillText(s, px(k*12+5.5), H-8));
+}
+
+/* ── 48 epizod instrumenti ───────────────────────────────────────────── */
+let selected = 23, filter = 'all';
+
+function buildStrip(){
+  const strip = document.getElementById('strip');
+  strip.innerHTML = '';
+  EPS.forEach((e,i)=>{
+    const b = document.createElement('button');
+    b.className = 'ep'; b.type='button'; b.role='tab';
+    b.setAttribute('aria-pressed', i===selected ? 'true':'false');
+    b.setAttribute('aria-label', 'EP'+String(e.n).padStart(3,'0')+' — '+e.t);
+    const bar = document.createElement('span');
+    bar.className='bar';
+    bar.style.height = (14 + e.d*21) + 'px';
+    bar.style.background = ARCH[e.a][1];
+    bar.title = ARCH[e.a][0];
+    const hand = document.createElement('span');
+    hand.className='hand';
+    hand.style.background = e.ph==='INTACT' ? cssv('--line')
+                          : e.mj ? cssv('--wound') : cssv('--wound')+'88';
+    const num = document.createElement('span');
+    num.className='num'; num.textContent = e.n;
+    b.append(bar, hand, num);
+    b.addEventListener('click', ()=>{ selected=i; render(); });
+    strip.appendChild(b);
+  });
+}
+
+function matches(e){
+  if(filter==='all') return true;
+  if(filter==='major') return e.mj;
+  if(filter==='ss') return !!e.ss;
+  if(filter==='horse') return e.tr==='HORSE';
+  return e.s===filter;
+}
+
+function render(){
+  [...document.querySelectorAll('.ep')].forEach((b,i)=>{
+    b.setAttribute('aria-pressed', i===selected ? 'true':'false');
+    b.classList.toggle('dim', !matches(EPS[i]));
+  });
+  const e = EPS[selected];
+  const id = 'EP'+String(e.n).padStart(3,'0');
+  const cf = CONF[e.c];
+  const d = document.getElementById('detail');
+  d.classList.toggle('major', e.mj);
+  d.innerHTML = `
+    <div class="detail-top">
+      <span class="detail-id">${id} · ${e.s}</span>
+      <span class="badge ${cf[1]}">${cf[0]}</span>
+      ${e.ss ? `<span class="badge ss">SHUBHA SAHNASI ${e.ss.replace('SS_','')}</span>`:''}
+      ${e.mj ? `<span class="badge ss">MIX — KALIT LAHZA</span>`:''}
+    </div>
+    <h3>${e.t}</h3>
+    <p class="detail-date mono">${e.h} · ${e.g}</p>
+    <div class="dl">
+      <div><dt>Arxetip</dt><dd style="color:${ARCH[e.a][1]}">${ARCH[e.a][0]}</dd></div>
+      <div><dt>Qiyinlik</dt><dd>T${e.d}<small>${e.m} daqiqa</small></dd></div>
+      <div><dt>Asosiy harakat</dt><dd>${TRAV[e.tr]}</dd></div>
+      <div><dt>Qo’l holati</dt><dd style="color:${e.ph==='INTACT'?'var(--ink)':'var(--wound)'}">${PHASE[e.ph]}<small>${e.hp}% / ship ${e.mx}%</small></dd></div>
+      <div><dt>Parry oynasi</dt><dd>${e.pw} ms</dd></div>
+      <div><dt>Mix bu epizodda</dt><dd style="font-size:13px">${MIH[e.mk]}</dd></div>
+      <div><dt>Kodeks</dt><dd>${e.cx} yozuv</dd></div>
+      <div><dt>Dushman</dt><dd>${e.ms||'—'}${e.bg?` <small>+${e.bg} fon agenti</small>`:''}</dd></div>
+    </div>`;
+}
+
+/* ── Chartlar ────────────────────────────────────────────────────────── */
+function bars(el, entries, hotKey){
+  const max = Math.max(...entries.map(x=>x[1]));
+  el.innerHTML = entries.map(([k,v,label,color])=>`
+    <div style="display:grid;grid-template-columns:118px 1fr 26px;gap:11px;align-items:center;margin-bottom:7px">
+      <span style="font:400 12.5px/1.3 var(--t3);color:${k===hotKey?'var(--wound)':'var(--dim)'};text-align:right">${label}</span>
+      <span class="barcell"><i class="${k===hotKey?'hot':''}" style="width:${(v/max)*100}%;${color&&k!==hotKey?`background:${color}`:''}"></i></span>
+      <span class="mono" style="font-size:12.5px;color:var(--ink-2)">${v}</span>
+    </div>`).join('');
+}
+
+function charts(){
+  const ac = {}; EPS.forEach(e=> ac[e.a]=(ac[e.a]||0)+1);
+  bars(document.getElementById('archChart'),
+       Object.entries(ac).sort((a,b)=>b[1]-a[1])
+             .map(([k,v])=>[k,v,ARCH[k][0],ARCH[k][1]]));
+
+  const tc = {}; EPS.forEach(e=> tc[e.tr]=(tc[e.tr]||0)+1);
+  bars(document.getElementById('travChart'),
+       Object.entries(tc).sort((a,b)=>b[1]-a[1])
+             .map(([k,v])=>[k,v,TRAV[k],null]), 'HORSE');
+}
+
+/* ── Init ────────────────────────────────────────────────────────────── */
+document.querySelectorAll('.chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(o=>o.setAttribute('aria-pressed','false'));
+    c.setAttribute('aria-pressed','true');
+    filter = c.dataset.f;
+    const first = EPS.findIndex(matches);
+    if(first>=0) selected = first;
+    render();
+  });
+});
+
+const secs = [...document.querySelectorAll('section[id]')];
+const links = [...document.querySelectorAll('.spine a')];
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver(es=>{
+    es.forEach(en=>{
+      if(en.isIntersecting){
+        links.forEach(l=> l.classList.toggle('on', l.getAttribute('href')==='#'+en.target.id));
+      }
+    });
+  },{rootMargin:'-45% 0px -45% 0px'});
+  secs.forEach(s=> io.observe(s));
+}
+
+buildStrip(); render(); charts(); drawCurve();
+let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(drawCurve,120); });
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{ drawCurve(); buildStrip(); render(); });
+new MutationObserver(()=>{ drawCurve(); buildStrip(); render(); })
+  .observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+</script>

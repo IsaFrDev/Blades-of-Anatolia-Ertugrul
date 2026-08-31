@@ -1,0 +1,59 @@
+{
+  "id": "q1_3_first_blood",
+  "episode": 0,
+  "title_key": "Q1_3_TITLE",
+  "giver": "ertugrul",
+  "type": "main",
+  "location": "road_to_oba",
+  "gdd_ref": "Epizod 1 / Kvest 1.3 - Birinchi qon va qochish",
+  "systems": [
+    "UEscortObjectiveComponent",
+    "UWaveSpawnerSubsystem",
+    "UQTESubsystem"
+  ],
+  "objectives": [
+    {
+      "id": "escort_numan",
+      "text_key": "Q1_3_OBJ_ESCORT",
+      "optional": false
+    },
+    {
+      "id": "make_camp",
+      "text_key": "Q1_3_OBJ_CAMP",
+      "optional": false
+    },
+    {
+      "id": "halima_dialogue",
+      "text_key": "Q1_3_OBJ_HALIMA",
+      "optional": false
+    },
+    {
+      "id": "survive_waves",
+      "text_key": "Q1_3_OBJ_WAVES",
+      "optional": false
+    },
+    {
+      "id": "extinguish_fire",
+      "text_key": "Q1_3_OBJ_FIRE",
+      "optional": false
+    },
+    {
+      "id": "arrive_oba",
+      "text_key": "Q1_3_OBJ_ARRIVE",
+      "optional": false
+    },
+    {
+      "id": "first_council",
+      "text_key": "Q1_3_OBJ_COUNCIL",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 10,
+    "skill_points": 1,
+    "resources": {
+      "gold": 20
+    }
+  },
+  "next": "q2_1_journey_to_aleppo"
+}

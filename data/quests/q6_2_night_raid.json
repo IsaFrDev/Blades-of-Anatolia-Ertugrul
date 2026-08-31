@@ -1,0 +1,51 @@
+{
+  "id": "q6_2_night_raid",
+  "episode": 5,
+  "title_key": "Q6_2_TITLE",
+  "giver": "ertugrul",
+  "type": "main",
+  "location": "mongol_camp",
+  "gdd_ref": "Epizod 6 / Kvest 6.2 - Mogul lageriga tungi reyd",
+  "systems": [
+    "USabotageObjectiveComponent",
+    "UFireSpreadSubsystem",
+    "ULargeBattleSubsystem"
+  ],
+  "objectives": [
+    {
+      "id": "infiltrate_camp",
+      "text_key": "Q6_2_OBJ_INFILTRATE",
+      "optional": false
+    },
+    {
+      "id": "burn_catapults",
+      "text_key": "Q6_2_OBJ_CATAPULTS",
+      "optional": false
+    },
+    {
+      "id": "burn_rams",
+      "text_key": "Q6_2_OBJ_RAMS",
+      "optional": false
+    },
+    {
+      "id": "mounted_pursuit",
+      "text_key": "Q6_2_OBJ_MOUNTED",
+      "optional": false
+    },
+    {
+      "id": "defeat_tangut",
+      "text_key": "Q6_2_OBJ_TANGUT",
+      "optional": false
+    },
+    {
+      "id": "hamza_choice",
+      "text_key": "Q6_2_OBJ_HAMZA",
+      "optional": true
+    }
+  ],
+  "rewards": {
+    "honor": 12,
+    "skill_points": 2
+  },
+  "next": "q6_3_noyan_duel"
+}

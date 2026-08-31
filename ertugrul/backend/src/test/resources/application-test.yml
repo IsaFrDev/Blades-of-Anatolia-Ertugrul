@@ -1,0 +1,59 @@
+# Test profile.
+#
+# Postgres va MinIO Testcontainers orqali keladi (@ServiceConnection va
+# @DynamicPropertySource). Kafka va Redis esa ataylab ko'tarilmaydi: save
+# yo'li ularga bog'liq emas, va ikkita ortiqcha konteyner har bir yurishga
+# sekundlar qo'shadi.
+#
+# Ular yo'qligida servis ishlashda davom etishi kerak — bu offline-first
+# qoidasining test darajasidagi tasdig'i.
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate      # Flyway owns the schema here too; catches drift
+  flyway:
+    enabled: true
+    clean-disabled: false
+
+  kafka:
+    # Unreachable on purpose. KafkaAdmin logs a warning and carries on
+    # (fatalIfBrokerNotAvailable defaults to false), and TelemetryProducer
+    # swallows publish failures by design.
+    bootstrap-servers: localhost:59092
+    admin:
+      fail-fast: false
+
+  data:
+    redis:
+      # Also unreachable. RateLimitFilter fails open, so requests still pass.
+      host: localhost
+      port: 63799
+      connect-timeout: 200ms
+      timeout: 200ms
+
+ertugrul:
+  security:
+    jwt:
+      issuer: https://test.dirilis-game.com
+      audience: ertugrul-test
+    save-hmac-secret: test-save-hmac-secret
+    client-hmac-secret: test-client-hmac-secret
+
+  s3:
+    # endpoint / access-key / secret-key are injected by @DynamicPropertySource.
+    path-style-access: true
+    save-bucket: ertugrul-saves
+    export-bucket: ertugrul-exports
+
+  ratelimit:
+    # Off in tests: a shared bucket across parallel test methods produces
+    # failures that look like logic bugs but are not.
+    enabled: false
+
+logging:
+  level:
+    com.fayzinc.ertugrul: DEBUG
+    org.testcontainers: INFO
+    org.springframework.kafka: ERROR
+    io.lettuce: ERROR

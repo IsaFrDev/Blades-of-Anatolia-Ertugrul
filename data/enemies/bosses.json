@@ -1,0 +1,72 @@
+{
+  "bisol": {
+    "name_key": "Bisol", "faction": "templar", "role": "mini_boss",
+    "health": 260, "armor": 0.2, "damage": 24, "speed": 3.6, "attack_range": 2.3,
+    "view_distance": 26, "view_angle": 110, "shield": true, "shield_durability": 4,
+    "scripted_retreat_at_ratio": 0.5,
+    "gdd_ref": "Epizod 1.2 mini-boss (50% da qochadi) va 2.2 duel",
+    "phases": [
+      {"id": "shielded", "threshold": 1.0, "moves": ["shield_bash", "slash_combo"]},
+      {"id": "broken_guard", "threshold": 0.45, "moves": ["wide_swing", "charge"], "invulnerable_transition": true}
+    ]
+  },
+  "titus": {
+    "name_key": "Titus", "faction": "templar", "role": "final_boss_s1",
+    "health": 900, "armor": 0.25, "damage": 34, "speed": 3.4, "attack_range": 2.8,
+    "view_distance": 30, "view_angle": 140, "shield": true, "shield_durability": 3,
+    "arena": "amanos_tower_top",
+    "gdd_ref": "Epizod 3.3 - Final boss: Titus (yomgir, chaqmoq, minora tepasi)",
+    "phases": [
+      {"id": "shield_and_sword", "threshold": 1.0, "moves": ["shield_bash", "heavy_chop", "shove"],
+       "note": "3 muvaffaqiyatli parry -> qalqon yoriladi"},
+      {"id": "longsword", "threshold": 0.66, "moves": ["long_thrust", "spin_slash", "pillar_dash"],
+       "arena_event": "pillars_active", "invulnerable_transition": true},
+      {"id": "wounded_rage", "threshold": 0.3, "moves": ["rapid_flurry", "torch_sweep", "ledge_push"],
+       "arena_event": "fire_zone", "invulnerable_transition": true,
+       "note": "Chaqmoq chaqnaganda korish qiyinlashadi"}
+    ]
+  },
+  "ulubilge": {
+    "name_key": "Ulubilga", "faction": "mongol", "role": "mini_boss",
+    "health": 320, "armor": 0.1, "damage": 22, "speed": 4.8, "attack_range": 1.9,
+    "view_distance": 28, "view_angle": 130,
+    "gdd_ref": "Epizod 5.2 - shomon: tutun bombalar, ikki xanjar, illyuziya",
+    "phases": [
+      {"id": "smoke_dance", "threshold": 1.0, "moves": ["smoke_bomb", "twin_dagger_flurry"]},
+      {"id": "illusion", "threshold": 0.4, "moves": ["mirror_images", "shaman_bell"], "arena_event": "smoke_field"}
+    ]
+  },
+  "tangut": {
+    "name_key": "Tangut", "faction": "mongol", "role": "mini_boss",
+    "health": 480, "armor": 0.3, "damage": 36, "speed": 3.2, "attack_range": 2.9,
+    "view_distance": 26, "view_angle": 120,
+    "gdd_ref": "Epizod 6.2 - ikki qolli qilich, mixchi. Finisher: Ertugrul mixni oladi",
+    "phases": [
+      {"id": "greatsword", "threshold": 1.0, "moves": ["overhead", "sweeping_arc"]},
+      {"id": "berserk", "threshold": 0.35, "moves": ["triple_slash", "ground_slam"], "invulnerable_transition": true}
+    ]
+  },
+  "bayju_noyan": {
+    "name_key": "Bayju Noyan", "faction": "mongol", "role": "final_boss_s2",
+    "health": 1400, "armor": 0.3, "damage": 40, "speed": 3.8, "attack_range": 3.0,
+    "view_distance": 34, "view_angle": 150, "survives_defeat": true, "arena": "shaman_ground",
+    "gdd_ref": "Epizod 6.3 - Final boss (mixlash tanlovi bilan tugaydi)",
+    "phases": [
+      {"id": "mounted", "threshold": 1.0, "moves": ["lance_charge", "mounted_bow", "trample"],
+       "arena_event": "wide_arena", "note": "Otni yiqitish kerak"},
+      {"id": "saber_and_whip", "threshold": 0.62, "moves": ["whip_grab", "saber_combo", "rage_kick"],
+       "arena_event": "tents_collapse", "invulnerable_transition": true,
+       "note": "Gazab zarbasi qalqonini yoradi; parry-stun jazosi bor"},
+      {"id": "bloody_duel", "threshold": 0.28, "moves": ["slow_heavy", "grapple", "mockery"],
+       "arena_event": "small_circle", "invulnerable_transition": true,
+       "note": "Iymon tolganda maxsus finisher ochiladi"}
+    ]
+  },
+  "gumustekin": {
+    "name_key": "Gumushtekin", "faction": "seljuk", "role": "short_boss",
+    "health": 300, "armor": 0.2, "damage": 26, "speed": 3.6, "attack_range": 2.2,
+    "view_distance": 24, "view_angle": 110,
+    "gdd_ref": "Epizod 6.1 - karvonsaroyda qisqa boss (xoin amir)",
+    "phases": [{"id": "duel", "threshold": 1.0, "moves": ["quick_slash", "kick"]}]
+  }
+}

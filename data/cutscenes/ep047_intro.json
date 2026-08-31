@@ -1,0 +1,381 @@
+{
+  "id": "ep047_intro",
+  "episode": "EP047",
+  "level": "forest_pass",
+  "music": "MUS_EP047",
+  "ambience": "Ambience.Winter.Snow",
+  "letterbox": true,
+  "fade_in": 1.2,
+  "fade_out": 1.0,
+  "time_of_day": "night",
+  "weather": "snow",
+  "duration": 0,
+  "actors": [
+    {
+      "id": "ertugrul",
+      "char": "ertugrul",
+      "model": "assets/models/ottoman/ottoman.obj",
+      "loc_name": "chr.ertugrul.name",
+      "scale": 1.82,
+      "tint": [
+        1.0,
+        0.95,
+        0.85
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            -3.4,
+            0.0,
+            32.6
+          ],
+          "yaw": 123,
+          "clip": "Idle"
+        },
+        {
+          "t": 4.5,
+          "pos": [
+            -2.6,
+            0.0,
+            30.8
+          ],
+          "yaw": 125,
+          "clip": "Walk"
+        },
+        {
+          "t": 10.0,
+          "pos": [
+            -0.6,
+            0.0,
+            29.4
+          ],
+          "yaw": 85,
+          "clip": "Walk"
+        },
+        {
+          "t": 15.5,
+          "pos": [
+            1.6,
+            0.0,
+            29.6
+          ],
+          "yaw": 52,
+          "clip": "Walk"
+        },
+        {
+          "t": 21.0,
+          "pos": [
+            3.4,
+            0.0,
+            31.0
+          ],
+          "yaw": 22,
+          "clip": "Walk"
+        },
+        {
+          "t": 26.5,
+          "pos": [
+            4.2,
+            0.0,
+            33.0
+          ],
+          "yaw": -123,
+          "clip": "Idle"
+        },
+        {
+          "t": 31.0,
+          "pos": [
+            4.2,
+            0.0,
+            33.0
+          ],
+          "yaw": -123,
+          "clip": "Draw"
+        },
+        {
+          "t": 36.0,
+          "pos": [
+            3.0,
+            0.0,
+            34.6
+          ],
+          "yaw": -51,
+          "clip": "Walk"
+        },
+        {
+          "t": 40.0,
+          "pos": [
+            2.0,
+            0.0,
+            35.4
+          ],
+          "yaw": -142,
+          "clip": "Idle"
+        }
+      ]
+    },
+    {
+      "id": "noyan",
+      "char": "noyan",
+      "model": "assets/models/crusader/crusader.obj",
+      "loc_name": "chr.noyan.name",
+      "scale": 1.9,
+      "tint": [
+        0.7,
+        0.72,
+        0.78
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            3.6,
+            0.0,
+            28.0
+          ],
+          "yaw": -57,
+          "clip": "Idle"
+        },
+        {
+          "t": 5.0,
+          "pos": [
+            2.4,
+            0.0,
+            29.8
+          ],
+          "yaw": -55,
+          "clip": "Walk"
+        },
+        {
+          "t": 10.5,
+          "pos": [
+            0.4,
+            0.0,
+            31.2
+          ],
+          "yaw": -95,
+          "clip": "Walk"
+        },
+        {
+          "t": 16.0,
+          "pos": [
+            -1.8,
+            0.0,
+            31.0
+          ],
+          "yaw": -131,
+          "clip": "Walk"
+        },
+        {
+          "t": 21.5,
+          "pos": [
+            -3.4,
+            0.0,
+            29.6
+          ],
+          "yaw": -163,
+          "clip": "Walk"
+        },
+        {
+          "t": 27.0,
+          "pos": [
+            -4.0,
+            0.0,
+            27.6
+          ],
+          "yaw": 57,
+          "clip": "Talk"
+        },
+        {
+          "t": 32.0,
+          "pos": [
+            -4.0,
+            0.0,
+            27.6
+          ],
+          "yaw": 57,
+          "clip": "Draw"
+        },
+        {
+          "t": 36.5,
+          "pos": [
+            -2.8,
+            0.0,
+            26.2
+          ],
+          "yaw": 135,
+          "clip": "Walk"
+        },
+        {
+          "t": 40.0,
+          "pos": [
+            -2.0,
+            0.0,
+            25.4
+          ],
+          "yaw": 22,
+          "clip": "Idle"
+        }
+      ]
+    }
+  ],
+  "camera": [
+    {
+      "t": 0.0,
+      "pos": [
+        -7.4,
+        3.6,
+        38.6
+      ],
+      "look": [
+        -1.0,
+        1.5,
+        30.4
+      ],
+      "fov": 48
+    },
+    {
+      "t": 5.5,
+      "pos": [
+        -4.6,
+        2.0,
+        34.6
+      ],
+      "look": [
+        -1.4,
+        1.5,
+        30.6
+      ],
+      "fov": 40
+    },
+    {
+      "t": 11.0,
+      "pos": [
+        -1.0,
+        1.8,
+        35.4
+      ],
+      "look": [
+        0.0,
+        1.5,
+        30.4
+      ],
+      "fov": 36
+    },
+    {
+      "t": 16.5,
+      "pos": [
+        6.4,
+        1.9,
+        33.6
+      ],
+      "look": [
+        1.6,
+        1.5,
+        29.8
+      ],
+      "fov": 34
+    },
+    {
+      "t": 22.0,
+      "pos": [
+        -0.4,
+        1.75,
+        26.4
+      ],
+      "look": [
+        -2.8,
+        1.45,
+        30.0
+      ],
+      "fov": 30
+    },
+    {
+      "t": 27.5,
+      "pos": [
+        -6.6,
+        1.8,
+        30.6
+      ],
+      "look": [
+        -3.8,
+        1.5,
+        28.0
+      ],
+      "fov": 32
+    },
+    {
+      "t": 33.0,
+      "pos": [
+        8.6,
+        2.2,
+        30.0
+      ],
+      "look": [
+        0.4,
+        1.5,
+        30.4
+      ],
+      "fov": 40
+    },
+    {
+      "t": 38.0,
+      "pos": [
+        -1.4,
+        4.4,
+        41.4
+      ],
+      "look": [
+        1.0,
+        1.4,
+        31.0
+      ],
+      "fov": 54
+    }
+  ],
+  "lines": [
+    {
+      "t": 1.8,
+      "actor": "noyan",
+      "loc": "cut.ep047_intro.01",
+      "vo": "ep047_intro_01",
+      "dur": 0
+    },
+    {
+      "t": 7.4,
+      "actor": "noyan",
+      "loc": "cut.ep047_intro.02",
+      "vo": "ep047_intro_02",
+      "dur": 0
+    },
+    {
+      "t": 13.2,
+      "actor": "noyan",
+      "loc": "cut.ep047_intro.03",
+      "vo": "ep047_intro_03",
+      "dur": 0
+    },
+    {
+      "t": 19.4,
+      "actor": "ertugrul",
+      "loc": "cut.ep047_intro.04",
+      "vo": "ep047_intro_04",
+      "dur": 0
+    },
+    {
+      "t": 25.6,
+      "actor": "noyan",
+      "loc": "cut.ep047_intro.05",
+      "vo": "ep047_intro_05",
+      "dur": 0
+    },
+    {
+      "t": 32.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep047_intro.06",
+      "vo": "ep047_intro_06",
+      "dur": 0
+    }
+  ]
+}

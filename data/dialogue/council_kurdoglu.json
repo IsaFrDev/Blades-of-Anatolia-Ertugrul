@@ -1,0 +1,43 @@
+{
+  "id": "council_kurdoglu",
+  "gdd_ref": "Epizod 2 / Kvest 2.3 - Kengash dialog-dueli: dalillarni ketma-ket korsatish",
+  "duel_threshold": 3,
+  "start": "opening",
+  "nodes": {
+    "opening": {
+      "speaker": "Sulaymon Shoh",
+      "text_key": "DLG_COUNCIL_OPEN",
+      "next": "accusation"
+    },
+    "accusation": {
+      "speaker": "Ertugrul",
+      "text_key": "DLG_COUNCIL_ACCUSE",
+      "options": [
+        {"text_key": "DLG_COUNCIL_EVID_LETTER", "requires_evidence": "letter", "duel_points": 1, "next": "deny_letter"},
+        {"text_key": "DLG_COUNCIL_EVID_SEAL", "requires_evidence": "seal", "duel_points": 1, "next": "deny_seal"},
+        {"text_key": "DLG_COUNCIL_EVID_SELCAN", "requires_evidence": "selcan_talk", "duel_points": 1, "next": "selcan_reacts"},
+        {"text_key": "DLG_COUNCIL_EVID_AYKIZ", "requires_evidence": "aykiz_witness", "duel_points": 1, "next": "aykiz_speaks"},
+        {"text_key": "DLG_COUNCIL_NO_PROOF", "honor": -6, "choice_id": "e2_council_style", "option_id": "no_proof", "next": "weak_case"}
+      ]
+    },
+    "deny_letter": {"speaker": "Kurdogli", "text_key": "DLG_COUNCIL_DENY_LETTER", "next": "accusation"},
+    "deny_seal": {"speaker": "Kurdogli", "text_key": "DLG_COUNCIL_DENY_SEAL", "next": "accusation"},
+    "selcan_reacts": {"speaker": "Selcan Xotun", "text_key": "DLG_COUNCIL_SELCAN", "next": "accusation"},
+    "aykiz_speaks": {"speaker": "Aykiz", "text_key": "DLG_COUNCIL_AYKIZ", "next": "verdict"},
+    "weak_case": {"speaker": "Kurdogli", "text_key": "DLG_COUNCIL_WEAK", "next": "verdict"},
+    "verdict": {
+      "speaker": "Sulaymon Shoh",
+      "text_key": "DLG_COUNCIL_VERDICT",
+      "options": [
+        {"text_key": "DLG_COUNCIL_OPT_TRIAL", "honor": 8, "choice_id": "e2_kurdoglu_fate", "option_id": "trial", "set_flag": "kurdoglu_exposed", "next": "news_of_yigit"},
+        {"text_key": "DLG_COUNCIL_OPT_EXECUTE", "honor": -4, "choice_id": "e2_kurdoglu_fate", "option_id": "execute", "set_flag": "kurdoglu_exposed", "next": "news_of_yigit"}
+      ]
+    },
+    "news_of_yigit": {
+      "speaker": "Dogon Alp",
+      "text_key": "DLG_COUNCIL_YIGIT_TAKEN",
+      "set_flag": "yigit_kidnapped",
+      "next": "end"
+    }
+  }
+}

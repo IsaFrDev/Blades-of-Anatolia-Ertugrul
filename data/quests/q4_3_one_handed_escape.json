@@ -1,0 +1,56 @@
+{
+  "id": "q4_3_one_handed_escape",
+  "episode": 3,
+  "title_key": "Q4_3_TITLE",
+  "giver": "sungurtekin",
+  "type": "main",
+  "location": "mongol_camp",
+  "gdd_ref": "Epizod 4 / Kvest 4.3 - Bir qolli qochish",
+  "systems": [
+    "UInjuryStateComponent",
+    "UBleedingComponent",
+    "USnowTrackSubsystem"
+  ],
+  "objectives": [
+    {
+      "id": "leave_cage",
+      "text_key": "Q4_3_OBJ_CAGE",
+      "optional": false
+    },
+    {
+      "id": "find_bandage_1",
+      "text_key": "Q4_3_OBJ_BANDAGE",
+      "optional": false
+    },
+    {
+      "id": "release_horses",
+      "text_key": "Q4_3_OBJ_HORSES",
+      "optional": true
+    },
+    {
+      "id": "avoid_dogs",
+      "text_key": "Q4_3_OBJ_DOGS",
+      "optional": false
+    },
+    {
+      "id": "break_trail",
+      "text_key": "Q4_3_OBJ_TRAIL",
+      "optional": false
+    },
+    {
+      "id": "escape_tangut",
+      "text_key": "Q4_3_OBJ_TANGUT",
+      "optional": false
+    },
+    {
+      "id": "river_jump",
+      "text_key": "Q4_3_OBJ_RIVER",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 12,
+    "skill_points": 2
+  },
+  "next": "q5_1_return_to_forge"
+}

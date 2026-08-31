@@ -1,0 +1,56 @@
+{
+  "kayi": [
+    {"id": "ertugrul", "name": "Ertugrul Gozi", "role": "player", "gameplay": "Toliq boshqaruv", "seasons": [1, 2]},
+    {"id": "suleyman_shah", "name": "Sulaymon Shoh", "role": "quest_giver", "gameplay": "Asosiy kvest beruvchi; 1-mavsum oxirida vafot", "seasons": [1]},
+    {"id": "hayme_ana", "name": "Hayma Ona", "role": "quest_giver", "gameplay": "Oba kvestlari; 2-mavsumda qabila rahbari", "seasons": [1, 2]},
+    {"id": "gundogdu", "name": "Gundogdu", "role": "rival_ally", "gameplay": "Kengashda raqib/ittifoqchi, bazi missiyalarda hamroh", "seasons": [1, 2]},
+    {"id": "selcan", "name": "Selcan Xotun", "role": "side_story", "gameplay": "Ichki fitna -> tavba yoli", "seasons": [1, 2]},
+    {"id": "dundar", "name": "Dundor", "role": "young_brother", "gameplay": "Ov tutoriali, sparring minigame", "seasons": [1, 2]},
+    {"id": "turgut", "name": "Turgut Alp", "role": "companion", "companion_role": "heavy", "gameplay": "Ogir zarbalar, eshik buzish", "seasons": [1, 2]},
+    {"id": "bamsi", "name": "Bamsi Beyrak", "role": "companion", "companion_role": "dual", "gameplay": "Olomon jangi, kuch QTE, hazil", "seasons": [1, 2]},
+    {"id": "dogan", "name": "Dogon Alp", "role": "companion", "companion_role": "archer", "gameplay": "Uzoqdan qollab-quvvatlash, razvedka", "seasons": [1, 2]},
+    {"id": "deli_demir", "name": "Deli Demir", "role": "craft_npc", "gameplay": "Temirchilik minigame, qurol yangilash", "seasons": [1, 2]},
+    {"id": "aykiz", "name": "Aykiz", "role": "side_story", "gameplay": "Oba kvestlari, 1-mavsum drama", "seasons": [1]},
+    {"id": "gokce", "name": "Gokcha", "role": "relationship", "gameplay": "Munosabat yon chizigi", "seasons": [1, 2]},
+    {"id": "kurdoglu", "name": "Kurdogli", "role": "antagonist_internal", "gameplay": "Ichki xoin, Epizod 2 da fosh boladi", "seasons": [1]},
+    {"id": "akca_koca", "name": "Aqcha Koja", "role": "elder", "gameplay": "Kengash, yon kvestlar", "seasons": [1, 2]},
+    {"id": "hamza", "name": "Hamza Alp", "role": "traitor", "gameplay": "Josus chizigi, tavba yoki olim", "seasons": [2]},
+    {"id": "abdurrahman", "name": "Abdurrahmon Alp", "role": "companion", "companion_role": "scout", "gameplay": "2-mavsum hamrohi", "seasons": [2]},
+    {"id": "wild_demir", "name": "Yovvoyi Demir", "role": "craft_npc", "gameplay": "Minigame NPC", "seasons": [1, 2]}
+  ],
+  "seljuk_aleppo_spiritual": [
+    {"id": "halima", "name": "Halima Sulton", "role": "love_interest", "playable": true, "gameplay": "Qisqa oynaladigan segment (3.1 asirlikdan qochish)", "seasons": [1, 2]},
+    {"id": "numan", "name": "Shahzoda Numon", "role": "escort_npc", "gameplay": "Eskort obyekti (1.3)", "seasons": [1]},
+    {"id": "yigit", "name": "Yigit", "role": "rescue_target", "gameplay": "Qutqarish kvesti", "seasons": [1]},
+    {"id": "ibn_arabi", "name": "Ibn Arabiy", "role": "mentor", "gameplay": "Hikmat sahnalari, kodeks ochadi", "seasons": [1, 2]},
+    {"id": "aladdin_kayqubad", "name": "Sulton Alouddin Kayqubod", "role": "sultan", "gameplay": "Ittifoq kvesti (6.1)", "seasons": [2]},
+    {"id": "afsin_bey", "name": "Afshin Bey", "role": "double_agent", "gameplay": "Sulton josusi, ikkiyuzlama ittifoqchi", "seasons": [1, 2]},
+    {"id": "ertokus_bey", "name": "Ertoqush Bey", "role": "commander", "gameplay": "Saljuqiy qoshini (6.2)", "seasons": [2]},
+    {"id": "saadettin_kopek", "name": "Saduddin Kopak", "role": "hidden_rival", "gameplay": "3-mavsumga koprik", "seasons": [2]},
+    {"id": "al_aziz", "name": "Al-Aziz", "role": "emir", "gameplay": "Halab amiri, yaylov kelishuvi", "seasons": [1]},
+    {"id": "nasir", "name": "Nosir", "role": "antagonist", "gameplay": "Halab vaziri, Templar agenti", "seasons": [1]},
+    {"id": "eftelya", "name": "Eftelya", "role": "spy", "gameplay": "Templar ayol josusi, stealth yon kvesti", "seasons": [1]}
+  ],
+  "templars": [
+    {"id": "titus", "name": "Titus", "role": "final_boss_s1", "gameplay": "Amanos qomondoni, 1-mavsum finali", "seasons": [1]},
+    {"id": "petruccio_manzini", "name": "Kardinal Petruchcho Manzini", "role": "mastermind", "gameplay": "Templar strategi; 3.3 da qochadi", "seasons": [1, 2]},
+    {"id": "bisol", "name": "Bisol", "role": "mini_boss", "gameplay": "Titus ukasi, 1.2 va 2.2 mini-boss", "seasons": [1]},
+    {"id": "claudius_omar", "name": "Klavdiy (Umar)", "role": "convert_ally", "gameplay": "Islomni qabul qiladi, 3.1 da ichkaridan yordam", "seasons": [1]}
+  ],
+  "mongols": [
+    {"id": "bayju_noyan", "name": "Bayju Noyan", "role": "final_boss_s2", "gameplay": "2-mavsum finali bossi", "seasons": [2]},
+    {"id": "tangut", "name": "Tangut", "role": "mini_boss", "gameplay": "Noyan ong qoli, mix sahnasi ishtirokchisi", "seasons": [2]},
+    {"id": "ulubilge", "name": "Ulubilga", "role": "mini_boss", "gameplay": "Shomon/aygoqchi", "seasons": [2]},
+    {"id": "goncagul", "name": "Gunchagul", "role": "spy", "gameplay": "Noyan josusi, Dodurga obasida", "seasons": [2]},
+    {"id": "aytolun", "name": "Aytolun Xotun", "role": "traitor", "gameplay": "Korkut Bey xotini, Noyan bilan til biriktirgan", "seasons": [2]},
+    {"id": "kocabas", "name": "Kojabosh", "role": "spy", "gameplay": "Josus, yon kvest", "seasons": [2]}
+  ],
+  "dodurga": [
+    {"id": "korkut_bey", "name": "Korkut Bey", "role": "quest_giver", "gameplay": "Dodurga beyi; 6.1 da zaharlanadi", "seasons": [2]},
+    {"id": "tugtekin", "name": "Tugtekin", "role": "rival_ally", "gameplay": "Vaqtinchalik hamroh, birga zarba QTE", "seasons": [2]},
+    {"id": "sungurtekin", "name": "Sungurtekin", "role": "hidden_ally", "gameplay": "4.3 da sirli yordamchi, 6.1 da ochiq qaytadi", "seasons": [2]},
+    {"id": "artuk_bey", "name": "Artuq Bey", "role": "craft_npc", "gameplay": "Tabib, crafting NPC", "seasons": [2]},
+    {"id": "banu_cicek", "name": "Bonu Chechak", "role": "side_story", "gameplay": "Dodurga qizi, yon chiziq", "seasons": [2]},
+    {"id": "geyikli_baba", "name": "Geyikli Bobo", "role": "mentor", "gameplay": "Darvesh, qayta tugilish sahnalari", "seasons": [2]}
+  ]
+}

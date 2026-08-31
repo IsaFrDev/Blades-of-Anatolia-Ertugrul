@@ -1,0 +1,41 @@
+{
+  "id": "q5_2_test_of_faith",
+  "episode": 4,
+  "title_key": "Q5_2_TITLE",
+  "giver": "hayme_ana",
+  "type": "main",
+  "location": "kayi_oba_winter",
+  "gdd_ref": "Epizod 5 / Kvest 5.2 - Iymon sinovi",
+  "systems": [
+    "UBindingSwordComponent",
+    "UFaithMeterComponent",
+    "ABossAIController"
+  ],
+  "objectives": [
+    {
+      "id": "position_alps",
+      "text_key": "Q5_2_OBJ_POSITION",
+      "optional": false
+    },
+    {
+      "id": "break_shield_rage",
+      "text_key": "Q5_2_OBJ_BREAK",
+      "optional": false
+    },
+    {
+      "id": "defeat_ulubilge",
+      "text_key": "Q5_2_OBJ_ULUBILGE",
+      "optional": false
+    },
+    {
+      "id": "ulubilge_fate",
+      "text_key": "Q5_2_OBJ_FATE",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 10,
+    "skill_points": 2
+  },
+  "next": "q6_1_unite_the_beyliks"
+}

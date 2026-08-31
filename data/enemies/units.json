@@ -1,0 +1,84 @@
+{
+  "templar_knight": {
+    "name_key": "Templar ritsari", "faction": "templar", "health": 110, "armor": 0.15,
+    "damage": 15, "speed": 3.2, "attack_range": 2.1, "view_distance": 22, "view_angle": 100,
+    "shield": true, "shield_durability": 3,
+    "gdd_ref": "VII Bestiary - Oddiy ritsar (qalqon + qilich)"
+  },
+  "templar_heavy": {
+    "name_key": "Ogir ritsar", "faction": "templar", "health": 190, "armor": 0.35,
+    "damage": 30, "speed": 2.4, "attack_range": 2.6, "view_distance": 18, "view_angle": 90,
+    "stagger_resistant": true,
+    "gdd_ref": "VII Bestiary - Ogir ritsar (gurzi)"
+  },
+  "templar_archer": {
+    "name_key": "Templar kamonchisi", "faction": "templar", "health": 70, "armor": 0.0,
+    "damage": 22, "speed": 3.6, "attack_range": 24.0, "view_distance": 30, "view_angle": 80,
+    "ranged": true, "prefers_high_ground": true,
+    "gdd_ref": "VII Bestiary - Kamonchi"
+  },
+  "templar_priest_officer": {
+    "name_key": "Ruhoniy-ofitser", "faction": "templar", "health": 95, "armor": 0.1,
+    "damage": 12, "speed": 2.8, "attack_range": 2.0, "view_distance": 26, "view_angle": 120,
+    "officer": true, "aura_radius": 12.0, "aura_damage_multiplier": 1.25,
+    "gdd_ref": "VII Bestiary - Ruhoniy-ofitser (birinchi oldirish kerak)"
+  },
+  "templar_spy": {
+    "name_key": "Templar josusi", "faction": "templar", "health": 60, "armor": 0.0,
+    "damage": 20, "speed": 4.4, "attack_range": 1.8, "view_distance": 28, "view_angle": 140,
+    "stealth_enemy": true,
+    "gdd_ref": "VII Bestiary - Josus"
+  },
+  "aleppo_spearman": {
+    "name_key": "Halab nayzachisi", "faction": "aleppo", "health": 90, "armor": 0.1,
+    "damage": 18, "speed": 3.0, "attack_range": 3.0, "view_distance": 20, "view_angle": 100,
+    "gdd_ref": "VII - Halab soqchilari: Nayzachi"
+  },
+  "aleppo_palace_guard": {
+    "name_key": "Saroy gvardiyasi", "faction": "aleppo", "health": 120, "armor": 0.2,
+    "damage": 20, "speed": 3.2, "attack_range": 2.2, "view_distance": 24, "view_angle": 110,
+    "spare_recommended": true, "honor_penalty_on_kill": -6,
+    "gdd_ref": "VII - Saroy gvardiyasi (oldirmaslik tavsiya)"
+  },
+  "bandit": {
+    "name_key": "Qaroqchi", "faction": "bandit", "health": 55, "armor": 0.0,
+    "damage": 11, "speed": 3.8, "attack_range": 2.0, "view_distance": 18, "view_angle": 100,
+    "flee_health_ratio": 0.25,
+    "gdd_ref": "VII - Qaroqchilar: zaif, kop sonli"
+  },
+  "mongol_horse_archer": {
+    "name_key": "Otliq kamonchi", "faction": "mongol", "health": 85, "armor": 0.05,
+    "damage": 20, "speed": 9.5, "attack_range": 26.0, "view_distance": 34, "view_angle": 90,
+    "mounted": true, "circling_radius": 14.0,
+    "gdd_ref": "VII Bestiary - Otliq kamonchi (Keshik)"
+  },
+  "keshik_spearman": {
+    "name_key": "Keshik nayzachisi", "faction": "mongol", "health": 160, "armor": 0.28,
+    "damage": 28, "speed": 2.8, "attack_range": 3.2, "view_distance": 22, "view_angle": 100,
+    "gdd_ref": "VII Bestiary - Keshik nayzachi (elita gvardiya)"
+  },
+  "mongol_lasso": {
+    "name_key": "Arqonli askar", "faction": "mongol", "health": 95, "armor": 0.1,
+    "damage": 10, "speed": 4.0, "attack_range": 9.0, "view_distance": 26, "view_angle": 110,
+    "special": "lasso_dismount",
+    "gdd_ref": "VII Bestiary - Lasso askar (otdan tushiradi)"
+  },
+  "mongol_shield_infantry": {
+    "name_key": "Qalqonli piyoda", "faction": "mongol", "health": 140, "armor": 0.3,
+    "damage": 22, "speed": 2.9, "attack_range": 2.2, "view_distance": 20, "view_angle": 95,
+    "shield": true, "shield_durability": 4,
+    "gdd_ref": "VII Bestiary - Qalqonli piyoda (Gazab zarbasi bilan sindiriladi)"
+  },
+  "mongol_dog": {
+    "name_key": "Mogul iti", "faction": "mongol", "health": 40, "armor": 0.0,
+    "damage": 12, "speed": 6.5, "attack_range": 1.6, "view_distance": 16, "view_angle": 160,
+    "smell_radius": 14.0,
+    "gdd_ref": "VII Bestiary - It (hidlab topadi) - GDD 4.3"
+  },
+  "mongol_scout": {
+    "name_key": "Mogul razvedkachisi", "faction": "mongol", "health": 75, "armor": 0.05,
+    "damage": 16, "speed": 4.6, "attack_range": 2.0, "view_distance": 30, "view_angle": 120,
+    "raises_alarm": true,
+    "gdd_ref": "Epizod 5.2 - Ulubilge razvedka otryadi"
+  }
+}

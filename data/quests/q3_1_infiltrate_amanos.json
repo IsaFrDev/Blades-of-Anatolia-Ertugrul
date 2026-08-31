@@ -1,0 +1,51 @@
+{
+  "id": "q3_1_infiltrate_amanos",
+  "episode": 2,
+  "title_key": "Q3_1_TITLE",
+  "giver": "claudius_omar",
+  "type": "main",
+  "location": "amanos_castle",
+  "gdd_ref": "Epizod 3 / Kvest 3.1 - Amanos qalasiga infiltratsiya",
+  "systems": [
+    "UDisguiseComponent",
+    "USuspicionMeterComponent",
+    "UAssassinationComponent"
+  ],
+  "objectives": [
+    {
+      "id": "wear_monk_robe",
+      "text_key": "Q3_1_OBJ_DISGUISE",
+      "optional": false
+    },
+    {
+      "id": "pass_gate_check",
+      "text_key": "Q3_1_OBJ_GATE_CHECK",
+      "optional": false
+    },
+    {
+      "id": "blend_in_courtyard",
+      "text_key": "Q3_1_OBJ_BLEND",
+      "optional": false
+    },
+    {
+      "id": "kill_gate_guards",
+      "text_key": "Q3_1_OBJ_GUARDS",
+      "optional": false
+    },
+    {
+      "id": "find_yigit",
+      "text_key": "Q3_1_OBJ_YIGIT",
+      "optional": true
+    },
+    {
+      "id": "open_gate",
+      "text_key": "Q3_1_OBJ_OPEN_GATE",
+      "optional": false
+    }
+  ],
+  "rewards": {
+    "honor": 10,
+    "skill_points": 1
+  },
+  "next": "q3_2_castle_courtyard"
+}
