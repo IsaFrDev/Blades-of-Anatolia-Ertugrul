@@ -1337,6 +1337,19 @@ void Character::update(const CharacterInput& in, float dt) {
                 const float ddx = pos_.x - prevPos.x, ddz = pos_.z - prevPos.z;
                 const float ds  = std::sqrt(ddx * ddx + ddz * ddz);
                 groundDs_ = goodF(ds) ? clampf(ds, 0.0f, 2.0f) : 0.0f;
+
+                // Yer nishabi harakat yo'nalishida: 0.45 m oldinda va orqada
+                // tayanch balandligi farqi. Qadam geometriyasi (Skin) shunga
+                // moslashadi va bosib o'tilgan yo'l qiyalik bo'ylab uzayadi.
+                Vec3 sd = dirFromYaw(yaw_);
+                if (ds > 1.0e-3f) sd = Vec3{ddx / ds, 0.0f, ddz / ds};
+                const float gA = supportY(world_, pos_.x - sd.x * 0.45f, pos_.z - sd.z * 0.45f, pos_.y + 0.6f);
+                const float gB = supportY(world_, pos_.x + sd.x * 0.45f, pos_.z + sd.z * 0.45f, pos_.y + 0.6f);
+                float sl = (gB - gA) / 0.9f;
+                if (!goodF(sl) || std::fabs(gB - gA) > 0.9f) sl = 0.0f;   // zina/chekka — nishab emas
+                slope_ = damp(slope_, clampf(sl, -0.7f, 0.7f), 12.0f, dt);
+                // groundDs_ GORIZONTAL qoladi: panja nishoni (fz) model fazosida
+                // gorizontal, shuning uchun faza ham gorizontal masofadan haydaladi.
             }
 
             // ==== 7) INERSIYA VIZUALIZATSIYASI ====
@@ -1467,6 +1480,7 @@ void Character::update(const CharacterInput& in, float dt) {
                                               -25.0f, 25.0f);
                 model_->setBodyHeightMeters(bodyH_);
                 model_->setLocomotionPose(bank_, lean_, headLead, strideYaw_, turnStepHz_);
+                model_->setGroundSlope(grounded_ ? slope_ : 0.0f);
                 animState_ = state_;
                 animTime_  = stateTime_;
                 model_->driveByLocomotion(speed_, groundDs_, dt);  // ichida update(dt) bor
@@ -1517,6 +1531,7 @@ void Character::update(const CharacterInput& in, float dt) {
                 // CrouchWalk fazasi ham MASOFAdan haydalsin (klip tanlamasdan)
                 model_->setBodyHeightMeters(bodyH_);
                 model_->setLocomotionPose(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+                model_->setGroundSlope((grounded_ && state_ == MS::CrouchWalk) ? slope_ : 0.0f);
                 model_->setLocomotion(speed_, groundDs_);
                 // YANGI harakat boshlandimi? Holat o'zgargan bo'lsa yoki holat
                 // taymeri orqaga qaytgan bo'lsa (kombo zanjirida shunday bo'ladi)

@@ -89,6 +89,8 @@ public:
     // Kamera silkinishi 0..1. Muzlashdan MUSTAQIL — haqiqiy vaqtda so'nadi,
     // aks holda muzlash paytida kamera ham to'xtab qolardi.
     float cameraShake() const;
+    // O'q yig'ib olinganda HUD hisoblagichi yonib o'chadi (0..1, haqiqiy vaqtda so'nadi)
+    float pickupFlash() const;
     void draw();                       // dunyodagi belgilar (maqsad markeri, dushman ko'rsatkichlari)
 
     // O'yinchi halok bo'lganda chaqiriladi: oxirgi nazorat nuqtasidan tiklaydi

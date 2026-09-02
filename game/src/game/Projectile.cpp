@@ -13,7 +13,8 @@ constexpr float kArrowLife   = 3.0f;    // s
 constexpr float kArrowRange  = 65.0f;   // m — aniq otish masofasi chegarasi
 constexpr float kArrowStep   = 0.40f;   // m — integratsiya qadami
 constexpr float kBodyRadius  = 0.42f;   // dushman silindri
-constexpr float kStuckShow   = 6.0f;    // qadalgan o'q ko'rinib turadi (s)
+constexpr float kStuckShow   = 40.0f;   // qadalgan o'q shuncha vaqt yig'ib olinadi (s)
+constexpr float kStuckFade   = 5.0f;    // oxirgi soniyalarda so'nadi
 
 inline bool goodF(float v) { return std::isfinite(v) && v > -1.0e8f && v < 1.0e8f; }
 inline bool goodV(const Vec3& v) { return goodF(v.x) && goodF(v.y) && goodF(v.z); }
@@ -133,7 +134,16 @@ void ArrowPool::update(float dt, const PhysicsWorld& phys,
                 hit.dist = distance(r.from, p);
                 hit.charge = r.charge;  hit.silent = r.silent;
                 outHits.push_back(hit);
-                r.active = false;
+                // O'q tanadan o'tmaydi — jasad YONIDA yerga tushadi va uni
+                // o'yinchi yig'ib olishi mumkin (ilgari shunchaki yo'qolardi).
+                {
+                    const float gy = phys.supportBelow(p.x, p.z, p.y + 0.3f);
+                    Vec3 g{p.x, goodF(gy) ? gy : p.y, p.z};
+                    g.x += hit.dir.x * 0.6f;  g.z += hit.dir.z * 0.6f;
+                    Vec3 d = hit.dir;  d.y = -0.55f;
+                    r.pos = g;  r.stuck = true;  r.stuckT = 0.0f;
+                    r.stuckDir = normalize(d);
+                }
                 break;
             }
 
@@ -188,8 +198,10 @@ void ArrowPool::draw() const {
         const Arrow& r = a_[i];
         if (!r.active) continue;
         if (r.stuck) {
-            const float f = 1.0f - saturate(r.stuckT / kStuckShow);
-            glColor4f(0.75f, 0.69f, 0.55f, 0.85f * f);
+            const float f = saturate((kStuckShow - r.stuckT) / kStuckFade);
+            // Yig'ib olinadigan o'q: sekin "nafas oluvchi" yorug'lik bilan ajralib turadi
+            const float pulse = 0.80f + 0.20f * std::sin(r.stuckT * 5.0f);
+            glColor4f(0.92f * pulse, 0.84f * pulse, 0.55f, 0.95f * f);
             glVertex3f(r.pos.x, r.pos.y, r.pos.z);
             glVertex3f(r.pos.x - r.stuckDir.x * 0.35f,
                        r.pos.y - r.stuckDir.y * 0.35f,
@@ -230,6 +242,21 @@ bool ArrowPool::predictImpact(const BowShot& s, const PhysicsWorld& phys, Vec3& 
 }
 
 void ArrowPool::clear() { for (int i = 0; i < kMax; ++i) a_[i] = Arrow(); }
+
+int ArrowPool::collect(const Vec3& pos, float radius) {
+    if (!goodV(pos)) return 0;
+    int n = 0;
+    for (int i = 0; i < kMax; ++i) {
+        Arrow& r = a_[i];
+        if (!r.active || !r.stuck) continue;
+        const float dx = r.pos.x - pos.x, dz = r.pos.z - pos.z, dy = r.pos.y - pos.y;
+        if (dx * dx + dz * dz > radius * radius) continue;
+        if (dy < -1.0f || dy > 2.0f) continue;    // boshqa qavat / tom
+        r.active = false;
+        ++n;
+    }
+    return n;
+}
 int  ArrowPool::live() const {
     int c = 0;
     for (int i = 0; i < kMax; ++i) if (a_[i].active && !a_[i].stuck) ++c;

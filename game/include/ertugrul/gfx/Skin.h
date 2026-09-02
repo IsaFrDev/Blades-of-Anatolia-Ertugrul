@@ -73,6 +73,7 @@ struct StrideCtx {
     float bank      = 0.0f;    // yon egilish (burilish inersiyasi)
     float moveAngle = 0.0f;    // harakat / tana burchagi (strafe warping)
     float headLead  = 0.0f;    // bosh burilishni yetaklaydi
+    float slope     = 0.0f;    // yer nishabi harakat yo'nalishida (ko'tarilish/m, tan)
     // --- Zarba reaksiyasi (poseHurt / poseStagger / poseDeath) ---
     float hitDir    = 0.0f;    // hujumchi burchagi tana o'qiga nisbatan:
                                //   0 = old, +90 = +X tomon, +-180 = orqa
@@ -114,6 +115,9 @@ public:
     // nisbatan harakat burchagi (-180..180), lock-on strafe uchun.
     void     setLocomotionPose(float bankDeg, float leanDeg, float headLeadDeg,
                               float moveAngleDeg, float turnStepHz);
+    // Yer nishabi harakat yo'nalishida (tan: +0.3 = 100 m da 30 m ko'tarilish).
+    // Tepalikda oldingi panja BALANDROQ tushadi, tana qiyalikka egiladi.
+    void     setGroundSlope(float rise) { slope_ = (rise == rise && rise < 9.0f && rise > -9.0f) ? rise : 0.0f; }
     // 0..1 qadam sikli (0 = chap tovon tegdi) — diagnostika va oyoq tovushi uchun
     float    stridePhase() const { return phase_; }
     // Zarba yo'nalishi va og'irligi. receiveHit() ichida bir marta chaqiriladi.
@@ -156,6 +160,7 @@ private:
     float bodyM_      = 1.82f;  // personaj bo'yi (m)
     float bankDeg_ = 0.0f, leanDeg_ = 0.0f, headLead_ = 0.0f;
     float moveAngle_ = 0.0f, turnStepHz_ = 0.0f;
+    float slope_     = 0.0f;    // yer nishabi (tan)
     float phaseDir_  = 1.0f;    // +1 oldinga, -1 orqaga
 
     // Poza konteksti (bonePosition() const bo'lgani uchun bu ham const)

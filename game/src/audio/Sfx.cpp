@@ -231,6 +231,15 @@ SoundRef mkArrowWall() {
     return finish(b, 0.66f);
 }
 
+// O'q yig'ib olindi: qisqa yog'och "tak" va yuqori, tez so'nuvchi jarang.
+SoundRef mkPickup() {
+    Buf b(0.16f);
+    addNoise(b, 0.30f, 0.010f, 2600.0f, 400.0f, 0x7A11u);
+    addPartial(b, 720.0f, 0.35f, 0.030f);
+    addPartial(b, 1480.0f, 0.22f, 0.060f, 0.4f);
+    return finish(b, 0.50f);
+}
+
 // Tana yerga qulashi: yumshoq, past, uzunroq.
 SoundRef mkDeath() {
     Buf b(0.48f);
@@ -283,13 +292,14 @@ void Sfx::build() {
     b.s[(int)SfxId::ArrowHit]  = mkArrowHit();
     b.s[(int)SfxId::ArrowWall] = mkArrowWall();
     b.s[(int)SfxId::Death]     = mkDeath();
+    b.s[(int)SfxId::Pickup]    = mkPickup();
     b.built = true;
 
     // ERT_SFX_DUMP=<papka> — tovushlarni WAV qilib yozadi (tinglash va tekshirish)
     if (const char* dir = std::getenv("ERT_SFX_DUMP")) {
         static const char* const nm[(int)SfxId::Count] = {
             "hit", "block", "parry", "kill", "swing", "bowshot",
-            "arrow_hit", "arrow_wall", "death"
+            "arrow_hit", "arrow_wall", "death", "pickup"
         };
         for (int i = 0; i < (int)SfxId::Count; ++i) {
             if (!b.s[i]) continue;

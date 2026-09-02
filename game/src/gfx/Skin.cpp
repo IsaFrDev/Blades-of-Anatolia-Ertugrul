@@ -227,6 +227,9 @@ void poseStride(Pose& p, const StrideCtx& sc) {
     FootTrack ft[2];
     ft[0] = footTrack(ph,        sc.strideN, sc.duty);   // chap
     ft[1] = footTrack(ph + 0.5f, sc.strideN, sc.duty);   // o'ng
+    // NISHAB: panja ostidagi yer chanoqdan fz masofada slope*fz ga baland/past.
+    // Ilgari tepalikda oldingi panja yerga botib, orqadagisi havoda qolardi.
+    for (int k = 0; k < 2; ++k) ft[k].fy += ft[k].fz * sc.slope;
 
     // --- 2) Chanoq balandligi TAYANCH oyoqdan hisoblanadi ---
     // Eski kod teskari edi: oy = +0.015*(1-cos(2ph)) - oyoqlar ochilganda chanoq
@@ -2165,6 +2168,9 @@ StrideCtx SkinnedModel::buildStrideCtx() const {
     sc.bank    = bankDeg_;
     sc.moveAngle = moveAngle_;
     sc.headLead  = headLead_;
+    sc.slope     = clampf(slope_, -0.7f, 0.7f);
+    // Qiyalikka egilish: tepaga chiqishda oldinga, tushishda orqaga (ko'krak ochiladi)
+    sc.lean     += sc.slope * 12.0f * clampf(v / 1.2f, 0.0f, 1.0f);
     if (clip_ == AnimClip::CrouchWalk) { sc.strideN *= 0.62f; sc.lean += 10.0f; }
     sc.hitDir    = hitDir_;
     sc.hitWeight = hitW_;

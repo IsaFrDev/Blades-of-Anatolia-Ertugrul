@@ -240,6 +240,7 @@ private:
     float   camYaw_    = 0.0f;   // oxirgi kadrdagi kamera yo'nalishi
     float   camPitch_  = 0.0f;   // oxirgi kadrdagi kamera qiyaligi
     int     arrows_    = 12, arrowsMax_ = 12;
+    float   slope_     = 0.0f;   // yer nishabi harakat yo'nalishida (tan), silliqlangan
     bool    shotFired_ = true;   // MUHIM: true — bo'sh pendingShot_ iste'mol qilinmasin
     BowShot pendingShot_;
     int   execVictim_ = -1;

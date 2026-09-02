@@ -28,7 +28,7 @@ struct Arrow {
     float charge = 1.0f;
     bool  active = false;
     bool  silent = true;
-    bool  stuck  = false;     // devorga/yerga qadaldi — 6 s ko'rinadi
+    bool  stuck  = false;     // yerga/devorga qadaldi — YIG'IB OLISH mumkin
     float stuckT = 0.0f;
     Vec3  stuckDir{0, 0, 1};
 };
@@ -57,6 +57,9 @@ public:
                 std::vector<ArrowHit>& outHits);
     void draw() const;                   // GL_LINES — uchayotgan va qadalgan o'qlar
     int  live() const;
+    // O'yinchi yaqinidagi qadalgan o'qlarni yig'adi — nechta olinganini qaytaradi.
+    // Yerdagi va jasad yonidagi o'qlar ham shu yerdan qaytadi.
+    int  collect(const Vec3& pos, float radius);
 
     // HUD uchun: zararsiz oldindan hisob — birinchi to'qnashuv nuqtasi
     static bool predictImpact(const BowShot& s, const PhysicsWorld& phys, Vec3& out);

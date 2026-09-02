@@ -22,6 +22,7 @@ enum class SfxId {
     ArrowHit,     // o'q tanaga
     ArrowWall,    // o'q devorga/yerga
     Death,        // tana yerga qulashi
+    Pickup,       // o'q yig'ib olindi — yog'och "tak" + yengil jarang
     Count
 };
 

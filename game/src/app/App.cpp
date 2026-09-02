@@ -421,11 +421,14 @@ void drawCombatHud(Impl& im) {
             std::snprintf(ab, sizeof(ab), "%d/%d", have, cap);
             const float ax = bx + bw + 16.0f;
             const float ay = (float)im.h - 116.0f;
-            const float* ac = (have == 0) ? YARA : (im.player.aimBlend() > 0.01f ? ZARHAL : SONIK);
-            drawRect(ax, ay + 1.0f, 5.0f, 5.0f, ac[0], ac[1], ac[2],
-                     (have == 0) ? 0.9f : 0.65f);
+            const float pf = enc.pickupFlash();          // o'q yig'ilganda yonadi
+            const float* ac = (have == 0) ? YARA
+                            : ((im.player.aimBlend() > 0.01f || pf > 0.0f) ? ZARHAL : SONIK);
+            const float aa = (have == 0) ? 0.9f : (0.65f + 0.35f * pf);
+            drawRect(ax - 1.0f * pf, ay + 1.0f - 1.0f * pf, 5.0f + 2.0f * pf, 5.0f + 2.0f * pf,
+                     ac[0], ac[1], ac[2], aa);
             fm.draw(ab, ax + 11.0f, ay - 3.0f, ac[0], ac[1], ac[2],
-                    (have == 0) ? 0.95f : 0.7f);
+                    (have == 0) ? 0.95f : (0.7f + 0.3f * pf));
         }
     }
 

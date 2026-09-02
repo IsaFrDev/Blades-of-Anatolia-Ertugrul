@@ -641,9 +641,20 @@ Bular hali bajarilmagan — halol ro'yxat.
 | Shader yo'q | Fixed-function OpenGL 1.1 — soya xaritasi va PBR imkonsiz |
 | Faqat Windows | Win32 ga bevosita bog'langan |
 | Git Bash segfault | PowerShell va Explorer dan ishlaydi, Git Bash dan yo'q — sabab aniqlanmagan |
-| O'q yig'ish yo'q | Jasadga qadalgan o'qni qaytarib olib bo'lmaydi |
-| Nishab hisobga olinmaydi | Tepalikda qadam tekis yerdagidek |
-| Sukunat kamerani ham sekinlashtiradi | Ghost of Tsushima da kamera normal tezlikda qoladi; bizda `dt` bitta joydan o'tadi |
 
 Tuzatilganlar (shu bosqichda): jang jadvalidagi yashirin `x0.70` poza koeffitsiyenti,
 bepul parry, dushman blokining burchak tekshiruvi va zarbaning balandlik tekshiruvi.
+
+Yopilganlar (2026-09):
+
+| Edi | Endi |
+|---|---|
+| O'q yig'ib bo'lmasdi — yerga qadalgani 6 s da yo'qolar, tanaga tekkani shunchaki o'chardi | Yerdagi va **jasad yonidagi** o'q 40 s yotadi (so'nggi 5 s so'nadi), yorug'lik bilan "nafas oladi"; ustidan o'tsangiz sadoqqa qaytadi — HUD hisoblagichi chaqnaydi, yog'och "tak" tovushi (`SfxId::Pickup`) |
+| Tepalikda qadam tekis yerdagidek — oldingi panja yerga botar, orqadagisi havoda qolardi | `Character` harakat yo'nalishida 0.9 m bazada nishabni o'lchaydi (`slope_`), `Skin` panja nishonini `fy += fz·slope` ko'taradi, tana qiyalikka egiladi. Faza hamon GORIZONTAL masofadan haydaladi — nishabda ham SLIP 0% |
+| "Sukunat kamerani sekinlashtiradi" | Aslida allaqachon yo'q edi: kamera `im.lastDt` (haqiqiy dt) bilan, dunyo `gdt` bilan yuradi — jadval eskirgan ekan |
+
+O'q yig'ish mantig'i o'yin tashqarisida ham sinaladi (soxta fizika, tekis yer):
+
+```bash
+D:/gcc/mingw64/bin/g++ -std=c++20 -Igame/include tools/tests/arrow_pickup_test.cpp game/src/game/Projectile.cpp game/src/core/Math.cpp -lopengl32 -o build/arrow_pickup_test.exe && build/arrow_pickup_test.exe
+```

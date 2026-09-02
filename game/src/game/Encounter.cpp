@@ -64,6 +64,7 @@ struct Runtime {
     bool  waveFlawless = true;      // joriy to'lqinda zarba yemadi
     // --- Zarba qaytarmasi: muzlash va uchqunlar (HAQIQIY vaqtda so'nadi) ---
     float hitStopT = 0.0f;
+    float pickupT  = 0.0f;          // o'q yig'ish HUD chaqnashi
     float shakeAmp = 0.0f;          // kamera silkinishi 0..1
     float shakeT   = 0.0f;          // silkinish fazasi (haqiqiy vaqt)
     struct Spark { Vec3 p; float t; int kind; };   // 0 = tegdi, 1 = bloklandi, 2 = o'ldi
@@ -459,6 +460,15 @@ void Encounter::update(float dt) {
             hits.clear();
             if (rt.phys != nullptr) rt.arrows.update(dt, *rt.phys, rt.enemies.all(), hits);
             for (size_t i = 0; i < hits.size(); ++i) resolveArrowHit(rt, pl, hits[i]);
+            // --- o'q yig'ish: yerga/jasad yoniga tushgan o'q ustidan o'tsa sadoqqa qaytadi ---
+            if (pl.arrows() < pl.arrowsMax()) {
+                const int got = rt.arrows.collect(pl.position(), 1.15f);
+                if (got > 0) {
+                    pl.addArrows(got);
+                    rt.pickupT = 0.9f;
+                    Sfx::get().play(SfxId::Pickup, 0.0f, 0.9f);
+                }
+            }
         }
 
         // --- dushman zarbalari ---
@@ -642,6 +652,7 @@ void Encounter::restartEpisode() {
 }
 
 void Encounter::tickFeedback(float realDt) {
+    { Runtime& q = RT(); q.pickupT = (q.pickupT > realDt) ? q.pickupT - realDt : 0.0f; }
     Runtime& rt = RT();
     if (!(realDt > 0.0f)) return;
     if (realDt > 0.1f) realDt = 0.1f;
@@ -662,6 +673,7 @@ void Encounter::tickFeedback(float realDt) {
 
 // Zarba tekkanda o'yin qisqa muddatga muzlaydi — zarbaning OG'IRLIGI shundan sezildi.
 float Encounter::timeScale() const { return (RT().hitStopT > 0.0f) ? 0.12f : 1.0f; }
+float Encounter::pickupFlash() const { return clampf(RT().pickupT / 0.9f, 0.0f, 1.0f); }
 
 float Encounter::cameraShake() const {
     const Runtime& rt = RT();
