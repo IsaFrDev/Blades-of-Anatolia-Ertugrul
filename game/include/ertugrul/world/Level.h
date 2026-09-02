@@ -51,6 +51,9 @@ public:
     void drawSky(const Vec3& camPos) const;
     void applyLighting() const;
     void draw(const Vec3& camPos) const;
+    // Soya xaritasi o'timi: relyef + fokus atrofidagi rekvizitlar, faqat geometriya
+    // (rang/material/soya disklari yo'q). ShadowMap::begin() dan keyin chaqiriladi.
+    void drawCasters(const Vec3& focus, float radius) const;
 
     // XZ da doiraviy to'qnashuv; pos ni tuzatadi, to'qnashuv bo'lsa true
     bool resolveCollision(Vec3& pos, float radius) const;

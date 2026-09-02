@@ -1,5 +1,6 @@
 // Ilova holat mashinasi: Splash -> Til -> Menyu -> Epizod -> Cutscene -> O'yin -> Pauza.
 // 3D sahna chizish, uchinchi shaxs boshqaruvi, HUD va subtitrlar shu yerda.
+#include "ertugrul/gfx/ShadowMap.h"
 #include "ertugrul/app/App.h"
 #include "ertugrul/app/Input.h"
 #include "ertugrul/app/Bindings.h"
@@ -586,6 +587,27 @@ std::string pickLevel(const Episode* e, const CutScene* cs) {
     return "oba_camp";
 }
 
+// Soya xaritasi o'timi (shadersiz, ARB_shadow). casters() personaj/aktyorlarni
+// chizadi; relyef va rekvizitlar Level::drawCasters dan. Quyosh past bo'lsa yoki
+// kengaytma bo'lmasa false — o'shanda eski yumshoq disklar ishlatiladi.
+template <class F>
+bool shadowPass(Impl& im, const Vec3& focus, F casters) {
+    ShadowMap& sm = ShadowMap::get();
+    if (!sm.enabled()) return false;
+    const SkyPreset& s = im.level.sky();
+    if (!sm.begin(Vec3{s.sunDir[0], s.sunDir[1], s.sunDir[2]}, focus, 34.0f, im.w, im.h))
+        return false;
+    im.level.drawCasters(focus, 42.0f);
+    casters();
+    sm.end();
+    return true;
+}
+// Soya qorong'iligi: kunduzi 0.42, tong/shomda yumshoqroq
+float shadowLevelFor(const Impl& im) {
+    const SkyPreset& s = im.level.sky();
+    return (s.sunDir[1] > 0.5f) ? 0.42f : 0.55f;
+}
+
 // Menyu foni: lager ustida sekin aylanuvchi kamera
 void renderMenuBackdrop(Impl& im, float dt) {
     im.menuOrbit += dt * 3.2f;
@@ -593,11 +615,14 @@ void renderMenuBackdrop(Impl& im, float dt) {
     float a = deg2rad(im.menuOrbit);
     Vec3 center{0.0f, im.level.groundAt(0, 0) + 2.4f, 0.0f};
     Vec3 eye{ center.x + std::sin(a) * r, center.y + 9.0f + std::sin(a * 0.37f) * 2.2f, center.z + std::cos(a) * r };
+    const bool shadowed = shadowPass(im, center, [] {});
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     beginScene3D(im.w, im.h, 44.0f, eye, center);
     im.level.applyLighting();          // ko'rinish matritsasidan KEYIN!
     im.level.drawSky(eye);
+    if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
     im.level.draw(eye);
+    if (shadowed) ShadowMap::get().unbindReceive();
 }
 
 } // namespace
@@ -1465,21 +1490,31 @@ void App::render() {
         const float minEyeY = im.level.groundAt(eye.x, eye.z) + 0.6f;
         if (eye.y < minEyeY) eye.y = minEyeY;
         im.level.terrain().clampToBounds(eye, 2.0f);
+        const bool shadowed = shadowPass(im, look, [&] {
+            for (const auto& a : cd.actors()) {
+                if (!a.model || !a.def) continue;
+                Vec3 p = a.pos;
+                p.y = im.level.groundAt(p.x, p.z);
+                a.model->draw(p, a.yaw, a.def->scale);
+            }
+        });
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         beginScene3D(im.w, im.h, cd.cameraFov(), eye, look);
         im.level.applyLighting();      // ko'rinish matritsasidan KEYIN!
         im.level.drawSky(eye);
+        if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
         im.level.draw(eye);
 
         for (const auto& a : cd.actors()) {
             if (!a.model || !a.def) continue;
             Vec3 p = a.pos;
             p.y = im.level.groundAt(p.x, p.z);
-            drawBlobShadow(im.level, p, 0.75f, 0.42f);
+            if (!shadowed) drawBlobShadow(im.level, p, 0.75f, 0.42f);
             pushTintMaterial(a.def->tint);
             a.model->draw(p, a.yaw, a.def->scale);
             popTintMaterial();
         }
+        if (shadowed) ShadowMap::get().unbindReceive();
 
         begin2D(im.w, im.h);
         drawLetterbox(im.w, im.h, cd.letterbox());
@@ -1549,12 +1584,22 @@ void App::render() {
             }
         }
 
+        const float playerTint[3] = {1.0f, 0.97f, 0.90f};
+        const bool shadowed = shadowPass(im, im.player.position(), [&] {
+            EnemyManager& em = Encounter::get().enemies();
+            for (Enemy& e : em.all()) {
+                if (!e.alive() && e.state() != EnemyState::Dead) continue;
+                e.model().draw(e.position(), e.yaw(), enemyStats(e.kind()).scale);
+            }
+            im.player.draw(1.82f, playerTint);
+        });
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Nishonlashda ko'rish maydoni torayadi — "yaqinlashish" hissi
         im.camFov = damp(im.camFov, im.player.cameraFovHint(), 10.0f, im.lastDt);
         beginScene3D(im.w, im.h, clampf(im.camFov, 30.0f, 60.0f), eye, focus);
         im.level.applyLighting();      // ko'rinish matritsasidan KEYIN!
         im.level.drawSky(eye);
+        if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
         im.level.draw(eye);
 
         // --- Dushmanlar ---
@@ -1563,18 +1608,18 @@ void App::render() {
             for (Enemy& e : em.all()) {
                 if (!e.alive() && e.state() != EnemyState::Dead) continue;
                 const EnemyStats& st = enemyStats(e.kind());
-                drawBlobShadow(im.level, e.position(), 0.72f, e.alive() ? 0.42f : 0.22f);
+                if (!shadowed) drawBlobShadow(im.level, e.position(), 0.72f, e.alive() ? 0.42f : 0.22f);
                 pushTintMaterial(st.tint);
                 e.model().draw(e.position(), e.yaw(), st.scale);
                 popTintMaterial();
             }
         }
 
-        drawBlobShadow(im.level, im.player.position(), 0.7f, 0.45f);
-        const float playerTint[3] = {1.0f, 0.97f, 0.90f};
+        if (!shadowed) drawBlobShadow(im.level, im.player.position(), 0.7f, 0.45f);
         pushTintMaterial(playerTint);
         im.player.draw(1.82f, playerTint);
         popTintMaterial();
+        if (shadowed) ShadowMap::get().unbindReceive();
 
         // Maqsad markerlari va dushman ogohlik belgilari
         Encounter::get().draw();
@@ -1601,11 +1646,18 @@ void App::render() {
     case AppState::EpisodeComplete: {
         // Orqada muzlatilgan sahna
         Vec3 focus = im.player.cameraFocus();
-        im.level.applyLighting();
+        const float pt[3] = {1.0f, 0.97f, 0.90f};
+        const bool shadowed = shadowPass(im, im.player.position(), [&] {
+            EnemyManager& em = Encounter::get().enemies();
+            for (Enemy& e : em.all())
+                e.model().draw(e.position(), e.yaw(), enemyStats(e.kind()).scale);
+            im.player.draw(1.82f, pt);
+        });
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         beginScene3D(im.w, im.h, 46.0f, im.camSmooth, focus);
         im.level.applyLighting();
         im.level.drawSky(im.camSmooth);
+        if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
         im.level.draw(im.camSmooth);
         {
             EnemyManager& em = Encounter::get().enemies();
@@ -1616,10 +1668,10 @@ void App::render() {
                 popTintMaterial();
             }
         }
-        const float pt[3] = {1.0f, 0.97f, 0.90f};
         pushTintMaterial(pt);
         im.player.draw(1.82f, pt);
         popTintMaterial();
+        if (shadowed) ShadowMap::get().unbindReceive();
 
         const Encounter& enc = Encounter::get();
         const EncounterResult& r = enc.result();

@@ -22,6 +22,7 @@ set(ERT_SOURCES
     game/src/gfx/Font.cpp
     game/src/gfx/Mesh.cpp
     game/src/gfx/Skin.cpp
+    game/src/gfx/ShadowMap.cpp
     game/src/audio/Audio.cpp
     game/src/audio/Sfx.cpp
     game/src/audio/Voice.cpp
@@ -54,6 +55,11 @@ if(WIN32)
         ole32 oleaut32 uuid     # SAPI (TTS) uchun COM
         user32 shell32
     )
+    # STATIK runtime. Aks holda exe libstdc++-6.dll / libgcc_s_seh-1.dll ni PATH dan
+    # qidiradi va Git Bash ostida C:/Program Files/Git/mingw64/bin dagi BOSHQA
+    # versiyani yuklab, App::loadConfig ichida (std::string ABI) segfault berardi.
+    # Endi exe hech qanday MinGW DLL siz ishlaydi — Git Bash, PowerShell, Explorer.
+    target_link_options(ertugrul PRIVATE -static -static-libgcc -static-libstdc++)
 else()
     message(FATAL_ERROR "Bu qurilish faqat Windows uchun (Win32 + WGL).")
 endif()

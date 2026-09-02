@@ -1116,6 +1116,27 @@ void Level::drawSky(const Vec3& camPos) const {
 // ===========================================================================
 // draw — relyef + soyalar + rekvizitlar
 // ===========================================================================
+void Level::drawCasters(const Vec3& focus, float radius) const {
+    terrain_.draw();                       // tepaliklar vodiyga soya tashlaydi
+    static const bool noProps = (std::getenv("ERT_NO_PROPS") != nullptr);
+    if (noProps) return;
+    const float r2 = radius * radius;
+    for (size_t i = 0; i < props_.size(); ++i) {
+        const Prop& p = props_[i];
+        if (p.cached == nullptr) continue;
+        const float dx = p.pos.x - focus.x, dz = p.pos.z - focus.z;
+        if (dx * dx + dz * dz > r2) continue;
+        const float gy = p.snapToGround ? terrain_.heightAt(p.pos.x, p.pos.z) : p.pos.y;
+        glPushMatrix();
+        glTranslatef(p.pos.x, gy, p.pos.z);
+        if (p.yaw != 0.0f)   glRotatef(p.yaw, 0.0f, 1.0f, 0.0f);
+        if (p.scale != 1.0f) glScalef(p.scale, p.scale, p.scale);
+        if (p.cached->hasList()) p.cached->drawList();
+        else                     p.cached->draw();
+        glPopMatrix();
+    }
+}
+
 void Level::draw(const Vec3& camPos) const {
     terrain_.draw();
     if (props_.empty()) return;

@@ -137,6 +137,9 @@ void emitTerrain(int gridN, float cell, float halfSz,
 }
 
 // GL 1.3 tokenlari (MinGW ning gl.h si GL 1.1 da to'xtagan)
+#ifndef GL_PREVIOUS
+#define GL_PREVIOUS 0x8578
+#endif
 #ifndef GL_COMBINE
 #define GL_COMBINE        0x8570
 #define GL_COMBINE_RGB    0x8571
@@ -163,7 +166,10 @@ void setBrightModulate() {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_SRC1_RGB, GL_PRIMARY_COLOR);
+    // PREVIOUS: 0-birlikda bu PRIMARY_COLOR ning o'zi, lekin soya xaritasi
+    // (ShadowMap) relyefni 1-birlikka ko'chirganda 0-birlikdagi soya koeffitsiyenti
+    // shu orqali kiradi — PRIMARY_COLOR bo'lsa soya relyefga tushmasdi.
+    glTexEnvi(GL_TEXTURE_ENV, GL_SRC1_RGB, GL_PREVIOUS);
     glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE, 2.0f);
 }
 
