@@ -63,6 +63,8 @@ public:
     // Kattalar modelini shunchaki kichraytirsak, "mitti kattalar" bo'lib qoladi;
     // nisbatlar o'zgarsa haqiqiy bola siluetiga yaqinlashadi.
     static Mesh* getVariant(const std::string& objPath, const std::string& variant);
+    // Yuklangan .obj yo'li (rig.json kabi yondosh fayllarni topish uchun)
+    const std::string& path() const { return path_; }
     static void  clearCache();
 
     // Protsedural primitivlar (fayl kerak emas)

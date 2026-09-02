@@ -5,6 +5,8 @@
 // 12 ta virtual suyakdan biriga biriktiriladi, chegaralarda og'irlik yumshatiladi.
 // Animatsiya CPU da hisoblanadi (skinning) va sekundiga 30 marta (standart) yangilanadi.
 #include "ertugrul/gfx/Skin.h"
+#include <fstream>
+#include <nlohmann/json.hpp>
 
 #include <windows.h>   // <GL/gl.h> dan OLDIN kelishi SHART
 #include <GL/gl.h>
@@ -61,6 +63,79 @@ const BoneDef kBone[BCOUNT] = {
     /* LegUpperR */ {  0.30f, 0.50f, 0.0f, B_PELVIS  },
     /* LegLowerR */ {  0.30f, 0.28f, 0.0f, B_LUR     },
 };
+
+// Har suyakning UCHI (normallashtirilgan: x halfW, y h, z halfD birliklarida).
+// Segment rigi verteksni "suyak chizig'i"ga masofa bo'yicha biriktiradi:
+// bu quti (Y-band) rigidan farqli o'laroq, qo'l va tana, son va chanoq
+// haqiqiy anatomik chiziqqa yaqinligiga qarab ajraladi.
+const float kBoneEnd[BCOUNT][3] = {
+    /* Root      */ {  0.00f, 0.50f, 0.0f },
+    /* Pelvis    */ {  0.00f, 0.58f, 0.0f },
+    /* Torso     */ {  0.00f, 0.86f, 0.0f },   // amalda bo'yin (neckN) ishlatiladi
+    /* Head      */ {  0.00f, 1.00f, 0.0f },
+    /* ArmUpperL */ { -0.78f, 0.70f, 0.0f },
+    /* ArmLowerL */ { -0.86f, 0.50f, 0.0f },   // qo'l panjasi
+    /* ArmUpperR */ {  0.78f, 0.70f, 0.0f },
+    /* ArmLowerR */ {  0.86f, 0.50f, 0.0f },
+    /* LegUpperL */ { -0.30f, 0.28f, 0.0f },
+    /* LegLowerL */ { -0.30f, 0.00f, 0.0f },   // tovon
+    /* LegUpperR */ {  0.30f, 0.28f, 0.0f },
+    /* LegLowerR */ {  0.30f, 0.00f, 0.0f },
+};
+const char* const kBoneName[BCOUNT] = {
+    "root", "pelvis", "torso", "head",
+    "arm_upper_l", "arm_lower_l", "arm_upper_r", "arm_lower_r",
+    "leg_upper_l", "leg_lower_l", "leg_upper_r", "leg_lower_r",
+};
+
+// <model>.rig.json: {"joints": {"arm_upper_l": [-0.62, 0.80, 0.02], ...},
+//                    "ends":   {"arm_lower_l": [-0.70, 0.48, 0.05], ...},
+//                    "blend":  0.06}
+// Hamma maydon ixtiyoriy — berilmagani standart jadvaldan olinadi.
+bool loadRigJson(const std::string& objPath, float joint[BCOUNT][3], float end[BCOUNT][3],
+                 float& blend) {
+    if (objPath.size() < 4) return false;
+    std::string base = objPath;
+    const size_t dot = base.rfind('.');
+    if (dot != std::string::npos) base.erase(dot);
+    const std::string rp = base + ".rig.json";
+    std::ifstream f(rp.c_str());
+    if (!f.is_open()) return false;
+    try {
+        nlohmann::json j;
+        f >> j;
+        auto readMap = [&](const char* key, float out[BCOUNT][3]) {
+            if (!j.contains(key) || !j[key].is_object()) return;
+            for (int b = 0; b < BCOUNT; ++b) {
+                if (!j[key].contains(kBoneName[b])) continue;
+                const nlohmann::json& a = j[key][kBoneName[b]];
+                if (!a.is_array() || a.size() < 3) continue;
+                for (int k = 0; k < 3; ++k) out[b][k] = a[k].get<float>();
+            }
+        };
+        readMap("joints", joint);
+        readMap("ends", end);
+        if (j.contains("blend")) blend = clampf(j["blend"].get<float>(), 0.01f, 0.25f);
+        std::printf("[rig] %s yuklandi\n", rp.c_str());
+        return true;
+    } catch (...) {
+        std::printf("[rig] %s o'qilmadi — standart skelet\n", rp.c_str());
+        return false;
+    }
+}
+
+// Nuqtadan kesmagacha masofa
+inline float segDist(const Vec3& p, const Vec3& a, const Vec3& b) {
+    const Vec3 ab = b - a;
+    const float l2 = lengthSq(ab);
+    float t = (l2 > 1e-12f) ? (dot(p - a, ab) / l2) : 0.0f;
+    t = clampf(t, 0.0f, 1.0f);
+    const Vec3 q = a + ab * t;
+    return length(p - q);
+}
+inline bool bonesAdjacent(int a, int b) {
+    return kBone[a].parent == b || kBone[b].parent == a;
+}
 
 // Chap/o'ng juftlikka ega suyaklar (o'rta chiziqda og'irlikni yumshatish uchun)
 inline bool isPaired(int b) {
@@ -1574,16 +1649,17 @@ void computeXforms(const Pose& p, const Vec3 pivot[BCOUNT], float h, Xform out[B
 }
 
 // Suyak tayanch nuqtalarini model fazosiga o'tkazadi.
-void buildPivots(const Vec3& bbMin, const Vec3& bbMax, Vec3 pivot[BCOUNT], float neckN) {
+void buildPivots(const float joint[BCOUNT][3], const Vec3& bbMin, const Vec3& bbMax,
+                 Vec3 pivot[BCOUNT], float neckN) {
     const float h     = std::max(1e-6f, bbMax.y - bbMin.y);
     const float halfW = std::max(1e-6f, (bbMax.x - bbMin.x) * 0.5f);
     const float halfD = std::max(1e-6f, (bbMax.z - bbMin.z) * 0.5f);
     const float cx    = (bbMin.x + bbMax.x) * 0.5f;
     const float cz    = (bbMin.z + bbMax.z) * 0.5f;
     for (int i = 0; i < BCOUNT; ++i) {
-        pivot[i].x = cx + kBone[i].px * halfW;
-        pivot[i].y = bbMin.y + kBone[i].py * h;
-        pivot[i].z = cz + kBone[i].pz * halfD;
+        pivot[i].x = cx + joint[i][0] * halfW;
+        pivot[i].y = bbMin.y + joint[i][1] * h;
+        pivot[i].z = cz + joint[i][2] * halfD;
     }
     // Bosh pivoti MESHDAN o'lchangan bo'yin balandligiga ko'chiriladi.
     // kBone[] dagi qat'iy 0.86 faqat ottoman'ga to'g'ri keladi; crusader'da
@@ -1623,11 +1699,12 @@ void skinStats(const std::vector<MeshVertex>& src,
 
 void skinAll(const std::vector<MeshVertex>& src,
              const std::vector<unsigned char>& bidx,
+             const std::vector<unsigned char>& bidx2,
              const std::vector<float>& bw,
              const Xform xf[BCOUNT],
              std::vector<MeshVertex>& dst) {
     const size_t n = src.size();
-    if (n == 0 || bidx.size() != n || bw.size() != n) return;
+    if (n == 0 || bidx.size() != n || bidx2.size() != n || bw.size() != n) return;
     if (dst.size() != n) dst = src;
 
     const MeshVertex*    s  = src.data();
@@ -1665,8 +1742,11 @@ void skinAll(const std::vector<MeshVertex>& src,
             // AYLANMASDAN QIRQILARDI (shear) — "boshi qiyshayadi".
             // Ota bilan aralashtirish esa klassik ikki suyakli skinlash:
             // bo'yin silliq egiladi, bosh QATTIQ jism bo'lib qoladi.
-            const int par = kBone[b].parent;
-            const Xform& x2 = xf[(par >= 0 && par < BCOUNT) ? par : b];
+            // Ikkinchi suyak: segment rigida eng yaqin QO'SHNI suyak (ota yoki
+            // bola), quti rigida — ota. Ikkalasi ham klassik ikki suyakli skinlash.
+            int b2 = static_cast<int>(bidx2[i]);
+            if (b2 < 0 || b2 >= BCOUNT) b2 = b;
+            const Xform& x2 = xf[b2];
             float bx, by, bz, mx, my, mz;
             if (x2.ident) {
                 bx = v.px; by = v.py; bz = v.pz;
@@ -1824,6 +1904,7 @@ bool SkinnedModel::init(Mesh* mesh) {
     mesh_ = nullptr;
     skinned_.clear();
     boneIdx_.clear();
+    boneIdx2_.clear();
     boneW_.clear();
     clip_ = prevClip_ = AnimClip::Idle;
     time_ = 0.0f; blend_ = 1.0f; blendDur_ = 0.25f;
@@ -1925,11 +2006,69 @@ bool SkinnedModel::init(Mesh* mesh) {
                         neckN_, bestW, shoulder, need, (int)src.size());
     }
 
+    // --- Skelet ta'rifi: standart jadval, ustiga <obj>.rig.json ---
+    for (int b = 0; b < BCOUNT; ++b) {
+        rigJoint_[b][0] = kBone[b].px; rigJoint_[b][1] = kBone[b].py; rigJoint_[b][2] = kBone[b].pz;
+        rigEnd_[b][0] = kBoneEnd[b][0]; rigEnd_[b][1] = kBoneEnd[b][1]; rigEnd_[b][2] = kBoneEnd[b][2];
+    }
+    rigBlend_ = 0.06f;
+    loadRigJson(mesh->path(), rigJoint_, rigEnd_, rigBlend_);
+    {
+        static const char* rigMode = std::getenv("ERT_RIG");
+        rigSegment_ = !(rigMode && std::strcmp(rigMode, "box") == 0);
+    }
+
     // Bir martalik ajratish â€” keyin har kadrda hech narsa ajratilmaydi
     skinned_ = src;
     boneIdx_.resize(src.size());
+    boneIdx2_.resize(src.size());
     boneW_.resize(src.size());
 
+    if (rigSegment_) {
+        // ================= SEGMENT RIGI =================
+        // Har verteks eng yaqin suyak KESMASIga biriktiriladi; ikkinchi suyak —
+        // unga qo'shni (ota/bola) suyaklar ichida eng yaqini. Og'irlik ikki
+        // masofa farqidan: teng masofada 50/50, blend*h dan uzoqda 100/0.
+        // Quti rigi Y-chiziqlar bilan kesardi: qo'l tana bilan, son chanoq
+        // bilan bir tekislikda ajralib, yelka va sonda "qirqilish" bo'lardi.
+        Vec3 piv[BCOUNT], end[BCOUNT];
+        buildPivots(rigJoint_, mn, mx, piv, neckN_);
+        buildPivots(rigEnd_,   mn, mx, end, -1.0f);
+        end[B_TORSO] = piv[B_HEAD];                 // tana bo'yingacha
+        end[B_ROOT]  = piv[B_PELVIS];
+        const float blendM = rigBlend_ * h;
+        int hist[BCOUNT] = {0};
+        for (size_t i = 0; i < src.size(); ++i) {
+            const Vec3 v{src[i].px, src[i].py, src[i].pz};
+            float d[BCOUNT];
+            int   b1 = B_PELVIS;
+            for (int b = 0; b < BCOUNT; ++b) {
+                d[b] = (b == B_ROOT) ? 1.0e9f : segDist(v, piv[b], end[b]);
+                if (d[b] < d[b1]) b1 = b;
+            }
+            int b2 = -1;
+            for (int b = 0; b < BCOUNT; ++b) {
+                if (b == b1 || b == B_ROOT || !bonesAdjacent(b, b1)) continue;
+                if (b2 < 0 || d[b] < d[b2]) b2 = b;
+            }
+            if (b2 < 0) b2 = (kBone[b1].parent >= 0) ? kBone[b1].parent : b1;
+            float w = 0.5f + (d[b2] - d[b1]) / (2.0f * std::max(blendM, 1e-5f));
+            w = smoothstepf(clampf(w, 0.0f, 1.0f));
+            boneIdx_[i]  = static_cast<unsigned char>(b1);
+            boneIdx2_[i] = static_cast<unsigned char>(b2);
+            boneW_[i]    = 0.5f + 0.5f * w;         // asosiy suyak hech qachon 50% dan kam emas
+            ++hist[b1];
+        }
+        static const bool rigLog2 = (std::getenv("ERT_RIG_LOG") != nullptr);
+        if (rigLog2) {
+            std::printf("[rig] segment: ");
+            for (int b = 0; b < BCOUNT; ++b) std::printf("%s=%d ", kBoneName[b], hist[b]);
+            std::printf("\n");
+        }
+        return true;
+    }
+
+    // ================= QUTI (Y-BAND) RIGI — ERT_RIG=box =================
     for (size_t i = 0; i < src.size(); ++i) {
         const float yn = (src[i].py - mn.y) / h;        // 0 = oyoq, 1 = bosh
         const float xn = (src[i].px - cx)  / halfW;     // -1 = chap, +1 = o'ng
@@ -1969,8 +2108,9 @@ bool SkinnedModel::init(Mesh* mesh) {
         // "ota bilan birga harakatlanish" degani — chok ancha tabiiy chiqadi.
         w = 0.15f + 0.85f * smoothstepf(w);
 
-        boneIdx_[i] = static_cast<unsigned char>(b);
-        boneW_[i]   = w;
+        boneIdx_[i]  = static_cast<unsigned char>(b);
+        boneIdx2_[i] = static_cast<unsigned char>((kBone[b].parent >= 0) ? kBone[b].parent : b);
+        boneW_[i]    = w;
     }
 
     return true;
@@ -2134,11 +2274,11 @@ void SkinnedModel::update(float dt) {
     if (simpleRig_) simplifyPose(res);
 
     Vec3 pivot[BCOUNT];
-    buildPivots(mesh_->bbMin(), mesh_->bbMax(), pivot, neckN_);
+    buildPivots(rigJoint_, mesh_->bbMin(), mesh_->bbMax(), pivot, neckN_);
     Xform xf[BCOUNT];
     computeXforms(res, pivot, modelHeight_, xf);
 
-    skinAll(mesh_->vertices(), boneIdx_, boneW_, xf, skinned_);
+    skinAll(mesh_->vertices(), boneIdx_, boneIdx2_, boneW_, xf, skinned_);
 
     // Diagnostika (ERT_SKIN_STATS=1): har ~2 sekundda bir marta siljishlarni chop etadi
     {
@@ -2276,7 +2416,7 @@ Vec3 SkinnedModel::bonePosition(Bone b, const Vec3& pos, float yawDeg, float sca
     const Vec3 mn = mesh_->bbMin();
     const Vec3 mx = mesh_->bbMax();
     Vec3 pivot[BCOUNT];
-    buildPivots(mn, mx, pivot, neckN_);
+    buildPivots(rigJoint_, mn, mx, pivot, neckN_);
     Xform xf[BCOUNT];
     computeXforms(res, pivot, (modelHeight_ > 1e-6f) ? modelHeight_ : 1.0f, xf);
 

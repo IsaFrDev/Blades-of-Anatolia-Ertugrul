@@ -140,7 +140,14 @@ private:
     Mesh*  mesh_ = nullptr;
     std::vector<MeshVertex> skinned_;
     std::vector<unsigned char> boneIdx_;   // har verteks uchun asosiy suyak
-    std::vector<float>         boneW_;     // ildizga aralashish og'irligi
+    std::vector<unsigned char> boneIdx2_;  // ikkinchi suyak (segment rigida qo'shni, quti rigida ota)
+    std::vector<float>         boneW_;     // asosiy suyak og'irligi (1-w ikkinchisiga)
+    // Skelet ta'rifi: bo'g'im va suyak uchlari (normallashtirilgan), <obj>.rig.json
+    // dan yuklanadi, bo'lmasa standart jadval. 12 ta Vec3 x 2 + blend.
+    float rigJoint_[12][3] = {{0}};
+    float rigEnd_[12][3]   = {{0}};
+    float rigBlend_        = 0.06f;
+    bool  rigSegment_      = true;        // false = eski quti (Y-band) rig
     AnimClip clip_ = AnimClip::Idle, prevClip_ = AnimClip::Idle;
     float time_ = 0.0f, blend_ = 1.0f, blendDur_ = 0.25f;
     float speedScale_ = 1.0f, talk_ = 0.0f, accum_ = 0.0f;

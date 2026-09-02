@@ -1,0 +1,22 @@
+{
+  "_izoh": "Ertug'rul (ottoman.obj) skeleti. Koordinatalar normallashtirilgan: x — yarim kenglik, y — bo'y (0 oyoq, 1 tepa), z — yarim chuqurlik birliklarida. Bo'sh qoldirilgan bo'g'im standart jadvaldan olinadi (Skin.cpp: kBone / kBoneEnd). Bosh bo'g'imi baribir meshdan o'lchangan bo'yin balandligiga ko'chiriladi.",
+  "joints": {
+    "pelvis":      [ 0.00, 0.50, 0.00],
+    "torso":       [ 0.00, 0.58, 0.00],
+    "arm_upper_l": [-0.66, 0.82, 0.02],
+    "arm_lower_l": [-0.76, 0.69, 0.04],
+    "arm_upper_r": [ 0.66, 0.82, 0.02],
+    "arm_lower_r": [ 0.76, 0.69, 0.04],
+    "leg_upper_l": [-0.28, 0.50, 0.00],
+    "leg_lower_l": [-0.28, 0.27, 0.02],
+    "leg_upper_r": [ 0.28, 0.50, 0.00],
+    "leg_lower_r": [ 0.28, 0.27, 0.02]
+  },
+  "ends": {
+    "arm_lower_l": [-0.84, 0.50, 0.08],
+    "arm_lower_r": [ 0.84, 0.50, 0.08],
+    "leg_lower_l": [-0.28, 0.00, 0.06],
+    "leg_lower_r": [ 0.28, 0.00, 0.06]
+  },
+  "blend": 0.06
+}

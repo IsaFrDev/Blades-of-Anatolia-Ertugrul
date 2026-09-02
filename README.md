@@ -637,7 +637,7 @@ Bular hali bajarilmagan — halol ro'yxat.
 
 | Cheklov | Tafsilot |
 |---|---|
-| Skelet animatsiya yo'q | Modellarda suyak yo'q; quti bo'yicha avtomatik rigging o'z chegarasiga ega |
+| Fayldan skelet import yo'q | .obj da suyak yo'q; skelet o'yin ichida ta'riflanadi (`<model>.rig.json`, pastga qarang). FBX/glTF skelet importi yo'q — bu ataylab (tashqi kutubxonasiz) |
 | PBR yo'q | Fixed-function OpenGL — fizik asosli material, normal-map yo'q (soya xaritasi esa BOR, pastga qarang) |
 | Faqat Windows | Win32 + WGL + waveOut + GDI+ ga bevosita bog'langan; boshqa platforma uchun oyna/audio/tekstura qatlamini qayta yozish kerak — bu qaror ataylab (tashqi kutubxonasiz) |
 
@@ -653,6 +653,7 @@ Yopilganlar (2026-09):
 | "Sukunat kamerani sekinlashtiradi" | Aslida allaqachon yo'q edi: kamera `im.lastDt` (haqiqiy dt) bilan, dunyo `gdt` bilan yuradi — jadval eskirgan ekan |
 | Git Bash dan ishga tushirilsa segfault | Sabab topildi: exe `libstdc++-6.dll` ni PATH dan qidirar, Git Bash esa `C:/Program Files/Git/mingw64/bin` dagi BOSHQA versiyani berardi (App::loadConfig ichida std::string ABI mos kelmay yiqilardi). Endi runtime statik (`-static -static-libstdc++`), exe MinGW DLL siz ishlaydi — Git Bash, PowerShell, Explorer |
 | Shader yo'q — soya xaritasi imkonsiz | **Shadersiz soya xaritasi**: `GL_ARB_depth_texture` + `GL_ARB_shadow` + multitexture (GL 1.4). Quyosh nuqtai nazaridan chuqurlik orqa buferga chiziladi, `glCopyTexSubImage2D` bilan teksturaga olinadi, EYE_LINEAR texgen orqali 1-birlikda apparat solishtiruvi (2x2 PCF), 2-birlik rangni koeffitsiyentga ko'paytiradi. Chodir, devor, daraxt, personaj — hammasi bir-biriga va relyefga soya tashlaydi. `ERT_NO_SHADOWMAP=1` eski yumshoq disklarga qaytaradi ([ShadowMap.cpp](game/src/gfx/ShadowMap.cpp)) |
+| Quti (Y-band) rigi: qo'l tana bilan, son chanoq bilan bir gorizontal chiziqda ajralib, yelka va sonda qirqilish | **Segment rigi** ([Skin.cpp](game/src/gfx/Skin.cpp)): har suyak — bo'g'imdan uchigacha KESMA; verteks eng yaqin kesmaga, ikkinchi og'irlik esa unga qo'shni (ota/bola) suyakka masofa farqi bo'yicha beriladi (`blend·h` kenglikda silliq). Bo'g'im va uch nuqtalari har model uchun `<model>.rig.json` da (misol: [ottoman.rig.json](assets/models/ottoman/ottoman.rig.json)), bo'lmasa standart jadval. `ERT_RIG=box` eski rigga qaytaradi, `ERT_RIG_LOG=1` verteks taqsimotini chiqaradi |
 
 O'q yig'ish mantig'i o'yin tashqarisida ham sinaladi (soxta fizika, tekis yer):
 
