@@ -44,7 +44,7 @@ CAST = {
     "kopek": (OWAR, 1.84, [0.60, 0.60, 0.70]), "kir_khan": (OWAR, 1.86, [0.90, 0.80, 0.70]),
     "emir_sharaf": (OWAR, 1.84, [0.95, 0.90, 0.75]), "yakub": (OWAR, 1.76, [1.0, 0.90, 0.70]),
     "togrul": (OWAR, 1.84, [0.80, 0.85, 0.95]), "hamza": (OWAR, 1.80, [0.60, 0.60, 0.60]),
-    "al_aziz": (OWAR, 1.56, [1.0, 0.95, 0.80]),           # o'n besh yoshli amir
+    "al_aziz": (OWAR, 1.58, [1.0, 0.95, 0.80], "child"),  # o'n besh yoshli amir
     # oqsoqollar, shayxlar — sallali keksa
     "suleyman_shah": (ELD, 1.84, W), "ibn_arabi": (ELD, 1.80, [0.95, 0.95, 1.0]),
     "rumi": (ELD, 1.80, [1.0, 0.97, 0.90]), "bektas": (ELD, 1.78, [0.90, 0.95, 0.90]),
@@ -52,8 +52,8 @@ CAST = {
     "hanchi": (ELD, 1.78, [0.90, 0.85, 0.75]), "xizmatkor": (ELD, 1.72, [0.85, 0.85, 0.85]),
     "uygur_kotib": (ELD, 1.76, [0.90, 0.90, 1.0]),
     # ayollar — yagona ayol model, tint bilan farqlanadi
-    "halime": (QUEEN, 1.64, W), "aykiz": (QUEEN, 1.60, [0.95, 0.85, 0.95]),
-    "hayme_ana": (QUEEN, 1.62, [0.75, 0.72, 0.70]), "gulbahor": (QUEEN, 1.60, [0.72, 0.70, 0.68]),
+    "halime": (M + "woman_halime.obj", 1.64, W), "aykiz": (M + "woman_aykiz.obj", 1.60, W),
+    "hayme_ana": (M + "woman_hayme.obj", 1.62, W), "gulbahor": (M + "woman_gulbahor.obj", 1.60, W),
     # mo'g'ullar — mo'ynali jangchi
     "noyan": (BARB, 1.94, W), "mongol_chavandoz": (MWAR, 1.84, [0.75, 0.75, 0.80]),   # otliq kamonchi
     "mongol_katib": (OWAR, 1.76, [0.60, 0.60, 0.68]), "darugachi": (BARB, 1.86, [0.85, 0.80, 0.80]),
@@ -65,11 +65,12 @@ CAST = {
     "kayqubad": (ARM, 1.88, W), "alauddin": (ARM, 1.88, W),
     "keyhusrev": (ARM, 1.84, [0.95, 0.95, 1.0]), "kaykhusraw": (ARM, 1.84, [0.95, 0.95, 1.0]),
     # bolalar — kattalar modeli kichik bo'yda
-    "orphan_boy": (OWAR, 1.18, [0.85, 0.80, 0.75]), "bola": (OWAR, 1.12, [0.90, 0.85, 0.80]),
-    "tashchi_bola": (OWAR, 1.22, [0.80, 0.78, 0.75]), "osman": (OWAR, 1.02, [1.0, 0.95, 0.85]),
+    "orphan_boy": (OWAR, 1.22, [0.85, 0.80, 0.75], "child"), "bola": (OWAR, 1.16, [0.90, 0.85, 0.80], "child"),
+    "tashchi_bola": (OWAR, 1.26, [0.80, 0.78, 0.75], "child"), "osman": (OWAR, 1.00, [1.0, 0.95, 0.85], "child"),
 }
 json.dump({"_izoh": "Har aktyor uchun kanonik model, bo'y va tint. tools/apply_scene_bible.py qo'llaydi.",
-           "cast": {k: {"model": v[0], "scale": v[1], "tint": v[2]} for k, v in CAST.items()}},
+           "cast": {k: {"model": v[0], "scale": v[1], "tint": v[2],
+                        "proportions": (v[3] if len(v) > 3 else "")} for k, v in CAST.items()}},
           io.open("data/cast_models.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
@@ -95,6 +96,10 @@ def apply_cast(scene):
         k = CAST.get(a["id"])
         if k:
             a["model"], a["scale"], a["tint"] = k[0], k[1], list(k[2])
+            if len(k) > 3 and k[3]:
+                a["proportions"] = k[3]          # "child" -> Mesh::getVariant
+            else:
+                a.pop("proportions", None)
         elif "/characters/" in a.get("model", ""):
             a["model"], a["scale"] = OWAR, 1.80     # zamonaviy odamcha -> tarixiy
 
@@ -147,6 +152,7 @@ for i, a in enumerate(t["actors"][:4]):
     a["loc_name"] = "chr.%s.name" % ids[i]
     k = CAST[ids[i]]
     a["model"], a["scale"], a["tint"] = k[0], k[1], list(k[2])
+    a.pop("proportions", None)
     if ids[i] == "josus":
         for kk in a["keys"]:
             kk["clip"] = "Idle"                  # josus jim turadi, faqat kuzatadi

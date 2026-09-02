@@ -553,8 +553,31 @@ Model fayl nomlari tashqi ko'rinishga mos kelmasligi aniqlandi (masalan
 `medieval+warrior` — ko'k kamonchi, `fantasy+warrior` — boltali pahlavon), shuning
 uchun jadval fayl nomi bo'yicha emas, **o'yin ichida chizib ko'rib** tuzildi:
 Turgut — boltali pahlavon, Dog'on — kamonchi, beklar — qizil kaftan, sultonlar —
-tojli zirh, shayxlar — sallali keksa, ayollar — bitta ayol model (tint bilan farq),
-Templarlar — oq surko, No'yon — mo'ynali jangchi, bolalar — kattalar modeli 1.1–1.2 m.
+tojli zirh, shayxlar — sallali keksa, Templarlar — oq surko, No'yon — mo'ynali jangchi.
+
+### Ayollar va bolalar — alohida modellar
+
+Ilgari to'rt ayol bitta `ornate+queen` modelini faqat tint bilan bo'lishar, bolalar
+esa kattalar modelining 1.1 m ga kichraytirilgani edi (bosh ham, oyoq ham katta odam
+nisbatida — "mitti erkak" ko'rinardi). Endi:
+
+| Aktyor | Model | Farq |
+|---|---|---|
+| Halima Sulton | `assets/models/woman_halime.obj` | firuza ko'ylak, tilla hoshiya |
+| Oyqiz | `woman_aykiz.obj` | binafsha-qizil ko'ylak, yosh qiz |
+| Hayma Ona | `woman_hayme.obj` | jigarrang keng rido, ro'mol (keksa) |
+| Gulbahor | `woman_gulbahor.obj` | yashil rido (keksa) |
+| Bolalar (yetim bola, bola, toshkash bola, Usmon, al-Aziz) | kattalar modeli + `"proportions": "child"` | oyoq ×0.72, gavda ×0.90, **bosh ×1.28**, en ×0.92 |
+
+Har ayol modeli o'z 2048² basecolor teksturasiga ega (`*_basecolor.jpg`) — bir xil
+mesh, lekin rang/gazlama boshqa, shuning uchun bir sahnada ikki ayol ajralib turadi.
+Bola nisbatlari `Mesh::getVariant(path, "child")` orqali CPU da bir marta deformatsiya
+qilinadi va keshlanadi (`Mesh.cpp: deformChild`); cutscene JSON da aktyorga
+`"proportions": "child"` yoziladi, buni `tools/apply_scene_bible.py` avtomatik qo'yadi.
+
+Tekshiruv: `--film` bilan EP010 (Oyqiz), EP015 (Halima), EP005 (Hayma Ona),
+EP027 (Gulbahor + bola), EP016 (yetim bola), EP048 (Usmon) suratga olindi — har
+ayol boshqa rangda, bolalar kattalar yonida qisqa va katta boshli.
 
 Cutscene kamerasi endi **yer sathiga nisbatan** cheklanadi — tepalikli darajalarda
 kamera yer ostiga tushib, ekranda faqat o't ko'rinardi.

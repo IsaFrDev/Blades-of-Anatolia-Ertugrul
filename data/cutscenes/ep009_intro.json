@@ -118,13 +118,13 @@
     {
       "id": "hayme_ana",
       "char": "hayme_ana",
-      "model": "assets/models/ornate+queen+costume+3d+model.obj",
+      "model": "assets/models/woman_hayme.obj",
       "loc_name": "chr.hayme_ana.name",
       "scale": 1.62,
       "tint": [
-        0.75,
-        0.72,
-        0.7
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {

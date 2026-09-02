@@ -228,6 +228,7 @@ bool parseActor(const json& j, CutActor& a) {
     a.charId  = jstr(j, "char", jstr(j, "char_id", a.id));
     a.model   = normSlashes(jstr(j, "model", ""));
     a.locName = jstr(j, "loc_name", jstr(j, "locName", ""));
+    a.proportions = jstr(j, "proportions", "");
     a.scale   = jnum(j, "scale", 1.8f);
     if (a.scale < 0.2f || a.scale > 6.0f) a.scale = 1.8f;   // aqlga sig'adigan chegaralar
 
@@ -540,10 +541,10 @@ void buildActors(const CutScene& s) {
         // 1) Modelni yuklash; topilmasa — protsedural zaxira (CRASH YO'Q)
         Mesh* mesh = nullptr;
         if (!a.model.empty()) {
-            mesh = Mesh::get(a.model);
+            mesh = Mesh::getVariant(a.model, a.proportions);
             if (!mesh) {
                 std::string alt = resolveFile(a.model);
-                if (alt != a.model) mesh = Mesh::get(alt);
+                if (alt != a.model) mesh = Mesh::getVariant(alt, a.proportions);
             }
         }
         if (!mesh) mesh = Mesh::unitCylinder(12);   // zaxira gavda

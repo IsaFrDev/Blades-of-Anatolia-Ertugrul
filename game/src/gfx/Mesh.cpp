@@ -796,6 +796,66 @@ Mesh* Mesh::get(const std::string& objPath) {
     return m;
 }
 
+// Bola nisbatlari: bo'y bo'yicha uch mintaqa alohida masshtablanadi.
+// Balandlik normallashtirilgan (0 = oyoq, 1 = bosh tepasi).
+static void deformChild(std::vector<MeshVertex>& v, const Vec3& mn, const Vec3& mx) {
+    const float h = std::max(1e-6f, mx.y - mn.y);
+    const float cx = (mn.x + mx.x) * 0.5f, cz = (mn.z + mx.z) * 0.5f;
+    const float kLeg = 0.72f, kTorso = 0.90f, kHead = 1.28f, kWide = 0.92f;
+    // mintaqalar: oyoq 0..0.50, tana 0.50..0.86, bosh 0.86..1
+    const float legTop   = mn.y + h * 0.50f * kLeg;
+    const float torsoTop = legTop + h * 0.36f * kTorso;
+    const float headMidN = 0.93f;                                   // bosh markazi
+    for (size_t i = 0; i < v.size(); ++i) {
+        MeshVertex& p = v[i];
+        const float yn = (p.py - mn.y) / h;
+        float ny;
+        if (yn < 0.50f)      ny = mn.y + (p.py - mn.y) * kLeg;
+        else if (yn < 0.86f) ny = legTop + (p.py - (mn.y + h * 0.50f)) * kTorso;
+        else {
+            // bosh: markaz atrofida hamma o'qda kattalashadi
+            const float headMid = mn.y + h * headMidN;
+            ny = torsoTop + (p.py - (mn.y + h * 0.86f)) * kHead * 0.8f;
+            const float dy = (p.py - headMid);
+            (void)dy;
+            p.px = cx + (p.px - cx) * kHead;
+            p.pz = cz + (p.pz - cz) * kHead;
+            p.py = ny;
+            continue;
+        }
+        p.py = ny;
+        p.px = cx + (p.px - cx) * kWide;
+        p.pz = cz + (p.pz - cz) * kWide;
+    }
+}
+
+Mesh* Mesh::getVariant(const std::string& objPath, const std::string& variant) {
+    if (variant.empty()) return get(objPath);
+    const std::string key = cacheKey(objPath) + "#" + variant;
+    std::map<std::string, Mesh*>& c = fileCache();
+    std::map<std::string, Mesh*>::iterator it = c.find(key);
+    if (it != c.end()) return it->second;
+    Mesh* base = get(objPath);
+    if (!base) { c[key] = nullptr; return nullptr; }
+
+    Mesh* m = new (std::nothrow) Mesh();
+    if (!m) { c[key] = nullptr; return nullptr; }
+    m->vertices_ = base->vertices_;
+    m->subs_     = base->subs_;            // tekstura ko'rsatkichlari keshga tegishli
+    m->path_     = base->path_ + "#" + variant;
+    if (variant == "child" || variant == "bola") deformChild(m->vertices_, base->bbMin_, base->bbMax_);
+    // chegara qutisini qayta hisoblaymiz (rigging shunga tayanadi)
+    Vec3 mn{1e9f, 1e9f, 1e9f}, mx{-1e9f, -1e9f, -1e9f};
+    for (size_t i = 0; i < m->vertices_.size(); ++i) {
+        const MeshVertex& p = m->vertices_[i];
+        mn.x = std::min(mn.x, p.px); mn.y = std::min(mn.y, p.py); mn.z = std::min(mn.z, p.pz);
+        mx.x = std::max(mx.x, p.px); mx.y = std::max(mx.y, p.py); mx.z = std::max(mx.z, p.pz);
+    }
+    m->bbMin_ = mn; m->bbMax_ = mx;
+    c[key] = m;
+    return m;
+}
+
 void Mesh::clearCache() {
     std::map<std::string, Mesh*>& c = fileCache();
     for (std::map<std::string, Mesh*>::iterator it = c.begin(); it != c.end(); ++it)

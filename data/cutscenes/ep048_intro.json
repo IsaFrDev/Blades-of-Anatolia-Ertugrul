@@ -224,7 +224,7 @@
       "char": "osman",
       "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.osman.name",
-      "scale": 1.02,
+      "scale": 1.0,
       "tint": [
         1.0,
         0.95,
@@ -321,7 +321,8 @@
           "yaw": 37,
           "clip": "Idle"
         }
-      ]
+      ],
+      "proportions": "child"
     },
     {
       "id": "turgut",

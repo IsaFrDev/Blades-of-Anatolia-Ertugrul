@@ -346,7 +346,7 @@
     {
       "id": "halime",
       "char": "halime",
-      "model": "assets/models/ornate+queen+costume+3d+model.obj",
+      "model": "assets/models/woman_halime.obj",
       "loc_name": "chr.halime.name",
       "scale": 1.64,
       "tint": [

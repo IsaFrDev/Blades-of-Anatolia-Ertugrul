@@ -58,6 +58,11 @@ public:
 
     // --- Kesh ---
     static Mesh* get(const std::string& objPath);   // yuklab bo'lmasa nullptr
+    // Mavjud meshning DEFORMATSIYALANGAN nusxasi (keshlanadi).
+    // variant: "child" — bola nisbatlari: oyoq qisqa, tana biroz qisqa, bosh katta.
+    // Kattalar modelini shunchaki kichraytirsak, "mitti kattalar" bo'lib qoladi;
+    // nisbatlar o'zgarsa haqiqiy bola siluetiga yaqinlashadi.
+    static Mesh* getVariant(const std::string& objPath, const std::string& variant);
     static void  clearCache();
 
     // Protsedural primitivlar (fayl kerak emas)

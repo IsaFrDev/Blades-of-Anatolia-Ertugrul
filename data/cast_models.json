@@ -8,7 +8,8 @@
     1.0,
     0.95,
     0.85
-   ]
+   ],
+   "proportions": ""
   },
   "turgut": {
    "model": "assets/models/fantasy+warrior+3d+model.obj",
@@ -17,7 +18,8 @@
     0.86,
     0.8,
     0.74
-   ]
+   ],
+   "proportions": ""
   },
   "bamsi": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -26,7 +28,8 @@
     0.78,
     0.7,
     0.62
-   ]
+   ],
+   "proportions": ""
   },
   "dogan": {
    "model": "assets/models/medieval+warrior+3d+model.obj",
@@ -35,7 +38,8 @@
     0.92,
     0.88,
     0.82
-   ]
+   ],
+   "proportions": ""
   },
   "deli_demir": {
    "model": "assets/models/fantasy+warrior+3d+model.obj",
@@ -44,7 +48,8 @@
     0.7,
     0.66,
     0.62
-   ]
+   ],
+   "proportions": ""
   },
   "dundar": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -53,7 +58,8 @@
     0.95,
     0.9,
     0.85
-   ]
+   ],
+   "proportions": ""
   },
   "gunduz": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -62,7 +68,8 @@
     0.9,
     0.85,
     0.8
-   ]
+   ],
+   "proportions": ""
   },
   "gundogdu": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -71,7 +78,8 @@
     0.85,
     0.8,
     0.78
-   ]
+   ],
+   "proportions": ""
   },
   "savci": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -80,7 +88,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "tekin": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -89,7 +98,8 @@
     0.8,
     0.8,
     0.85
-   ]
+   ],
+   "proportions": ""
   },
   "sungur": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -98,7 +108,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "husam": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -107,7 +118,8 @@
     0.9,
     0.9,
     0.95
-   ]
+   ],
+   "proportions": ""
   },
   "arslan_bek": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -116,7 +128,8 @@
     0.85,
     0.85,
     0.9
-   ]
+   ],
+   "proportions": ""
   },
   "abdurrahman": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -125,7 +138,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "kurdoglu": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -134,7 +148,8 @@
     0.75,
     0.72,
     0.72
-   ]
+   ],
+   "proportions": ""
   },
   "kopek": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -143,7 +158,8 @@
     0.6,
     0.6,
     0.7
-   ]
+   ],
+   "proportions": ""
   },
   "kir_khan": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -152,7 +168,8 @@
     0.9,
     0.8,
     0.7
-   ]
+   ],
+   "proportions": ""
   },
   "emir_sharaf": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -161,7 +178,8 @@
     0.95,
     0.9,
     0.75
-   ]
+   ],
+   "proportions": ""
   },
   "yakub": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -170,7 +188,8 @@
     1.0,
     0.9,
     0.7
-   ]
+   ],
+   "proportions": ""
   },
   "togrul": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -179,7 +198,8 @@
     0.8,
     0.85,
     0.95
-   ]
+   ],
+   "proportions": ""
   },
   "hamza": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -188,16 +208,18 @@
     0.6,
     0.6,
     0.6
-   ]
+   ],
+   "proportions": ""
   },
   "al_aziz": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
-   "scale": 1.56,
+   "scale": 1.58,
    "tint": [
     1.0,
     0.95,
     0.8
-   ]
+   ],
+   "proportions": "child"
   },
   "suleyman_shah": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -206,7 +228,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "ibn_arabi": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -215,7 +238,8 @@
     0.95,
     0.95,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "rumi": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -224,7 +248,8 @@
     1.0,
     0.97,
     0.9
-   ]
+   ],
+   "proportions": ""
   },
   "bektas": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -233,7 +258,8 @@
     0.9,
     0.95,
     0.9
-   ]
+   ],
+   "proportions": ""
   },
   "ahi_evren": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -242,7 +268,8 @@
     1.0,
     0.9,
     0.8
-   ]
+   ],
+   "proportions": ""
   },
   "darvesh": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -251,7 +278,8 @@
     0.8,
     0.8,
     0.8
-   ]
+   ],
+   "proportions": ""
   },
   "hanchi": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -260,7 +288,8 @@
     0.9,
     0.85,
     0.75
-   ]
+   ],
+   "proportions": ""
   },
   "xizmatkor": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -269,7 +298,8 @@
     0.85,
     0.85,
     0.85
-   ]
+   ],
+   "proportions": ""
   },
   "uygur_kotib": {
    "model": "assets/models/turbaned+elder+3d+model.obj",
@@ -278,43 +308,48 @@
     0.9,
     0.9,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "halime": {
-   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "model": "assets/models/woman_halime.obj",
    "scale": 1.64,
    "tint": [
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "aykiz": {
-   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "model": "assets/models/woman_aykiz.obj",
    "scale": 1.6,
    "tint": [
-    0.95,
-    0.85,
-    0.95
-   ]
+    1.0,
+    1.0,
+    1.0
+   ],
+   "proportions": ""
   },
   "hayme_ana": {
-   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "model": "assets/models/woman_hayme.obj",
    "scale": 1.62,
    "tint": [
-    0.75,
-    0.72,
-    0.7
-   ]
+    1.0,
+    1.0,
+    1.0
+   ],
+   "proportions": ""
   },
   "gulbahor": {
-   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "model": "assets/models/woman_gulbahor.obj",
    "scale": 1.6,
    "tint": [
-    0.72,
-    0.7,
-    0.68
-   ]
+    1.0,
+    1.0,
+    1.0
+   ],
+   "proportions": ""
   },
   "noyan": {
    "model": "assets/models/barbarian+warrior+3d+model.obj",
@@ -323,7 +358,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "mongol_chavandoz": {
    "model": "assets/models/medieval+warrior+3d+model.obj",
@@ -332,7 +368,8 @@
     0.75,
     0.75,
     0.8
-   ]
+   ],
+   "proportions": ""
   },
   "mongol_katib": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
@@ -341,7 +378,8 @@
     0.6,
     0.6,
     0.68
-   ]
+   ],
+   "proportions": ""
   },
   "darugachi": {
    "model": "assets/models/barbarian+warrior+3d+model.obj",
@@ -350,7 +388,8 @@
     0.85,
     0.8,
     0.8
-   ]
+   ],
+   "proportions": ""
   },
   "jallod": {
    "model": "assets/models/fantasy+warrior+3d+model.obj",
@@ -359,7 +398,8 @@
     0.55,
     0.55,
     0.55
-   ]
+   ],
+   "proportions": ""
   },
   "titus": {
    "model": "assets/models/crusader+knight+3d+model.obj",
@@ -368,7 +408,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "josus": {
    "model": "assets/models/medieval+knight+3d+model.obj",
@@ -377,7 +418,8 @@
     0.8,
     0.8,
     0.8
-   ]
+   ],
+   "proportions": ""
   },
   "theodoros": {
    "model": "assets/models/cardinal+robe+3d+model.obj",
@@ -386,7 +428,8 @@
     0.8,
     0.8,
     0.9
-   ]
+   ],
+   "proportions": ""
   },
   "kosta": {
    "model": "assets/models/cardinal+robe+3d+model.obj",
@@ -395,7 +438,8 @@
     0.7,
     0.7,
     0.7
-   ]
+   ],
+   "proportions": ""
   },
   "kayqubad": {
    "model": "assets/models/medieval+armored+warrior+3d+model.obj",
@@ -404,7 +448,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "alauddin": {
    "model": "assets/models/medieval+armored+warrior+3d+model.obj",
@@ -413,7 +458,8 @@
     1.0,
     1.0,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "keyhusrev": {
    "model": "assets/models/medieval+armored+warrior+3d+model.obj",
@@ -422,7 +468,8 @@
     0.95,
     0.95,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "kaykhusraw": {
    "model": "assets/models/medieval+armored+warrior+3d+model.obj",
@@ -431,43 +478,48 @@
     0.95,
     0.95,
     1.0
-   ]
+   ],
+   "proportions": ""
   },
   "orphan_boy": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
-   "scale": 1.18,
+   "scale": 1.22,
    "tint": [
     0.85,
     0.8,
     0.75
-   ]
+   ],
+   "proportions": "child"
   },
   "bola": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
-   "scale": 1.12,
+   "scale": 1.16,
    "tint": [
     0.9,
     0.85,
     0.8
-   ]
+   ],
+   "proportions": "child"
   },
   "tashchi_bola": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
-   "scale": 1.22,
+   "scale": 1.26,
    "tint": [
     0.8,
     0.78,
     0.75
-   ]
+   ],
+   "proportions": "child"
   },
   "osman": {
    "model": "assets/models/ottoman+warrior+3d+model.obj",
-   "scale": 1.02,
+   "scale": 1.0,
    "tint": [
     1.0,
     0.95,
     0.85
-   ]
+   ],
+   "proportions": "child"
   }
  }
 }

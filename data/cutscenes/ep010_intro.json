@@ -118,13 +118,13 @@
     {
       "id": "aykiz",
       "char": "aykiz",
-      "model": "assets/models/ornate+queen+costume+3d+model.obj",
+      "model": "assets/models/woman_aykiz.obj",
       "loc_name": "chr.aykiz.name",
       "scale": 1.6,
       "tint": [
-        0.95,
-        0.85,
-        0.95
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {

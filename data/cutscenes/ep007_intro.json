@@ -224,7 +224,7 @@
       "char": "al_aziz",
       "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.al_aziz.name",
-      "scale": 1.56,
+      "scale": 1.58,
       "tint": [
         1.0,
         0.95,
@@ -321,7 +321,8 @@
           "yaw": -113,
           "clip": "Idle"
         }
-      ]
+      ],
+      "proportions": "child"
     },
     {
       "id": "togrul",

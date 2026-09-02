@@ -130,7 +130,7 @@
       "char": "bola",
       "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bola.name",
-      "scale": 1.12,
+      "scale": 1.16,
       "tint": [
         0.9,
         0.85,
@@ -227,18 +227,19 @@
           "yaw": -68.6,
           "clip": "Idle"
         }
-      ]
+      ],
+      "proportions": "child"
     },
     {
       "id": "gulbahor",
       "char": "gulbahor",
-      "model": "assets/models/ornate+queen+costume+3d+model.obj",
+      "model": "assets/models/woman_gulbahor.obj",
       "loc_name": "chr.gulbahor.name",
       "scale": 1.6,
       "tint": [
-        0.72,
-        0.7,
-        0.68
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {

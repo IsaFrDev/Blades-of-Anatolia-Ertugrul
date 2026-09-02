@@ -18,7 +18,8 @@ struct CutActorKey {
 struct CutActor {
     std::string id;               // sahna ichidagi nom, masalan "ertugrul"
     std::string charId;           // cast.json dagi id (ovoz profili uchun)
-    std::string model;            // .obj yo'li
+    std::string model;
+    std::string proportions;   // "" | "child" — mesh varianti (bola nisbatlari)            // .obj yo'li
     std::string locName;          // ismi uchun lokalizatsiya kaliti
     float       scale  = 1.8f;    // metrdagi balandlik
     float       tint[3] = {1,1,1};
