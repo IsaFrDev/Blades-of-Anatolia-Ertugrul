@@ -8,7 +8,7 @@
   "fade_in": 1.2,
   "fade_out": 1.0,
   "time_of_day": "day",
-  "weather": "fog",
+  "weather": "rain",
   "duration": 0,
   "actors": [
     {
@@ -118,13 +118,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.85,
+      "scale": 1.92,
       "tint": [
-        0.82,
         0.86,
-        0.92
+        0.8,
+        0.74
       ],
       "keys": [
         {
@@ -212,13 +212,13 @@
     {
       "id": "theodoros",
       "char": "theodoros",
-      "model": "assets/models/characters/character-h.obj",
+      "model": "assets/models/cardinal+robe+3d+model.obj",
       "loc_name": "chr.theodoros.name",
-      "scale": 1.68,
+      "scale": 1.8,
       "tint": [
-        0.86,
-        0.88,
-        0.95
+        0.8,
+        0.8,
+        0.9
       ],
       "keys": [
         {

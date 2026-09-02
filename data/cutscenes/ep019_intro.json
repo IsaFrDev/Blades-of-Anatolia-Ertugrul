@@ -7,7 +7,7 @@
   "letterbox": true,
   "fade_in": 1.2,
   "fade_out": 1.0,
-  "time_of_day": "night",
+  "time_of_day": "dusk",
   "weather": "clear",
   "duration": 0,
   "actors": [
@@ -118,13 +118,13 @@
     {
       "id": "kayqubad",
       "char": "kayqubad",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/medieval+armored+warrior+3d+model.obj",
       "loc_name": "chr.kayqubad.name",
-      "scale": 1.79,
+      "scale": 1.88,
       "tint": [
         1.0,
-        0.9,
-        0.62
+        1.0,
+        1.0
       ],
       "keys": [
         {
@@ -212,13 +212,13 @@
     {
       "id": "kopek",
       "char": "kopek",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.kopek.name",
       "scale": 1.84,
       "tint": [
-        0.7,
-        0.68,
-        0.78
+        0.6,
+        0.6,
+        0.7
       ],
       "keys": [
         {
@@ -306,13 +306,13 @@
     {
       "id": "kaykhusraw",
       "char": "kaykhusraw",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/medieval+armored+warrior+3d+model.obj",
       "loc_name": "chr.kaykhusraw.name",
-      "scale": 1.76,
+      "scale": 1.84,
       "tint": [
-        0.86,
-        0.76,
-        0.9
+        0.95,
+        0.95,
+        1.0
       ],
       "keys": [
         {

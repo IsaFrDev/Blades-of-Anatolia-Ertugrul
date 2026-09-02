@@ -1,7 +1,7 @@
 {
   "id": "ep002_intro",
   "episode": "EP002",
-  "level": "oba_valley",
+  "level": "forest_pass",
   "music": "MUS_EP002",
   "ambience": "Ambience.Autumn.Clear",
   "letterbox": true,
@@ -118,13 +118,13 @@
     {
       "id": "dogan",
       "char": "dogan",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/medieval+warrior+3d+model.obj",
       "loc_name": "chr.dogan.name",
-      "scale": 1.8,
+      "scale": 1.82,
       "tint": [
-        0.82,
+        0.92,
         0.88,
-        0.8
+        0.82
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "bamsi",
       "char": "bamsi",
-      "model": "assets/models/characters/character-f.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bamsi.name",
-      "scale": 1.86,
+      "scale": 1.88,
       "tint": [
-        0.95,
-        0.88,
-        0.76
+        0.78,
+        0.7,
+        0.62
       ],
       "keys": [
         {
@@ -318,9 +318,9 @@
     {
       "t": 0.0,
       "pos": [
-        -5.76,
+        -6.36,
         1.7,
-        3.59
+        -0.38
       ],
       "look": [
         -4.68,
@@ -332,9 +332,9 @@
     {
       "t": 6.0,
       "pos": [
-        -12.34,
+        -13.45,
         2.0,
-        37.12
+        42.99
       ],
       "look": [
         -2.88,

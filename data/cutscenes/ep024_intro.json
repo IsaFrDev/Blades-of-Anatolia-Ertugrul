@@ -118,13 +118,13 @@
     {
       "id": "sungur",
       "char": "sungur",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.sungur.name",
-      "scale": 1.78,
+      "scale": 1.8,
       "tint": [
-        0.76,
-        0.74,
-        0.7
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "jallod",
       "char": "jallod",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.jallod.name",
-      "scale": 1.88,
+      "scale": 1.94,
       "tint": [
         0.55,
-        0.54,
-        0.58
+        0.55,
+        0.55
       ],
       "keys": [
         {

@@ -128,13 +128,13 @@
     {
       "id": "kopek",
       "char": "kopek",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.kopek.name",
-      "scale": 1.86,
+      "scale": 1.84,
       "tint": [
-        0.72,
-        0.7,
-        0.66
+        0.6,
+        0.6,
+        0.7
       ],
       "keys": [
         {
@@ -242,13 +242,13 @@
     {
       "id": "xizmatkor",
       "char": "xizmatkor",
-      "model": "assets/models/characters/character-k.obj",
+      "model": "assets/models/turbaned+elder+3d+model.obj",
       "loc_name": "chr.xizmatkor.name",
-      "scale": 1.62,
+      "scale": 1.72,
       "tint": [
-        0.86,
-        0.84,
-        0.78
+        0.85,
+        0.85,
+        0.85
       ],
       "keys": [
         {

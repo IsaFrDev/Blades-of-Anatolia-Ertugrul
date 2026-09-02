@@ -8,7 +8,7 @@
   "fade_in": 1.2,
   "fade_out": 1.0,
   "time_of_day": "day",
-  "weather": "clear",
+  "weather": "fog",
   "duration": 0,
   "actors": [
     {
@@ -118,13 +118,13 @@
     {
       "id": "bamsi",
       "char": "bamsi",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bamsi.name",
-      "scale": 1.86,
+      "scale": 1.88,
       "tint": [
-        0.95,
-        0.82,
-        0.72
+        0.78,
+        0.7,
+        0.62
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "ibn_arabi",
       "char": "ibn_arabi",
-      "model": "assets/models/characters/character-a.obj",
+      "model": "assets/models/turbaned+elder+3d+model.obj",
       "loc_name": "chr.ibn_arabi.name",
-      "scale": 1.66,
+      "scale": 1.8,
       "tint": [
-        0.9,
-        0.9,
-        0.86
+        0.95,
+        0.95,
+        1.0
       ],
       "keys": [
         {

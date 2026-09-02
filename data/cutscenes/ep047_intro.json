@@ -1,7 +1,7 @@
 {
   "id": "ep047_intro",
   "episode": "EP047",
-  "level": "forest_pass",
+  "level": "oba_camp",
   "music": "MUS_EP047",
   "ambience": "Ambience.Winter.Snow",
   "letterbox": true,
@@ -118,13 +118,13 @@
     {
       "id": "noyan",
       "char": "noyan",
-      "model": "assets/models/crusader/crusader.obj",
+      "model": "assets/models/barbarian+warrior+3d+model.obj",
       "loc_name": "chr.noyan.name",
-      "scale": 1.9,
+      "scale": 1.94,
       "tint": [
-        0.7,
-        0.72,
-        0.78
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {

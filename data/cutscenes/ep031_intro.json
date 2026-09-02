@@ -1,14 +1,14 @@
 {
   "id": "ep031_intro",
   "episode": "EP031",
-  "level": "aleppo_road",
+  "level": "forest_pass",
   "music": "MUS_EP031",
   "ambience": "Ambience.Winter.Cloudy",
   "letterbox": true,
   "fade_in": 1.2,
   "fade_out": 1.0,
   "time_of_day": "day",
-  "weather": "cloudy",
+  "weather": "fog",
   "duration": 0,
   "actors": [
     {
@@ -118,13 +118,13 @@
     {
       "id": "titus",
       "char": "titus",
-      "model": "assets/models/crusader/crusader.obj",
+      "model": "assets/models/crusader+knight+3d+model.obj",
       "loc_name": "chr.titus.name",
-      "scale": 1.88,
+      "scale": 1.9,
       "tint": [
-        0.9,
-        0.91,
-        0.96
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.84,
+      "scale": 1.92,
       "tint": [
-        0.82,
         0.86,
-        0.92
+        0.8,
+        0.74
       ],
       "keys": [
         {

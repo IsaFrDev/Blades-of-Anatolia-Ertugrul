@@ -19,16 +19,16 @@
       "scale": 1.82,
       "tint": [
         1.0,
-        0.86,
-        0.7
+        0.95,
+        0.85
       ],
       "keys": [
         {
           "t": 0.0,
           "pos": [
-            -16.02,
+            -18.18,
             0.0,
-            16.43
+            19.04
           ],
           "yaw": 36,
           "clip": "Idle"
@@ -36,9 +36,9 @@
         {
           "t": 1.0,
           "pos": [
-            -10.75,
+            -8.88,
             0.0,
-            9.63
+            6.76
           ],
           "yaw": 36,
           "clip": "Run"
@@ -138,13 +138,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.88,
+      "scale": 1.92,
       "tint": [
         0.86,
-        0.78,
-        0.68
+        0.8,
+        0.74
       ],
       "keys": [
         {
@@ -232,12 +232,12 @@
     {
       "id": "titus",
       "char": "titus",
-      "model": "assets/models/crusader/crusader.obj",
+      "model": "assets/models/crusader+knight+3d+model.obj",
       "loc_name": "chr.titus.name",
-      "scale": 1.92,
+      "scale": 1.9,
       "tint": [
-        0.98,
-        0.98,
+        1.0,
+        1.0,
         1.0
       ],
       "keys": [

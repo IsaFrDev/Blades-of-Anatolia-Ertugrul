@@ -128,13 +128,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.84,
+      "scale": 1.92,
       "tint": [
-        0.82,
         0.86,
-        0.92
+        0.8,
+        0.74
       ],
       "keys": [
         {
@@ -232,13 +232,13 @@
     {
       "id": "husam",
       "char": "husam",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.husam.name",
-      "scale": 1.8,
+      "scale": 1.82,
       "tint": [
-        0.7,
-        0.72,
-        0.8
+        0.9,
+        0.9,
+        0.95
       ],
       "keys": [
         {
@@ -264,9 +264,9 @@
         {
           "t": 13.0,
           "pos": [
-            -9.35,
+            -11.54,
             0.0,
-            20.65
+            18.46
           ],
           "yaw": 60.9,
           "clip": "Walk"
@@ -274,9 +274,9 @@
         {
           "t": 18.0,
           "pos": [
-            -1.65,
+            1.2,
             0.0,
-            25.9
+            27.13
           ],
           "yaw": 74.1,
           "clip": "Walk"
@@ -304,7 +304,7 @@
         {
           "t": 33.0,
           "pos": [
-            -1.8,
+            -1.68,
             0.0,
             24.0
           ],
@@ -314,9 +314,9 @@
         {
           "t": 37.0,
           "pos": [
-            -9.75,
+            -9.84,
             0.0,
-            21.18
+            21.11
           ],
           "yaw": -121.0,
           "clip": "Walk"

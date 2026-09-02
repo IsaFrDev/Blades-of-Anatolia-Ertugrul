@@ -8,7 +8,7 @@
   "fade_in": 1.2,
   "fade_out": 1.0,
   "time_of_day": "day",
-  "weather": "fog",
+  "weather": "snow",
   "duration": 0,
   "actors": [
     {
@@ -18,9 +18,9 @@
       "loc_name": "chr.ertugrul.name",
       "scale": 1.82,
       "tint": [
-        0.94,
-        0.9,
-        0.84
+        1.0,
+        0.95,
+        0.85
       ],
       "keys": [
         {
@@ -118,13 +118,13 @@
     {
       "id": "bektas",
       "char": "haci_bektas",
-      "model": "assets/models/characters/character-i.obj",
+      "model": "assets/models/turbaned+elder+3d+model.obj",
       "loc_name": "chr.haci_bektas.name",
-      "scale": 1.6,
+      "scale": 1.78,
       "tint": [
         0.9,
-        0.88,
-        0.82
+        0.95,
+        0.9
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "darvesh",
       "char": "darvesh",
-      "model": "assets/models/characters/character-e.obj",
+      "model": "assets/models/turbaned+elder+3d+model.obj",
       "loc_name": "chr.darvesh.name",
-      "scale": 1.68,
+      "scale": 1.76,
       "tint": [
-        0.84,
-        0.86,
-        0.88
+        0.8,
+        0.8,
+        0.8
       ],
       "keys": [
         {

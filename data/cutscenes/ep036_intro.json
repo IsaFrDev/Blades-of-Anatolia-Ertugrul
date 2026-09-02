@@ -1,13 +1,13 @@
 {
   "id": "ep036_intro",
   "episode": "EP036",
-  "level": "oba_valley",
+  "level": "oba_camp",
   "music": "MUS_EP036",
   "ambience": "Ambience.Summer.Cloudy",
   "letterbox": true,
   "fade_in": 1.2,
   "fade_out": 1.0,
-  "time_of_day": "dusk",
+  "time_of_day": "night",
   "weather": "cloudy",
   "duration": 0,
   "actors": [
@@ -118,13 +118,13 @@
     {
       "id": "noyan",
       "char": "noyan",
-      "model": "assets/models/crusader/crusader.obj",
+      "model": "assets/models/barbarian+warrior+3d+model.obj",
       "loc_name": "chr.noyan.name",
-      "scale": 1.88,
+      "scale": 1.94,
       "tint": [
-        0.62,
-        0.66,
-        0.72
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {
@@ -222,12 +222,12 @@
     {
       "id": "mongol_katib",
       "char": "mongol_katib",
-      "model": "assets/models/characters/character-l.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.mongol_katib.name",
-      "scale": 1.66,
+      "scale": 1.76,
       "tint": [
-        0.7,
-        0.74,
+        0.6,
+        0.6,
         0.68
       ],
       "keys": [

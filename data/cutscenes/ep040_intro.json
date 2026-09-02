@@ -1,7 +1,7 @@
 {
   "id": "ep040_intro",
   "episode": "EP040",
-  "level": "oba_valley",
+  "level": "aleppo_road",
   "music": "MUS_EP040",
   "ambience": "Ambience.Summer.Clear",
   "letterbox": true,
@@ -96,9 +96,9 @@
         {
           "t": 34.0,
           "pos": [
-            2.8,
+            1.72,
             0.0,
-            27.6
+            27.25
           ],
           "yaw": 45,
           "clip": "Walk"
@@ -108,7 +108,7 @@
           "pos": [
             4.0,
             0.0,
-            29.67
+            30.57
           ],
           "yaw": 55,
           "clip": "Idle"
@@ -118,21 +118,21 @@
     {
       "id": "ahi_evren",
       "char": "ahi_evren",
-      "model": "assets/models/characters/character-h.obj",
+      "model": "assets/models/turbaned+elder+3d+model.obj",
       "loc_name": "chr.ahi_evren.name",
-      "scale": 1.64,
+      "scale": 1.8,
       "tint": [
-        0.94,
-        0.86,
-        0.66
+        1.0,
+        0.9,
+        0.8
       ],
       "keys": [
         {
           "t": 0.0,
           "pos": [
-            -6.6,
+            -6.65,
             0.0,
-            22.4
+            22.27
           ],
           "yaw": 60,
           "clip": "Idle"
@@ -140,9 +140,9 @@
         {
           "t": 5.0,
           "pos": [
-            -5.4,
+            -4.38,
             0.0,
-            23.4
+            22.38
           ],
           "yaw": 55,
           "clip": "Walk"
@@ -150,9 +150,9 @@
         {
           "t": 10.0,
           "pos": [
-            -5.16,
+            -4.67,
             0.0,
-            25.07
+            25.68
           ],
           "yaw": 50,
           "clip": "Walk"
@@ -222,13 +222,13 @@
     {
       "id": "dundar",
       "char": "dundar",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.dundar.name",
       "scale": 1.78,
       "tint": [
-        0.88,
+        0.95,
         0.9,
-        0.86
+        0.85
       ],
       "keys": [
         {
@@ -294,9 +294,9 @@
         {
           "t": 33.0,
           "pos": [
-            3.0,
+            2.88,
             0.0,
-            25.8
+            25.53
           ],
           "yaw": 40,
           "clip": "Walk"
@@ -304,9 +304,9 @@
         {
           "t": 38.0,
           "pos": [
-            5.0,
+            5.66,
             0.0,
-            27.6
+            27.33
           ],
           "yaw": 45,
           "clip": "Idle"
@@ -346,9 +346,9 @@
     {
       "t": 12.0,
       "pos": [
-        -0.98,
+        -15.81,
         2.0,
-        28.83
+        31.29
       ],
       "look": [
         1.2,
@@ -360,9 +360,9 @@
     {
       "t": 17.5,
       "pos": [
-        7.88,
+        34.98,
         1.8,
-        25.72
+        21.98
       ],
       "look": [
         -1.0,
@@ -374,9 +374,9 @@
     {
       "t": 23.0,
       "pos": [
-        -8.47,
+        -21.85,
         1.75,
-        24.29
+        25.87
       ],
       "look": [
         -1.6,
@@ -388,9 +388,9 @@
     {
       "t": 29.0,
       "pos": [
-        1.15,
+        1.29,
         2.2,
-        30.69
+        30.82
       ],
       "look": [
         -2.6,

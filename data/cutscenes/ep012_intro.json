@@ -8,7 +8,7 @@
   "fade_in": 1.2,
   "fade_out": 1.0,
   "time_of_day": "dawn",
-  "weather": "cloudy",
+  "weather": "fog",
   "duration": 0,
   "actors": [
     {
@@ -118,13 +118,13 @@
     {
       "id": "bamsi",
       "char": "bamsi",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bamsi.name",
-      "scale": 1.86,
+      "scale": 1.88,
       "tint": [
-        0.95,
-        0.82,
-        0.72
+        0.78,
+        0.7,
+        0.62
       ],
       "keys": [
         {
@@ -212,13 +212,13 @@
     {
       "id": "al_aziz",
       "char": "al_aziz",
-      "model": "assets/models/characters/character-c.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.al_aziz.name",
-      "scale": 1.62,
+      "scale": 1.56,
       "tint": [
-        0.98,
-        0.9,
-        0.7
+        1.0,
+        0.95,
+        0.8
       ],
       "keys": [
         {
@@ -306,13 +306,13 @@
     {
       "id": "dogan",
       "char": "dogan",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/medieval+warrior+3d+model.obj",
       "loc_name": "chr.dogan.name",
-      "scale": 1.8,
+      "scale": 1.82,
       "tint": [
-        0.82,
+        0.92,
         0.88,
-        0.8
+        0.82
       ],
       "keys": [
         {

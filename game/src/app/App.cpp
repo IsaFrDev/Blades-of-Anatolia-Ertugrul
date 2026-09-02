@@ -1449,6 +1449,15 @@ void App::render() {
     case AppState::Cutscene: {
         CutsceneDirector& cd = CutsceneDirector::get();
         Vec3 eye = cd.cameraPos(), look = cd.cameraLook();
+        // Kamera YER OSTIGA tushmasin. Cutscene kalitlari tekis maydon uchun
+        // yozilgan (y ~ 2-3 m mutlaq); tepalikli darajalarda (forest_pass)
+        // kamera tepalik ichiga kirib, ekranda faqat o't ko'rinardi (EP010).
+        {
+            const float ge = im.level.groundAt(eye.x,  eye.z);
+            const float gl = im.level.groundAt(look.x, look.z);
+            if (std::isfinite(ge) && eye.y  < ge + 1.2f) eye.y  = ge + 1.2f;
+            if (std::isfinite(gl) && look.y < gl + 0.9f) look.y = gl + 0.9f;
+        }
         // Kamera yer ostiga tushib ketmasin (relyef tepaliklarida muhim)
         const float minEyeY = im.level.groundAt(eye.x, eye.z) + 0.6f;
         if (eye.y < minEyeY) eye.y = minEyeY;

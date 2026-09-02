@@ -797,7 +797,9 @@ void MenuSystem::draw(int W, int H) {
                 const Episode& e = eps[gi];
                 const bool done   = Progress::get().completed(e.id);
                 const bool locked = !Progress::get().unlocked(e.id);
-                char num[8]; std::snprintf(num, sizeof num, "%02d", e.seasonIndex + 1);
+                // Butun serial bo'ylab raqam (01..48). Ilgari har mavsum 01 dan
+                // boshlanardi va to'rtta "01" epizod ko'rinib, tartib aralashgandek edi.
+                char num[8]; std::snprintf(num, sizeof num, "%02d", e.globalIndex + 1);
                 fM->draw(num, x0 + 4.0f, ry + 5.0f,
                          sel ? FERUZA[0] : SONIK[0], sel ? FERUZA[1] : SONIK[1], sel ? FERUZA[2] : SONIK[2],
                          sel ? 1.0f : (locked ? 0.35f : 0.7f));

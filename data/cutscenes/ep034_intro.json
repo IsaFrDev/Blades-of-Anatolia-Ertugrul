@@ -1,7 +1,7 @@
 {
   "id": "ep034_intro",
   "episode": "EP034",
-  "level": "oba_valley",
+  "level": "oba_camp",
   "music": "MUS_EP034",
   "ambience": "Ambience.Spring.Clear",
   "letterbox": true,
@@ -118,13 +118,13 @@
     {
       "id": "deli_demir",
       "char": "deli_demir",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.deli_demir.name",
-      "scale": 1.88,
+      "scale": 1.9,
       "tint": [
-        0.86,
-        0.78,
-        0.68
+        0.7,
+        0.66,
+        0.62
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "bamsi",
       "char": "bamsi",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bamsi.name",
-      "scale": 1.86,
+      "scale": 1.88,
       "tint": [
-        0.95,
-        0.82,
-        0.72
+        0.78,
+        0.7,
+        0.62
       ],
       "keys": [
         {
@@ -316,13 +316,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.84,
+      "scale": 1.92,
       "tint": [
-        0.82,
         0.86,
-        0.92
+        0.8,
+        0.74
       ],
       "keys": [
         {

@@ -1,7 +1,7 @@
 {
   "id": "ep013_intro",
   "episode": "EP013",
-  "level": "aleppo_road",
+  "level": "forest_pass",
   "music": "MUS_EP013",
   "ambience": "Ambience.Summer.Clear",
   "letterbox": true,
@@ -118,13 +118,13 @@
     {
       "id": "bamsi",
       "char": "bamsi",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bamsi.name",
-      "scale": 1.86,
+      "scale": 1.88,
       "tint": [
-        0.95,
-        0.82,
-        0.72
+        0.78,
+        0.7,
+        0.62
       ],
       "keys": [
         {
@@ -212,13 +212,13 @@
     {
       "id": "alauddin",
       "char": "alauddin",
-      "model": "assets/models/characters/character-m.obj",
+      "model": "assets/models/medieval+armored+warrior+3d+model.obj",
       "loc_name": "chr.alauddin.name",
-      "scale": 1.74,
+      "scale": 1.88,
       "tint": [
         1.0,
-        0.92,
-        0.72
+        1.0,
+        1.0
       ],
       "keys": [
         {
@@ -306,13 +306,13 @@
     {
       "id": "kopek",
       "char": "kopek",
-      "model": "assets/models/characters/character-j.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.kopek.name",
-      "scale": 1.7,
+      "scale": 1.84,
       "tint": [
-        0.76,
-        0.78,
-        0.74
+        0.6,
+        0.6,
+        0.7
       ],
       "keys": [
         {

@@ -118,13 +118,13 @@
     {
       "id": "halime",
       "char": "halime",
-      "model": "assets/models/characters/character-b.obj",
+      "model": "assets/models/ornate+queen+costume+3d+model.obj",
       "loc_name": "chr.halime.name",
-      "scale": 1.62,
+      "scale": 1.64,
       "tint": [
-        0.98,
-        0.88,
-        0.92
+        1.0,
+        1.0,
+        1.0
       ],
       "keys": [
         {
@@ -212,13 +212,13 @@
     {
       "id": "deli_demir",
       "char": "deli_demir",
-      "model": "assets/models/characters/character-m.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.deli_demir.name",
-      "scale": 1.74,
+      "scale": 1.9,
       "tint": [
-        0.8,
-        0.72,
-        0.66
+        0.7,
+        0.66,
+        0.62
       ],
       "keys": [
         {

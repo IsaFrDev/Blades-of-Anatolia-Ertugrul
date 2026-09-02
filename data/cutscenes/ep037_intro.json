@@ -8,7 +8,7 @@
   "fade_in": 1.2,
   "fade_out": 1.0,
   "time_of_day": "day",
-  "weather": "snow",
+  "weather": "clear",
   "duration": 0,
   "actors": [
     {
@@ -118,13 +118,13 @@
     {
       "id": "darugachi",
       "char": "darugachi",
-      "model": "assets/models/characters/character-i.obj",
+      "model": "assets/models/barbarian+warrior+3d+model.obj",
       "loc_name": "chr.darugachi.name",
-      "scale": 1.68,
+      "scale": 1.86,
       "tint": [
-        0.72,
-        0.7,
-        0.66
+        0.85,
+        0.8,
+        0.8
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "dundar",
       "char": "dundar",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.dundar.name",
       "scale": 1.78,
       "tint": [
-        0.88,
+        0.95,
         0.9,
-        0.86
+        0.85
       ],
       "keys": [
         {

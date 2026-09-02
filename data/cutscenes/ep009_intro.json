@@ -118,13 +118,13 @@
     {
       "id": "hayme_ana",
       "char": "hayme_ana",
-      "model": "assets/models/characters/character-h.obj",
+      "model": "assets/models/ornate+queen+costume+3d+model.obj",
       "loc_name": "chr.hayme_ana.name",
-      "scale": 1.58,
+      "scale": 1.62,
       "tint": [
-        0.88,
-        0.84,
-        0.9
+        0.75,
+        0.72,
+        0.7
       ],
       "keys": [
         {
@@ -212,13 +212,13 @@
     {
       "id": "kurdoglu",
       "char": "kurdoglu",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.kurdoglu.name",
-      "scale": 1.83,
+      "scale": 1.84,
       "tint": [
+        0.75,
         0.72,
-        0.7,
-        0.66
+        0.72
       ],
       "keys": [
         {
@@ -306,13 +306,13 @@
     {
       "id": "dogan",
       "char": "dogan",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/medieval+warrior+3d+model.obj",
       "loc_name": "chr.dogan.name",
-      "scale": 1.8,
+      "scale": 1.82,
       "tint": [
-        0.82,
+        0.92,
         0.88,
-        0.8
+        0.82
       ],
       "keys": [
         {

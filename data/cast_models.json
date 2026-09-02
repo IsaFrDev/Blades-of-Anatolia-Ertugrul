@@ -1,0 +1,473 @@
+{
+ "_izoh": "Har aktyor uchun kanonik model, bo'y va tint. tools/apply_scene_bible.py qo'llaydi.",
+ "cast": {
+  "ertugrul": {
+   "model": "assets/models/ottoman/ottoman.obj",
+   "scale": 1.82,
+   "tint": [
+    1.0,
+    0.95,
+    0.85
+   ]
+  },
+  "turgut": {
+   "model": "assets/models/fantasy+warrior+3d+model.obj",
+   "scale": 1.92,
+   "tint": [
+    0.86,
+    0.8,
+    0.74
+   ]
+  },
+  "bamsi": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.88,
+   "tint": [
+    0.78,
+    0.7,
+    0.62
+   ]
+  },
+  "dogan": {
+   "model": "assets/models/medieval+warrior+3d+model.obj",
+   "scale": 1.82,
+   "tint": [
+    0.92,
+    0.88,
+    0.82
+   ]
+  },
+  "deli_demir": {
+   "model": "assets/models/fantasy+warrior+3d+model.obj",
+   "scale": 1.9,
+   "tint": [
+    0.7,
+    0.66,
+    0.62
+   ]
+  },
+  "dundar": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.78,
+   "tint": [
+    0.95,
+    0.9,
+    0.85
+   ]
+  },
+  "gunduz": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.82,
+   "tint": [
+    0.9,
+    0.85,
+    0.8
+   ]
+  },
+  "gundogdu": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.86,
+   "tint": [
+    0.85,
+    0.8,
+    0.78
+   ]
+  },
+  "savci": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "tekin": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.82,
+   "tint": [
+    0.8,
+    0.8,
+    0.85
+   ]
+  },
+  "sungur": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "husam": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.82,
+   "tint": [
+    0.9,
+    0.9,
+    0.95
+   ]
+  },
+  "arslan_bek": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.86,
+   "tint": [
+    0.85,
+    0.85,
+    0.9
+   ]
+  },
+  "abdurrahman": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "kurdoglu": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    0.75,
+    0.72,
+    0.72
+   ]
+  },
+  "kopek": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    0.6,
+    0.6,
+    0.7
+   ]
+  },
+  "kir_khan": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.86,
+   "tint": [
+    0.9,
+    0.8,
+    0.7
+   ]
+  },
+  "emir_sharaf": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    0.95,
+    0.9,
+    0.75
+   ]
+  },
+  "yakub": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.76,
+   "tint": [
+    1.0,
+    0.9,
+    0.7
+   ]
+  },
+  "togrul": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    0.8,
+    0.85,
+    0.95
+   ]
+  },
+  "hamza": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    0.6,
+    0.6,
+    0.6
+   ]
+  },
+  "al_aziz": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.56,
+   "tint": [
+    1.0,
+    0.95,
+    0.8
+   ]
+  },
+  "suleyman_shah": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "ibn_arabi": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    0.95,
+    0.95,
+    1.0
+   ]
+  },
+  "rumi": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    1.0,
+    0.97,
+    0.9
+   ]
+  },
+  "bektas": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.78,
+   "tint": [
+    0.9,
+    0.95,
+    0.9
+   ]
+  },
+  "ahi_evren": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    1.0,
+    0.9,
+    0.8
+   ]
+  },
+  "darvesh": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.76,
+   "tint": [
+    0.8,
+    0.8,
+    0.8
+   ]
+  },
+  "hanchi": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.78,
+   "tint": [
+    0.9,
+    0.85,
+    0.75
+   ]
+  },
+  "xizmatkor": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.72,
+   "tint": [
+    0.85,
+    0.85,
+    0.85
+   ]
+  },
+  "uygur_kotib": {
+   "model": "assets/models/turbaned+elder+3d+model.obj",
+   "scale": 1.76,
+   "tint": [
+    0.9,
+    0.9,
+    1.0
+   ]
+  },
+  "halime": {
+   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "scale": 1.64,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "aykiz": {
+   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "scale": 1.6,
+   "tint": [
+    0.95,
+    0.85,
+    0.95
+   ]
+  },
+  "hayme_ana": {
+   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "scale": 1.62,
+   "tint": [
+    0.75,
+    0.72,
+    0.7
+   ]
+  },
+  "gulbahor": {
+   "model": "assets/models/ornate+queen+costume+3d+model.obj",
+   "scale": 1.6,
+   "tint": [
+    0.72,
+    0.7,
+    0.68
+   ]
+  },
+  "noyan": {
+   "model": "assets/models/barbarian+warrior+3d+model.obj",
+   "scale": 1.94,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "mongol_chavandoz": {
+   "model": "assets/models/medieval+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    0.75,
+    0.75,
+    0.8
+   ]
+  },
+  "mongol_katib": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.76,
+   "tint": [
+    0.6,
+    0.6,
+    0.68
+   ]
+  },
+  "darugachi": {
+   "model": "assets/models/barbarian+warrior+3d+model.obj",
+   "scale": 1.86,
+   "tint": [
+    0.85,
+    0.8,
+    0.8
+   ]
+  },
+  "jallod": {
+   "model": "assets/models/fantasy+warrior+3d+model.obj",
+   "scale": 1.94,
+   "tint": [
+    0.55,
+    0.55,
+    0.55
+   ]
+  },
+  "titus": {
+   "model": "assets/models/crusader+knight+3d+model.obj",
+   "scale": 1.9,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "josus": {
+   "model": "assets/models/medieval+knight+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    0.8,
+    0.8,
+    0.8
+   ]
+  },
+  "theodoros": {
+   "model": "assets/models/cardinal+robe+3d+model.obj",
+   "scale": 1.8,
+   "tint": [
+    0.8,
+    0.8,
+    0.9
+   ]
+  },
+  "kosta": {
+   "model": "assets/models/cardinal+robe+3d+model.obj",
+   "scale": 1.72,
+   "tint": [
+    0.7,
+    0.7,
+    0.7
+   ]
+  },
+  "kayqubad": {
+   "model": "assets/models/medieval+armored+warrior+3d+model.obj",
+   "scale": 1.88,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "alauddin": {
+   "model": "assets/models/medieval+armored+warrior+3d+model.obj",
+   "scale": 1.88,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "keyhusrev": {
+   "model": "assets/models/medieval+armored+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    0.95,
+    0.95,
+    1.0
+   ]
+  },
+  "kaykhusraw": {
+   "model": "assets/models/medieval+armored+warrior+3d+model.obj",
+   "scale": 1.84,
+   "tint": [
+    0.95,
+    0.95,
+    1.0
+   ]
+  },
+  "orphan_boy": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.18,
+   "tint": [
+    0.85,
+    0.8,
+    0.75
+   ]
+  },
+  "bola": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.12,
+   "tint": [
+    0.9,
+    0.85,
+    0.8
+   ]
+  },
+  "tashchi_bola": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.22,
+   "tint": [
+    0.8,
+    0.78,
+    0.75
+   ]
+  },
+  "osman": {
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "scale": 1.02,
+   "tint": [
+    1.0,
+    0.95,
+    0.85
+   ]
+  }
+ }
+}

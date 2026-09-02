@@ -118,13 +118,13 @@
     {
       "id": "kir_khan",
       "char": "kir_khan",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.kir_khan.name",
-      "scale": 1.9,
+      "scale": 1.86,
       "tint": [
-        0.78,
-        0.74,
-        0.64
+        0.9,
+        0.8,
+        0.7
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "orphan_boy",
       "char": "orphan_boy",
-      "model": "assets/models/characters/character-e.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.orphan_boy.name",
-      "scale": 1.48,
+      "scale": 1.18,
       "tint": [
-        0.88,
-        0.84,
-        0.78
+        0.85,
+        0.8,
+        0.75
       ],
       "keys": [
         {
@@ -316,13 +316,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.88,
+      "scale": 1.92,
       "tint": [
-        0.82,
         0.86,
-        0.92
+        0.8,
+        0.74
       ],
       "keys": [
         {

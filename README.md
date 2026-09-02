@@ -532,6 +532,33 @@ uning o'zbek TTS sida **faqat bitta ayol ovozi bor (Gulnoza)** va turkcha
 umuman yo'q. Shuning uchun standart engine — edge-tts. Kalitlar repoga
 yozilmaydi, `--aisha-keys <fayl>` orqali beriladi.
 
+## Epizod tartibi va cutscene bibliyasi
+
+Epizodlar `data/episodes/episodes_v2.json` da qat'iy xronologik: 1227 → 1261,
+orqaga sakrash yo'q. Menyu endi butun serial bo'ylab **01–48** raqamlaydi (ilgari
+har mavsum 01 dan boshlanib, to'rtta "01" ko'rinardi) va har qatorda yil turadi.
+
+`tools/apply_scene_bible.py` har cutscene'ga epizod ma'lumotidan **joy, vaqt va
+ob-havo** beradi va **kanonik aktyor jadvalini** (`data/cast_models.json`) qo'llaydi:
+
+| Nima aralashgan edi | Endi |
+|---|---|
+| Söğüt epizodlari (39, 42, 44, 48) Qayi obasida | `sogut_village`, qishloq ko'chasi |
+| Mo'g'ul / harbiy lagerlar (32, 34, 36, 46, 47) Qayi obasida | `oba_camp` (begona lager) |
+| 14 aktyor sahnadan sahnaga model almashtirardi | har aktyor bitta model, bo'y va tint |
+| Ko'p aktyor Kenney'ning **zamonaviy** kubik odamchalari (gamepad futbolkasi, politsiya formasi) | 10 ta tarixiy teksturali model |
+| EP006 (Sultan Han) cutscene'i yo'q edi | yozildi: 4 aktyor, 7 replika, 3 tilda ovoz |
+
+Model fayl nomlari tashqi ko'rinishga mos kelmasligi aniqlandi (masalan
+`medieval+warrior` — ko'k kamonchi, `fantasy+warrior` — boltali pahlavon), shuning
+uchun jadval fayl nomi bo'yicha emas, **o'yin ichida chizib ko'rib** tuzildi:
+Turgut — boltali pahlavon, Dog'on — kamonchi, beklar — qizil kaftan, sultonlar —
+tojli zirh, shayxlar — sallali keksa, ayollar — bitta ayol model (tint bilan farq),
+Templarlar — oq surko, No'yon — mo'ynali jangchi, bolalar — kattalar modeli 1.1–1.2 m.
+
+Cutscene kamerasi endi **yer sathiga nisbatan** cheklanadi — tepalikli darajalarda
+kamera yer ostiga tushib, ekranda faqat o't ko'rinardi.
+
 ## Demo xarita — "Qayi obasi, vodiy"
 
 `data/levels/oba_valley.json` — kinematik demo xarita, `tools/make_valley_level.py`

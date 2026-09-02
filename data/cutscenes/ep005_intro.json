@@ -1,7 +1,7 @@
 {
   "id": "ep005_intro",
   "episode": "EP005",
-  "level": "oba_valley",
+  "level": "forest_pass",
   "music": "MUS_EP005",
   "ambience": "Ambience.Winter.Snow",
   "letterbox": true,
@@ -18,9 +18,9 @@
       "loc_name": "chr.ertugrul.name",
       "scale": 1.82,
       "tint": [
-        0.9,
-        0.92,
-        1.0
+        1.0,
+        0.95,
+        0.85
       ],
       "keys": [
         {
@@ -108,13 +108,13 @@
     {
       "id": "hayme_ana",
       "char": "hayme_ana",
-      "model": "assets/models/characters/character-p.obj",
+      "model": "assets/models/ornate+queen+costume+3d+model.obj",
       "loc_name": "chr.hayme_ana.name",
-      "scale": 1.66,
+      "scale": 1.62,
       "tint": [
-        0.88,
-        0.86,
-        0.94
+        0.75,
+        0.72,
+        0.7
       ],
       "keys": [
         {
@@ -202,13 +202,13 @@
     {
       "id": "bamsi",
       "char": "bamsi",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bamsi.name",
-      "scale": 1.86,
+      "scale": 1.88,
       "tint": [
-        0.94,
-        0.9,
-        0.86
+        0.78,
+        0.7,
+        0.62
       ],
       "keys": [
         {
@@ -288,9 +288,9 @@
     {
       "t": 0.0,
       "pos": [
-        -5.67,
+        -4.12,
         3.2,
-        14.21
+        14.31
       ],
       "look": [
         -0.79,
@@ -302,9 +302,9 @@
     {
       "t": 7.0,
       "pos": [
-        -8.48,
+        -7.81,
         2.4,
-        11.91
+        9.26
       ],
       "look": [
         -0.19,

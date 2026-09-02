@@ -1,13 +1,13 @@
 {
   "id": "ep033_intro",
   "episode": "EP033",
-  "level": "oba_valley",
+  "level": "aleppo_road",
   "music": "MUS_EP033",
   "ambience": "Ambience.Winter.Cloudy",
   "letterbox": true,
   "fade_in": 1.2,
   "fade_out": 1.0,
-  "time_of_day": "night",
+  "time_of_day": "day",
   "weather": "cloudy",
   "duration": 0,
   "actors": [
@@ -118,13 +118,13 @@
     {
       "id": "keyhusrev",
       "char": "keyhusrev",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/medieval+armored+warrior+3d+model.obj",
       "loc_name": "chr.keyhusrev.name",
-      "scale": 1.8,
+      "scale": 1.84,
       "tint": [
-        1.0,
-        0.9,
-        0.68
+        0.95,
+        0.95,
+        1.0
       ],
       "keys": [
         {
@@ -180,9 +180,9 @@
         {
           "t": 27.0,
           "pos": [
-            2.2,
+            2.08,
             0.0,
-            27.2
+            27.15
           ],
           "yaw": -64.4,
           "clip": "Talk"
@@ -192,7 +192,7 @@
           "pos": [
             4.0,
             0.0,
-            26.6
+            26.37
           ],
           "yaw": 122.0,
           "clip": "Walk"
@@ -222,13 +222,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.84,
+      "scale": 1.92,
       "tint": [
-        0.82,
         0.86,
-        0.92
+        0.8,
+        0.74
       ],
       "keys": [
         {
@@ -342,9 +342,9 @@
     {
       "t": 6.0,
       "pos": [
-        -15.29,
+        -15.71,
         2.2,
-        35.34
+        35.5
       ],
       "look": [
         -4.0,
@@ -356,9 +356,9 @@
     {
       "t": 11.5,
       "pos": [
-        4.16,
+        5.71,
         2.0,
-        27.62
+        23.95
       ],
       "look": [
         -1.6,
@@ -370,9 +370,9 @@
     {
       "t": 17.0,
       "pos": [
-        -0.84,
+        -4.91,
         1.9,
-        28.99
+        29.82
       ],
       "look": [
         0.8,
@@ -384,9 +384,9 @@
     {
       "t": 23.0,
       "pos": [
-        5.8,
+        12.81,
         1.8,
-        26.73
+        21.85
       ],
       "look": [
         -0.6,
@@ -398,9 +398,9 @@
     {
       "t": 28.5,
       "pos": [
-        -16.53,
+        -20.62,
         2.2,
-        34.12
+        35.35
       ],
       "look": [
         0.6,

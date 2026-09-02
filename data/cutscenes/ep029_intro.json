@@ -118,13 +118,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.84,
+      "scale": 1.92,
       "tint": [
-        0.82,
         0.86,
-        0.92
+        0.8,
+        0.74
       ],
       "keys": [
         {
@@ -222,13 +222,13 @@
     {
       "id": "bamsi",
       "char": "bamsi",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.bamsi.name",
-      "scale": 1.86,
+      "scale": 1.88,
       "tint": [
-        0.95,
-        0.82,
-        0.72
+        0.78,
+        0.7,
+        0.62
       ],
       "keys": [
         {
@@ -326,13 +326,13 @@
     {
       "id": "mongol_chavandoz",
       "char": "mongol_chavandoz",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/medieval+warrior+3d+model.obj",
       "loc_name": "chr.mongol_chavandoz.name",
-      "scale": 1.8,
+      "scale": 1.84,
       "tint": [
-        0.56,
-        0.62,
-        0.7
+        0.75,
+        0.75,
+        0.8
       ],
       "keys": [
         {

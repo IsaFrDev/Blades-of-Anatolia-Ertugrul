@@ -118,13 +118,13 @@
     {
       "id": "turgut",
       "char": "turgut",
-      "model": "assets/models/ottoman/ottoman.obj",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
       "loc_name": "chr.turgut.name",
-      "scale": 1.88,
+      "scale": 1.92,
       "tint": [
         0.86,
-        0.84,
-        0.8
+        0.8,
+        0.74
       ],
       "keys": [
         {
@@ -212,13 +212,13 @@
     {
       "id": "dundar",
       "char": "dundar",
-      "model": "assets/models/characters/character-c.obj",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
       "loc_name": "chr.dundar.name",
-      "scale": 1.68,
+      "scale": 1.78,
       "tint": [
-        0.92,
+        0.95,
         0.9,
-        0.86
+        0.85
       ],
       "keys": [
         {
