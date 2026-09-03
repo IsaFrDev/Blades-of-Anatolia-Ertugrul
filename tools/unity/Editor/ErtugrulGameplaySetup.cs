@@ -77,6 +77,7 @@ namespace Ertugrul.EditorTools
                     if (ctrl != null) anim.runtimeAnimatorController = ctrl;
                     anim.applyRootMotion = false;
                     pl.animator = anim;
+                    if (m.GetComponent<ErtugrulFootsteps>() == null) m.AddComponent<ErtugrulFootsteps>();
                 }
                 pl.model = m.transform;
             }

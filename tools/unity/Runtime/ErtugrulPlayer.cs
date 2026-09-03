@@ -61,6 +61,7 @@ namespace Ertugrul
             yaw = transform.eulerAngles.y;
             if (cameraTransform == null && Camera.main != null) cameraTransform = Camera.main.transform;
             if (model == null && transform.childCount > 0) model = transform.GetChild(0);
+            if (model != null) model.localRotation = Quaternion.Euler(0f, modelYawOffset, 0f);
         }
 
         void Update()
@@ -84,7 +85,7 @@ namespace Ertugrul
             var kb = Keyboard.current;
             Vector2 mv = debugMove;
             bool sprint = debugSprint, jump = false, wantCrouch = crouch;
-            if (inputEnabled && kb != null)
+            if (inputEnabled && kb != null && debugMove.sqrMagnitude < 0.01f)
             {
                 mv = new Vector2((kb.dKey.isPressed ? 1 : 0) - (kb.aKey.isPressed ? 1 : 0),
                                  (kb.wKey.isPressed ? 1 : 0) - (kb.sKey.isPressed ? 1 : 0));
@@ -157,9 +158,11 @@ namespace Ertugrul
             }
             cc.Move((h + Vector3.up * velocity.y) * dt);
 
-            // ---------- model ----------
-            if (model != null)
-                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.Euler(0f, yaw + modelYawOffset, 0f), 1f - Mathf.Exp(-14f * dt));
+            // ---------- burilish: o'yinchi ILDIZI aylanadi ----------
+            // Model ildizi emas: humanoid Animator o'z GameObject'ining burilishini
+            // yozib qo'yishi mumkin (root rotation) — bu "qiyshiq yurish" bergan edi.
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, yaw, 0f), 1f - Mathf.Exp(-14f * dt));
+            if (model != null && animator != null) model.localRotation = Quaternion.Euler(0f, modelYawOffset, 0f);
             UpdateAnimation(dt, speed);
         }
 
@@ -198,7 +201,7 @@ namespace Ertugrul
             var lp = model.localPosition;
             lp.y = Mathf.Abs(Mathf.Sin(bob * Mathf.PI)) * amp + (crouch ? -0.25f : 0f);
             model.localPosition = lp;
-            model.localRotation = Quaternion.Euler(Mathf.Clamp(spd, 0f, 7f) * 1.2f, model.localEulerAngles.y, Mathf.Sin(bob * Mathf.PI * 0.5f) * amp * 40f);
+            model.localRotation = Quaternion.Euler(Mathf.Clamp(spd, 0f, 7f) * 1.2f, modelYawOffset, Mathf.Sin(bob * Mathf.PI * 0.5f) * amp * 40f);
         }
 
         // Sinov uchun: Vector2 yo'nalishda N sekund yurish (Unity CLI eval orqali chaqiriladi)
@@ -209,6 +212,40 @@ namespace Ertugrul
             Invoke(nameof(DebugStop), seconds);
         }
         void DebugStop() { debugMove = Vector2.zero; debugSprint = false; }
+
+        // O'z-o'zini sinash: 4 yo'nalish + sprint, har birida 1.6 s dan keyin o'lchov.
+        // Natija debugReport da (CLI dan bir marta o'qiladi — eval kechikishiga bog'liq emas).
+        public string debugReport = "";
+        public void DebugRunTest() { StartCoroutine(RunTest()); }
+        System.Collections.IEnumerator RunTest()
+        {
+            debugReport = "";
+            var dirs = new[] { new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0), new Vector2(0, 1) };
+            for (int i = 0; i < dirs.Length; ++i)
+            {
+                bool sprint = i == dirs.Length - 1;
+                debugMove = dirs[i]; debugSprint = sprint;
+                yield return new WaitForSeconds(1.6f);
+                Vector3 v = cc.velocity; v.y = 0f;
+                Vector3 f = transform.forward;
+                string hipsTxt = "-";
+                string clip = "-";
+                if (animator != null)
+                {
+                    var hb = animator.GetBoneTransform(HumanBodyBones.Hips);
+                    if (hb != null) { Vector3 hf = hb.forward; hf.y = 0f; hipsTxt = Vector3.SignedAngle(hf.normalized, v.normalized, Vector3.up).ToString("F0"); }
+                    var ci = animator.GetCurrentAnimatorClipInfo(0);
+                    if (ci.Length > 0) clip = ci[0].clip.name;
+                }
+                debugReport += string.Format("[{0}{1}] speed={2:F2} rootVsMove={3:F0} hipsVsMove={4} clip={5} tilt={6:F0}/{7:F0}\n",
+                    dirs[i], sprint ? " sprint" : "", v.magnitude, Vector3.SignedAngle(f, v.normalized, Vector3.up), hipsTxt, clip,
+                    model != null ? model.eulerAngles.x : 0f, model != null ? model.eulerAngles.z : 0f);
+            }
+            debugMove = Vector2.zero; debugSprint = false;
+            debugReport += "DONE";
+            try { System.IO.File.WriteAllText(System.IO.Path.Combine(Application.dataPath, "..", "Temp", "ertugrul_selftest.txt"), debugReport); }
+            catch (System.Exception e) { Debug.LogWarning("selftest yozilmadi: " + e.Message); }
+        }
         public void DebugJump() { velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); }
     }
 }
