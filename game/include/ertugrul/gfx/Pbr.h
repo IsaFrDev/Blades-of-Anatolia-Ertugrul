@@ -44,7 +44,7 @@ private:
     bool inited_ = false, avail_ = false, active_ = false, paused_ = false;
     unsigned prog_ = 0;
     int uTex_ = -1, uShadow_ = -1, uShadowOn_ = -1, uShadowLevel_ = -1;
-    int uTexScale_ = -1, uUseVCol_ = -1, uRough_ = -1, uMat_ = -1;
+    int uTexScale_ = -1, uUseVCol_ = -1, uRough_ = -1, uMat_ = -1, uShadowEye_ = -1, uDbg_ = -1;
 };
 
 } // namespace ert

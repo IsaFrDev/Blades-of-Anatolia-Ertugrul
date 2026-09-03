@@ -227,6 +227,23 @@ void ShadowMap::bindReceive(float shadowLevel) {
     // glTexCoord2f faqat 0-birlikka boradi, teksturalar (0,0) tekselga yopishib
     // hamma narsa tekis rangga aylangan edi.
 
+    // --- Shader uchun: ko'z -> soya matritsasi. Kamera MV qattiq jism
+    // (aylanish + siljish), teskarisi = [R^T | -R^T t].
+    {
+        float mv[16];
+        glGetFloatv(GL_MODELVIEW_MATRIX, mv);
+        float inv[16] = {0};
+        // R^T (ustun-major: mv[c*4+r])
+        for (int r = 0; r < 3; ++r)
+            for (int c = 0; c < 3; ++c) inv[c * 4 + r] = mv[r * 4 + c];
+        const float tx = mv[12], ty = mv[13], tz = mv[14];
+        inv[12] = -(inv[0] * tx + inv[4] * ty + inv[8]  * tz);
+        inv[13] = -(inv[1] * tx + inv[5] * ty + inv[9]  * tz);
+        inv[14] = -(inv[2] * tx + inv[6] * ty + inv[10] * tz);
+        inv[15] = 1.0f;
+        mul44(lightMat_, inv, eyeMat_);
+    }
+
     // --- 1: soya ---
     pActiveTexture(GL_TEXTURE1_ARB);
     glEnable(GL_TEXTURE_2D);

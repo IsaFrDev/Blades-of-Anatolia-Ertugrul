@@ -1,4 +1,5 @@
 #include "ertugrul/gfx/Pbr.h"
+#include "ertugrul/gfx/ShadowMap.h"
 #include <windows.h>
 #include <GL/gl.h>
 #include <cstdio>
@@ -34,6 +35,7 @@ typedef GLint  (APIENTRY* PFN_GetUniformLocation)(GLuint, const GLchar*);
 typedef void   (APIENTRY* PFN_Uniform1i)(GLint, GLint);
 typedef void   (APIENTRY* PFN_Uniform1f)(GLint, GLfloat);
 typedef void   (APIENTRY* PFN_Uniform4f)(GLint, GLfloat, GLfloat, GLfloat, GLfloat);
+typedef void   (APIENTRY* PFN_UniformMatrix4fv)(GLint, GLsizei, GLboolean, const GLfloat*);
 
 PFN_CreateShader        pCreateShader;
 PFN_ShaderSource        pShaderSource;
@@ -50,6 +52,7 @@ PFN_GetUniformLocation  pGetUniformLocation;
 PFN_Uniform1i           pUniform1i;
 PFN_Uniform1f           pUniform1f;
 PFN_Uniform4f           pUniform4f;
+PFN_UniformMatrix4fv    pUniformMatrix4fv;
 
 template <class T> bool load(T& fn, const char* name) {
     fn = (T)wglGetProcAddress(name);
@@ -65,6 +68,7 @@ varying vec4 vCol;
 varying vec2 vUV;
 varying vec4 vSh;
 varying float vFog;
+uniform mat4 uShadowEye;   // ko'z fazosi -> soya teksturasi (ShadowMap::eyeMatrix)
 void main() {
     vec4 e = gl_ModelViewMatrix * gl_Vertex;
     vE   = e.xyz;
@@ -72,8 +76,7 @@ void main() {
     vCol = gl_Color;
     vUV  = gl_MultiTexCoord0.xy;
     // ShadowMap 1-birlikka EYE_LINEAR texgen qo'ygan — o'sha tekisliklar
-    vSh  = vec4(dot(gl_EyePlaneS[1], e), dot(gl_EyePlaneT[1], e),
-                dot(gl_EyePlaneR[1], e), dot(gl_EyePlaneQ[1], e));
+    vSh  = uShadowEye * e;
     // chiziqli tuman: (end - dist) * scale, dist = -e.z
     vFog = clamp((gl_Fog.end + e.z) * gl_Fog.scale, 0.0, 1.0);
     gl_Position = ftransform();
@@ -90,6 +93,7 @@ uniform float uTexScale;
 uniform float uUseVCol;
 uniform float uRough;
 uniform vec4  uMat;
+uniform float uDbg;
 varying vec3 vN;
 varying vec3 vE;
 varying vec4 vCol;
@@ -111,10 +115,16 @@ void main() {
     float nv = max(dot(N, V), 0.001);
 
     // Soya: apparat solishtiruvi (PCF), xaritadan tashqarisi yorug' (border=1)
-    float sh = 1.0;
+    // sh — quyosh hadi (soyada 0, PCF chetida silliq), occ — osmon/ambient hadi
+    // (soyada uShadowLevel gacha). Faqat quyoshni o'chirish yetmadi: bu sahnada
+    // ambient+fill quyoshga teng bo'lgani uchun soya atigi 30% qorong'i bo'lib,
+    // ko'zga tashlanmasdi. Real dunyoda soyadagi joy osmonning bir qismini ham
+    // ko'rmaydi (sky occlusion) — occ shuning arzon taqlidi.
+    float sh = 1.0, occ = 1.0;
     if (uShadowOn > 0.5) {
         float s = shadow2DProj(uShadow, vSh).r;
-        sh = mix(uShadowLevel, 1.0, s);
+        sh  = s;
+        occ = mix(max(uShadowLevel, 0.45), 1.0, s);
     }
 
     // --- Quyosh (GL_LIGHT0, yo'naltirilgan): GGX ---
@@ -138,13 +148,15 @@ void main() {
     // --- To'ldiruvchi (GL_LIGHT1): osmon gumbazi, yumshoq ---
     vec3  L1  = normalize(gl_LightSource[1].position.xyz);
     float nl1 = max(dot(N, L1), 0.0);
-    vec3  diff1 = albedo * gl_LightSource[1].diffuse.rgb * nl1;
+    vec3  diff1 = albedo * gl_LightSource[1].diffuse.rgb * nl1 * occ;
 
     // --- Ambient + gorizontdan yengil hemisferik qo'shimcha ---
-    vec3 amb = albedo * gl_LightModel.ambient.rgb * (0.85 + 0.15 * N.y);
+    vec3 amb = albedo * gl_LightModel.ambient.rgb * (0.85 + 0.15 * N.y) * occ;
 
     vec3 col = amb + diff0 + diff1 + spec;
     col = mix(gl_Fog.color.rgb, col, vFog);
+    if (uDbg > 0.5 && uDbg < 1.5) col = vec3(sh);
+    if (uDbg > 1.5) col = vec3(fract(vSh.xy / max(vSh.w, 1e-4)), vSh.z / max(vSh.w, 1e-4));
     gl_FragColor = vec4(col, alpha);
 }
 )GLSL";
@@ -195,7 +207,7 @@ bool Pbr::init() {
         load(pGetProgramiv, "glGetProgramiv") && load(pGetProgramInfoLog, "glGetProgramInfoLog") &&
         load(pUseProgram, "glUseProgram") && load(pGetUniformLocation, "glGetUniformLocation") &&
         load(pUniform1i, "glUniform1i") && load(pUniform1f, "glUniform1f") &&
-        load(pUniform4f, "glUniform4f");
+        load(pUniform4f, "glUniform4f") && load(pUniformMatrix4fv, "glUniformMatrix4fv");
     if (!ok) {
         std::printf("[PBR] GL 2.0 shader funksiyalari yo'q -> fixed-function\n");
         return false;
@@ -224,6 +236,8 @@ bool Pbr::init() {
     uUseVCol_     = pGetUniformLocation(prog_, "uUseVCol");
     uRough_       = pGetUniformLocation(prog_, "uRough");
     uMat_         = pGetUniformLocation(prog_, "uMat");
+    uShadowEye_   = pGetUniformLocation(prog_, "uShadowEye");
+    uDbg_         = pGetUniformLocation(prog_, "uDbg");
     avail_ = true;
     std::printf("[PBR] GLSL 1.20 dasturi tayyor (GGX + soya + tuman)\n");
     whiteTexture();
@@ -244,6 +258,11 @@ void Pbr::begin(bool shadowOn, float shadowLevel) {
     pUniform1i(uShadow_, 1);
     pUniform1f(uShadowOn_, shadowOn ? 1.0f : 0.0f);
     pUniform1f(uShadowLevel_, shadowLevel);
+    if (shadowOn) pUniformMatrix4fv(uShadowEye_, 1, GL_FALSE, ShadowMap::get().eyeMatrix());
+    {   // ERT_PBR_DBG=1 soya koeffitsiyenti, =2 soya koordinatalari
+        static const char* dbg = std::getenv("ERT_PBR_DBG");
+        pUniform1f(uDbg_, dbg ? (float)std::atof(dbg) : 0.0f);
+    }
     pUniform1f(uTexScale_, 1.0f);
     pUniform1f(uUseVCol_, 1.0f);
     pUniform1f(uRough_, 0.70f);

@@ -43,6 +43,10 @@ public:
 
     int  mapSize() const { return size_; }
     bool receiving() const { return receiving_; }
+    // bias*P*V*inverse(kamera MV) — ko'z koordinatasidan soya teksturasiga.
+    // bindReceive() da hisoblanadi; Pbr shaderi uniform sifatida oladi
+    // (gl_EyePlane* built-in'lariga tayanmaslik uchun).
+    const float* eyeMatrix() const { return eyeMat_; }
     bool ambientExt() const { return hasAmbient_; }
 
 private:
@@ -52,6 +56,7 @@ private:
     int   size_ = 0;
     int   savedVp_[4] = {0, 0, 0, 0};
     float lightMat_[16] = {0};      // bias * proj * view (ustun-major)
+    float eyeMat_[16]   = {0};      // lightMat * inverse(kamera modelview)
 };
 
 } // namespace ert
