@@ -61,6 +61,7 @@ public:
 
     const SpawnPoint* spawn(const std::string& id) const;
     const std::vector<Prop>& props() const { return props_; }
+    const std::vector<SpawnPoint>& spawns() const { return spawns_; }
     const std::string& id() const { return id_; }
     const std::string& displayName() const { return locName_; }
 

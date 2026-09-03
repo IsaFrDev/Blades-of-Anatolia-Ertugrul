@@ -631,6 +631,13 @@ sog'lig'ini ushlab turadi — bu FAQAT trailer yozish uchun, o'yin balansiga teg
 Bu rejim vaqtni QAT'IY 1/30 s qadam bilan yuritadi, shuning uchun natija
 mashina tezligiga bog'liq emas va har safar bir xil chiqadi.
 
+## Unity'ga ko'chirish
+
+`D:\My project` (Unity 6, URP) ga kontent oqimi tayyor: modellar, ovozlar, JSON'lar, CSV'lar
+nusxalandi; `--export-unity` buyrug'i darajani relyef + rekvizit + spawn + osmon JSON'iga
+chiqaradi, [tools/unity/ErtugrulLevelImporter.cs](tools/unity/ErtugrulLevelImporter.cs) undan
+Unity sahnasi quradi. Holat va yo'l xaritasi: [docs/UNITY_PORT.md](docs/UNITY_PORT.md).
+
 ## Ma'lum cheklovlar
 
 Bular hali bajarilmagan — halol ro'yxat.

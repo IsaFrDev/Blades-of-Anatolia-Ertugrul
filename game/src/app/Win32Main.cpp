@@ -14,6 +14,9 @@
 #include "ertugrul/ui/Menu.h"
 #include "ertugrul/app/Bindings.h"
 #include "ertugrul/audio/Voice.h"
+#include "ertugrul/world/Level.h"
+#include <nlohmann/json.hpp>
+#include <fstream>
 
 #include <cstdio>
 #include <cstring>
@@ -142,6 +145,7 @@ struct Args {
     ert::AppConfig cfg;
     bool console = true;
     bool check   = false;
+    std::string exportUnity;   // --export-unity <papka>: darajani Unity uchun JSON ga chiqarish
     std::string shotsDir;      // --shots <papka>: skriptlangan sayohat + PNG saqlash
     bool locoTour = false;     // --loco: yurish mexanikasi sayohati
     std::string filmDir;       // --film <papka>: video uchun kadr yozish
@@ -165,6 +169,7 @@ Args parseArgs(int argc, char** argv) {
         else if (s == "--quality")               a.cfg.modelQuality = std::atoi(next("1").c_str());
         else if (s == "--no-console")            a.console          = false;
         else if (s == "--check")                 a.check            = true;
+        else if (s == "--export-unity")          a.exportUnity      = next("export");
         else if (s == "--shots")                 a.shotsDir         = next("shots");
         else if (s == "--loco")                  a.locoTour         = true;
         else if (s == "--film")                  a.filmDir          = next("film");
@@ -180,7 +185,8 @@ Args parseArgs(int argc, char** argv) {
                         "  --skip-menu         menyuni o'tkazib yuborish\n"
                         "  --quality 0|1|2     model sifati\n"
                         "  --no-console        konsol oynasini yashirish\n"
-                        "  --check             kontent diagnostikasi va chiqish\n");
+                        "  --check             kontent diagnostikasi va chiqish\n"
+                        "  --export-unity <papka>  --level bilan berilgan darajani Unity importeri uchun JSON ga chiqaradi\n");
             std::exit(0);
         }
     }
@@ -188,6 +194,62 @@ Args parseArgs(int argc, char** argv) {
 }
 
 // Kontent diagnostikasi (GPU siz ham foydali)
+// --level <id> darajasini Unity importeri (Assets/Ertugrul/Editor/ErtugrulLevelImporter.cs)
+// tushunadigan JSON ga chiqaradi: relyef balandliklari (257x257), BARCHA
+// rekvizitlar (scatter allaqachon joylashtirilgan holda), spawn nuqtalari, osmon.
+// GL konteksti kerak emas — Level::load meshlarni yuklaydi, display list qurmaydi.
+int runExportUnity(const std::string& levelId, const std::string& outDir) {
+    ert::Level lv;
+    if (!lv.load(levelId)) { std::printf("XATO: daraja yuklanmadi: %s\n", levelId.c_str()); return 2; }
+    const ert::Terrain& t = lv.terrain();
+    const int   R    = 257;                      // Unity: 2^n + 1
+    const float half = t.half();
+    nlohmann::json j;
+    j["id"]        = lv.id();
+    j["name"]      = lv.displayName();
+    j["size"]      = t.size();
+    j["heightRes"] = R;
+    float mn = 1e9f, mx = -1e9f;
+    std::vector<float> hs; hs.reserve((size_t)R * R);
+    for (int r = 0; r < R; ++r) {                // qator = z, ustun = x
+        const float z = -half + t.size() * (float)r / (float)(R - 1);
+        for (int c = 0; c < R; ++c) {
+            const float x = -half + t.size() * (float)c / (float)(R - 1);
+            const float h = t.heightAt(x, z);
+            hs.push_back(h); if (h < mn) mn = h; if (h > mx) mx = h;
+        }
+    }
+    j["minH"] = mn; j["maxH"] = mx;
+    j["heights"] = hs;
+    const ert::SkyPreset& sk = lv.sky();
+    j["sky"] = { {"sunDir", {sk.sunDir[0], sk.sunDir[1], sk.sunDir[2]}},
+                 {"sunColor", {sk.sunColor[0], sk.sunColor[1], sk.sunColor[2]}},
+                 {"ambient", {sk.ambient[0], sk.ambient[1], sk.ambient[2]}},
+                 {"fogColor", {sk.fogColor[0], sk.fogColor[1], sk.fogColor[2]}},
+                 {"fogStart", sk.fogStart}, {"fogEnd", sk.fogEnd} };
+    nlohmann::json props = nlohmann::json::array();
+    for (const ert::Prop& p : lv.props()) {
+        if (p.mesh.empty() || p.mesh[0] == '#') continue;      // protsedural kub/silindr
+        const float gy = p.snapToGround ? t.heightAt(p.pos.x, p.pos.z) : p.pos.y;
+        props.push_back({ {"mesh", p.mesh}, {"pos", {p.pos.x, gy, p.pos.z}}, {"yaw", p.yaw},
+                          {"scale", p.scale}, {"tint", {p.tint[0], p.tint[1], p.tint[2]}},
+                          {"collide", p.collide}, {"radius", p.radius} });
+    }
+    j["props"] = props;
+    nlohmann::json sp = nlohmann::json::array();
+    for (const ert::SpawnPoint& s : lv.spawns())
+        sp.push_back({ {"id", s.id}, {"pos", {s.pos.x, t.heightAt(s.pos.x, s.pos.z), s.pos.z}}, {"yaw", s.yaw} });
+    j["spawns"] = sp;
+    CreateDirectoryA(outDir.c_str(), nullptr);
+    const std::string path = outDir + "/" + levelId + ".level.json";
+    std::ofstream f(path.c_str(), std::ios::binary);
+    if (!f.is_open()) { std::printf("XATO: yozib bo'lmadi: %s\n", path.c_str()); return 3; }
+    f << j.dump();
+    std::printf("Unity eksport: %s  (rekvizit %d, spawn %d, relyef %dx%d, %.1f..%.1f m)\n",
+                path.c_str(), (int)props.size(), (int)sp.size(), R, R, mn, mx);
+    return 0;
+}
+
 int runCheck() {
     std::printf("\n=================== KONTENT DIAGNOSTIKASI ===================\n");
     ert::Loc& loc = ert::Loc::get();
@@ -698,6 +760,7 @@ int main(int argc, char** argv) {
     CreateDirectoryA("saves", nullptr);
 
     if (args.check) return runCheck();
+    if (!args.exportUnity.empty()) return runExportUnity(args.cfg.startLevel, args.exportUnity);
 
     // ---------------- oyna ----------------
     HINSTANCE hInst = GetModuleHandleW(nullptr);
