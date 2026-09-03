@@ -57,6 +57,22 @@ keyin `DebugWalk` bilan yurish/sprint, sakrash, kamera orbitasi — skrinshotlar
 3. Menyu **Ertugrul → Build Animator from Mixamo**, keyin **Setup Gameplay (ALL scenes)** —
    o'yinchi avtomatik rigli modelga o'tadi. Rig kelguncha OBJ placeholder ishlaydi.
 
+## Realizm o'timi (Ertugrul of Ulukayin uslubi)
+
+`Editor/ErtugrulRealismPass.cs` — menyu **Ertugrul → Realism Pass (ALL scenes)**, 5 sahnaga qo'llandi:
+relyef 3 qatlam (o't / tuproq / qoya — nishab, balandlik, shovqin bo'yicha splat), detal o't
+(Kenney grass mesh, instancing), **1387 ta Kenney kubik daraxt protsedural realistik daraxtlarga
+almashtirildi** (tana + barg kartalari, alpha-clip, qarag'ay/eman 3 variant), qoyalar mot
+material, protsedural skybox + quyosh, eksponensial tuman, ACES tonemapping + bloom + rang + vinyet
+(URP Volume), soya 160 m / 4 kaskad / yumshoq, SMAA, ko'l (relyef chuqurligi bo'lsa).
+Qo'shilgan skriptlar (`Assets/Ertugrul/Scripts/`, C++ repodagi `assets/Ertugrul/Scripts` dan):
+Quest (ErtQuestManager/Data/UI, maqsad markerlari), Dialogue (tanlovli dialog, ovoz, iymon),
+NPC (NavMesh patrul/wander, [E] interaksiya), Core (GameManager, WorldState). Ular
+`ErtugrulPlayer` bilan bog'landi (dialog paytida boshqaruv o'chadi). ErtPlayerController /
+ErtThirdPersonCamera / ErtSceneSetup olinmadi — o'rnini ErtugrulPlayer/ErtugrulCamera/Setup Gameplay bosadi.
+Tekshirilmagan: detal o't Game view skrinshotida ko'rinmadi (ma'lumot bor: 461k nusxa) — Editorda
+Play bosib ko'ring; ko'rinmasa Terrain → Paint Details → prototip materialini tekshiring.
+
 ## Birinchi qadam (siz)
 
 1. Unity Hub'dan `D:\My project` ni oching — modellar importi ~5–10 daqiqa (195 MB, 4096² teksturalar).

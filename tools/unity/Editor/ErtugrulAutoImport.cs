@@ -38,9 +38,21 @@ namespace Ertugrul.EditorTools
 
         static void Run()
         {
-            try { File.Delete(Flag); } catch { }
-            Debug.Log("Ertugrul: AUTOIMPORT bayrog'i topildi — barcha darajalar import qilinmoqda");
-            ErtugrulLevelImporter.ImportAll();
+            // Fayl ichida "Namespace.Type.Method" bo'lsa — o'sha statik metod, bo'sh bo'lsa ImportAll
+            string method = "";
+            try { method = File.ReadAllText(Flag).Trim(); File.Delete(Flag); } catch { }
+            if (string.IsNullOrEmpty(method))
+            {
+                Debug.Log("Ertugrul: AUTOIMPORT bayrog'i topildi — barcha darajalar import qilinmoqda");
+                ErtugrulLevelImporter.ImportAll();
+                return;
+            }
+            int dot = method.LastIndexOf('.');
+            var type = System.Type.GetType(method.Substring(0, dot) + ", Assembly-CSharp-Editor");
+            var mi = type != null ? type.GetMethod(method.Substring(dot + 1)) : null;
+            if (mi == null) { Debug.LogError("Ertugrul: AUTOIMPORT metodi topilmadi: " + method); return; }
+            Debug.Log("Ertugrul: AUTOIMPORT -> " + method);
+            mi.Invoke(null, null);
         }
     }
 }
