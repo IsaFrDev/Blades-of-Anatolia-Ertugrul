@@ -57,6 +57,15 @@ mannequin bilan): Speed=3.3 → Run_N, sakrash → Jump. **Mixamo FBX'lar kompyu
 Desktop, Documents, D: tekshirildi) — mixamo.com dan yuklab olib `Assets/Ertugrul/Characters/` ga
 qo'ying, keyin **Setup Gameplay (ALL scenes)**: o'yinchi avtomatik rigli Ertug'rul modeliga o'tadi.
 
+### "Qiyshiq yurish" tuzatildi (19:50)
+Sabab ikkita: (1) humanoid Animator o'z GameObject'ining burilishini yozib qo'yadi — endi model
+alohida **pivot** ostida, o'yinchi ILDIZI aylanadi; (2) mesh transformdan boshqa tomonga qaragan
+bo'lishi mumkin — `Animator.bodyRotation` orqali **avtomatik kalibrovka** (ikki xil boshlang'ich
+ofsetdan ham -5° ga yaqinlashdi, mannequin obaga qarab, orqasi kameraga yuguradi).
+`OnFootstep`/`OnLand` hodisalari uchun `ErtugrulFootsteps` (protsedural qadam tovushi) — konsol spam yo'q.
+O'z-o'zini sinash: `Assets/Ertugrul/SELFTEST` fayli (`armature` yoki `armature:<ofset>`) → Play →
+`Temp/ertugrul_selftest.txt` (tezlik, ildiz/tana/kamera burchaklari, klip).
+
 ### Mixamo rig (qo'lda, Adobe hisobi kerak)
 1. mixamo.com → Upload character → `assets/models/ottoman/ottoman.obj` (yoki FBX ga o'girib) → autorig.
 2. Yuklab oling (FBX for Unity): `ertugrul.fbx` (Idle, **With Skin**), keyin **Without Skin**:

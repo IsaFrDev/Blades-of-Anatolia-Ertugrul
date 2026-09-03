@@ -67,8 +67,11 @@ namespace Ertugrul.EditorTools
             if (!rigged) modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ModelsRoot + "ottoman/ottoman.obj");
             if (modelPrefab != null)
             {
-                var m = (GameObject)PrefabUtility.InstantiatePrefab(modelPrefab, player.transform);
-                m.name = "Model";
+                // Pivot: model ofseti shu yerda; Animator (rigli model) o'z ildizini yozsa ham pivotga tegmaydi
+                var pivot = new GameObject("Model").transform;
+                pivot.SetParent(player.transform, false);
+                var m = (GameObject)PrefabUtility.InstantiatePrefab(modelPrefab, pivot);
+                m.name = rigged ? "Rig" : "Mesh";
                 if (!rigged) ErtugrulCutscenePlayer.FitToHeight(m.transform, 1.82f);
                 else
                 {
@@ -79,7 +82,7 @@ namespace Ertugrul.EditorTools
                     pl.animator = anim;
                     if (m.GetComponent<ErtugrulFootsteps>() == null) m.AddComponent<ErtugrulFootsteps>();
                 }
-                pl.model = m.transform;
+                pl.model = pivot;
             }
 
             // --- Kamera ---
@@ -103,6 +106,9 @@ namespace Ertugrul.EditorTools
             vcam.LookAt = target.transform;
             var orbital = camGo.AddComponent<CinemachineOrbitalFollow>();
             orbital.OrbitStyle = CinemachineOrbitalFollow.OrbitStyles.Sphere;
+            // DUNYO fazosi: aks holda kamera o'yinchi burilishi bilan birga aylanadi va
+            // kamera-nisbiy kiritish bilan cheksiz aylanish (qiyshiq yurish) paydo bo'ladi
+            orbital.TrackerSettings.BindingMode = Unity.Cinemachine.TargetTracking.BindingMode.WorldSpace;
             orbital.Radius = 5.2f;
             orbital.HorizontalAxis.Value = yaw;
             orbital.VerticalAxis.Value = 12f;

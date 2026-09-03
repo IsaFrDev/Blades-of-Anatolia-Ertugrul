@@ -23,19 +23,28 @@ namespace Ertugrul
             if (pl == null) return;
 #if UNITY_EDITOR
             string mode = System.IO.File.ReadAllText(flag).Trim();
-            if (mode == "armature" && pl.animator == null)
+            // "armature" yoki "armature:-90" (model ofseti sinov uchun)
+            if (mode.StartsWith("armature") && pl.animator == null)
             {
+                int colon = mode.IndexOf(':');
+                if (colon > 0) float.TryParse(mode.Substring(colon + 1), System.Globalization.NumberStyles.Float,
+                                              System.Globalization.CultureInfo.InvariantCulture, out pl.modelYawOffset);
                 var arm = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/SourceFiles/StarterAssets/ThirdPersonController/Character/Models/Armature.fbx");
                 var ctrl = UnityEditor.AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/Ertugrul/Characters/Ertugrul.controller");
                 if (arm != null && ctrl != null)
                 {
                     if (pl.model != null) pl.model.gameObject.SetActive(false);
-                    var m = Instantiate(arm, pl.transform);
-                    m.name = "ModelTest"; m.transform.localPosition = Vector3.zero; m.transform.localRotation = Quaternion.Euler(0f, pl.modelYawOffset, 0f);
+                    // PIVOT: Animator o'z GameObject'ining burilishini yozib qo'yadi, shuning uchun
+                    // ofset alohida ota obyektda — Animator unga tegmaydi
+                    var pivot = new GameObject("ModelPivot").transform;
+                    pivot.SetParent(pl.transform, false);
+                    pivot.localRotation = Quaternion.Euler(0f, pl.modelYawOffset, 0f);
+                    var m = Instantiate(arm, pivot);
+                    m.name = "ModelTest"; m.transform.localPosition = Vector3.zero; m.transform.localRotation = Quaternion.identity;
                     var an = m.GetComponent<Animator>() ?? m.AddComponent<Animator>();
                     an.runtimeAnimatorController = ctrl; an.applyRootMotion = false;
                     m.AddComponent<ErtugrulFootsteps>();
-                    pl.animator = an; pl.model = m.transform;
+                    pl.animator = an; pl.model = pivot;
                 }
             }
 #endif

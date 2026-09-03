@@ -64,6 +64,38 @@ namespace Ertugrul
             if (model != null) model.localRotation = Quaternion.Euler(0f, modelYawOffset, 0f);
         }
 
+        // Humanoid rig uchun avtomatik kalibrovka: Animator.bodyRotation — avatar tanasining
+        // haqiqiy old tomoni (Unity humanoid normallashtirilgan). Mesh transformdan boshqa
+        // tomonga qaragan bo'lsa (Mixamo / Starter Assets farqi), pivot ofseti tuzatiladi.
+        // Birinchi animatsiya kadridan keyin bir marta chaqiriladi.
+        bool calibrated;
+        public void CalibrateModelFacing()
+        {
+            if (animator == null || model == null || !animator.isHuman) return;
+            Vector3 bodyFwd = animator.bodyRotation * Vector3.forward; bodyFwd.y = 0f;
+            if (bodyFwd.sqrMagnitude < 1e-4f) return;
+            float err = Vector3.SignedAngle(transform.forward, bodyFwd.normalized, Vector3.up);
+            calibrated = true;
+            if (Mathf.Abs(err) > 3f)
+            {
+                modelYawOffset = Mathf.Round((modelYawOffset - err) / 5f) * 5f;
+                model.localRotation = Quaternion.Euler(0f, modelYawOffset, 0f);
+                Debug.Log("Ertugrul: model yo'nalishi kalibrovka qilindi, xato " + err.ToString("F0") + " -> ofset " + modelYawOffset);
+            }
+        }
+
+        // Vizual old tomon (oyoqlardan) bilan harakat orasidagi burchak — sinov hisoboti uchun
+        public string VisualFacingReport(Vector3 moveDir)
+        {
+            if (animator == null || !animator.isHuman) return "-";
+            var lf = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+            var rf = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+            if (lf == null || rf == null) return "-";
+            Vector3 right = rf.position - lf.position; right.y = 0f;
+            Vector3 visualFwd = Vector3.Cross(right.normalized, Vector3.up);
+            return Vector3.SignedAngle(visualFwd, moveDir, Vector3.up).ToString("F0");
+        }
+
         void Update()
         {
             float dt = Time.deltaTime;
@@ -80,6 +112,8 @@ namespace Ertugrul
                 UpdateAnimation(dt, 0f);
                 return;
             }
+
+            if (!calibrated && animator != null && Time.timeSinceLevelLoad > 0.3f) CalibrateModelFacing();
 
             // ---------- kiritish ----------
             var kb = Keyboard.current;
@@ -237,9 +271,12 @@ namespace Ertugrul
                     var ci = animator.GetCurrentAnimatorClipInfo(0);
                     if (ci.Length > 0) clip = ci[0].clip.name;
                 }
-                debugReport += string.Format("[{0}{1}] speed={2:F2} rootVsMove={3:F0} hipsVsMove={4} clip={5} tilt={6:F0}/{7:F0}\n",
+                Vector3 cf = cameraTransform != null ? cameraTransform.forward : Vector3.forward; cf.y = 0f;
+                Vector3 bf = animator != null ? animator.bodyRotation * Vector3.forward : f; bf.y = 0f;
+                debugReport += string.Format("[{0}{1}] speed={2:F2} rootVsMove={3:F0} camVsMove={9:F0} modelOff={10} bodyVsMove={11:F0} hipsVsMove={4} clip={5} tilt={6:F0}/{7:F0}\n",
                     dirs[i], sprint ? " sprint" : "", v.magnitude, Vector3.SignedAngle(f, v.normalized, Vector3.up), hipsTxt, clip,
-                    model != null ? model.eulerAngles.x : 0f, model != null ? model.eulerAngles.z : 0f);
+                    model != null ? model.eulerAngles.x : 0f, model != null ? model.eulerAngles.z : 0f, VisualFacingReport(v.normalized),
+                    Vector3.SignedAngle(cf.normalized, v.normalized, Vector3.up), modelYawOffset, Vector3.SignedAngle(bf.normalized, v.normalized, Vector3.up));
             }
             debugMove = Vector2.zero; debugSprint = false;
             debugReport += "DONE";
