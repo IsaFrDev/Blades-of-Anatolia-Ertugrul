@@ -49,6 +49,14 @@ kutubxonasi), `ErtugrulUI` (subtitr, gapiruvchi, letterbox, so'nish, maqsad), `E
 Sinov (Play rejimi, CLI orqali): EP001 intro cutscene to'liq o'ynadi (kamera, 3 aktyor, letterbox),
 keyin `DebugWalk` bilan yurish/sprint, sakrash, kamera orbitasi — skrinshotlar bilan tasdiqlandi.
 
+### Animator holati (2026-09-03, 19:27)
+`Assets/Ertugrul/Characters/Ertugrul.controller` qurildi (**Ertugrul → Build Animator**): kliplar kalit
+so'z bo'yicha topiladi, Mixamo FBX bo'lmasa Unity Starter Assets (Idle/Walk_N/Run_N/Jump) ishlatiladi —
+humanoid retargeting tufayli Mixamo rigda ham o'sha kliplar ishlaydi. Play sinovi (Starter Assets
+mannequin bilan): Speed=3.3 → Run_N, sakrash → Jump. **Mixamo FBX'lar kompyuterda topilmadi** (Downloads,
+Desktop, Documents, D: tekshirildi) — mixamo.com dan yuklab olib `Assets/Ertugrul/Characters/` ga
+qo'ying, keyin **Setup Gameplay (ALL scenes)**: o'yinchi avtomatik rigli Ertug'rul modeliga o'tadi.
+
 ### Mixamo rig (qo'lda, Adobe hisobi kerak)
 1. mixamo.com → Upload character → `assets/models/ottoman/ottoman.obj` (yoki FBX ga o'girib) → autorig.
 2. Yuklab oling (FBX for Unity): `ertugrul.fbx` (Idle, **With Skin**), keyin **Without Skin**:

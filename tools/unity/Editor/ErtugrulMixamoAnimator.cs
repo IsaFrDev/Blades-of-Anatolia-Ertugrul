@@ -1,14 +1,15 @@
-// Mixamo rig bilan ishlash.
+// Humanoid Animator quruvchi — Mixamo yoki Unity Starter Assets kliplaridan.
 //
-// Mixamo (mixamo.com) ga kirish Adobe hisobi talab qiladi, shuning uchun yuklab olish
-// qo'lda: 1) assets/models/ottoman/ottoman.obj ni Mixamo ga yuklang ("Upload character"),
-// autorig; 2) quyidagi animatsiyalarni "FBX for Unity, Without Skin" (birinchisini
-// "With Skin") formatida yuklab oling va Assets/Ertugrul/Characters/ papkasiga qo'ying:
-//      ertugrul.fbx        — Idle (With Skin)  -> model + skelet
-//      anim_idle.fbx, anim_walk.fbx, anim_run.fbx, anim_sprint.fbx,
-//      anim_jump.fbx, anim_crouch_idle.fbx, anim_crouch_walk.fbx, anim_mantle.fbx (Climb)
-// 3) Menyu: Ertugrul > Build Animator from Mixamo. Keyin "Setup Gameplay" avtomatik
-//    rigli modelni ishlatadi (Speed/Grounded/Crouch/Jump/Mantle parametrlari).
+// Kliplar KALIT SO'Z bo'yicha qidiriladi (fayl nomi katta-kichik harfsiz):
+//   idle | walk | run | sprint | jump | crouch idle | crouch walk | mantle/climb
+// Qidiruv papkalari: Assets/Ertugrul/Characters (Mixamo), keyin
+// Assets/SourceFiles/StarterAssets (Unity mannequin animatsiyalari — humanoid
+// retargeting tufayli Mixamo rigda ham ishlaydi).
+//
+// Mixamo (mixamo.com, Adobe hisobi): Upload character -> ottoman.obj -> autorig;
+// "FBX for Unity": ertugrul.fbx (With Skin) + animatsiyalar (Without Skin) ->
+// Assets/Ertugrul/Characters/. Keyin: Ertugrul > Build Animator, Ertugrul > Setup Gameplay.
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -20,33 +21,46 @@ namespace Ertugrul.EditorTools
     {
         const string Dir = "Assets/Ertugrul/Characters";
         const string Ctrl = Dir + "/Ertugrul.controller";
+        static readonly string[] SearchDirs = { Dir, "Assets/SourceFiles/StarterAssets" };
 
-        [MenuItem("Ertugrul/Build Animator from Mixamo")]
+        [MenuItem("Ertugrul/Build Animator (Mixamo / Starter Assets)")]
         public static void Build()
         {
             Directory.CreateDirectory(Dir);
-            var files = Directory.GetFiles(Dir, "*.fbx");
-            if (files.Length == 0)
+            // Characters dagi FBX'lar: humanoid, loop
+            foreach (var f in Directory.GetFiles(Dir, "*.fbx"))
             {
-                Debug.LogWarning("Ertugrul: " + Dir + " da FBX yo'q. Mixamo dan yuklab oling (skript boshidagi izoh).");
-                return;
-            }
-            // Barcha FBX: Humanoid rig, loop
-            foreach (var f in files)
-            {
-                var imp = AssetImporter.GetAtPath(f.Replace('\\', '/')) as ModelImporter;
+                string p = f.Replace('\\', '/');
+                var imp = AssetImporter.GetAtPath(p) as ModelImporter;
                 if (imp == null) continue;
+                bool changed = imp.animationType != ModelImporterAnimationType.Human;
                 imp.animationType = ModelImporterAnimationType.Human;
                 imp.importAnimation = true;
                 var clips = imp.defaultClipAnimations;
+                string n = Path.GetFileNameWithoutExtension(p).ToLower();
                 foreach (var c in clips)
                 {
-                    string n = Path.GetFileNameWithoutExtension(f).ToLower();
                     c.loopTime = !(n.Contains("jump") || n.Contains("mantle") || n.Contains("climb"));
                     c.lockRootHeightY = true; c.lockRootRotation = true; c.keepOriginalPositionXZ = false;
                 }
                 imp.clipAnimations = clips;
-                imp.SaveAndReimport();
+                if (changed || clips.Length > 0) imp.SaveAndReimport();
+            }
+
+            var idle = Find("idle", "stand");
+            var walk = Find("walk");
+            var run = Find("run", "jog");
+            var sprint = Find("sprint") ?? run;
+            var jump = Find("jump");
+            var cIdle = Find("crouch idle", "crouch_idle", "crouchidle") ?? idle;
+            var cWalk = Find("crouch walk", "crouch_walk", "crouchwalk", "sneak") ?? walk;
+            var mantle = Find("mantle", "climb", "vault") ?? jump;
+            Debug.Log("Ertugrul: kliplar — idle:" + N(idle) + " walk:" + N(walk) + " run:" + N(run) + " sprint:" + N(sprint) +
+                      " jump:" + N(jump) + " crouchIdle:" + N(cIdle) + " crouchWalk:" + N(cWalk) + " mantle:" + N(mantle));
+            if (idle == null || walk == null || run == null)
+            {
+                Debug.LogWarning("Ertugrul: idle/walk/run kliplari topilmadi — Animator qurilmadi. FBX'larni " + Dir + " ga qo'ying.");
+                return;
             }
 
             var ctrl = AnimatorController.CreateAnimatorControllerAtPath(Ctrl);
@@ -57,48 +71,65 @@ namespace Ertugrul.EditorTools
             ctrl.AddParameter("Mantle", AnimatorControllerParameterType.Trigger);
             var sm = ctrl.layers[0].stateMachine;
 
-            // Locomotion blend tree: Speed bo'yicha idle -> walk -> run -> sprint
             var loco = sm.AddState("Locomotion");
             var tree = new BlendTree { name = "Loco", blendType = BlendTreeType.Simple1D, blendParameter = "Speed", useAutomaticThresholds = false };
             AssetDatabase.AddObjectToAsset(tree, ctrl);
-            AddMotion(tree, "anim_idle", 0f); AddMotion(tree, "anim_walk", 1.35f);
-            AddMotion(tree, "anim_run", 3.3f); AddMotion(tree, "anim_sprint", 6.2f);
+            tree.AddChild(idle, 0f); tree.AddChild(walk, 1.35f); tree.AddChild(run, 3.3f); tree.AddChild(sprint, 6.2f);
             loco.motion = tree;
             sm.defaultState = loco;
 
-            var crouchState = sm.AddState("Crouch");
+            var crouch = sm.AddState("Crouch");
             var ctree = new BlendTree { name = "CrouchLoco", blendType = BlendTreeType.Simple1D, blendParameter = "Speed", useAutomaticThresholds = false };
             AssetDatabase.AddObjectToAsset(ctree, ctrl);
-            AddMotion(ctree, "anim_crouch_idle", 0f); AddMotion(ctree, "anim_crouch_walk", 1.1f);
-            crouchState.motion = ctree;
-            var toCrouch = loco.AddTransition(crouchState); toCrouch.AddCondition(AnimatorConditionMode.If, 0, "Crouch"); toCrouch.hasExitTime = false; toCrouch.duration = 0.15f;
-            var fromCrouch = crouchState.AddTransition(loco); fromCrouch.AddCondition(AnimatorConditionMode.IfNot, 0, "Crouch"); fromCrouch.hasExitTime = false; fromCrouch.duration = 0.15f;
+            ctree.AddChild(cIdle, 0f); ctree.AddChild(cWalk, 1.1f);
+            crouch.motion = ctree;
+            var toC = loco.AddTransition(crouch); toC.AddCondition(AnimatorConditionMode.If, 0, "Crouch"); toC.hasExitTime = false; toC.duration = 0.15f;
+            var fromC = crouch.AddTransition(loco); fromC.AddCondition(AnimatorConditionMode.IfNot, 0, "Crouch"); fromC.hasExitTime = false; fromC.duration = 0.15f;
 
-            var jump = sm.AddState("Jump"); jump.motion = FindClip("anim_jump");
-            var tj = sm.AddAnyStateTransition(jump); tj.AddCondition(AnimatorConditionMode.If, 0, "Jump"); tj.duration = 0.05f; tj.canTransitionToSelf = false;
-            var back = jump.AddTransition(loco); back.hasExitTime = true; back.exitTime = 0.85f; back.duration = 0.15f;
-
-            var mantle = sm.AddState("Mantle"); mantle.motion = FindClip("anim_mantle");
-            var tm = sm.AddAnyStateTransition(mantle); tm.AddCondition(AnimatorConditionMode.If, 0, "Mantle"); tm.duration = 0.05f; tm.canTransitionToSelf = false;
-            var back2 = mantle.AddTransition(loco); back2.hasExitTime = true; back2.exitTime = 0.9f; back2.duration = 0.1f;
-
+            if (jump != null)
+            {
+                var js = sm.AddState("Jump"); js.motion = jump;
+                var tj = sm.AddAnyStateTransition(js); tj.AddCondition(AnimatorConditionMode.If, 0, "Jump"); tj.duration = 0.05f; tj.canTransitionToSelf = false;
+                var back = js.AddTransition(loco); back.hasExitTime = true; back.exitTime = 0.85f; back.duration = 0.15f;
+            }
+            if (mantle != null)
+            {
+                var ms = sm.AddState("Mantle"); ms.motion = mantle;
+                var tm = sm.AddAnyStateTransition(ms); tm.AddCondition(AnimatorConditionMode.If, 0, "Mantle"); tm.duration = 0.05f; tm.canTransitionToSelf = false;
+                var back2 = ms.AddTransition(loco); back2.hasExitTime = true; back2.exitTime = 0.9f; back2.duration = 0.1f;
+            }
             AssetDatabase.SaveAssets();
             Debug.Log("Ertugrul: Animator yaratildi: " + Ctrl);
         }
 
-        static void AddMotion(BlendTree t, string name, float threshold)
-        {
-            var c = FindClip(name);
-            if (c != null) t.AddChild(c, threshold);
-            else Debug.LogWarning("Ertugrul: klip topilmadi: " + name + ".fbx");
-        }
+        static string N(AnimationClip c) => c != null ? c.name : "-";
 
-        static AnimationClip FindClip(string name)
+        // Kalit so'z bo'yicha klip: avval Characters (Mixamo), keyin Starter Assets
+        static AnimationClip Find(params string[] keys)
         {
-            string p = Dir + "/" + name + ".fbx";
-            foreach (var o in AssetDatabase.LoadAllAssetsAtPath(p))
-                if (o is AnimationClip c && !c.name.StartsWith("__preview")) return c;
+            foreach (var dir in SearchDirs)
+            {
+                if (!Directory.Exists(dir)) continue;
+                var files = new List<string>();
+                foreach (var f in Directory.GetFiles(dir, "*.fbx", SearchOption.AllDirectories)) files.Add(f.Replace('\\', '/'));
+                foreach (var f in Directory.GetFiles(dir, "*.anim", SearchOption.AllDirectories)) files.Add(f.Replace('\\', '/'));
+                files.Sort();
+                foreach (var f in files)
+                {
+                    string n = Path.GetFileNameWithoutExtension(f).ToLower().Replace("--", " ").Replace("_", " ").Replace(".anim", "");
+                    bool ok = false;
+                    foreach (var k in keys) if (n.Contains(k)) { ok = true; break; }
+                    if (!ok) continue;
+                    // "walk n land" / "run n land" — qo'nish kliplari emas
+                    if (n.Contains("land") && !HasKey(keys, "land")) continue;
+                    if (n.Contains("inair") || n.Contains("in air")) { if (!HasKey(keys, "inair")) continue; }
+                    if (n.Contains("crouch") && !HasKey(keys, "crouch")) continue;
+                    foreach (var o in AssetDatabase.LoadAllAssetsAtPath(f))
+                        if (o is AnimationClip c && !c.name.StartsWith("__preview")) return c;
+                }
+            }
             return null;
         }
+        static bool HasKey(string[] keys, string k) { foreach (var x in keys) if (x.Contains(k)) return true; return false; }
     }
 }

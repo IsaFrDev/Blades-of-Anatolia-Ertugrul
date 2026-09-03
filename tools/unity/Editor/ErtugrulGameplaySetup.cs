@@ -55,7 +55,14 @@ namespace Ertugrul.EditorTools
             cc.slopeLimit = 48f; cc.stepOffset = 0.45f;
             var pl = player.AddComponent<ErtugrulPlayer>();
 
+            // Rigli model: Characters/ertugrul.fbx yoki papkadagi SkinnedMeshRenderer'li birinchi FBX
             GameObject modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(MixamoModel);
+            if (modelPrefab == null && Directory.Exists("Assets/Ertugrul/Characters"))
+                foreach (var f in Directory.GetFiles("Assets/Ertugrul/Characters", "*.fbx"))
+                {
+                    var g = AssetDatabase.LoadAssetAtPath<GameObject>(f.Replace('\\', '/'));
+                    if (g != null && g.GetComponentInChildren<SkinnedMeshRenderer>() != null) { modelPrefab = g; break; }
+                }
             bool rigged = modelPrefab != null;
             if (!rigged) modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ModelsRoot + "ottoman/ottoman.obj");
             if (modelPrefab != null)
