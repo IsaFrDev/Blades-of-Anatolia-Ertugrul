@@ -65,6 +65,7 @@ namespace Ertugrul
             var cut = FindFirstObjectByType<ErtugrulCutscenePlayer>();
             var ui = ErtugrulUI.Instance;
             string id = null;
+            if (cut != null && levelId == "world") { cut.worldMode = true; if (string.IsNullOrEmpty(episodeId)) episodeId = "EP001"; }
             if (playIntro && cut != null)
                 id = string.IsNullOrEmpty(episodeId) ? ErtugrulCutscenePlayer.FindForLevel(levelId)
                                                      : episodeId.ToLower() + "_intro";

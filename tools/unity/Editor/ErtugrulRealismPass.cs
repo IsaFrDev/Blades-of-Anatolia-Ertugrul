@@ -56,7 +56,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ URP
-        static void PipelineSettings()
+        internal static void PipelineSettings()
         {
             var rp = GraphicsSettings.defaultRenderPipeline as UniversalRenderPipelineAsset;
             if (rp == null) return;
@@ -77,7 +77,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ teksturalar
-        static Texture2D NoiseTex(string name, int size, System.Func<float, float, float, Color> f, int seed, bool alpha = false)
+        internal static Texture2D NoiseTex(string name, int size, System.Func<float, float, float, Color> f, int seed, bool alpha = false)
         {
             string path = GenDir + "/" + name + ".png";
             var existing = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
@@ -103,7 +103,7 @@ namespace Ertugrul.EditorTools
             return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
 
-        static TerrainLayer Layer(string name, Texture2D tex, float tile, float smooth)
+        internal static TerrainLayer Layer(string name, Texture2D tex, float tile, float smooth)
         {
             string path = GenDir + "/" + name + ".terrainlayer";
             var tl = AssetDatabase.LoadAssetAtPath<TerrainLayer>(path);
@@ -146,7 +146,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ detal o't
-        static void DetailGrass(Terrain terrain)
+        internal static void DetailGrass(Terrain terrain)
         {
             var td = terrain.terrainData;
             // Barg kartasi: bir nechta ingichka barglar, alpha
@@ -197,7 +197,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ daraxtlar
-        static Mesh TrunkMesh(float h, float r0, float r1, int seg = 10)
+        internal static Mesh TrunkMesh(float h, float r0, float r1, int seg = 10)
         {
             var m = new Mesh { name = "trunk" };
             var v = new List<Vector3>(); var nrm = new List<Vector3>(); var uv = new List<Vector2>(); var tri = new List<int>();
@@ -222,7 +222,7 @@ namespace Ertugrul.EditorTools
             return m;
         }
 
-        static Mesh CanopyMesh(System.Random rnd, float baseY, float height, float radius, int cards)
+        internal static Mesh CanopyMesh(System.Random rnd, float baseY, float height, float radius, int cards)
         {
             var m = new Mesh { name = "canopy" };
             var v = new List<Vector3>(); var nrm = new List<Vector3>(); var uv = new List<Vector2>(); var tri = new List<int>();
@@ -248,7 +248,7 @@ namespace Ertugrul.EditorTools
             return m;
         }
 
-        static Material Mat(string name, Texture2D tex, Color col, float smooth, bool alphaClip, bool twoSided)
+        internal static Material Mat(string name, Texture2D tex, Color col, float smooth, bool alphaClip, bool twoSided)
         {
             string path = GenDir + "/" + name + ".mat";
             var m = AssetDatabase.LoadAssetAtPath<Material>(path);
@@ -261,7 +261,7 @@ namespace Ertugrul.EditorTools
             return m;
         }
 
-        static GameObject TreePrefab(int variant, bool pine)
+        internal static GameObject TreePrefab(int variant, bool pine)
         {
             string path = GenDir + "/tree_" + (pine ? "pine" : "oak") + variant + ".prefab";
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
@@ -359,7 +359,7 @@ namespace Ertugrul.EditorTools
         // ------------------------------------------------------------------ protsedural qoyalar
         // Kenney qoya meshlarining yuzalari teskari (Unity importida normal ichkariga qaraydi,
         // yon tomonlar qora chiqardi). Shuning uchun shar + shovqin bilan o'z qoyamiz.
-        static Mesh RockMesh(int variant)
+        internal static Mesh RockMesh(int variant)
         {
             var src = Resources.GetBuiltinResource<Mesh>("New-Sphere.fbx");
             var m = new Mesh { name = "rock" + variant };
@@ -382,7 +382,7 @@ namespace Ertugrul.EditorTools
             return m;
         }
 
-        static GameObject RockPrefab(int variant)
+        internal static GameObject RockPrefab(int variant)
         {
             string path = GenDir + "/rock_" + variant + ".prefab";
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
@@ -427,7 +427,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ osmon
-        static void SkyAndFog()
+        internal static void SkyAndFog()
         {
             string path = GenDir + "/m_sky.mat";
             var sky = AssetDatabase.LoadAssetAtPath<Material>(path);
@@ -458,7 +458,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ post-processing
-        static void PostProcessing()
+        internal static void PostProcessing()
         {
             var old = GameObject.Find("PostProcessVolume");
             if (old != null) Object.DestroyImmediate(old);
@@ -482,7 +482,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ ko'l
-        static void Lake(Terrain terrain)
+        internal static void Lake(Terrain terrain)
         {
             var old = GameObject.Find("Lake");
             if (old != null) Object.DestroyImmediate(old);

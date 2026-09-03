@@ -82,7 +82,19 @@ namespace Ertugrul
             StartCoroutine(Run(d, onDone));
         }
 
-        Vector3 W(float[] v) => new Vector3(v[0], v[1], flipZ ? -v[2] : v[2]);
+        // DUNYO xaritasi: cutscene koordinatalari o'z darajasi (oba_valley, sogut_village...)
+        // markazidan berilgan; world sahnasida o'sha mintaqa markaziga ko'chiriladi.
+        public bool worldMode;
+        Vector2 regionOffset;
+        static readonly Dictionary<string, Vector2> regionCenters = new Dictionary<string, Vector2>
+        {
+            { "oba_valley",    new Vector2(-560f,  560f) },
+            { "oba_camp",      new Vector2( 520f, -460f) },
+            { "sogut_village", new Vector2(-470f, -470f) },
+            { "forest_pass",   new Vector2( -40f,  420f) },
+            { "aleppo_road",   new Vector2(-200f, -150f) },
+        };
+        Vector3 W(float[] v) => new Vector3(v[0] + regionOffset.x, v[1], (flipZ ? -v[2] : v[2]) + regionOffset.y);
         float Yaw(float y) => flipZ ? 180f - y : y;
 
         GameObject Spawn(CutActor a)
@@ -140,6 +152,8 @@ namespace Ertugrul
         IEnumerator Run(CutsceneData d, Action onDone)
         {
             IsPlaying = true;
+            regionOffset = Vector2.zero;
+            if (worldMode && d.level != null && regionCenters.TryGetValue(d.level, out var rc)) regionOffset = rc;
             var ui = ErtugrulUI.Instance;
             var player = FindFirstObjectByType<ErtugrulPlayer>();
             var pcam = FindFirstObjectByType<ErtugrulCamera>();

@@ -46,7 +46,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ teksturalar
-        static Texture2D Tex(string name, int size, System.Func<float, float, Color> f)
+        internal static Texture2D Tex(string name, int size, System.Func<float, float, Color> f)
         {
             string path = GenDir + "/" + name + ".png";
             var existing = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
@@ -60,19 +60,19 @@ namespace Ertugrul.EditorTools
             if (imp != null) { imp.wrapMode = TextureWrapMode.Repeat; imp.SaveAndReimport(); }
             return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
-        static float Fbm(float x, float y, int oct = 4)
+        internal static float Fbm(float x, float y, int oct = 4)
         {
             float n = 0f, a = 0.5f, fr = 1f;
             for (int i = 0; i < oct; ++i) { n += a * Mathf.PerlinNoise(x * fr, y * fr); a *= 0.5f; fr *= 2f; }
             return n;
         }
-        static Texture2D FeltTex() => Tex("t_felt", 512, (u, v) =>
+        internal static Texture2D FeltTex() => Tex("t_felt", 512, (u, v) =>
         {
             float fiber = Mathf.PerlinNoise(u * 90f, v * 6f) * 0.5f + Fbm(u * 8f + 3f, v * 8f) * 0.5f;
             float g = 0.62f + fiber * 0.22f;
             return new Color(g, g * 0.92f, g * 0.78f);
         });
-        static Texture2D StoneTex() => Tex("t_stone", 512, (u, v) =>
+        internal static Texture2D StoneTex() => Tex("t_stone", 512, (u, v) =>
         {
             // g'isht-tosh qatorlari: har qator siljigan bloklar, choklar qorong'i
             float row = v * 8f; int r = Mathf.FloorToInt(row);
@@ -84,14 +84,14 @@ namespace Ertugrul.EditorTools
             float g = Mathf.Lerp(0.28f, 0.42f + n * 0.30f, mortar);
             return new Color(g, g * 0.95f, g * 0.86f);
         });
-        static Texture2D PlankTex() => Tex("t_plank", 512, (u, v) =>
+        internal static Texture2D PlankTex() => Tex("t_plank", 512, (u, v) =>
         {
             float grain = Mathf.PerlinNoise(u * 4f, v * 80f) * 0.5f + Fbm(u * 6f, v * 40f) * 0.5f;
             float plank = Mathf.Abs(Mathf.Sin(u * Mathf.PI * 6f)) < 0.06f ? 0.6f : 1f;
             float g = (0.36f + grain * 0.22f) * plank;
             return new Color(g * 1.15f, g * 0.85f, g * 0.55f);
         });
-        static Material Mat(string name, Texture2D tex, Color col, float smooth, Vector2 tiling)
+        internal static Material Mat(string name, Texture2D tex, Color col, float smooth, Vector2 tiling)
         {
             string path = GenDir + "/" + name + ".mat";
             var m = AssetDatabase.LoadAssetAtPath<Material>(path);
@@ -103,7 +103,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ primitivlar
-        static GameObject Prim(PrimitiveType t, Transform parent, Vector3 pos, Vector3 scale, Material m, Vector3? euler = null)
+        internal static GameObject Prim(PrimitiveType t, Transform parent, Vector3 pos, Vector3 scale, Material m, Vector3? euler = null)
         {
             var go = GameObject.CreatePrimitive(t);
             go.transform.SetParent(parent, false);
@@ -114,7 +114,7 @@ namespace Ertugrul.EditorTools
             return go;
         }
 
-        static Mesh ConeMesh(float r, float h, int seg, float rTop = 0f)
+        internal static Mesh ConeMesh(float r, float h, int seg, float rTop = 0f)
         {
             var m = new Mesh { name = "cone" };
             var v = new List<Vector3>(); var n = new List<Vector3>(); var uv = new List<Vector2>(); var tri = new List<int>();
@@ -132,7 +132,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ O'TOV
-        static GameObject YurtPrefab(int variant, bool open)
+        internal static GameObject YurtPrefab(int variant, bool open)
         {
             string path = GenDir + "/yurt_" + variant + (open ? "_open" : "") + ".prefab";
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
@@ -233,7 +233,7 @@ namespace Ertugrul.EditorTools
         }
 
         // ------------------------------------------------------------------ QAL'A
-        static float Ground(float x, float z)
+        internal static float Ground(float x, float z)
         {
             var t = Terrain.activeTerrain;
             return t != null ? t.SampleHeight(new Vector3(x, 0, z)) + t.transform.position.y : 0f;
@@ -335,7 +335,7 @@ namespace Ertugrul.EditorTools
             return true;
         }
 
-        static void Crenels(Transform root, Vector3 top, float r, Material m, int count)
+        internal static void Crenels(Transform root, Vector3 top, float r, Material m, int count)
         {
             for (int i = 0; i < count; ++i)
             {
@@ -346,7 +346,7 @@ namespace Ertugrul.EditorTools
             }
         }
 
-        static void SetTiling(GameObject g, float u, float v)
+        internal static void SetTiling(GameObject g, float u, float v)
         {
             var r = g.GetComponent<MeshRenderer>();
             var mpb = new MaterialPropertyBlock(); r.GetPropertyBlock(mpb);

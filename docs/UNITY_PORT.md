@@ -100,6 +100,24 @@ minoralari, donjon, bayroq — So'g'ut va Halab yo'lida), So'g'ut uylari tosh-po
 **protsedural qoyalar** (Kenney qoya meshlarida yuzalar teskari bo'lib qora chiqardi — 563 ta almashtirildi).
 Asset Store'dan to'plam olsangiz: prefab yo'lini `ReplaceYurts`/`ReplaceRocks` ga bering, qolgani avtomatik.
 
+## DUNYO xaritasi (foydalanuvchi eskizi bo'yicha) — `Assets/Ertugrul/Scenes/world.unity`
+
+`Editor/ErtugrulWorldBuilder.cs`, menyu **Ertugrul → Build WORLD map (2000 m)**. Bitta 2000×2000 m relyef
+(1025² balandlik, 1024² 6 qatlamli splat: o't, tuproq, qoya, qor, kul, dasht), 4 mintaqa:
+
+| Mintaqa | Markaz (x, z) | Nima |
+|---|---|---|
+| **Qayi obasi** (NW) | (-560, 560) | rejadagidek 250×250: Bey chodiri 12 m markazda (0,0), 44 o'tov 5 m uch halqada, asosiy yo'l 4 m N–S, temirchi 15×15 (g'arb), mashq maydoni 20×20 (sharq), janubiy darvoza (0,-125) ko'k bayroqlar bilan, palisad, 4 qorovul minorasi, ichkarida siyrak daraxt/tosh |
+| **Tosh qal'a** (NE) | (620, 660) | qorli tog' cho'qqisida (232 m), 4 devor + tishlar, 4 minora, darvoza minoralari, donjon, bayroq, yog'och ko'prik |
+| **Shahar** (SW) | (-470, -470) | sakkiz burchakli devor r=190, 8 minora, janubiy darvoza, 4 halqa uy (feruza tomlar), saroy + oltin gumbaz + 2 minora; dasht atrof |
+| **Mo'g'ul lageri** (SE) | (520, -460) | kul yer, ~90 qora chodir, gulxanlar (nuqta yorug'lik), xon chodiri, qizil bayroqlar, qoziqli to'siq |
+| Daryo (W), chorraha (10, 40), 5 yo'l | | yo'llar relyefni silliqlaydi va tuproq qatlami chizadi; o'rmon NW da zich (3200 daraxt), tog'da qoyalar |
+
+Spawn nuqtalari: `Spawn_player` (oba darvozasi), `Spawn_oba/city/camp/fortress/forest/crossroads`.
+Cutscene'lar world sahnasida o'z darajasi markaziga ko'chiriladi (`ErtugrulCutscenePlayer.worldMode`).
+Epizodlar o'sgan sari mintaqalar kengaytiriladi: konstantalar `ObaHalf/CityR/CampR/FortHalf` va markazlar
+faylning boshida — o'zgartirib qayta qurish 5 daqiqa.
+
 ## Steam sharhlaridan sabaqlar (Ertugrul of Ulukayin, 10 sharh o'rganildi)
 
 | Ularda shikoyat | Bizda qaror |
