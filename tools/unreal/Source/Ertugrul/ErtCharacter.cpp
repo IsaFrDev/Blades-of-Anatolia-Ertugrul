@@ -1,0 +1,421 @@
+#include "ErtCharacter.h"
+#include "Ertugrul.h"
+#include "ErtHeroBody.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/PlayerController.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputAction.h"
+#include "InputMappingContext.h"
+#include "InputModifiers.h"
+#include "InputTriggers.h"
+#include "Engine/Engine.h"
+#include "Engine/World.h"
+#include "CollisionShape.h"
+#include "UnrealClient.h"
+#include "Misc/CommandLine.h"
+#include "Misc/Parse.h"
+
+AErtCharacter::AErtCharacter()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	GetCapsuleComponent()->InitCapsuleSize(38.f, 92.f);
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	UCharacterMovementComponent* CM = GetCharacterMovement();
+	CM->bOrientRotationToMovement = true;
+	CM->RotationRate = FRotator(0.f, 540.f, 0.f);
+	CM->MaxWalkSpeed = JogSpeed;
+	CM->MaxWalkSpeedCrouched = CrouchSpeed;
+	CM->JumpZVelocity = 460.f;
+	CM->AirControl = 0.3f;
+	CM->GravityScale = 1.5f;
+	CM->BrakingDecelerationWalking = 1600.f;
+	CM->MaxAcceleration = 1400.f;
+	CM->GroundFriction = 7.f;
+	CM->SetWalkableFloorAngle(48.f);
+	CM->MaxStepHeight = 42.f;
+	CM->PerchRadiusThreshold = 20.f;
+	CM->bUseSeparateBrakingFriction = true;
+	CM->BrakingFriction = 5.f;
+	CM->GetNavAgentPropertiesRef().bCanCrouch = true;
+	CM->SetCrouchedHalfHeight(62.f);
+
+	if (USkeletalMeshComponent* SK = GetMesh()) SK->SetVisibility(false);
+
+	Boom = CreateDefaultSubobject<USpringArmComponent>(TEXT("Boom"));
+	Boom->SetupAttachment(RootComponent);
+	Boom->TargetArmLength = TargetArm;
+	Boom->SocketOffset = FVector(0, 45.f, 60.f);
+	Boom->bUsePawnControlRotation = true;
+	Boom->bEnableCameraLag = true;
+	Boom->CameraLagSpeed = 12.f;
+	Boom->bEnableCameraRotationLag = true;
+	Boom->CameraRotationLagSpeed = 18.f;
+	Boom->bDoCollisionTest = true;
+	Boom->ProbeSize = 14.f;
+
+	Cam = CreateDefaultSubobject<UCameraComponent>(TEXT("Cam"));
+	Cam->SetupAttachment(Boom, USpringArmComponent::SocketName);
+	Cam->bUsePawnControlRotation = false;
+	Cam->FieldOfView = 78.f;
+
+	Body = CreateDefaultSubobject<UErtHeroBody>(TEXT("Body"));
+}
+
+void AErtCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	Stamina = StaminaMax;
+	if (Body) Body->Build(GetCapsuleComponent(), GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight());
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		PC->SetControlRotation(FRotator(-12.f, GetActorRotation().Yaw, 0.f));
+	}
+	if (FParse::Value(FCommandLine::Get(), TEXT("-ErtShot="), ShotDir))
+	{
+		ShotDir = ShotDir.TrimQuotes();
+		ShotT = 0.f;
+		UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi: skrinshotlar -> %s"), *ShotDir);
+	}
+}
+
+void AErtCharacter::TakeShot(const TCHAR* Name)
+{
+	const FString File = FString::Printf(TEXT("%s/%02d_%s.png"), *ShotDir, ++ShotIdx, Name);
+	FScreenshotRequest::RequestScreenshot(File, true, false);
+	UE_LOG(LogErtugrul, Log, TEXT("Skrinshot %s (pos %s, tezlik %.0f)"), *File, *GetActorLocation().ToCompactString(), GetVelocity().Size2D());
+}
+
+void AErtCharacter::Teleport(float E, float N, float Z, float Pitch, float Yaw)
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+	GetCharacterMovement()->Velocity = FVector::ZeroVector;
+	SetActorLocation(FVector(N * 100.f, E * 100.f, Z * 100.f), false, nullptr, ETeleportType::TeleportPhysics);
+	if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(Pitch, Yaw, 0.f));
+	Boom->bDoCollisionTest = false;
+	Boom->bEnableCameraLag = false;
+	TargetArm = 250.f;
+	SetActorHiddenInGame(true); // havo suratlarida personaj ko'rinishni to'smasin
+}
+
+void AErtCharacter::UpdateShotScript(float Dt)
+{
+	const float T0 = ShotT;
+	ShotT += Dt;
+	auto At = [&](float T) { return T0 < T && ShotT >= T; };
+	DebugMove = FVector2D::ZeroVector;
+	if (ShotT > 1.5f && ShotT < 4.5f) DebugMove = FVector2D(0, 1);
+	if (ShotT > 4.5f && ShotT < 7.5f) { DebugMove = FVector2D(0, 1); bWantSprint = true; }
+	if (At(7.5f)) { bWantSprint = false; }
+	if (ShotT > 7.5f && ShotT < 9.0f) DebugMove = FVector2D(0, 1);
+	if (At(7.6f)) Jump();
+	if (At(9.2f)) Crouch();
+	if (ShotT > 9.4f && ShotT < 10.4f) DebugMove = FVector2D(1, 0);
+	if (At(10.6f)) UnCrouch();
+	if (At(1.4f)) TakeShot(TEXT("idle"));
+	if (At(4.0f)) TakeShot(TEXT("jog"));
+	if (At(7.0f)) TakeShot(TEXT("sprint"));
+	if (At(7.95f)) TakeShot(TEXT("jump"));
+	if (At(10.2f)) TakeShot(TEXT("crouch"));
+	if (At(11.0f)) Teleport(-560.f, 470.f, 20.f + 45.f, -38.f, 0.f);
+	if (At(12.6f)) TakeShot(TEXT("oba"));
+	if (At(13.0f)) Teleport(-560.f, 380.f, 20.f + 140.f, -55.f, 0.f);
+	if (At(14.6f)) TakeShot(TEXT("oba_air"));
+	if (At(15.0f)) Teleport(620.f, 540.f, 232.f + 40.f, -22.f, 0.f);
+	if (At(16.6f)) TakeShot(TEXT("fort"));
+	if (At(17.0f)) Teleport(-470.f, -720.f, 12.f + 70.f, -28.f, 0.f);
+	if (At(18.6f)) TakeShot(TEXT("city"));
+	if (At(19.0f)) Teleport(520.f, -700.f, 10.f + 60.f, -28.f, 0.f);
+	if (At(20.6f)) TakeShot(TEXT("camp"));
+	if (At(21.0f)) Teleport(-150.f, -1100.f, 700.f, -32.f, 0.f);
+	if (At(22.6f)) TakeShot(TEXT("world"));
+	if (At(23.0f)) Teleport(-820.f, 300.f, 6.f + 25.f, -25.f, 0.f);
+	if (At(24.6f)) TakeShot(TEXT("river"));
+	if (At(26.0f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (!DebugMove.IsNearlyZero())
+	{
+		MoveInput = DebugMove;
+		const FRotator YawRot(0.f, GetControlRotation().Yaw, 0.f);
+		AddMovementInput(FRotationMatrix(YawRot).GetUnitAxis(EAxis::X), DebugMove.Y);
+		AddMovementInput(FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y), DebugMove.X);
+	}
+}
+
+// ---------------- Kirish (Enhanced Input, resurssiz) ----------------
+
+void AErtCharacter::BuildInput()
+{
+	if (IMC) return;
+	auto MakeAction = [this](const TCHAR* Name, EInputActionValueType Type)
+	{
+		UInputAction* A = NewObject<UInputAction>(this, Name);
+		A->ValueType = Type;
+		return A;
+	};
+	IA_Move = MakeAction(TEXT("IA_ErtMove"), EInputActionValueType::Axis2D);
+	IA_Look = MakeAction(TEXT("IA_ErtLook"), EInputActionValueType::Axis2D);
+	IA_Jump = MakeAction(TEXT("IA_ErtJump"), EInputActionValueType::Boolean);
+	IA_Sprint = MakeAction(TEXT("IA_ErtSprint"), EInputActionValueType::Boolean);
+	IA_Crouch = MakeAction(TEXT("IA_ErtCrouch"), EInputActionValueType::Boolean);
+	IA_Walk = MakeAction(TEXT("IA_ErtWalk"), EInputActionValueType::Boolean);
+	IA_Zoom = MakeAction(TEXT("IA_ErtZoom"), EInputActionValueType::Axis1D);
+
+	IMC = NewObject<UInputMappingContext>(this, TEXT("IMC_Ertugrul"));
+	auto Map = [this](UInputAction* A, const FKey& K) -> FEnhancedActionKeyMapping& { return IMC->MapKey(A, K); };
+	auto Swizzle = [this]() { return NewObject<UInputModifierSwizzleAxis>(this); };
+	auto Negate = [this]() { return NewObject<UInputModifierNegate>(this); };
+
+	// Harakat: X = o'ngga, Y = oldinga
+	{ FEnhancedActionKeyMapping& M = Map(IA_Move, EKeys::W); M.Modifiers.Add(Swizzle()); }
+	{ FEnhancedActionKeyMapping& M = Map(IA_Move, EKeys::S); M.Modifiers.Add(Swizzle()); M.Modifiers.Add(Negate()); }
+	Map(IA_Move, EKeys::D);
+	{ FEnhancedActionKeyMapping& M = Map(IA_Move, EKeys::A); M.Modifiers.Add(Negate()); }
+	{
+		FEnhancedActionKeyMapping& M = Map(IA_Move, EKeys::Gamepad_Left2D);
+		UInputModifierDeadZone* DZ = NewObject<UInputModifierDeadZone>(this); DZ->LowerThreshold = 0.2f; M.Modifiers.Add(DZ);
+	}
+	// Qarash
+	{
+		FEnhancedActionKeyMapping& M = Map(IA_Look, EKeys::Mouse2D);
+		UInputModifierNegate* N = Negate(); N->bX = false; N->bY = true; N->bZ = false; M.Modifiers.Add(N);
+	}
+	{
+		FEnhancedActionKeyMapping& M = Map(IA_Look, EKeys::Gamepad_Right2D);
+		UInputModifierDeadZone* DZ = NewObject<UInputModifierDeadZone>(this); DZ->LowerThreshold = 0.25f; M.Modifiers.Add(DZ);
+		UInputModifierScalar* Sc = NewObject<UInputModifierScalar>(this); Sc->Scalar = FVector(2.4f, 1.6f, 1.f); M.Modifiers.Add(Sc);
+	}
+	Map(IA_Jump, EKeys::SpaceBar);
+	Map(IA_Jump, EKeys::Gamepad_FaceButton_Bottom);
+	Map(IA_Sprint, EKeys::LeftShift);
+	Map(IA_Sprint, EKeys::Gamepad_LeftThumbstick);
+	Map(IA_Crouch, EKeys::LeftControl);
+	Map(IA_Crouch, EKeys::C);
+	Map(IA_Crouch, EKeys::Gamepad_FaceButton_Right);
+	Map(IA_Walk, EKeys::LeftAlt);
+	Map(IA_Walk, EKeys::CapsLock);
+	Map(IA_Zoom, EKeys::MouseWheelAxis);
+}
+
+void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
+{
+	Super::SetupPlayerInputComponent(PIC);
+	BuildInput();
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		if (UEnhancedInputLocalPlayerSubsystem* Sub = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+		{
+			Sub->ClearAllMappings();
+			Sub->AddMappingContext(IMC, 0);
+		}
+	UEnhancedInputComponent* EIC = Cast<UEnhancedInputComponent>(PIC);
+	if (!EIC) { UE_LOG(LogErtugrul, Error, TEXT("EnhancedInputComponent topilmadi - DefaultInput.ini tekshiring")); return; }
+	EIC->BindAction(IA_Move, ETriggerEvent::Triggered, this, &AErtCharacter::OnMove);
+	EIC->BindAction(IA_Look, ETriggerEvent::Triggered, this, &AErtCharacter::OnLook);
+	EIC->BindAction(IA_Jump, ETriggerEvent::Started, this, &AErtCharacter::OnJumpPressed);
+	EIC->BindAction(IA_Jump, ETriggerEvent::Completed, this, &AErtCharacter::OnJumpReleased);
+	EIC->BindAction(IA_Sprint, ETriggerEvent::Started, this, &AErtCharacter::OnSprintOn);
+	EIC->BindAction(IA_Sprint, ETriggerEvent::Completed, this, &AErtCharacter::OnSprintOff);
+	EIC->BindAction(IA_Crouch, ETriggerEvent::Started, this, &AErtCharacter::OnCrouchToggle);
+	EIC->BindAction(IA_Walk, ETriggerEvent::Started, this, &AErtCharacter::OnWalkToggle);
+	EIC->BindAction(IA_Zoom, ETriggerEvent::Triggered, this, &AErtCharacter::OnZoom);
+}
+
+void AErtCharacter::OnMove(const FInputActionValue& V)
+{
+	if (!bInputEnabled || bMantling) return;
+	const FVector2D In = V.Get<FVector2D>();
+	MoveInput = In;
+	const FRotator YawRot(0.f, GetControlRotation().Yaw, 0.f);
+	const FVector Fwd = FRotationMatrix(YawRot).GetUnitAxis(EAxis::X);
+	const FVector Right = FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y);
+	AddMovementInput(Fwd, In.Y);
+	AddMovementInput(Right, In.X);
+}
+
+void AErtCharacter::OnLook(const FInputActionValue& V)
+{
+	if (!bInputEnabled) return;
+	const FVector2D L = V.Get<FVector2D>();
+	AddControllerYawInput(L.X);
+	AddControllerPitchInput(L.Y);
+}
+
+void AErtCharacter::OnJumpPressed()
+{
+	if (!bInputEnabled || bMantling) return;
+	if (bIsCrouched) { UnCrouch(); return; }
+	if (TryMantle()) return;
+	Jump();
+}
+
+void AErtCharacter::OnJumpReleased() { StopJumping(); }
+void AErtCharacter::OnSprintOn() { bWantSprint = true; }
+void AErtCharacter::OnSprintOff() { bWantSprint = false; }
+
+void AErtCharacter::OnCrouchToggle()
+{
+	if (!bInputEnabled || bMantling) return;
+	if (bIsCrouched) UnCrouch(); else Crouch();
+}
+
+void AErtCharacter::OnWalkToggle() { bWalkToggle = !bWalkToggle; }
+
+void AErtCharacter::OnZoom(const FInputActionValue& V)
+{
+	TargetArm = FMath::Clamp(TargetArm - V.Get<float>() * 40.f, CamMin, CamMax);
+}
+
+// ---------------- Mexanika ----------------
+
+void AErtCharacter::UpdateGait(float Dt)
+{
+	UCharacterMovementComponent* CM = GetCharacterMovement();
+	const bool bMoving = MoveInput.SizeSquared() > 0.01f && CM->Velocity.SizeSquared2D() > 100.f;
+	const bool bCanSprint = bWantSprint && Stamina > 1.f && !bIsCrouched && !CM->IsFalling() && MoveInput.Y > -0.2f;
+	if (bCanSprint && bMoving) Gait = EErtGait::Sprint;
+	else if (bWalkToggle) Gait = EErtGait::Walk;
+	else Gait = EErtGait::Jog;
+
+	float Speed = Gait == EErtGait::Sprint ? SprintSpeed : (Gait == EErtGait::Walk ? WalkSpeed : JogSpeed);
+	// Nishab: tepaga sekin, pastga bir oz tez
+	const FVector Vel2D = CM->Velocity.GetSafeNormal2D();
+	const float Uphill = -FVector::DotProduct(Vel2D, FVector(FloorNormal.X, FloorNormal.Y, 0.f).GetSafeNormal()) * FMath::Sin(FMath::DegreesToRadians(SlopeDeg));
+	Speed *= FMath::Clamp(1.f - Uphill * 0.9f, 0.55f, 1.15f);
+	CM->MaxWalkSpeed = FMath::FInterpTo(CM->MaxWalkSpeed, Speed, Dt, 8.f);
+
+	if (Gait == EErtGait::Sprint && bMoving) Stamina = FMath::Max(0.f, Stamina - StaminaDrain * Dt);
+	else Stamina = FMath::Min(StaminaMax, Stamina + StaminaRegen * Dt * (bMoving ? 0.5f : 1.f));
+	if (Stamina <= 0.f) bWantSprint = false;
+}
+
+void AErtCharacter::UpdateSlope(float Dt)
+{
+	UCharacterMovementComponent* CM = GetCharacterMovement();
+	if (CM->IsMovingOnGround() && CM->CurrentFloor.bBlockingHit)
+	{
+		FloorNormal = CM->CurrentFloor.HitResult.ImpactNormal;
+		SlopeDeg = FMath::RadiansToDegrees(FMath::Acos(FMath::Clamp(FloorNormal.Z, -1.f, 1.f)));
+		if (SlopeDeg > SlideAngle)
+		{
+			// Tik qiyalik: pastga sirpanish kuchi (gradient bo'ylab)
+			const FVector Down = FVector::VectorPlaneProject(FVector::DownVector, FloorNormal).GetSafeNormal();
+			const float K = (SlopeDeg - SlideAngle) / FMath::Max(1.f, CM->GetWalkableFloorAngle() - SlideAngle);
+			CM->AddForce(Down * 60000.f * K);
+		}
+	}
+	else
+	{
+		SlopeDeg = FMath::FInterpTo(SlopeDeg, 0.f, Dt, 5.f);
+		FloorNormal = FVector::UpVector;
+	}
+}
+
+bool AErtCharacter::TryMantle()
+{
+	UWorld* W = GetWorld();
+	if (!W) return false;
+	const UCapsuleComponent* Cap = GetCapsuleComponent();
+	const float R = Cap->GetScaledCapsuleRadius();
+	const float HH = Cap->GetScaledCapsuleHalfHeight();
+	const FVector Loc = GetActorLocation();
+	const FVector Feet = Loc - FVector(0, 0, HH);
+	FVector Fwd = GetActorForwardVector();
+	if (MoveInput.SizeSquared() > 0.04f)
+	{
+		const FRotator YawRot(0.f, GetControlRotation().Yaw, 0.f);
+		Fwd = (FRotationMatrix(YawRot).GetUnitAxis(EAxis::X) * MoveInput.Y + FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y) * MoveInput.X).GetSafeNormal();
+	}
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtMantle), false, this);
+
+	// 1) Oldinda devor bormi? (ko'krak balandligi)
+	FHitResult Wall;
+	const FVector A = Feet + FVector(0, 0, MantleMinHeight);
+	if (!W->LineTraceSingleByChannel(Wall, A, A + Fwd * (R + 70.f), ECC_Visibility, Q)) return false;
+	if (Wall.ImpactNormal.Z > 0.6f) return false;
+
+	// 2) Devor ortidan pastga: chekka nuqtasi
+	FHitResult Ledge;
+	const FVector Top = Wall.ImpactPoint + Fwd * (R * 0.9f) + FVector(0, 0, MantleMaxHeight + 10.f - MantleMinHeight);
+	if (!W->LineTraceSingleByChannel(Ledge, Top, Top - FVector(0, 0, MantleMaxHeight + 20.f), ECC_Visibility, Q)) return false;
+	const float H = Ledge.ImpactPoint.Z - Feet.Z;
+	if (H < MantleMinHeight || H > MantleMaxHeight || Ledge.ImpactNormal.Z < 0.7f) return false;
+
+	// 3) Tepada kapsula sig'adimi?
+	const FVector Target = Ledge.ImpactPoint + Fwd * 8.f + FVector(0, 0, HH + 4.f);
+	if (W->OverlapBlockingTestByChannel(Target, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeCapsule(R * 0.95f, HH * 0.95f), Q)) return false;
+
+	bMantling = true;
+	MantleT = 0.f;
+	MantleStart = Loc;
+	MantleEnd = Target;
+	GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+	GetCharacterMovement()->Velocity = FVector::ZeroVector;
+	SetActorRotation(FRotator(0.f, Fwd.Rotation().Yaw, 0.f));
+	return true;
+}
+
+void AErtCharacter::UpdateMantle(float Dt)
+{
+	MantleT += Dt / FMath::Max(0.05f, MantleDuration);
+	const float T = FMath::Clamp(MantleT, 0.f, 1.f);
+	// Avval ko'tariladi, keyin oldinga o'tadi
+	const float Up = FMath::Sin(FMath::Min(T * 1.35f, 1.f) * HALF_PI);
+	const float Fw = FMath::Clamp((T - 0.35f) / 0.65f, 0.f, 1.f);
+	const float FwS = Fw * Fw * (3.f - 2.f * Fw);
+	FVector P;
+	P.Z = FMath::Lerp(MantleStart.Z, MantleEnd.Z, Up);
+	P.X = FMath::Lerp(MantleStart.X, MantleEnd.X, FwS);
+	P.Y = FMath::Lerp(MantleStart.Y, MantleEnd.Y, FwS);
+	SetActorLocation(P, false, nullptr, ETeleportType::TeleportPhysics);
+	if (MantleT >= 1.f)
+	{
+		bMantling = false;
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	}
+}
+
+void AErtCharacter::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+	const float Fall = -GetVelocity().Z;
+	LandSquash = FMath::Clamp(Fall / 900.f, 0.f, 1.f);
+}
+
+void AErtCharacter::Tick(float Dt)
+{
+	Super::Tick(Dt);
+	if (ShotT >= 0.f) UpdateShotScript(Dt);
+	if (bMantling) UpdateMantle(Dt);
+	else { UpdateSlope(Dt); UpdateGait(Dt); }
+
+	Boom->TargetArmLength = FMath::FInterpTo(Boom->TargetArmLength, TargetArm, Dt, 10.f);
+	LandSquash = FMath::FInterpTo(LandSquash, 0.f, Dt, 6.f);
+
+	if (Body)
+	{
+		const UCharacterMovementComponent* CM = GetCharacterMovement();
+		const FVector V = CM->Velocity;
+		const float Lean = FVector::DotProduct(GetActorRightVector(), V.GetSafeNormal2D()) * FMath::Min(V.Size2D() / SprintSpeed, 1.f);
+		Body->Animate(Dt, V.Size2D(), CM->IsFalling() || bMantling, bIsCrouched || LandSquash > 0.35f, Lean, SlopeDeg);
+	}
+	MoveInput = FVector2D::ZeroVector;
+	if (bShowDebug) DrawDebug();
+}
+
+void AErtCharacter::DrawDebug()
+{
+	if (!GEngine) return;
+	const UCharacterMovementComponent* CM = GetCharacterMovement();
+	const TCHAR* G = Gait == EErtGait::Sprint ? TEXT("CHOPISH") : (Gait == EErtGait::Walk ? TEXT("YURISH") : TEXT("YUGURISH"));
+	const FString S = FString::Printf(TEXT("%s  tezlik %.0f sm/s  stamina %.0f  nishab %.0f%s  %s%s"),
+		G, CM->Velocity.Size2D(), Stamina, SlopeDeg, TEXT("°"),
+		bIsCrouched ? TEXT("[cho'kkan] ") : TEXT(""), bMantling ? TEXT("[mantle] ") : (CM->IsFalling() ? TEXT("[havoda] ") : TEXT("")));
+	GEngine->AddOnScreenDebugMessage(1, 0.f, FColor::Yellow, S);
+	GEngine->AddOnScreenDebugMessage(2, 0.f, FColor::Silver, TEXT("WASD yurish | Shift chopish | Space sakrash/mantle | Ctrl/C cho'kish | Alt yurish rejimi | g'ildirak zoom"));
+}
