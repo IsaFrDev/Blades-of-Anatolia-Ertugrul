@@ -31,6 +31,32 @@ Qayta import: `Assets/Ertugrul/Levels/AUTOIMPORT` bo'sh faylini yarating va Unit
 oynasiga bosing (yoki menyu **Ertugrul → Import ALL levels → scenes**).
 Unity CLI (`unity command eval/screenshot`) `com.unity.pipeline` paketi orqali ulanadi.
 
+## Gameplay (2026-09-03, kechqurun)
+
+Har sahnada (**Ertugrul → Setup Gameplay**): `Player` (CharacterController + `ErtugrulPlayer`),
+Cinemachine 3 orbital kamera (`ErtugrulCamera`, sichqoncha), `CutscenePlayer` (183 modelli cast
+kutubxonasi), `ErtugrulUI` (subtitr, gapiruvchi, letterbox, so'nish, maqsad), `Episode` oqimi.
+
+| Skript | Nima |
+|---|---|
+| `Runtime/ErtugrulPlayer.cs` | yurish 1.35 / yugurish 3.3 / sprint 6.2 m/s, sakrash, cho'kkalash, qiyalikda sirpanish, past to'siqqa chiqish (mantle), kamera-nisbiy harakat, Animator bo'lsa Speed/Grounded/Crouch/Jump/Mantle, bo'lmasa protsedural tebranish |
+| `Runtime/ErtugrulCamera.cs` | CinemachineOrbitalFollow o'qlarini sichqoncha bilan boshqaradi (Input Actions asset kerak emas), Decollider |
+| `Runtime/ErtugrulCutscenePlayer.cs` | C++ `data/cutscenes/*.json` ni o'qiydi: aktyorlar (kalitlar orasida interpolyatsiya, tint, bola nisbati), kamera (ustuvorlik 50), replikalar → subtitr + `Audio/vo/<til>/*.wav`, Esc 0.5 s = o'tkazib yuborish |
+| `Runtime/ErtugrulEpisode.cs` | sahna ochilganda daraja uchun intro cutscene, keyin boshqaruv |
+| `Runtime/ErtugrulLoc.cs` | CSV lokalizatsiya (937 kalit), `ErtugrulLoc.Lang = "uz"/"tr"/"en"` |
+| `Editor/ErtugrulMixamoAnimator.cs` | Mixamo FBX'lardan Animator (blend tree) quradi — pastga qarang |
+
+Sinov (Play rejimi, CLI orqali): EP001 intro cutscene to'liq o'ynadi (kamera, 3 aktyor, letterbox),
+keyin `DebugWalk` bilan yurish/sprint, sakrash, kamera orbitasi — skrinshotlar bilan tasdiqlandi.
+
+### Mixamo rig (qo'lda, Adobe hisobi kerak)
+1. mixamo.com → Upload character → `assets/models/ottoman/ottoman.obj` (yoki FBX ga o'girib) → autorig.
+2. Yuklab oling (FBX for Unity): `ertugrul.fbx` (Idle, **With Skin**), keyin **Without Skin**:
+   `anim_idle`, `anim_walk`, `anim_run`, `anim_sprint`, `anim_jump`, `anim_crouch_idle`,
+   `anim_crouch_walk`, `anim_mantle` → `Assets/Ertugrul/Characters/`.
+3. Menyu **Ertugrul → Build Animator from Mixamo**, keyin **Setup Gameplay (ALL scenes)** —
+   o'yinchi avtomatik rigli modelga o'tadi. Rig kelguncha OBJ placeholder ishlaydi.
+
 ## Birinchi qadam (siz)
 
 1. Unity Hub'dan `D:\My project` ni oching — modellar importi ~5–10 daqiqa (195 MB, 4096² teksturalar).
