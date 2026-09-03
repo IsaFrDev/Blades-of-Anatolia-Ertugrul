@@ -201,6 +201,19 @@ const EnemyStats* statsTable() {
         s.model = "assets/models/crusader/crusader.obj";
         s.tint[0] = 0.48f; s.tint[1] = 0.52f; s.tint[2] = 0.60f;
     }
+    // Deer — kiyik. Ov bosqichi nishoni: hujum qilmaydi, ko'rsa/eshitsa qochadi.
+    // Faqat kamon bilan yetib bo'ladi (qochish tezligi yugurishdan yuqori).
+    {
+        EnemyStats& s = t[(int)EnemyKind::Deer];
+        s.health = 34.0f;  s.breath = 200.0f; s.posture = 40.0f;
+        s.moveSpeed = 1.4f; s.chaseSpeed = 7.4f;
+        s.sightRange = 30.0f; s.sightAngle = 120.0f; s.hearRange = 26.0f;
+        s.attackRange = 0.0f; s.aggression = 0.0f; s.blockChance = 0.0f;
+        s.scale = 1.55f;
+        s.model = "assets/models/nature/deer.obj";
+        s.tint[0] = 1.0f; s.tint[1] = 0.95f; s.tint[2] = 0.85f;
+        s.flees = true;
+    }
     return t;
 }
 
@@ -291,6 +304,7 @@ const char* enemyKindName(EnemyKind k) {
         case EnemyKind::Assassin:    return "Assassin";
         case EnemyKind::HorseArcher: return "Horse Archer";
         case EnemyKind::Elite:       return "Elite Guard";
+        case EnemyKind::Deer:        return "Deer";
         default:                     return "Unknown";
     }
 }
@@ -303,6 +317,7 @@ const char* enemyKindLocKey(EnemyKind k) {
         case EnemyKind::Assassin:    return "ui.enemy.assassin";
         case EnemyKind::HorseArcher: return "ui.enemy.horse_archer";
         case EnemyKind::Elite:       return "ui.enemy.elite";
+        case EnemyKind::Deer:        return "ui.enemy.deer";
         default:                     return "ui.enemy.footman";
     }
 }
@@ -317,6 +332,7 @@ EnemyKind enemyKindFromName(const std::string& s) {
         if (c == ' ' || c == '_' || c == '-') continue;
         k.push_back((char)((c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c));
     }
+    if (k == "deer" || k == "kiyik" || k == "geyik")            return EnemyKind::Deer;
     if (k == "footman"  || k == "soldier" || k == "piyoda")   return EnemyKind::Footman;
     if (k == "sergeant" || k == "shield"  || k == "serjant")  return EnemyKind::Sergeant;
     if (k == "crossbow" || k == "crossbowman" || k == "archer" || k == "arbalet")
@@ -733,6 +749,14 @@ void Enemy::update(const Character& player, float dt) {
         strikePending_ = false;
     }
 
+    // Hayvon: shubha/qidiruv/aylanish yo'q — sezdi = qochdi
+    if (st_.flees && alert_ > 0.25f &&
+        (state_ == EnemyState::Suspicious || state_ == EnemyState::Search ||
+         state_ == EnemyState::Alert || state_ == EnemyState::Circle ||
+         state_ == EnemyState::Windup || state_ == EnemyState::Idle || state_ == EnemyState::Patrol)) {
+        state_ = EnemyState::Approach; stateT_ = 0.0f;
+    }
+
     // Poza buzilgan bo'lsa hamma narsa to'xtaydi
     if (vitals.staggered && state_ != EnemyState::Stagger) {
         state_  = EnemyState::Stagger;
@@ -835,6 +859,21 @@ void Enemy::update(const Character& player, float dt) {
     case EnemyState::Approach: {
         float y = 0.0f;
         if (aimYaw(pos_, see ? pp : target_, y)) targetYaw_ = y;
+
+        // HAYVON: yaqinlashish o'rniga o'yinchidan QOCHADI. Ko'rmay qolsa va
+        // ogohlik so'nsa yana o'tlashga (Patrol) qaytadi.
+        if (st_.flees) {
+            Vec3 away{pos_.x - pp.x, 0.0f, pos_.z - pp.z};
+            if (lengthSq(away) < 1.0e-4f) away = Vec3{1.0f, 0.0f, 0.0f};
+            away = normalize(away);
+            const Vec3 dest = pos_ + away * 12.0f;
+            float fy = 0.0f;
+            if (aimYaw(pos_, dest, fy)) targetYaw_ = fy;
+            moved = stepToward(pos_, dest, st_.chaseSpeed, dt, world_, bodyH);
+            if (!see) alert_ -= dt * 0.5f;
+            if (!see && alert_ < 0.15f) { state_ = EnemyState::Patrol; stateT_ = 0.0f; }
+            break;
+        }
 
         if (atkEdge && dist < st_.attackRange * 1.6f && rnd01() < st_.blockChance) {
             state_ = EnemyState::Block; stateT_ = 0.0f; speed_ = 0.0f;
@@ -1326,7 +1365,7 @@ int EnemyManager::aliveCount() const {
 int EnemyManager::awareCount() const {
     int c = 0;
     for (size_t i = 0; i < enemies_.size(); ++i)
-        if (enemies_[i].alive() && enemies_[i].aware()) ++c;
+        if (enemies_[i].alive() && enemies_[i].aware() && !enemyStats(enemies_[i].kind()).flees) ++c;
     return c;
 }
 

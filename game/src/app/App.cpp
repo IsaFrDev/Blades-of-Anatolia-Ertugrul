@@ -458,11 +458,19 @@ void drawCombatHud(Impl& im) {
             fh.draw(o.text(), ox, oy, c[0], c[1], c[2], a, TextAlign::Right);
             oy += fh.lineHeight() + 5.0f;
         }
-        // to'lqin ko'rsatkichi
-        char wv[64];
-        std::snprintf(wv, sizeof wv, "%s %d/%d", T("ui.hud.wave").c_str(),
-                      enc.waveIndex() + 1, enc.waveCount());
-        fm.draw(wv, ox, oy + 6.0f, SONIK[0], SONIK[1], SONIK[2], 0.7f, TextAlign::Right);
+        // bosqich va to'lqin ko'rsatkichi
+        char wv[96];
+        if (enc.phaseCount() > 0) {
+            std::snprintf(wv, sizeof wv, "%s %d/%d  ·  %s", T("ui.hud.phase").c_str(),
+                          enc.phaseIndex() + 1, enc.phaseCount(), enc.phaseTitle().c_str());
+            fm.draw(wv, ox, oy + 6.0f, FERUZA[0], FERUZA[1], FERUZA[2], 0.75f, TextAlign::Right);
+            oy += fm.lineHeight() + 4.0f;
+        }
+        if (enc.waveCount() > 0) {
+            std::snprintf(wv, sizeof wv, "%s %d/%d", T("ui.hud.wave").c_str(),
+                          enc.waveIndex() + 1, enc.waveCount());
+            fm.draw(wv, ox, oy + 6.0f, SONIK[0], SONIK[1], SONIK[2], 0.7f, TextAlign::Right);
+        }
     }
 
     // --- Nazorat nuqtasi xabari ---
@@ -470,7 +478,15 @@ void drawCombatHud(Impl& im) {
     if (cf > 0.01f) {
         const float cx = im.w * 0.5f;
         drawRect(cx - 6.0f, (float)im.h * 0.30f, 7.0f, 7.0f, FERUZA[0], FERUZA[1], FERUZA[2], cf);
-        fm.draw(T("ui.hud.checkpoint"), cx + 14.0f, (float)im.h * 0.30f - 4.0f,
+        // Yangi bosqich boshlanganda uning nomi, oddiy nazorat nuqtasida — standart matn
+        std::string cpTxt = T("ui.hud.checkpoint");
+        if (!enc.phaseTitle().empty() && enc.stateTime() < 2.5f) {
+            char pb[96];
+            std::snprintf(pb, sizeof pb, "%s %d/%d: %s", T("ui.hud.phase").c_str(),
+                          enc.phaseIndex() + 1, enc.phaseCount(), enc.phaseTitle().c_str());
+            cpTxt = pb;
+        }
+        fm.draw(cpTxt, cx + 14.0f, (float)im.h * 0.30f - 4.0f,
                 FERUZA[0], FERUZA[1], FERUZA[2], cf);
     }
 

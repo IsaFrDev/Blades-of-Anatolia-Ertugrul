@@ -30,6 +30,11 @@ enum class ObjectiveKind {
     SurviveTime,       // N sekund omon qolish
     StayUndetected,    // sezilmaslik (buzilsa "failed", lekin epizod davom etadi)
     Assassinate,       // nishonni yashirincha o'ldirish
+    Route,             // yo'l: nuqtalar zanjiri (yugurish/sakrash/chiqish) — points[]
+    Hunt,              // ov: N ta kiyikni kamon bilan urish
+    Collect,           // qidiruv: N ta dalil/buyumni topish — points[]
+    HoldPoint,         // himoya: nuqta atrofida N sekund turish
+    Timer,             // vaqt chegarasi (ixtiyoriy bonus)
     Count
 };
 
@@ -43,6 +48,9 @@ struct Objective {
     bool          optional = false;
     Vec3          point{0, 0, 0};
     float         radius = 4.0f;
+    std::vector<Vec3> points;             // Route / Collect nuqtalari
+    bool          needY = false;          // Route: nuqta USTIDA turish shart (tom, qoya)
+    float         hold  = 0.0f;           // HoldPoint: to'plangan sekundlar
     // Ekranda ko'rsatiladigan matn ("Dushmanlarni yo'q qiling  3/5")
     std::string   text() const;
 };
@@ -111,6 +119,11 @@ public:
     const std::string& episodeId() const;
     // Nazorat nuqtasi nomi (HUD da "Nazorat nuqtasi saqlandi")
     const std::string& checkpointName() const;
+    // Missiya bosqichlari: har epizod bir nechta har xil bosqichdan iborat
+    // (yo'l, ov, yashirin, himoya, qidiruv, yakkama-yakka, jang)
+    int   phaseIndex() const;
+    int   phaseCount() const;
+    const std::string& phaseTitle() const;   // lokalizatsiyalangan
     float checkpointFlash() const;     // 0..1, yangi CP dan keyin so'nadi
 
     // Lock-on nishoni (kamera va HUD uchun); yo'q bo'lsa nullptr

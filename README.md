@@ -631,6 +631,31 @@ sog'lig'ini ushlab turadi — bu FAQAT trailer yozish uchun, o'yin balansiga teg
 Bu rejim vaqtni QAT'IY 1/30 s qadam bilan yuritadi, shuning uchun natija
 mashina tezligiga bog'liq emas va har safar bir xil chiqadi.
 
+## Missiya bosqichlari — hamma epizod jang emas
+
+Ilgari har epizod = "to'lqinlar kelib turadi, hammasini o'ldiring". Endi epizod
+**bosqichlar zanjiri** ([Encounter.cpp](game/src/game/Encounter.cpp), `Phase`), har
+bosqichning o'z maqsadi, markeri va (bo'lsa) dushmanlari bor; bosqich tugagach nazorat
+nuqtasi saqlanadi va HUD da "Bosqich 2/4 · Ov" chiqadi.
+
+| Bosqich | Nima qilasiz | Mexanika |
+|---|---|---|
+| **Yo'l** (`Route`) | 2–4 nuqtali zanjir bo'ylab yugurish; har ikkinchi nuqta **tom/qoya ustida** — sakrash, chiqish, mantle kerak | `findElevated` fizika qutilaridan (climbable/vaultable, 1.2–6.5 m) tanlaydi; nuqta ustida turish shart (`needY`). Ixtiyoriy **vaqt** bonusi |
+| **Ov** (`Hunt`) | 26–44 m da o'tlayotgan kiyiklarni kamon bilan urish | yangi `EnemyKind::Deer`: hujum qilmaydi, ko'rsa/eshitsa 7.4 m/s qochadi (yugurishdan tez), ogohlik hisobiga kirmaydi; model `tools/make_deer.py` |
+| **Yashirin** (`Stealth`) | aylanib yurgan qorovullarni sezilmasdan yo'q qilish | sezilsa `reinforce` to'lqini keladi (bir marta), maqsad davom etadi |
+| **Himoya** (`HoldPoint`) | nuqta atrofida (7 m) N sekund turish, to'lqinlar ketma-ket | halqadan chiqsangiz vaqt to'xtaydi |
+| **Qidiruv** (`Collect`) | 2–3 dalil markerlariga yaqin borish | Pickup tovushi, HUD hisoblagichi |
+| **Yakkama-yakka** (`Duel`) | bitta kuchli raqib (Elite / Sergeant) | |
+| **Jang** (`Fight`) | to'lqinlar (eski rejim) | |
+
+Arxetip → ssenariy (har epizodda kamida bitta jang bor, lekin oldin yo'l/ov/qidiruv):
+`SIEGE/DEFENSE`: Yo'l(vaqtli) → Himoya → Yo'l → Jang · `SURVIVAL`: Ov → Yo'l → Jang ·
+`INFILTRATION`: Yo'l → Yashirin → Qidiruv → Yo'l(vaqtli) · `CHASE`: Yo'l(4, vaqtli) → Jang → Yo'l → Duel ·
+`ESCORT`: Yo'l → Himoya → Yo'l → Jang · `RITUAL`: Qidiruv → Ov → Yo'l → Duel ·
+`COURT`: Qidiruv → Yo'l → Yashirin → Duel · `INVESTIGATION`: Yo'l → Qidiruv → Yashirin → Jang.
+Nuqtalar epizod urug'idan (seed) deterministik, "kursor" oldinga suriladi — epizod xaritada
+oldinga yuradi. Sinov: `--episode EP005 --film <papka> --filmpart 2` logida `[Missiya]` qatorlari.
+
 ## Unity'ga ko'chirish
 
 `D:\My project` (Unity 6, URP) ga kontent oqimi tayyor: modellar, ovozlar, JSON'lar, CSV'lar

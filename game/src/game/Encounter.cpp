@@ -38,11 +38,22 @@ const float C_MATN[3]   = {0.894f, 0.918f, 0.918f};
 struct Checkpoint {
     bool  valid = false;
     int   wave = 0;
+    int   phase = 0;
     Vec3  playerPos{0, 0, 0};
     float playerYaw = 0.0f;
     std::vector<Objective> objectives;
     EncounterResult result;
     std::string name;
+};
+
+// Missiya bosqichi. Epizod = bosqichlar zanjiri; har bosqichning o'z maqsadlari
+// va (bo'lsa) dushman to'lqinlari bor. Bosqich tugagach nazorat nuqtasi saqlanadi.
+struct Phase {
+    std::string            titleKey;      // ui.phase.*
+    std::vector<Objective> objectives;
+    std::vector<Wave>      waves;         // bo'sh bo'lishi mumkin (yo'l, qidiruv)
+    Wave                   reinforce;     // yashirin bosqich: sezilsa qo'shimcha kuch
+    bool                   reinforced = false;
 };
 
 struct Runtime {
@@ -55,6 +66,11 @@ struct Runtime {
     ArrowPool      arrows;          // o'yinchi o'qlari
     std::vector<Wave>      waves;
     std::vector<Objective> objectives;
+    std::vector<Phase>     phases;
+    int   phase  = 0;
+    float phaseT = 0.0f;
+    std::string phaseTitle;
+    int   assassinations = 0;
     EncounterState state = EncounterState::Inactive;
 
     int   wave = 0;
@@ -152,9 +168,69 @@ void spawnWave(Runtime& rt, int index) {
     rt.lockIdx = -1;
 }
 
+// Mavjud dushmanlarni O'CHIRMASDAN qo'shimcha kuch chiqaradi
+void saveCheckpoint(Runtime& rt);
+
+void spawnExtra(Runtime& rt, const Wave& w) {
+    for (const EnemySpawn& s : w.spawns) rt.enemies.spawn(s, rt.phys);
+}
+
+// Ko'tarilgan nuqta: chiqib bo'ladigan quti (tom, qoya, devor) ustidagi joy.
+// Topilmasa oddiy yer nuqtasi. Shunday nuqtaga yetish uchun sakrash/chiqish kerak.
+Vec3 findElevated(const Vec3& around, float minR, float maxR, Rng& rng,
+                  PhysicsWorld* phys, Level* level, bool& elevated) {
+    elevated = false;
+    if (phys) {
+        std::vector<const Box*> cand;
+        for (const Box& b : phys->boxes()) {
+            if (!b.climbable && !b.vaultable) continue;
+            const float cx = b.centerX(), cz = b.centerZ();
+            const float d = std::sqrt((cx - around.x) * (cx - around.x) + (cz - around.z) * (cz - around.z));
+            if (d < minR || d > maxR) continue;
+            const float g  = phys->groundAt(cx, cz);
+            const float hh = b.topY - g;
+            if (hh < 1.2f || hh > 6.5f) continue;
+            if ((b.maxX - b.minX) < 1.2f || (b.maxZ - b.minZ) < 1.2f) continue;   // turib bo'lmaydi
+            cand.push_back(&b);
+        }
+        if (!cand.empty()) {
+            const Box& b = *cand[(size_t)(rng.nextFloat() * 0.999f * (float)cand.size())];
+            elevated = true;
+            return Vec3{b.centerX(), b.topY, b.centerZ()};
+        }
+    }
+    return findSpot(around, minR, maxR, rng, phys, level);
+}
+
+void startPhase(Runtime& rt, int idx) {
+    if (idx < 0 || idx >= (int)rt.phases.size()) return;
+    Phase& P = rt.phases[(size_t)idx];
+    rt.phase      = idx;
+    rt.phaseT     = 0.0f;
+    rt.objectives = P.objectives;
+    rt.waves      = P.waves;
+    rt.wave       = 0;
+    rt.waveFlawless = true;
+    spawnWave(rt, 0);                        // to'lqin yo'q bo'lsa dushmanlarni tozalaydi
+    for (Objective& o : rt.objectives) {
+        if (o.kind == ObjectiveKind::DefeatAll) { o.target = rt.enemies.total(); o.progress = 0; }
+        if (o.kind == ObjectiveKind::Hunt) {
+            int n = 0;
+            for (const Enemy& e : rt.enemies.all()) if (e.kind() == EnemyKind::Deer) ++n;
+            if (n > 0) o.target = n;
+        }
+    }
+    rt.phaseTitle = Loc::get().trOr(P.titleKey, P.titleKey);
+    saveCheckpoint(rt);
+    std::printf("[Missiya] %s bosqich %d/%d: %s (maqsad %d, to'lqin %d)\n",
+                rt.episodeId.c_str(), idx + 1, (int)rt.phases.size(), P.titleKey.c_str(),
+                (int)P.objectives.size(), (int)P.waves.size());
+}
+
 void saveCheckpoint(Runtime& rt) {
     rt.cp.valid      = true;
     rt.cp.wave       = rt.wave;
+    rt.cp.phase      = rt.phase;
     rt.cp.playerPos  = rt.player ? rt.player->position() : Vec3{0, 0, 0};
     rt.cp.playerYaw  = rt.player ? rt.player->yaw() : 0.0f;
     rt.cp.objectives = rt.objectives;
@@ -208,7 +284,18 @@ std::string Objective::text() const {
         }
         break;
     case ObjectiveKind::SurviveTime:
+    case ObjectiveKind::HoldPoint:
+    case ObjectiveKind::Timer:
         std::snprintf(b, sizeof b, "  %d s", std::max(0, target - progress));
+        base += b;
+        break;
+    case ObjectiveKind::Route:
+        std::snprintf(b, sizeof b, "  %d/%d", progress, (int)points.size());
+        base += b;
+        break;
+    case ObjectiveKind::Hunt:
+    case ObjectiveKind::Collect:
+        std::snprintf(b, sizeof b, "  %d/%d", progress, target);
         base += b;
         break;
     default: break;
@@ -294,68 +381,175 @@ bool Encounter::begin(const Episode& ep, Level& level, PhysicsWorld& phys, Chara
     Rng rng(rt.seed);
     const int season = seasonNumber(ep.seasonId);
     const int tier   = clampf((float)ep.difficultyTier, 1.0f, 5.0f);
-    const int waveCount = (tier <= 1) ? 2 : (tier >= 5 ? 4 : (tier <= 3 ? 3 : 3));
     int perWave = ep.maxSimultaneous;
     if (perWave <= 0) perWave = 3;
     perWave = (int)clampf((float)perWave, 2.0f, 8.0f);
+    rt.phases.clear();
+    rt.phase = 0; rt.phaseT = 0.0f; rt.assassinations = 0;
 
-    const Vec3 pp = player.position();
+    // ------------------------------------------------------------------
+    // Bosqich quruvchilar. Har biri o'yinchining (yoki oldingi bosqich
+    // oxirining) atrofida joylashadi, shunda epizod xaritada OLDINGA yuradi.
+    // ------------------------------------------------------------------
+    Vec3 cursor = player.position();
 
-    // --- to'lqinlar ---
-    for (int w = 0; w < waveCount; ++w) {
-        Wave wv;
-        wv.delay = (w == 0) ? 0.0f : 1.2f;
-        const int n = perWave + (w == waveCount - 1 ? 1 : 0);   // oxirgi to'lqin og'irroq
+    auto makeWave = [&](int n, float delay, bool patrol) {
+        Wave wv; wv.delay = delay;
         for (int i = 0; i < n; ++i) {
-            EnemySpawn s;
-            s.kind = pickKind(season, tier, rng);
-            const EnemyStats& st = enemyStats(s.kind);
+            EnemySpawn sp;
+            sp.kind = pickKind(season, tier, rng);
+            const EnemyStats& st = enemyStats(sp.kind);
             const float minR = (st.attackRange > 6.0f) ? 18.0f : 13.0f;
-            s.pos = findSpot(pp, minR, minR + 13.0f, rng, &phys, &level);
-            s.yaw = yawFromDir(normalize(Vec3{pp.x - s.pos.x, 0.0f, pp.z - s.pos.z}));
-            s.patrolRadius = (w == 0) ? rng.range(0.0f, 5.0f) : 0.0f;
-            wv.spawns.push_back(s);
+            sp.pos = findSpot(cursor, minR, minR + 13.0f, rng, &phys, &level);
+            sp.yaw = yawFromDir(normalize(Vec3{cursor.x - sp.pos.x, 0.0f, cursor.z - sp.pos.z}));
+            sp.patrolRadius = patrol ? rng.range(4.0f, 8.0f) : 0.0f;
+            wv.spawns.push_back(sp);
         }
-        rt.waves.push_back(wv);
-    }
+        return wv;
+    };
 
-    // --- maqsadlar (arxetip bo'yicha) ---
+    // YO'L: n ta nuqta zanjiri; imkon bo'lsa tom/qoya ustida — sakrash, chiqish kerak.
+    auto addTravel = [&](int n, bool timed) {
+        Phase P; P.titleKey = "ui.phase.travel";
+        Objective o; o.kind = ObjectiveKind::Route; o.locKey = "ui.obj.route"; o.radius = 2.6f;
+        Vec3 c = cursor;
+        bool anyElev = false;
+        for (int k = 0; k < n; ++k) {
+            bool el = false;
+            Vec3 pnt = (k % 2 == 1) ? findElevated(c, 16.0f, 30.0f, rng, &phys, &level, el)
+                                    : findSpot(c, 18.0f, 30.0f, rng, &phys, &level);
+            anyElev = anyElev || el;
+            o.points.push_back(pnt);
+            c = pnt;
+        }
+        o.needY  = anyElev;
+        o.target = n;
+        P.objectives.push_back(o);
+        if (timed) {
+            Objective t; t.kind = ObjectiveKind::Timer; t.locKey = "ui.obj.timer";
+            t.target = 14 * n; t.optional = true; P.objectives.push_back(t);
+        }
+        cursor = c;
+        rt.phases.push_back(P);
+    };
+    // OV: kiyiklar 26-44 m da o'tlaydi, sezsa qochadi — kamon kerak.
+    auto addHunt = [&](int n) {
+        Phase P; P.titleKey = "ui.phase.hunt";
+        Wave wv;
+        for (int i = 0; i < n; ++i) {
+            EnemySpawn sp; sp.kind = EnemyKind::Deer;
+            sp.pos = findSpot(cursor, 26.0f, 44.0f, rng, &phys, &level);
+            sp.yaw = rng.range(0.0f, 360.0f);
+            sp.patrolRadius = rng.range(5.0f, 9.0f);
+            wv.spawns.push_back(sp);
+        }
+        P.waves.push_back(wv);
+        Objective o; o.kind = ObjectiveKind::Hunt; o.locKey = "ui.obj.hunt"; o.target = n;
+        P.objectives.push_back(o);
+        rt.phases.push_back(P);
+    };
+    // YASHIRIN: qorovullar aylanib yuradi; sezilmasdan yo'q qiling. Sezilsa — qo'shimcha kuch.
+    auto addStealth = [&](int guards) {
+        Phase P; P.titleKey = "ui.phase.stealth";
+        P.waves.push_back(makeWave(guards, 0.0f, true));
+        P.reinforce = makeWave(std::max(2, perWave - 1), 0.0f, false);
+        addObjective(P.objectives, ObjectiveKind::StayUndetected, "ui.obj.undetected", 0, true);
+        addObjective(P.objectives, ObjectiveKind::DefeatAll, "ui.obj.guards", 0);
+        rt.phases.push_back(P);
+    };
+    // HIMOYA: nuqtani N sekund ushlab turing; to'lqinlar ketma-ket keladi.
+    auto addDefend = [&](int seconds, int waves) {
+        Phase P; P.titleKey = "ui.phase.defend";
+        const Vec3 pt = findSpot(cursor, 6.0f, 12.0f, rng, &phys, &level);
+        Objective o; o.kind = ObjectiveKind::HoldPoint; o.locKey = "ui.obj.hold";
+        o.point = pt; o.radius = 7.0f; o.target = seconds; P.objectives.push_back(o);
+        for (int w = 0; w < waves; ++w) P.waves.push_back(makeWave(perWave + (w == waves - 1 ? 1 : 0), 1.2f, false));
+        cursor = pt;
+        rt.phases.push_back(P);
+    };
+    // QIDIRUV: N ta dalil — markerlarga yaqin boring.
+    auto addCollect = [&](int n) {
+        Phase P; P.titleKey = "ui.phase.collect";
+        Objective o; o.kind = ObjectiveKind::Collect; o.locKey = "ui.obj.collect";
+        o.radius = 1.9f; o.target = n;
+        for (int k = 0; k < n; ++k) o.points.push_back(findSpot(cursor, 10.0f, 28.0f, rng, &phys, &level));
+        P.objectives.push_back(o);
+        rt.phases.push_back(P);
+    };
+    // YAKKAMA-YAKKA: bitta kuchli raqib.
+    auto addDuel = [&]() {
+        Phase P; P.titleKey = "ui.phase.duel";
+        Wave wv;
+        EnemySpawn sp; sp.kind = (tier >= 4) ? EnemyKind::Elite : (tier >= 2 ? EnemyKind::Sergeant : EnemyKind::Footman);
+        sp.pos = findSpot(cursor, 10.0f, 16.0f, rng, &phys, &level);
+        sp.yaw = yawFromDir(normalize(Vec3{cursor.x - sp.pos.x, 0.0f, cursor.z - sp.pos.z}));
+        wv.spawns.push_back(sp);
+        P.waves.push_back(wv);
+        addObjective(P.objectives, ObjectiveKind::DefeatAll, "ui.obj.duel", 0);
+        rt.phases.push_back(P);
+    };
+    // JANG: to'lqinlar.
+    auto addFight = [&](int waves, bool survive) {
+        Phase P; P.titleKey = "ui.phase.fight";
+        for (int w = 0; w < waves; ++w) P.waves.push_back(makeWave(perWave + (w == waves - 1 ? 1 : 0), 1.2f, w == 0));
+        addObjective(P.objectives, ObjectiveKind::DefeatAll, "ui.obj.defeat_all", 0);
+        if (survive) addObjective(P.objectives, ObjectiveKind::SurviveTime, "ui.obj.survive", 30 + tier * 6, true);
+        rt.phases.push_back(P);
+    };
+
+    // ------------------------------------------------------------------
+    // Arxetip bo'yicha ssenariy. Har epizodda jang bor, lekin hammasi jang emas:
+    // yo'l, ov, qidiruv, yashirin, himoya, yakkama-yakka aralashadi.
+    // ------------------------------------------------------------------
     const std::string& a = ep.archetype;
-    const Vec3 far1 = findSpot(pp, 22.0f, 34.0f, rng, &phys, &level);
-    const Vec3 far2 = findSpot(pp, 26.0f, 40.0f, rng, &phys, &level);
-
-    if (a == "SIEGE" || a == "DEFENSE" || a == "SURVIVAL") {
-        addObjective(rt.objectives, ObjectiveKind::DefeatAll, "ui.obj.defeat_all", 0);
-        addObjective(rt.objectives, ObjectiveKind::SurviveTime, "ui.obj.survive",
-                     30 + tier * 6, true);
+    const int fightWaves = (tier <= 1) ? 1 : (tier >= 4 ? 3 : 2);
+    if (a == "SIEGE" || a == "DEFENSE") {
+        addTravel(2, true);
+        addDefend(36 + tier * 8, 2);
+        addTravel(2, false);
+        addFight(fightWaves, true);
+    } else if (a == "SURVIVAL") {
+        addHunt(2);
+        addTravel(3, false);
+        addFight(fightWaves, true);
     } else if (a == "INFILTRATION") {
-        addObjective(rt.objectives, ObjectiveKind::StayUndetected, "ui.obj.undetected", 0, true);
-        addObjective(rt.objectives, ObjectiveKind::ReachPoint, "ui.obj.reach_point", 0, false, far1, 5.0f);
-        addObjective(rt.objectives, ObjectiveKind::DefeatAll, "ui.obj.defeat_all", 0);
+        addTravel(2, false);
+        addStealth(std::max(2, std::min(4, perWave)));
+        addCollect(2);
+        addTravel(2, true);
     } else if (a == "CHASE") {
-        addObjective(rt.objectives, ObjectiveKind::ReachPoint, "ui.obj.reach_point", 0, false, far2, 5.5f);
-        addObjective(rt.objectives, ObjectiveKind::DefeatCount, "ui.obj.defeat_count",
-                     std::max(2, perWave), false);
-    } else if (a == "ESCORT" || a == "RITUAL") {
-        addObjective(rt.objectives, ObjectiveKind::ReachPoint, "ui.obj.reach_point", 0, false, far1, 5.0f);
-        addObjective(rt.objectives, ObjectiveKind::DefeatAll, "ui.obj.defeat_all", 0);
-    } else {   // INVESTIGATION, COURT va boshqalar
-        addObjective(rt.objectives, ObjectiveKind::ReachPoint, "ui.obj.reach_point", 0, false, far1, 5.0f);
-        addObjective(rt.objectives, ObjectiveKind::DefeatAll, "ui.obj.defeat_all", 0);
+        addTravel(4, true);
+        addFight(1, false);
+        addTravel(2, true);
+        addDuel();
+    } else if (a == "ESCORT") {
+        addTravel(2, false);
+        addDefend(30 + tier * 6, 2);
+        addTravel(2, false);
+        addFight(1, false);
+    } else if (a == "RITUAL") {
+        addCollect(3);
+        addHunt(1);
+        addTravel(2, false);
+        addDuel();
+    } else if (a == "COURT") {
+        addCollect(2);
+        addTravel(2, false);
+        addStealth(2);
+        addDuel();
+    } else {   // INVESTIGATION va boshqalar
+        addTravel(2, false);
+        addCollect(3);
+        addStealth(2);
+        addFight(1, false);
     }
 
-    spawnWave(rt, 0);
-    // DefeatAll maqsadi to'lqindagi dushmanlar soniga bog'lanadi
-    for (Objective& o : rt.objectives)
-        if (o.kind == ObjectiveKind::DefeatAll) o.target = rt.enemies.total();
-
-    saveCheckpoint(rt);
+    startPhase(rt, 0);
     rt.state = EncounterState::Briefing;
     rt.stateT = 0.0f;
 
-    std::printf("[Jang] %s: %d to'lqin x %d dushman, %d maqsad (arxetip %s, tier %d)\n",
-                ep.id.c_str(), (int)rt.waves.size(), perWave,
-                (int)rt.objectives.size(), a.c_str(), tier);
+    std::printf("[Jang] %s: %d bosqich, %d dushman/to'lqin (arxetip %s, tier %d)\n",
+                ep.id.c_str(), (int)rt.phases.size(), perWave, a.c_str(), tier);
     return true;
 }
 
@@ -389,6 +583,7 @@ void Encounter::update(float dt) {
 
     case EncounterState::Fighting: {
         rt.result.timeSec += dt;
+        rt.phaseT += dt;
         rt.result.bestHealth = std::min(rt.result.bestHealth, pl.vitals.health);
 
         // --- dushmanlar ---
@@ -410,6 +605,7 @@ void Encounter::update(float dt) {
                 HitResult hr;
                 if (rt.enemies.deathblow(vi, hr)) {
                     ++rt.result.kills;
+                    ++rt.assassinations;
                     kick(rt, 0.60f);
                     Sfx::get().play(SfxId::Kill, distanceXZ(hr.point, pl.position()), 1.15f);
                     // FaithEvent::Finisher ni QAYTA BERMAYMIZ — Character::playExecute()
@@ -531,10 +727,58 @@ void Encounter::update(float dt) {
                 if (o.progress >= o.target) o.done = true;
                 break;
             case ObjectiveKind::StayUndetected:
-                if (rt.enemies.awareCount() > 0) {
+                if (!o.failed && rt.enemies.awareCount() > 0) {
                     o.failed = true;
                     rt.result.undetected = false;
+                    // Sezildingiz — qo'shimcha kuch keladi (bir marta)
+                    Phase& P = rt.phases[(size_t)rt.phase];
+                    if (!P.reinforced && !P.reinforce.spawns.empty()) {
+                        P.reinforced = true;
+                        spawnExtra(rt, P.reinforce);
+                        for (Objective& q : rt.objectives)
+                            if (q.kind == ObjectiveKind::DefeatAll) q.target = rt.enemies.total();
+                    }
                 }
+                break;
+            case ObjectiveKind::Route: {
+                if (o.progress < (int)o.points.size()) {
+                    const Vec3& tp = o.points[(size_t)o.progress];
+                    const bool isNear = distanceXZ(pl.position(), tp) < o.radius;
+                    const bool isUp   = !o.needY || std::fabs(pl.position().y - tp.y) < 1.4f
+                                      || tp.y - pl.position().y < 0.6f;   // yer nuqtasi
+                    if (isNear && isUp) { ++o.progress; pl.faith.event(FaithEvent::FlawlessWave); }
+                }
+                if (o.progress >= (int)o.points.size()) o.done = true;
+                break;
+            }
+            case ObjectiveKind::Collect: {
+                for (size_t k = 0; k < o.points.size(); ++k) {
+                    if (distanceXZ(pl.position(), o.points[k]) < o.radius) {
+                        o.points.erase(o.points.begin() + (long)k);
+                        ++o.progress;
+                        Sfx::get().play(SfxId::Pickup, 0.0f, 1.0f);
+                        break;
+                    }
+                }
+                if (o.progress >= o.target) o.done = true;
+                break;
+            }
+            case ObjectiveKind::Hunt: {
+                int n = 0;
+                for (const Enemy& e : rt.enemies.all())
+                    if (e.kind() == EnemyKind::Deer && !e.alive()) ++n;
+                o.progress = n;
+                if (o.progress >= o.target) o.done = true;
+                break;
+            }
+            case ObjectiveKind::HoldPoint:
+                if (distanceXZ(pl.position(), o.point) < o.radius) o.hold += dt;
+                o.progress = (int)o.hold;
+                if (o.progress >= o.target) o.done = true;
+                break;
+            case ObjectiveKind::Timer:
+                o.progress = (int)rt.phaseT;
+                if (o.progress > o.target) o.failed = true;
                 break;
             default: break;
             }
@@ -552,7 +796,7 @@ void Encounter::update(float dt) {
         }
 
         // --- to'lqin tozalandimi ---
-        if (alive == 0 && rt.enemies.total() > 0) {
+        if (alive == 0 && rt.enemies.total() > 0 && rt.wave + 1 < (int)rt.waves.size()) {
             ++rt.result.wavesDone;
             // Zarba yemasdan tugatilgan to'lqin - Iymonning eng katta manbai
             if (rt.waveFlawless) pl.faith.event(FaithEvent::FlawlessWave);
@@ -560,6 +804,29 @@ void Encounter::update(float dt) {
             pl.addArrows(4);                 // to'lqin oralig'ida sadoq to'ldiriladi
             rt.state = EncounterState::WaveCleared;
             rt.stateT = 0.0f;
+            break;
+        }
+
+        // --- bosqich tugadimi: majburiy maqsadlar bajarilgan va dushman qolmagan ---
+        {
+            bool allDone = true;
+            for (const Objective& o : rt.objectives)
+                if (!o.optional && !o.done) { allDone = false; break; }
+            const bool wavesDone = rt.waves.empty() || (rt.wave + 1 >= (int)rt.waves.size() && alive == 0);
+            if (allDone && wavesDone) {
+                if (!rt.waves.empty()) { ++rt.result.wavesDone; if (rt.waveFlawless) pl.faith.event(FaithEvent::FlawlessWave); }
+                pl.addArrows(4);
+                if (rt.phase + 1 < (int)rt.phases.size()) {
+                    startPhase(rt, rt.phase + 1);
+                    rt.state = EncounterState::Fighting;   // brifingsiz — oqim uzilmasin
+                    rt.stateT = 0.0f;
+                } else {
+                    pl.faith.event(FaithEvent::EpisodeDone);
+                    Progress::get().setFaith(pl.faith.value);
+                    rt.state = EncounterState::Cleared;
+                    rt.stateT = 0.0f;
+                }
+            }
         }
         break;
     }
@@ -567,30 +834,13 @@ void Encounter::update(float dt) {
     case EncounterState::WaveCleared: {
         rt.enemies.update(pl, dt);
         if (rt.stateT < 1.5f) break;
-
-        // Majburiy maqsadlar bajarildimi?
-        bool allDone = true;
-        for (const Objective& o : rt.objectives)
-            if (!o.optional && !o.done) { allDone = false; break; }
-
-        if (rt.wave + 1 >= (int)rt.waves.size() && allDone) {
-            pl.faith.event(FaithEvent::EpisodeDone);
-            Progress::get().setFaith(pl.faith.value);
-            rt.state = EncounterState::Cleared;
-            rt.stateT = 0.0f;
-            break;
-        }
-        if (rt.wave + 1 >= (int)rt.waves.size()) {
-            // To'lqinlar tugadi, lekin maqsad qolgan (masalan nuqtaga yetish)
-            rt.state = EncounterState::Fighting;
-            rt.stateT = 0.0f;
-            break;
-        }
+        // Keyingi to'lqin (bosqich tugashi Fighting ichida tekshiriladi)
         ++rt.wave;
         spawnWave(rt, rt.wave);
         for (Objective& o : rt.objectives)
-            if (o.kind == ObjectiveKind::DefeatAll && !o.done)
-                o.target = rt.enemies.total();
+            if (o.kind == ObjectiveKind::DefeatAll && !o.done) {
+                o.target = rt.enemies.total(); o.progress = 0;
+            }
         saveCheckpoint(rt);
         rt.state = EncounterState::Fighting;
         rt.stateT = 0.0f;
@@ -613,7 +863,13 @@ void Encounter::restartFromCheckpoint() {
     Runtime& rt = RT();
     if (!rt.cp.valid || rt.player == nullptr) { restartEpisode(); return; }
 
+    rt.phase      = rt.cp.phase;
+    if (rt.phase >= 0 && rt.phase < (int)rt.phases.size()) {
+        rt.waves      = rt.phases[(size_t)rt.phase].waves;
+        rt.phaseTitle = Loc::get().trOr(rt.phases[(size_t)rt.phase].titleKey, "");
+    }
     rt.wave       = rt.cp.wave;
+    rt.phaseT     = 0.0f;
     rt.objectives = rt.cp.objectives;
     const int deaths = rt.result.deaths;
     rt.result       = rt.cp.result;
@@ -691,6 +947,9 @@ int   Encounter::aliveEnemies() const { return RT().enemies.aliveCount(); }
 float Encounter::stateTime() const { return RT().stateT; }
 const std::string& Encounter::episodeId() const { return RT().episodeId; }
 const std::string& Encounter::checkpointName() const { return RT().cpName; }
+int   Encounter::phaseIndex() const { return RT().phase; }
+int   Encounter::phaseCount() const { return (int)RT().phases.size(); }
+const std::string& Encounter::phaseTitle() const { return RT().phaseTitle; }
 float Encounter::checkpointFlash() const { return RT().cpFlash; }
 
 Enemy* Encounter::lockTarget() const {
@@ -737,27 +996,50 @@ void Encounter::draw() {
 
     rt.arrows.draw();          // uchayotgan va qadalgan o'qlar
 
-    // --- Maqsad markeri: yerdagi halqa + yuqoriga ko'tarilgan ustun ---
-    for (const Objective& o : rt.objectives) {
-        if (o.done || o.kind != ObjectiveKind::ReachPoint) continue;
-        const float gy = rt.phys ? rt.phys->groundAt(o.point.x, o.point.z) : o.point.y;
+    // --- Maqsad markerlari: yerdagi halqa + yuqoriga ko'tarilgan ustun ---
+    auto marker = [&](const Vec3& pt, float radius, const float* col, float h, bool onTop) {
+        // onTop: nuqta tom/qoya USTIDA — halqa o'sha balandlikda
+        const float gy = onTop ? pt.y : (rt.phys ? rt.phys->groundAt(pt.x, pt.z) : pt.y);
         glDisable(GL_DEPTH_TEST);
         glLineWidth(2.0f);
-        glColor4f(C_FERUZA[0], C_FERUZA[1], C_FERUZA[2], 0.75f);
+        glColor4f(col[0], col[1], col[2], 0.75f);
         glBegin(GL_LINE_LOOP);
         for (int i = 0; i < 28; ++i) {
             const float a = TAU * (float)i / 28.0f;
-            glVertex3f(o.point.x + std::cos(a) * o.radius, gy + 0.06f,
-                       o.point.z + std::sin(a) * o.radius);
+            glVertex3f(pt.x + std::cos(a) * radius, gy + 0.06f, pt.z + std::sin(a) * radius);
         }
         glEnd();
         glBegin(GL_LINES);
-        glColor4f(C_FERUZA[0], C_FERUZA[1], C_FERUZA[2], 0.55f);
-        glVertex3f(o.point.x, gy, o.point.z);
-        glColor4f(C_FERUZA[0], C_FERUZA[1], C_FERUZA[2], 0.0f);
-        glVertex3f(o.point.x, gy + 7.0f, o.point.z);
+        glColor4f(col[0], col[1], col[2], 0.55f);
+        glVertex3f(pt.x, gy, pt.z);
+        glColor4f(col[0], col[1], col[2], 0.0f);
+        glVertex3f(pt.x, gy + h, pt.z);
         glEnd();
         glEnable(GL_DEPTH_TEST);
+    };
+    for (const Objective& o : rt.objectives) {
+        if (o.done) continue;
+        switch (o.kind) {
+        case ObjectiveKind::ReachPoint:
+            marker(o.point, o.radius, C_FERUZA, 7.0f, false);
+            break;
+        case ObjectiveKind::Route:
+            if (o.progress < (int)o.points.size())
+                marker(o.points[(size_t)o.progress], o.radius, C_FERUZA, 9.0f, o.needY);
+            // keyingi nuqta xira ko'rsatiladi — yo'nalish sezilsin
+            if (o.progress + 1 < (int)o.points.size())
+                marker(o.points[(size_t)o.progress + 1], o.radius * 0.6f, C_MATN, 3.0f, o.needY);
+            break;
+        case ObjectiveKind::Collect:
+            for (const Vec3& pt : o.points) marker(pt, o.radius, C_ZARHAL, 4.0f, false);
+            break;
+        case ObjectiveKind::HoldPoint: {
+            const float pulse = 0.85f + 0.15f * std::sin(rt.result.timeSec * 4.0f);
+            marker(o.point, o.radius * pulse, C_YARA, 5.0f, false);
+            break;
+        }
+        default: break;
+        }
     }
 
     // --- Dushman ogohlik belgilari («mix boshi» kvadrati) ---

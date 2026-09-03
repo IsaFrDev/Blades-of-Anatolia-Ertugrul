@@ -24,6 +24,7 @@ enum class EnemyKind {
     Assassin,      // saroy qotili — tez, kam sog'liq
     HorseArcher,   // mo'g'ul otliq kamonchi (S3+)
     Elite,         // keshikten — elita gvardiya (S4)
+    Deer,          // kiyik — ov nishoni: hujum qilmaydi, sezsa qochadi
     Count
 };
 
@@ -47,6 +48,7 @@ struct EnemyStats {
     float blockChance = 0.25f;
     float scale       = 1.80f;
     const char* model = "assets/models/crusader/crusader.obj";
+    bool  flees       = false;    // hayvon: hujum o'rniga qochadi, ogohlikka kirmaydi
     float tint[3]     = { 1.0f, 1.0f, 1.0f };
 };
 
