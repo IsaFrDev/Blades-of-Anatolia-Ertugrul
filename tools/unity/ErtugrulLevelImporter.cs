@@ -95,6 +95,7 @@ namespace Ertugrul.EditorTools
                     hm[rr, c] = (lv.heights[r * R + c] - lv.minH) / range;
                 }
             td.SetHeights(0, 0, hm);
+            td.terrainLayers = new[] { GrassLayer() };
             string dir = "Assets/Ertugrul/Levels";
             Directory.CreateDirectory(dir);
             AssetDatabase.CreateAsset(td, dir + "/" + lv.id + "_terrain.asset");
@@ -140,7 +141,8 @@ namespace Ertugrul.EditorTools
                 var go = new GameObject("Spawn_" + s.id);
                 go.transform.SetParent(spRoot.transform);
                 go.transform.position = W(s.pos);
-                go.transform.rotation = Quaternion.Euler(0f, FlipZ ? -s.yaw : s.yaw, 0f);
+                // C++ yaw: (sin, 0, cos); Z teskari bo'lganda 180 - yaw (tekshirildi: kameraga oba ko'rinadi)
+                go.transform.rotation = Quaternion.Euler(0f, FlipZ ? 180f - s.yaw : s.yaw, 0f);
             }
 
             // ---------------- Osmon / yorug'lik ----------------
@@ -167,6 +169,41 @@ namespace Ertugrul.EditorTools
             Debug.Log($"Ertugrul: '{lv.name}' import qilindi — rekvizit {placed}, topilmagan model {missing}" +
                       (missing > 0 ? ("\n  " + string.Join("\n  ", missingSet)) : ""));
             Selection.activeGameObject = root;
+        }
+
+        // Relyef uchun o't qatlami: tekstura yo'q bo'lsa protsedural (shovqinli yashil) yaratiladi.
+        static TerrainLayer GrassLayer()
+        {
+            const string dir = "Assets/Ertugrul/Textures";
+            const string tex = dir + "/grass.png";
+            const string layer = dir + "/grass.terrainlayer";
+            Directory.CreateDirectory(dir);
+            if (!File.Exists(tex))
+            {
+                var t = new Texture2D(256, 256, TextureFormat.RGB24, false);
+                var rnd = new System.Random(7);
+                for (int y = 0; y < 256; ++y)
+                    for (int x = 0; x < 256; ++x)
+                    {
+                        float n = Mathf.PerlinNoise(x * 0.09f, y * 0.09f) * 0.6f + Mathf.PerlinNoise(x * 0.31f, y * 0.31f) * 0.4f;
+                        float j = (float)rnd.NextDouble() * 0.08f;
+                        t.SetPixel(x, y, new Color(0.30f + n * 0.22f + j, 0.42f + n * 0.26f + j, 0.16f + n * 0.12f));
+                    }
+                t.Apply();
+                File.WriteAllBytes(tex, t.EncodeToPNG());
+                AssetDatabase.ImportAsset(tex);
+                var imp = AssetImporter.GetAtPath(tex) as TextureImporter;
+                if (imp != null) { imp.wrapMode = TextureWrapMode.Repeat; imp.SaveAndReimport(); }
+            }
+            var tl = AssetDatabase.LoadAssetAtPath<TerrainLayer>(layer);
+            if (tl == null)
+            {
+                tl = new TerrainLayer();
+                tl.diffuseTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(tex);
+                tl.tileSize = new Vector2(6f, 6f);
+                AssetDatabase.CreateAsset(tl, layer);
+            }
+            return tl;
         }
 
         static Vector3 W(float[] v) => new Vector3(v[0], v[1], FlipZ ? -v[2] : v[2]);

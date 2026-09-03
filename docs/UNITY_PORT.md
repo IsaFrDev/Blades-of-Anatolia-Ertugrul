@@ -21,6 +21,16 @@ Eksport buyrug'i (C++ tomonda, darajani o'zgartirganda qayta chiqarish):
 build/ertugrul.exe --level oba_valley --export-unity "D:/My project/Assets/Ertugrul/Levels"
 ```
 
+## Import bajarildi (2026-09-03)
+
+5 sahna `Assets/Ertugrul/Scenes/` da: aleppo_road, forest_pass, oba_camp, oba_valley,
+sogut_village — barcha rekvizitlar topildi (0 yo'qolgan model), relyefga protsedural o't
+qatlami (`Assets/Ertugrul/Textures/grass.terrainlayer`), quyosh/tuman JSON dan, spawn
+markerlari (`Spawn_player` va h.k., yo'nalishi tekshirildi — oba oldinda ko'rinadi).
+Qayta import: `Assets/Ertugrul/Levels/AUTOIMPORT` bo'sh faylini yarating va Unity
+oynasiga bosing (yoki menyu **Ertugrul → Import ALL levels → scenes**).
+Unity CLI (`unity command eval/screenshot`) `com.unity.pipeline` paketi orqali ulanadi.
+
 ## Birinchi qadam (siz)
 
 1. Unity Hub'dan `D:\My project` ni oching — modellar importi ~5–10 daqiqa (195 MB, 4096² teksturalar).
