@@ -42,6 +42,7 @@ public:
     void unbindReceive();
 
     int  mapSize() const { return size_; }
+    bool receiving() const { return receiving_; }
     bool ambientExt() const { return hasAmbient_; }
 
 private:

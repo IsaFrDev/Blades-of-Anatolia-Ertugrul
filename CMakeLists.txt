@@ -23,6 +23,7 @@ set(ERT_SOURCES
     game/src/gfx/Mesh.cpp
     game/src/gfx/Skin.cpp
     game/src/gfx/ShadowMap.cpp
+    game/src/gfx/Pbr.cpp
     game/src/audio/Audio.cpp
     game/src/audio/Sfx.cpp
     game/src/audio/Voice.cpp

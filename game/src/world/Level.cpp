@@ -4,6 +4,8 @@
 // Fayl topilmasa yoki buzuq bo'lsa — protsedural Qayi obasi quriladi (crash yo'q).
 
 #include "ertugrul/world/Level.h"
+#include "ertugrul/gfx/ShadowMap.h"
+#include "ertugrul/gfx/Pbr.h"
 #include "ertugrul/gfx/Mesh.h"
 #include "ertugrul/gfx/Texture.h"
 
@@ -1155,8 +1157,10 @@ void Level::draw(const Vec3& camPos) const {
     static const bool flatProps = (std::getenv("ERT_FLAT_PROPS") != nullptr);
     static const bool noLists   = (std::getenv("ERT_NO_LISTS")   != nullptr);
     const bool thinShadows = (props_.size() > 150);
-    const unsigned disk = noShadows ? 0u : shadowDiskList();
+    // Haqiqiy soya xaritasi ishlayotganda disklar ortiqcha (ikki soya bo'lardi)
+    const unsigned disk = (noShadows || ShadowMap::get().receiving()) ? 0u : shadowDiskList();
     if (disk != 0) {
+        Pbr::get().pause();
         glPushAttrib(GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT |
                      GL_CURRENT_BIT | GL_TEXTURE_BIT | GL_POLYGON_BIT);
         glDisable(GL_LIGHTING);
@@ -1199,10 +1203,12 @@ void Level::draw(const Vec3& camPos) const {
             glPopMatrix();
         }
         glPopAttrib();
+        Pbr::get().resume();
     }
 
     // --- 2) Rekvizitlar ---
     if (noProps) return;
+    Pbr::get().setRoughness(0.72f);
     glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT | GL_TEXTURE_BIT);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);

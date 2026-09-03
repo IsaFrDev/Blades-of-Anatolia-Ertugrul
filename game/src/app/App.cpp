@@ -1,6 +1,7 @@
 // Ilova holat mashinasi: Splash -> Til -> Menyu -> Epizod -> Cutscene -> O'yin -> Pauza.
 // 3D sahna chizish, uchinchi shaxs boshqaruvi, HUD va subtitrlar shu yerda.
 #include "ertugrul/gfx/ShadowMap.h"
+#include "ertugrul/gfx/Pbr.h"
 #include "ertugrul/app/App.h"
 #include "ertugrul/app/Input.h"
 #include "ertugrul/app/Bindings.h"
@@ -124,6 +125,7 @@ void beginScene3D(int w, int h, float fovDeg, const Vec3& eye, const Vec3& targe
 
 // Personaj/rekvizit ostidagi yumshoq soya
 void drawBlobShadow(const Level& lv, const Vec3& p, float radius, float alpha) {
+    Pbr::get().pause();
     float gy = lv.groundAt(p.x, p.z) + 0.02f;
     glDisable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
@@ -141,6 +143,7 @@ void drawBlobShadow(const Level& lv, const Vec3& p, float radius, float alpha) {
     glEnd();
     glDepthMask(GL_TRUE);
     glEnable(GL_LIGHTING);
+    Pbr::get().resume();
 }
 
 // Bir xil model bilan chizilgan personajlarni farqlash uchun material rangi.
@@ -152,9 +155,14 @@ void pushTintMaterial(const float rgb[3]) {
     const GLfloat a[4] = { rgb[0] * 0.38f, rgb[1] * 0.38f, rgb[2] * 0.38f, 1.0f };
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, d);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, a);
+    Pbr::get().setMaterial(rgb[0], rgb[1], rgb[2], 1.0f);
+    Pbr::get().setUseVertexColor(false);
+    Pbr::get().setRoughness(0.55f);            // mato/teri/zirh aralash
 }
 void popTintMaterial() {
     glEnable(GL_COLOR_MATERIAL);
+    Pbr::get().setUseVertexColor(true);
+    Pbr::get().setRoughness(0.70f);
 }
 
 // «Bilge Ko'z» (Eagle Vision) qoplamasi.
@@ -621,7 +629,9 @@ void renderMenuBackdrop(Impl& im, float dt) {
     im.level.applyLighting();          // ko'rinish matritsasidan KEYIN!
     im.level.drawSky(eye);
     if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
+    Pbr::get().begin(shadowed, shadowLevelFor(im));
     im.level.draw(eye);
+    Pbr::get().end();
     if (shadowed) ShadowMap::get().unbindReceive();
 }
 
@@ -1503,6 +1513,7 @@ void App::render() {
         im.level.applyLighting();      // ko'rinish matritsasidan KEYIN!
         im.level.drawSky(eye);
         if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
+        Pbr::get().begin(shadowed, shadowLevelFor(im));
         im.level.draw(eye);
 
         for (const auto& a : cd.actors()) {
@@ -1514,6 +1525,7 @@ void App::render() {
             a.model->draw(p, a.yaw, a.def->scale);
             popTintMaterial();
         }
+        Pbr::get().end();
         if (shadowed) ShadowMap::get().unbindReceive();
 
         begin2D(im.w, im.h);
@@ -1600,6 +1612,7 @@ void App::render() {
         im.level.applyLighting();      // ko'rinish matritsasidan KEYIN!
         im.level.drawSky(eye);
         if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
+        Pbr::get().begin(shadowed, shadowLevelFor(im));
         im.level.draw(eye);
 
         // --- Dushmanlar ---
@@ -1619,6 +1632,7 @@ void App::render() {
         pushTintMaterial(playerTint);
         im.player.draw(1.82f, playerTint);
         popTintMaterial();
+        Pbr::get().end();
         if (shadowed) ShadowMap::get().unbindReceive();
 
         // Maqsad markerlari va dushman ogohlik belgilari
@@ -1658,6 +1672,7 @@ void App::render() {
         im.level.applyLighting();
         im.level.drawSky(im.camSmooth);
         if (shadowed) ShadowMap::get().bindReceive(shadowLevelFor(im));
+        Pbr::get().begin(shadowed, shadowLevelFor(im));
         im.level.draw(im.camSmooth);
         {
             EnemyManager& em = Encounter::get().enemies();
@@ -1671,6 +1686,7 @@ void App::render() {
         pushTintMaterial(pt);
         im.player.draw(1.82f, pt);
         popTintMaterial();
+        Pbr::get().end();
         if (shadowed) ShadowMap::get().unbindReceive();
 
         const Encounter& enc = Encounter::get();

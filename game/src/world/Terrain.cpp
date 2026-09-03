@@ -5,6 +5,7 @@
 // aralashmasidan hisoblanadi — shuning uchun xarita hech qachon "rangsiz" bo'lmaydi.
 
 #include "ertugrul/world/Terrain.h"
+#include "ertugrul/gfx/Pbr.h"
 #include "ertugrul/gfx/Texture.h"
 
 #ifndef NOMINMAX
@@ -328,6 +329,7 @@ bool Terrain::build(int gridN, float worldSize, uint32_t seed, float hillHeight,
     auxStore()[this] = aux;
 
     // --- 4) Display list'lar (3 ta: asosiy + tosh + tuproq qoplamasi) -------
+    Pbr::whiteTexture();   // list tashqarisida (Mesh.cpp dagi izohga qarang)
     const GLuint base = glGenLists(3);
     if (base != 0) {
         list_ = (unsigned)base;
@@ -460,12 +462,15 @@ void Terrain::draw() const {
 
     // --- Asosiy o'tim: o't teksturasi verteks ranglariga KO'PAYTIRILADI ---
     const bool useGrass = (texGrass_ != nullptr && texGrass_->valid());
+    Pbr::get().setRoughness(0.92f);            // yer — mot
     if (useGrass) {
         glEnable(GL_TEXTURE_2D);
         setBrightModulate();
         texGrass_->bind();
+        Pbr::get().setTexScale(2.0f);          // shaderda ham "detal x2"
     } else {
         glDisable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, Pbr::whiteTexture());
     }
 
     if (list_ != 0) glCallList((GLuint)list_);
@@ -486,6 +491,7 @@ void Terrain::draw() const {
         glPolygonOffset(-1.0f, -1.0f);
         glEnable(GL_TEXTURE_2D);
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        Pbr::get().setTexScale(1.0f);
 
         for (int p = 0; p < 2; ++p) {
             if (overlay[p] == nullptr || !overlay[p]->valid()) continue;
@@ -496,6 +502,8 @@ void Terrain::draw() const {
     }
 
     glPopAttrib();
+    Pbr::get().setTexScale(1.0f);
+    Pbr::get().setRoughness(0.70f);
 }
 
 } // namespace ert

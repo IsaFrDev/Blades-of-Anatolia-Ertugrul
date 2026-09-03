@@ -2,6 +2,7 @@
 // Immediate rejim (glBegin/glEnd) ISHLATILMAYDI: ~100k uchburchakli modellar uchun
 // faqat klient verteks massivlari + glDrawArrays ishlatiladi.
 #include "ertugrul/gfx/Mesh.h"
+#include "ertugrul/gfx/Pbr.h"
 #include "ertugrul/gfx/Texture.h"
 
 #include <windows.h>   // <GL/gl.h> dan OLDIN kelishi SHART
@@ -216,6 +217,7 @@ void drawArrays(const MeshVertex* base, size_t vcount, const std::vector<SubMesh
     if (subs.empty()) {
         // Material yo'q — hammasini bitta chaqiruvda
         glDisable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, Pbr::whiteTexture());
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vcount - (vcount % 3)));
     } else {
@@ -235,6 +237,10 @@ void drawArrays(const MeshVertex* base, size_t vcount, const std::vector<SubMesh
                 sm.tex->bind();
             } else {
                 glDisable(GL_TEXTURE_2D);
+                // PBR shaderi doim uTex ni o'qiydi: teksturasiz bo'lak uchun 1x1 oq.
+                // glBindTexture display listga kiradi, shuning uchun rekvizit
+                // listlari ham to'g'ri ishlaydi.
+                glBindTexture(GL_TEXTURE_2D, Pbr::whiteTexture());
             }
             glColor4f(sm.kd[0], sm.kd[1], sm.kd[2], sm.alpha);
             glDrawArrays(GL_TRIANGLES, static_cast<GLint>(sm.first), static_cast<GLsizei>(cnt));
@@ -760,6 +766,10 @@ void Mesh::buildDisplayList() {
     if (vertices_.empty()) return;
     if (::wglGetCurrentContext() == nullptr) return;
     if (list_ != 0) { glDeleteLists(list_, 1); list_ = 0; }
+    // Oq tekstura LISTDAN TASHQARIDA yaratilsin: glTexImage2D display list
+    // kompilyatsiyasida bajarilmay listga yoziladi, natijada tekstura chala
+    // qolib, teksturasiz rekvizitlar shaderda QOP-QORA chiqardi.
+    Pbr::whiteTexture();
     GLuint id = glGenLists(1);
     if (id == 0) return;
     glNewList(id, GL_COMPILE);
