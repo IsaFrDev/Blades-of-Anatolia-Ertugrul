@@ -73,6 +73,42 @@ ErtThirdPersonCamera / ErtSceneSetup olinmadi — o'rnini ErtugrulPlayer/Ertugru
 Tekshirilmagan: detal o't Game view skrinshotida ko'rinmadi (ma'lumot bor: 461k nusxa) — Editorda
 Play bosib ko'ring; ko'rinmasa Terrain → Paint Details → prototip materialini tekshiring.
 
+## O'rta asr rekvizitlari (Asset Store'siz)
+
+Asset Store'dan yuklab olish Unity hisobiga kirishni talab qiladi — buni faqat siz qila olasiz
+(Package Manager → My Assets). Shu sababli `Editor/ErtugrulMedievalProps.cs` hammasini protsedural quradi:
+**kiyiz o'tov** (panjara devor, konus tom, tunduk, eshik, 8 arqon; 42 ta Kenney yurt/chodir almashtirildi,
+o'lchami saqlangan), **tosh qal'a** (Karacahisar uslubi: 4 devor + tishlar, 4 burchak minorasi, darvoza
+minoralari, donjon, bayroq — So'g'ut va Halab yo'lida), So'g'ut uylari tosh-poydevor rangida,
+**protsedural qoyalar** (Kenney qoya meshlarida yuzalar teskari bo'lib qora chiqardi — 563 ta almashtirildi).
+Asset Store'dan to'plam olsangiz: prefab yo'lini `ReplaceYurts`/`ReplaceRocks` ga bering, qolgani avtomatik.
+
+## Steam sharhlaridan sabaqlar (Ertugrul of Ulukayin, 10 sharh o'rganildi)
+
+| Ularda shikoyat | Bizda qaror |
+|---|---|
+| Optimizatsiya: talab qilingan PC da 40 FPS, cutscene'da 15–24 | HUD'da doimiy FPS/ms ko'rsatkichi; soya 120 m / 3 kaskad; barcha protsedural materiallarda GPU instancing; SMAA (TAA emas); har o'zgarishdan keyin `get_performance_stats` bilan o'lchash |
+| Animatsiya "qizcha yugurish", NPC devorga uriladi | Mixamo rig (Animator blend tree tayyor); NPC NavMesh + obstacle avoidance (`ErtNpcController`); NavMesh bake shart |
+| Har dushmanga 5 s pafosli yakunlovchi zarba — bezor qiladi | Yakunlovchi zarba faqat poza buzilganda (ixtiyoriy), 1.2 s, 0.45x; oddiy o'lim slow-mo'siz |
+| Personaj sakray olmaydi | Sakrash, cho'kkalash, chekkaga chiqish bor (Space/Ctrl) |
+| "Bo'ri ko'zi" (Witcher nusxasi) foydasiz | Bilge Ko'z faqat parkur geometriyasini ko'rsatadi, hikoya izlarini emas; qisqa, ixtiyoriy |
+| Boshqaruv chalkash (sakrash/cho'kkalash/dodge bir tugmada) | Alohida tugmalar: Space sakrash, Ctrl cho'kkalash, dodge alohida |
+| Crafting menyusi o'yinni to'xtatmaydi; UI qo'pol | Menyular pauza qiladi; UI kod bilan, minimal |
+| "Open world" deb reklama, aslida chiziqli | Halol: "semi-open, epizodli" deb yozamiz; har epizodda yo'l/ov/qidiruv bosqichlari |
+| Motion blur ortiqcha, kamera notinch | Motion blur yo'q; Cinemachine damping; jangda kamera silkinishi qisqa |
+| 1 yilda 2 bob, narx yuqori | 48 epizod ssenariysi + 48 cutscene tayyor; narx Early Access'da past |
+| Jang chuqur emas, tugma bosish | Yo'nalishli blok/parry, poza, nafas, Iymon — C++ da ishlaydi, C# ga ko'chiriladi |
+
+## Unity yoki Unreal?
+
+Grafika sifati dvijokdan emas, **assetlar va yorug'likdan**. "Ulukayin" Unreal'da yozilgan bo'lsa ham
+sharhlarda "2012 yil grafikasi" deyishgan. Unity URP/HDRP bilan AAA ko'rinish mumkin (Hardspace,
+Escape from Tarkov, V Rising). Unreal Lumen/Nanite bilan realizm osonroq, lekin: 100+ GB (D: da joy bor,
+C: da 3 GB), 16 GB RAM da muharrir og'ir, C# emas C++/Blueprint, va hozirgi barcha kod qayta yoziladi.
+Qaror: **Unity'da davom** — prototip (personaj rig + jang + 3 epizod) tayyor bo'lgach, HDRP'ga o'tish
+yoki Unreal'ni sinash uchun sahna eksporti (FBX) qilish mumkin. Realizm uchun kerak: sifatli
+model to'plami (Asset Store), yorug'lik (baked GI + HDRP) — bular Unreal'da ham shart.
+
 ## Birinchi qadam (siz)
 
 1. Unity Hub'dan `D:\My project` ni oching — modellar importi ~5–10 daqiqa (195 MB, 4096² teksturalar).

@@ -48,6 +48,7 @@ namespace Ertugrul.EditorTools
             DetailGrass(terrain);
             ReplaceTrees();
             RockMaterials();
+            ReplaceRocks();
             SkyAndFog();
             PostProcessing();
             Lake(terrain);
@@ -59,8 +60,8 @@ namespace Ertugrul.EditorTools
         {
             var rp = GraphicsSettings.defaultRenderPipeline as UniversalRenderPipelineAsset;
             if (rp == null) return;
-            rp.shadowDistance = 160f;
-            rp.shadowCascadeCount = 4;
+            rp.shadowDistance = 120f;
+            rp.shadowCascadeCount = 3;
             { var so = new SerializedObject(rp); var pr = so.FindProperty("m_SoftShadowsSupported"); if (pr != null) { pr.boolValue = true; so.ApplyModifiedPropertiesWithoutUndo(); } }
             rp.supportsHDR = true;
             rp.msaaSampleCount = 4;
@@ -255,6 +256,7 @@ namespace Ertugrul.EditorTools
             m.SetTexture("_BaseMap", tex); m.SetColor("_BaseColor", col); m.SetFloat("_Smoothness", smooth); m.SetFloat("_Metallic", 0f);
             if (alphaClip) { m.SetFloat("_AlphaClip", 1f); m.SetFloat("_Cutoff", 0.45f); m.EnableKeyword("_ALPHATEST_ON"); }
             if (twoSided) m.SetFloat("_Cull", (float)CullMode.Off);
+            m.enableInstancing = true;
             EditorUtility.SetDirty(m);
             return m;
         }
@@ -352,6 +354,76 @@ namespace Ertugrul.EditorTools
                 }
             }
             Debug.Log("Ertugrul: " + n + " qoya materiali");
+        }
+
+        // ------------------------------------------------------------------ protsedural qoyalar
+        // Kenney qoya meshlarining yuzalari teskari (Unity importida normal ichkariga qaraydi,
+        // yon tomonlar qora chiqardi). Shuning uchun shar + shovqin bilan o'z qoyamiz.
+        static Mesh RockMesh(int variant)
+        {
+            var src = Resources.GetBuiltinResource<Mesh>("New-Sphere.fbx");
+            var m = new Mesh { name = "rock" + variant };
+            var v = src.vertices; var n = src.normals; var uv = src.uv;
+            var rnd = new System.Random(200 + variant);
+            float ox = (float)rnd.NextDouble() * 10f, oz = (float)rnd.NextDouble() * 10f;
+            var vv = new Vector3[v.Length];
+            for (int i = 0; i < v.Length; ++i)
+            {
+                var p = v[i] * 2f;                                   // radius 1
+                float d = 0.72f + 0.28f * Mathf.PerlinNoise(p.x * 1.6f + ox, p.z * 1.6f + oz)
+                        + 0.12f * Mathf.PerlinNoise(p.y * 3.1f + oz, p.x * 3.1f + ox);
+                p *= d;
+                p.y = Mathf.Max(p.y * 0.75f, -0.15f);                // pastki qismi yassi (yerga botadi)
+                p.x *= 1.15f;                                        // biroz cho'zilgan
+                vv[i] = p;
+            }
+            m.vertices = vv; m.uv = uv; m.triangles = src.triangles;
+            m.RecalculateNormals(); m.RecalculateBounds();
+            return m;
+        }
+
+        static GameObject RockPrefab(int variant)
+        {
+            string path = GenDir + "/rock_" + variant + ".prefab";
+            var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (existing != null) return existing;
+            var rockTex = NoiseTex("t_rock", 512, (u, v, n) => { float g = 0.30f + n * 0.32f; return new Color(g, g * 0.96f, g * 0.90f); }, 37);
+            var mat = Mat("m_rock_proc", rockTex, new Color(0.78f, 0.74f, 0.68f), 0.08f, false, false);
+            var mesh = RockMesh(variant);
+            AssetDatabase.CreateAsset(mesh, GenDir + "/mesh_rock_" + variant + ".asset");
+            var go = new GameObject("rock");
+            go.AddComponent<MeshFilter>().sharedMesh = mesh;
+            go.AddComponent<MeshRenderer>().sharedMaterial = mat;
+            go.AddComponent<SphereCollider>().radius = 0.9f;
+            var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
+            Object.DestroyImmediate(go);
+            return prefab;
+        }
+
+        static void ReplaceRocks()
+        {
+            var props = GameObject.Find("Props");
+            if (props == null) return;
+            var rnd = new System.Random(4);
+            var list = new List<Transform>();
+            foreach (Transform t in props.transform) list.Add(t);
+            int n = 0;
+            foreach (var t in list)
+            {
+                string nm = t.name.ToLower();
+                if (!(nm.StartsWith("rock") || nm.StartsWith("stone")) || nm.EndsWith("_real")) continue;
+                var rs = t.GetComponentsInChildren<Renderer>();
+                if (rs.Length == 0) continue;
+                var b = rs[0].bounds; foreach (var r in rs) b.Encapsulate(r.bounds);
+                var go = (GameObject)PrefabUtility.InstantiatePrefab(RockPrefab(rnd.Next(0, 3)), props.transform);
+                go.transform.position = new Vector3(b.center.x, b.min.y + 0.1f, b.center.z);
+                go.transform.rotation = Quaternion.Euler(0f, (float)rnd.NextDouble() * 360f, 0f);
+                go.transform.localScale = new Vector3(b.extents.x, Mathf.Max(0.4f, b.size.y * 0.9f), b.extents.z);
+                go.name = t.name + "_real";
+                Object.DestroyImmediate(t.gameObject);
+                ++n;
+            }
+            Debug.Log("Ertugrul: " + n + " qoya almashtirildi");
         }
 
         // ------------------------------------------------------------------ osmon

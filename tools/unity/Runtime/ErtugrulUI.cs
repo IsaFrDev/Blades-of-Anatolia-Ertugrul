@@ -68,9 +68,25 @@ namespace Ertugrul
             return t;
         }
 
+        // FPS ko'rsatkichi — optimizatsiya doim ko'z oldida tursin (Steam sharhlaridagi asosiy shikoyat)
+        Text fpsText; float fpsAcc, fpsT; int fpsN;
+
         void Update()
         {
             float dt = Time.unscaledDeltaTime;
+            if (fpsText == null)
+            {
+                fpsText = MakeText("FPS", Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"), 20, new Color(0.7f, 0.9f, 0.7f),
+                                   new Vector2(0.06f, 0.95f), 260, 30, TextAnchor.MiddleLeft);
+            }
+            fpsAcc += dt; ++fpsN; fpsT += dt;
+            if (fpsT > 0.5f)
+            {
+                float ms = fpsAcc / fpsN * 1000f;
+                fpsText.text = string.Format("{0:0} FPS  {1:0.0} ms", 1000f / ms, ms);
+                fpsText.color = ms > 33f ? new Color(0.95f, 0.45f, 0.35f) : (ms > 20f ? new Color(0.95f, 0.85f, 0.4f) : new Color(0.7f, 0.9f, 0.7f));
+                fpsAcc = 0f; fpsN = 0; fpsT = 0f;
+            }
             letterbox = Mathf.MoveTowards(letterbox, letterboxTarget, dt * 1.6f);
             float barH = Screen.height * 0.12f * letterbox;
             top.rectTransform.sizeDelta = new Vector2(0, barH);
