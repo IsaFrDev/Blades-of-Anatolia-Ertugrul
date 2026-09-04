@@ -208,7 +208,7 @@ void AErtGameMode::SaveGame()
 	R->SetBoolField(TEXT("invert_y"), bInvertY);
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
-		R->SetNumberField(TEXT("meat"), H->Meat);
+		R->SetNumberField(TEXT("meat"), H->Meat); R->SetBoolField(TEXT("pelt"), H->bPeltArmor);
 		R->SetNumberField(TEXT("gold"), H->Gold); R->SetNumberField(TEXT("potions"), H->Potions); R->SetNumberField(TEXT("arrows"), H->GetArrows());
 		R->SetNumberField(TEXT("level"), H->Level); R->SetNumberField(TEXT("xp"), H->XP);
 		R->SetNumberField(TEXT("sword"), H->SwordTier); R->SetNumberField(TEXT("bow"), H->BowTier); R->SetBoolField(TEXT("shield"), H->bShield);
@@ -237,6 +237,7 @@ void AErtGameMode::LoadGame()
 			int32 V = 0;
 			if (R->TryGetNumberField(TEXT("gold"), V)) H->Gold = V;
 			if (R->TryGetNumberField(TEXT("meat"), V)) H->Meat = V;
+			{ bool Bp = false; if (R->TryGetBoolField(TEXT("pelt"), Bp)) H->bPeltArmor = Bp; }
 			if (R->TryGetNumberField(TEXT("potions"), V)) H->Potions = V;
 			if (R->TryGetNumberField(TEXT("arrows"), V)) H->AddArrows(V - H->GetArrows());
 			if (R->TryGetNumberField(TEXT("level"), V)) { H->Level = FMath::Max(1, V); H->MaxHealth = 100.f + (H->Level - 1) * 10.f; H->StaminaMax = 100.f + (H->Level - 1) * 5.f; }

@@ -160,6 +160,13 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
   yon kvest bermaydi; >= 15 oddiy askarlar sog'lig'i 30% dan tushganda qochadi. Unvon: Sharafli Bey / Mo'tabar / Oddiy / Shubhali / Badnom.
 - Dialog bayroqlari `honor_high` / `honor_low` (`requires_evidence`): Hayma Ona duosi (+2 dori, to'liq shifo), savdogarning shikoyati.
 
+## Ko'rinadigan o'qlar va kvest mukofotlari
+- `AErtArrow`: protsedural o'q (dasta, uch, pat), yengil gravitatsiya, segment-nuqta masofasi bilan tegish, yerga sanchiladi (14 s).
+  Kamonchi dushmanlar endi haqiqiy o'q otadi (o'yinchi tezligiga qarab oldinga mo'ljal, +-40 sm tarqalish) - dodge/qochish ishlaydi.
+  O'yinchi kamoni: kamera nuri nishoniga qarab qo'ldan uchadi (4200 sm/s), tegsa zarar/XP/oltin.
+- Yon kvest mukofotlari (`sidequests.json` "reward"): pelt (bo'ri terisi zirhi, zarar -15%, saqlanadi), potions3, arrows12, xp100, shield, bow, meat6.
+  Yakuniy ekranda mukofot matni ko'rsatiladi; inventarda "Zirh" qatori.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

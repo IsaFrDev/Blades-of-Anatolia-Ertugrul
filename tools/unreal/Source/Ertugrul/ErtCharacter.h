@@ -54,6 +54,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") int32 GetArrows() const { return Arrows; }
 	// Inventar va daraja
 	int32 Meat = 0;
+	bool bPeltArmor = false;
 	int32 Gold = 20, Potions = 1, Level = 1, XP = 0, SwordTier = 1, BowTier = 1; bool bShield = false;
 	int32 XPToNext() const { return 80 + (Level - 1) * 60; }
 	void AddXP(int32 N);

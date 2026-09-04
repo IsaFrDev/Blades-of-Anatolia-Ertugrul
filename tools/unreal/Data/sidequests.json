@@ -23,7 +23,8 @@
    "xp": 120,
    "gold": 40,
    "honor": 4,
-   "done_key": "DLG_SQ_AYKIZ_TEARS_DONE"
+   "done_key": "DLG_SQ_AYKIZ_TEARS_DONE",
+   "reward": "arrows12"
   },
   {
    "id": "sq_claudius_to_omar",
@@ -66,7 +67,8 @@
    "xp": 130,
    "gold": 50,
    "honor": 2,
-   "done_key": "DLG_SQ_WOLF_HUNT_DONE"
+   "done_key": "DLG_SQ_WOLF_HUNT_DONE",
+   "reward": "pelt"
   },
   {
    "id": "sq_aleppo_caravan",
@@ -89,7 +91,8 @@
    "xp": 140,
    "gold": 90,
    "honor": 3,
-   "done_key": "DLG_SQ_ALEPPO_CARAVAN_DONE"
+   "done_key": "DLG_SQ_ALEPPO_CARAVAN_DONE",
+   "reward": "shield"
   },
   {
    "id": "sq_trail_of_eftelya",
@@ -112,7 +115,8 @@
    "xp": 150,
    "gold": 40,
    "honor": 3,
-   "done_key": "DLG_SQ_TRAIL_OF_EFTELYA_DONE"
+   "done_key": "DLG_SQ_TRAIL_OF_EFTELYA_DONE",
+   "reward": "bow"
   },
   {
    "id": "sq_selcan_secrets",
@@ -165,7 +169,8 @@
    "xp": 80,
    "gold": 0,
    "honor": 12,
-   "done_key": "DLG_SQ_GEYIKLI_WISDOM_DONE"
+   "done_key": "DLG_SQ_GEYIKLI_WISDOM_DONE",
+   "reward": "meat6"
   },
   {
    "id": "sq_artuk_apothecary",
@@ -180,7 +185,8 @@
    "xp": 90,
    "gold": 0,
    "honor": 1,
-   "done_key": "DLG_SQ_ARTUK_APOTHECARY_DONE"
+   "done_key": "DLG_SQ_ARTUK_APOTHECARY_DONE",
+   "reward": "potions3"
   },
   {
    "id": "sq_dundar_first_sword",
@@ -194,7 +200,8 @@
    "xp": 70,
    "gold": 0,
    "honor": 3,
-   "done_key": "DLG_SQ_DUNDAR_FIRST_SWORD_DONE"
+   "done_key": "DLG_SQ_DUNDAR_FIRST_SWORD_DONE",
+   "reward": "xp100"
   },
   {
    "id": "sq_hamza_conscience",

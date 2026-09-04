@@ -23,6 +23,7 @@
 #include "ErtHorse.h"
 #include "ErtNpc.h"
 #include "ErtAudio.h"
+#include "ErtArrow.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
@@ -309,14 +310,16 @@ void AErtCharacter::OnShoot()
 	if (Body) Body->TriggerAttack();
 	FErtAudio::PlaySfx(GetWorld(), TEXT("bowshot"), GetActorLocation(), 0.9f);
 	const FVector A = Cam->GetComponentLocation();
-	const FVector Dir = Cam->GetForwardVector();
+	FVector Dir = Cam->GetForwardVector();
+	// Nishon: kamera nuri tekkan nuqta (yoki 60 m), o'q qo'ldan uchadi
 	FHitResult H;
-	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtArrow), false, this);
-	if (GetWorld()->LineTraceSingleByChannel(H, A, A + Dir * 5000.f, ECC_Pawn, Q))
-	{
-		if (AErtEnemy* E = Cast<AErtEnemy>(H.GetActor())) { E->ApplyHit(ArrowDamage, this); FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_hit"), H.ImpactPoint, 1.f); if (E->IsDead()) { AddXP(E->XPValue()); AddGold(E->IsAnimal() ? 0 : FMath::RandRange(4, 14)); } }
-		else FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_wall"), H.ImpactPoint, 0.8f);
-	}
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtArrowAim), false, this);
+	FVector Target = A + Dir * 6000.f;
+	if (GetWorld()->LineTraceSingleByChannel(H, A, A + Dir * 6000.f, ECC_Pawn, Q)) Target = H.ImpactPoint;
+	else if (GetWorld()->LineTraceSingleByChannel(H, A, A + Dir * 6000.f, ECC_Visibility, Q)) Target = H.ImpactPoint;
+	const FVector Start = GetActorLocation() + GetActorForwardVector() * 50.f + FVector(0, 0, 40.f);
+	FVector D2 = (Target - Start).GetSafeNormal(); D2.Z += FVector::Dist(Start, Target) / 14000.f;
+	if (AErtArrow* Ar = GetWorld()->SpawnActor<AErtArrow>(AErtArrow::StaticClass(), Start, D2.Rotation())) Ar->Launch(D2, 4200.f, ArrowDamage, true, this);
 }
 
 void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker, bool bUnblockable)
@@ -339,6 +342,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	}
 	if (bBlocking && bFacing && Stamina > 5.f && !bUnblockable) { Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
+	if (bPeltArmor) Damage *= 0.85f;   // bo'ri terisi zirhi
 	if (Horse) { Horse->ApplyDamage(Damage * 0.4f); Damage *= 0.6f; }
 	Health -= Damage;
 	HurtFlash = 1.f;

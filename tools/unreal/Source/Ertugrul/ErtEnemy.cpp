@@ -6,6 +6,7 @@
 #include "ErtHorse.h"
 #include "ErtAudio.h"
 #include "ErtGameMode.h"
+#include "ErtArrow.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -307,7 +308,13 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 			{
 				AttackCD = AttackCooldown;
 				Body->TriggerAttack();
-				if (FMath::FRand() < 0.65f) Hero->ReceiveHit(AttackDamage, GetActorLocation(), this);
+				// Ko'rinadigan o'q: o'yinchining hozirgi joyiga (biroz oldinga) - dodge bilan qochish mumkin
+				const FVector Start = GetActorLocation() + FVector(0, 0, 60.f) + GetActorForwardVector() * 40.f;
+				const FVector Target = Hero->GetActorLocation() + Hero->GetVelocity() * 0.35f + FVector(FMath::FRandRange(-40.f, 40.f), FMath::FRandRange(-40.f, 40.f), 0);
+				const float Dist = FVector::Dist(Start, Target);
+				FVector Dir = (Target - Start).GetSafeNormal(); Dir.Z += Dist / 9000.f;   // parabola kompensatsiyasi
+				if (AErtArrow* Ar = GetWorld()->SpawnActor<AErtArrow>(AErtArrow::StaticClass(), Start, Dir.Rotation())) Ar->Launch(Dir, 2600.f, AttackDamage, false, this);
+				FErtAudio::PlaySfx(GetWorld(), TEXT("bowshot"), GetActorLocation(), 0.8f, 0.9f);
 			}
 			return;
 		}

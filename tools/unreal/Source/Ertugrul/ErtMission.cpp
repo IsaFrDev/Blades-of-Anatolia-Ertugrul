@@ -192,6 +192,7 @@ TArray<AErtMissionDirector::FSideInfo> AErtMissionDirector::LoadSideQuests()
 		FSideInfo S;
 		O->TryGetStringField(TEXT("id"), S.Id); O->TryGetStringField(TEXT("giver"), S.Giver); O->TryGetStringField(TEXT("title"), S.TitleKey); O->TryGetStringField(TEXT("done_key"), S.DoneKey);
 		O->TryGetNumberField(TEXT("xp"), S.XP); O->TryGetNumberField(TEXT("gold"), S.Gold); O->TryGetNumberField(TEXT("honor"), S.Honor);
+		O->TryGetStringField(TEXT("reward"), S.Reward);
 		Out.Add(S);
 	}
 	return Out;
@@ -212,6 +213,7 @@ bool AErtMissionDirector::StartSideQuest(const FString& QuestId)
 	Side = FSideInfo(); Side.Id = QuestId;
 	Found->TryGetStringField(TEXT("giver"), Side.Giver); Found->TryGetStringField(TEXT("done_key"), Side.DoneKey); Side.TitleKey = E.LocTitle;
 	Found->TryGetNumberField(TEXT("xp"), Side.XP); Found->TryGetNumberField(TEXT("gold"), Side.Gold); Found->TryGetNumberField(TEXT("honor"), Side.Honor);
+	Found->TryGetStringField(TEXT("reward"), Side.Reward);
 	const bool bOk = StartEpisodeData(E, GroundAt(H->GetActorLocation().X, H->GetActorLocation().Y), Found);
 	bSideQuest = bOk;
 	if (bOk) EpisodeTitle = FErtLoc::Get().Tr(TEXT("ui.hud.sidequest")) + TEXT(": ") + FErtLoc::Get().TrOr(E.LocTitle, QuestId);
@@ -717,7 +719,17 @@ void AErtMissionDirector::Tick(float Dt)
 			H->AddArrows(4);
 			H->Heal(25.f);
 			if (PhaseIdx + 1 < Phases.Num()) { StartPhase(PhaseIdx + 1); State = EErtMissionState::Fighting; StateT = 0.f; }
-			else if (bSideQuest) { State = EErtMissionState::Cleared; StateT = 0.f; H->AddXP(Side.XP); H->AddGold(Side.Gold); Cliffhanger = FErtLoc::Get().TrOr(Side.DoneKey, TEXT("")); if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->AddFlag(TEXT("sq_done_") + Side.Id); GM->RemoveFlag(TEXT("sq_avail_") + Side.Id); GM->AddHonor(Side.Honor); GM->SaveGame(); } NextEpisodeId.Reset(); }
+			else if (bSideQuest) { State = EErtMissionState::Cleared; StateT = 0.f; H->AddXP(Side.XP); H->AddGold(Side.Gold); Cliffhanger = FErtLoc::Get().TrOr(Side.DoneKey, TEXT(""));
+				// Maxsus mukofot
+				FString RewardText;
+				if (Side.Reward == TEXT("pelt")) { H->bPeltArmor = true; RewardText = TEXT("Bo'ri terisi zirhi: zarar -15%"); }
+				else if (Side.Reward == TEXT("potions3")) { H->Potions += 3; RewardText = TEXT("+3 dori"); }
+				else if (Side.Reward == TEXT("arrows12")) { H->AddArrows(12); RewardText = TEXT("+12 o'q"); }
+				else if (Side.Reward == TEXT("xp100")) { H->AddXP(100); RewardText = TEXT("+100 XP (ustozlik)"); }
+				else if (Side.Reward == TEXT("shield")) { H->bShield = true; H->ApplyEquipment(); RewardText = TEXT("Yog'och qalqon"); }
+				else if (Side.Reward == TEXT("bow")) { H->BowTier = 2; H->ApplyEquipment(); RewardText = TEXT("Kompozit kamon"); }
+				else if (Side.Reward == TEXT("meat6")) { H->Meat += 6; RewardText = TEXT("+6 go'sht"); }
+				if (!RewardText.IsEmpty()) Cliffhanger += TEXT("\n") + RewardText; if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->AddFlag(TEXT("sq_done_") + Side.Id); GM->RemoveFlag(TEXT("sq_avail_") + Side.Id); GM->AddHonor(Side.Honor); GM->SaveGame(); } NextEpisodeId.Reset(); }
 			else { State = EErtMissionState::Cleared; StateT = 0.f; H->AddXP(150); H->AddGold(40); SaveProgress(); UE_LOG(LogErtugrul, Log, TEXT("[Missiya] %s bajarildi: %d o'ldirildi, %d o'lim"), *EpisodeId, Kills, Deaths); }
 		}
 		break;

@@ -513,6 +513,7 @@ void AErtHUD::DrawInventory(float SW, float SH, float Sc)
 	Y += 10 * Sc;
 	Text(TEXT("JIHOZ"), 44 * Sc, Y, Gold, 1.1f * Sc, true, true); Y += 30 * Sc;
 	Row(TEXT("Qilich"), H->SwordTier >= 2 ? TEXT("Damashq po'lati (+12 zarar)") : TEXT("Oddiy qilich"));
+	Row(TEXT("Zirh"), H->bPeltArmor ? TEXT("Bo'ri terisi (zarar -15%)") : TEXT("Charm ko'krak zirhi"));
 	Row(TEXT("Qalqon"), H->bShield ? TEXT("Yog'och qalqon (blok 95%, kam stamina)") : TEXT("Yo'q"));
 	Row(TEXT("Kamon"), H->BowTier >= 2 ? TEXT("Kompozit kamon (+20 zarar, 24 o'q)") : TEXT("Oddiy kamon"));
 	Row(TEXT("Zarar"), FString::Printf(TEXT("qilich %d, o'q %d"), (int32)H->AttackDamage, (int32)H->ArrowDamage));

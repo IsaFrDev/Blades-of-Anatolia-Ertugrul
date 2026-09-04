@@ -64,7 +64,7 @@ public:
 	/** Yon kvest (sidequests.json): o'yinchi turgan joydan boshlanadi */
 	bool StartSideQuest(const FString& QuestId);
 	bool IsSideQuest() const { return bSideQuest; }
-	struct FSideInfo { FString Id, Giver, TitleKey, DoneKey; int32 XP = 0, Gold = 0, Honor = 0; };
+	struct FSideInfo { FString Id, Giver, TitleKey, DoneKey, Reward; int32 XP = 0, Gold = 0, Honor = 0; };
 	static TArray<FSideInfo> LoadSideQuests();
 
 	// HUD uchun
