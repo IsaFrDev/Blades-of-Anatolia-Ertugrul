@@ -485,6 +485,8 @@ void AErtHUD::DrawMapArea(float X0, float Y0, float S, float CE, float CN, float
 	Mark(SivE, SivN, SivR, TEXT("Sivas"), Ink);
 	Mark(ErzE, ErzN, ErzR, TEXT("Erzurum"), Ink);
 	Mark(BurE, BurN, BurR, TEXT("Bursa"), Ink);
+	Mark(NikE, NikN, NikR, TEXT("Nikeya"), Ink);
+	Mark(AskE, AskN, AskR, TEXT("Askaniya ko'li"), FLinearColor(0.2f, 0.4f, 0.7f));
 	Mark(UluE, UluN, 40.f, TEXT("Uludog'"), Ink);
 	Mark(ErcE, ErcN, 40.f, TEXT("Erciyes"), Ink);
 	// Maqsad markerlari

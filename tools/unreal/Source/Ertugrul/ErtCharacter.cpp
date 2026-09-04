@@ -572,7 +572,9 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(43.9f)) TakeShot(TEXT("bursa"));
 	if (At(44.0f)) { if (AErtHorse* Hh = NearestHorse(1e7f)) Teleport(Hh->GetActorLocation().Y / 100.f + 4.5f, Hh->GetActorLocation().X / 100.f - 3.f, Hh->GetActorLocation().Z / 100.f + 1.0f, -10.f, -35.f); }
 	if (At(44.9f)) TakeShot(TEXT("horse"));
-	if (At(45.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(45.0f)) Teleport(-300.f, -240.f, 5.5f + 60.f, -20.f, 0.f);
+	if (At(45.9f)) TakeShot(TEXT("nikeya"));
+	if (At(46.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;

@@ -33,6 +33,7 @@ namespace ErtMap
 	constexpr float SivE = -180.f, SivN = 400.f, SivR = 120.f, SivZ = 13.f, SivHillR = 40.f, SivHillH = 8.f;   // Sivas (qal'a tepaligi shimolda)
 	constexpr float ErzE = 420.f, ErzN = 730.f, ErzR = 110.f, ErzZ = 22.f, ErzHillR = 38.f, ErzHillH = 10.f;   // Erzurum (qal'a tepaligi shimoli-sharqda)
 	constexpr float BurE = -540.f, BurN = 60.f, BurR = 120.f, BurZ = 9.f, BurHillR = 45.f, BurHillH = 12.f, UluE = -620.f, UluN = -200.f, UluR = 110.f, UluH = 95.f;   // Bursa va Uludog'
+	constexpr float NikE = -300.f, NikN = -60.f, NikR = 110.f, NikZ = 5.5f, AskE = -300.f, AskN = 95.f, AskR = 65.f, AskZ = 4.5f;   // Nikeya va Askaniya ko'li
 }
 
 UCLASS()
@@ -88,6 +89,7 @@ private:
 	void BuildSivas();
 	void BuildErzurum();
 	void BuildBursa();
+	void BuildNikeya();
 	void AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S);
 	void BuildForest();
 	void BuildRocks();

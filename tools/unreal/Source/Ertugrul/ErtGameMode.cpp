@@ -58,6 +58,8 @@ void AErtGameMode::BeginPlay()
 			const float Ns[] = { 480.f, 300.f };
 			for (float N : Ns) { const float E = Wb->RiverE(N) + 8.f; GetWorld()->SpawnActor<AErtBoat>(AErtBoat::StaticClass(), FVector(N * 100.f, E * 100.f, ErtMap::WaterZ * 100.f + 10.f), FRotator(0, 0, 0), SP); }
 			GetWorld()->SpawnActor<AErtBoat>(AErtBoat::StaticClass(), FVector((ErtMap::LakeN - 20.f) * 100.f, (ErtMap::LakeE + 10.f) * 100.f, ErtMap::LakeZ * 100.f + 10.f), FRotator(0, 45.f, 0), SP);
+			GetWorld()->SpawnActor<AErtBoat>(AErtBoat::StaticClass(), FVector((ErtMap::AskN - ErtMap::AskR + 14.f) * 100.f, (ErtMap::AskE + 8.f) * 100.f, ErtMap::AskZ * 100.f + 10.f), FRotator(0, 0, 0), SP);
+			GetWorld()->SpawnActor<AErtBoat>(AErtBoat::StaticClass(), FVector((ErtMap::AskN - 10.f) * 100.f, (ErtMap::AskE - 30.f) * 100.f, ErtMap::AskZ * 100.f + 10.f), FRotator(0, 120.f, 0), SP);
 		}
 		// Karvonsaroy oldida ikkita tuya
 		for (int32 i = 0; i < 2; ++i)
@@ -133,6 +135,7 @@ void AErtGameMode::SpawnNpcs()
 		else if (Place == TEXT("sivas")) { E = ErtMap::SivE; Nn = ErtMap::SivN; }
 		else if (Place == TEXT("erzurum")) { E = ErtMap::ErzE; Nn = ErtMap::ErzN; }
 		else if (Place == TEXT("bursa")) { E = ErtMap::BurE; Nn = ErtMap::BurN; }
+		else if (Place == TEXT("nikeya")) { E = ErtMap::NikE; Nn = ErtMap::NikN; }
 		E += U; Nn += Vv;
 		const float X = Nn * 100.f, Y = E * 100.f;
 		FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtNpcGround), true);

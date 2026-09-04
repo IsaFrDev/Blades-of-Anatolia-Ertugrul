@@ -464,6 +464,36 @@
     0.75
    ],
    "dialog": "ep016_talk"
+  },
+  {
+   "id": "nikeya_savdogar",
+   "name": "chr.nikeya_savdogar.name",
+   "place": "nikeya",
+   "u": -45,
+   "v": -20,
+   "yaw": 0,
+   "woman": false,
+   "kaftan": [
+    0.25,
+    0.25,
+    0.5
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "nikeya_tekfur",
+   "name": "chr.nikeya_tekfur.name",
+   "place": "nikeya",
+   "u": 0,
+   "v": -26,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.35,
+    0.1,
+    0.35
+   ],
+   "dialog": "ep017_talk"
   }
  ]
 }

@@ -167,7 +167,8 @@ FVector AErtMissionDirector::AnchorFor(const FErtEpisode& E) const
 	else if (E.Region.Contains(TEXT("Kayseri"))) { PE = KayE - KayR - 45.f; PN = KayN; }   // Qayseri g'arbiy darvozasi oldi
 	else if (E.Region.Contains(TEXT("Sivas"))) { PE = SivE; PN = SivN - SivR - 45.f; }   // Sivas janubiy darvozasi oldi
 	else if (E.Region.Contains(TEXT("Erzurum")) || E.Region.Contains(TEXT("Erzincan"))) { PE = ErzE; PN = ErzN - ErzR - 45.f; }   // Erzurum janubiy darvozasi oldi
-	else if (E.Region.Contains(TEXT("Bursa")) || E.Region.Contains(TEXT("Nikeya"))) { PE = BurE + BurR + 45.f; PN = BurN; }   // Bursa sharqiy kirishi
+	else if (E.Region.Contains(TEXT("Bursa"))) { PE = BurE + BurR + 45.f; PN = BurN; }   // Bursa sharqiy kirishi
+	else if (E.Region.Contains(TEXT("Nikeya"))) { PE = NikE + NikR + 55.f; PN = NikN; }   // Nikeya sharqiy darvozasi oldi
 	// Epizod indeksiga qarab biroz siljitamiz - har epizod boshqa joyda
 	const float Off = (E.GlobalIndex % 5) * 35.f;
 	return GroundAt(PN * 100.f + Off * 100.f, PE * 100.f - Off * 60.f);

@@ -232,3 +232,5 @@ keys,uz,tr,en
 "chr.erzurum_beyi.name","Erzurum beyi","Erzurum beyi","Bey of Erzurum"
 "chr.bursa_savdogar.name","Bursa ipak savdogari","Bursa ipek tüccarı","Bursa silk merchant"
 "chr.bursa_qozi.name","Bursa qozisi","Bursa kadısı","Qadi of Bursa"
+"chr.nikeya_savdogar.name","Nikeya savdogari","İznik tüccarı","Nicaea merchant"
+"chr.nikeya_tekfur.name","Nikeya tekfuri","İznik tekfuru","Tekfur of Nicaea"

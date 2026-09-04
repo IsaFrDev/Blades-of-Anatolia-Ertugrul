@@ -273,3 +273,10 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `AErtHorse::Build` qayta yozildi: ellipsoid tana (bochka, sag'ri, son, ko'krak, yag'rin), 52 gradus egilgan konus bo'yin (`NeckMesh`) va yol tolalari, tumshuqli bosh (ko'zlar, burun teshiklari, konus quloqlar, peshona dog'i), yugan/jilov/suvliq, dum dastasi (`TailMesh`), ikki bo'g'inli oyoqlar (`Legs` yelka/son + `LowerLegs` bilak, to'piq, tuyoq). Tasodifiy belgilar: qora oyoq-tumshuq, oq paypoqlar, peshona dog'i. Egar: o'rindiq, oldingi/orqa qosh, qanotlar, ayil, uzangi tasmalari va temir uzangilar, gilam.
 - Animatsiya: pastki bo'g'in oyoq oldinga uchganda bukiladi, chopishda bo'yin cho'ziladi, turganda o'tlaydi (bosh pastga), dum va quloqlar tebranadi, tana yengil chayqaladi.
 - Sinov skrinshotlari: `28_bursa`, `29_horse`; minish sinovi endi janubga chopadi.
+
+## Nikeya shahri va Askaniya ko'li
+
+- `BuildNikeya()` (ErtWorldBuilder): g'arb-markazda (E=-300, N=-60, R=110 m) Vizantiya shahri: g'isht qatorli tosh qo'sh devor (tashqi past, ichki baland), 28 dumaloq burj, 4 Rim arkli darvoza (shimoliy darvoza ko'lga); Ayo Sofiya bazilikasi (nef, apsida, gumbaz, xoch, ustunlar); marmar ustunli agora va favvora; Rim teatri (yarim aylana zinalar, qisman xaroba, sahna devori); to'g'ri burchakli ko'chalar (cardo/decumanus), g'isht-tosh sopol tomli uylar, sarvlar; ko'l darvozasi oldida iskala.
+- Askaniya ko'li: yangi ko'l (E=-300, N=95, R=65 m, suv sathi 4.5 m): `IsWater`, relyef chuqurligi, suv diski, qumloq qirg'oq, 2 qayiq.
+- Xarita: `Nikeya`, `Askaniya ko'li` belgilari; NPC joyi `nikeya` (savdogar, tekfur); `Nikeya` epizodlari sharqiy darvoza oldidan boshlanadi. Yo'l (-150,-150) dan sharqiy darvozaga.
+- Sinov skrinshoti: `30_nikeya`.
