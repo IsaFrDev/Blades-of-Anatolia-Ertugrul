@@ -11,7 +11,7 @@ class AErtCutsceneDirector;
 class AErtNpc;
 
 UENUM()
-enum class EErtMenu : uint8 { None, Main, Pause, Episodes, Settings, Map };
+enum class EErtMenu : uint8 { None, Main, Pause, Episodes, Settings, Map, Inventory };
 struct FErtEpisode;
 
 UCLASS()
@@ -30,6 +30,7 @@ public:
 	bool IsAnyMenu() const { return Menu != EErtMenu::None; }
 	void OpenMenu(EErtMenu M);
 	void ToggleMap();
+	void ToggleInventory();
 	bool HasEpisodeStarted() const { return bEpisodeStarted; }
 	int32 GetMenuIndex() const { return MenuIndex; }
 	void MenuToggle();
@@ -53,6 +54,7 @@ public:
 	void AddFlag(const FString& F) { Flags.Add(F); }
 	bool HasFlag(const FString& F) const { return Flags.Contains(F); }
 	/** Oxirgi tugagan dialog (missiya maqsadlari uchun) */
+	FString ShopMsg; float ShopMsgT = 0.f;
 	FString LastDialogId; int32 LastDuelPoints = 0, LastDuelThreshold = 0; float LastDialogEndTime = -1.f;
 
 	/** Epizodni boshlaydi: kat-sahna (bo'lsa) -> missiya */

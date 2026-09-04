@@ -123,6 +123,13 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - X / B: dodge - kirish yo'nalishida sakrab qochish (kirish yo'q bo'lsa orqaga), 0.5 s, 0.2 s dan keyingi qismi daxlsiz, stamina -12.
 - Dushman zarba oldidan (0.22 s) boshida qizil "!" chiqadi - parry/dodge vaqti. Qulflangan nishonda oltin retikul.
 
+## Inventar va daraja
+- XP: dushman 20-80 (turiga qarab), kiyik 10, epizod 150. Daraja chegarasi 80 + 60*(L-1). Daraja oshganda sog'liq +10, stamina +5, zarar +3, to'liq shifo, "DARAJA N!".
+- Oltin: dushmandan 4-14, epizod 40. Dori (H): +45 sog'liq. Inventar (I): daraja/XP, sog'liq, oltin, dori, o'qlar, jihoz, zarar.
+- Jihoz: Damashq qilichi (+12 zarar, tig' rangi), yog'och qalqon (chap bilakda mesh, blok 95%, stamina -6), kompozit kamon (+20 zarar, 24 o'q).
+- Savdogar Yusuf (shahar bozori) dialogi orqali sotib olish: bayroqlar buy_* -> EndDialog da narx tekshiruvi (dori 15, 8 o'q 10, qalqon 60, kamon 90, qilich 120).
+- Saqlash: gold/potions/arrows/level/xp/sword/bow/shield `ert_save.json` da; o'yinchi paydo bo'lgach 0.5 s da qayta qo'llanadi.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

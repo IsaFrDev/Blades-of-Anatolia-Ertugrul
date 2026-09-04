@@ -46,6 +46,10 @@ public:
 	void SetSwimming(bool bOn) { bSwim = bOn; }
 	void SetRiding(bool bOn) { bRide = bOn; }
 	void SetBlocking(bool bOn) { bBlock = bOn; }
+	/** Chap bilakda qalqon */
+	void SetShield(bool bOn);
+	/** Damashq po'lati: tig' rangi */
+	void SetSwordTier(int32 Tier);
 	/** Parry: qisqa keskin harakat */
 	void TriggerParry() { ParryT = 1.f; }
 	/** Yiqilgan holat (o'lim) */
@@ -66,6 +70,7 @@ private:
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> ThighR;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> ShinL;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> ShinR;
+	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> Shield;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> Mat;
 
 	float Phase = 0.f;

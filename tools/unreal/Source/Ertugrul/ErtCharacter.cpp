@@ -169,6 +169,7 @@ void AErtCharacter::OnAttack()
 			ShakeT = FMath::Max(ShakeT, bExecute ? 0.3f : 0.12f);
 			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->HitStop(bExecute ? 0.22f : 0.07f);
 			FErtAudio::PlaySfx(GetWorld(), E->IsDead() ? TEXT("kill") : TEXT("hit"), E->GetActorLocation(), 1.f, FMath::FRandRange(0.9f, 1.1f));
+			if (E->IsDead()) { AddXP(E->XPValue()); AddGold(E->IsAnimal() ? 0 : FMath::RandRange(4, 14)); }
 			RiposteT = 0.f;
 		}
 	}
@@ -254,7 +255,7 @@ void AErtCharacter::OnShoot()
 	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtArrow), false, this);
 	if (GetWorld()->LineTraceSingleByChannel(H, A, A + Dir * 5000.f, ECC_Pawn, Q))
 	{
-		if (AErtEnemy* E = Cast<AErtEnemy>(H.GetActor())) { E->ApplyHit(ArrowDamage, this); FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_hit"), H.ImpactPoint, 1.f); }
+		if (AErtEnemy* E = Cast<AErtEnemy>(H.GetActor())) { E->ApplyHit(ArrowDamage, this); FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_hit"), H.ImpactPoint, 1.f); if (E->IsDead()) { AddXP(E->XPValue()); AddGold(E->IsAnimal() ? 0 : FMath::RandRange(4, 14)); } }
 		else FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_wall"), H.ImpactPoint, 0.8f);
 	}
 }
@@ -277,7 +278,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 		if (Footsteps) Footsteps->Step(GetActorLocation() - FVector(0, 0, 60.f), false, 1.2f);
 		return;
 	}
-	if (bBlocking && bFacing && Stamina > 5.f) { Damage *= 0.2f; Stamina = FMath::Max(0.f, Stamina - 12.f); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
+	if (bBlocking && bFacing && Stamina > 5.f) { Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
 	Health -= Damage;
 	HurtFlash = 1.f;
@@ -321,6 +322,7 @@ void AErtCharacter::ResetAt(const FVector& Pos, float Yaw)
 		Body->RegisterComponent();
 		Body->Build(GetCapsuleComponent(), GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight());
 	}
+	ApplyEquipment();
 }
 
 void AErtCharacter::UpdateCombat(float Dt)
@@ -329,6 +331,7 @@ void AErtCharacter::UpdateCombat(float Dt)
 	ShootCD = FMath::Max(0.f, ShootCD - Dt);
 	HurtFlash = FMath::Max(0.f, HurtFlash - Dt * 2.f);
 	ParryFlash = FMath::Max(0.f, ParryFlash - Dt * 1.6f);
+	LevelFlash = FMath::Max(0.f, LevelFlash - Dt * 0.6f);
 	ExecuteFlash = FMath::Max(0.f, ExecuteFlash - Dt * 1.4f);
 	RiposteT = FMath::Max(0.f, RiposteT - Dt);
 	BlockT += Dt;
@@ -501,6 +504,8 @@ void AErtCharacter::BuildInput()
 	IA_Map = MakeAction(TEXT("IA_ErtMap"), EInputActionValueType::Boolean);
 	IA_Lock = MakeAction(TEXT("IA_ErtLock"), EInputActionValueType::Boolean);
 	IA_Dodge = MakeAction(TEXT("IA_ErtDodge"), EInputActionValueType::Boolean);
+	IA_Inventory = MakeAction(TEXT("IA_ErtInventory"), EInputActionValueType::Boolean); IA_Inventory->bTriggerWhenPaused = true;
+	IA_Potion = MakeAction(TEXT("IA_ErtPotion"), EInputActionValueType::Boolean);
 	// Menyu harakatlari pauzada ham ishlaydi
 	for (UInputAction* A : { IA_Menu, IA_MenuUp, IA_MenuDown, IA_Confirm, IA_MenuLeft, IA_MenuRight, IA_Settings, IA_Map, IA_Choice1, IA_Choice2, IA_Choice3, IA_Choice4, IA_Jump }) if (A) A->bTriggerWhenPaused = true;
 
@@ -562,10 +567,44 @@ void AErtCharacter::BuildInput()
 	Map(IA_Map, EKeys::M); Map(IA_Map, EKeys::Gamepad_RightThumbstick);
 	Map(IA_Lock, EKeys::Q); Map(IA_Lock, EKeys::MiddleMouseButton); Map(IA_Lock, EKeys::Gamepad_LeftThumbstick);
 	Map(IA_Dodge, EKeys::X); Map(IA_Dodge, EKeys::Gamepad_FaceButton_Right);
+	Map(IA_Inventory, EKeys::I); Map(IA_Inventory, EKeys::Gamepad_DPad_Right);
+	Map(IA_Potion, EKeys::H); Map(IA_Potion, EKeys::Gamepad_DPad_Left);
 }
 
 void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); } }
 void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); } }
+void AErtCharacter::OnInventory() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleInventory(); }
+void AErtCharacter::OnPotion() { if (bInputEnabled && !bDead) UsePotion(); }
+
+bool AErtCharacter::UsePotion()
+{
+	if (Potions <= 0 || Health >= MaxHealth) return false;
+	--Potions; Heal(45.f); HurtFlash = 0.f;
+	FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.5f, 1.4f);
+	return true;
+}
+
+void AErtCharacter::AddXP(int32 N)
+{
+	XP += N;
+	while (XP >= XPToNext())
+	{
+		XP -= XPToNext(); ++Level;
+		MaxHealth += 10.f; StaminaMax += 5.f; Health = MaxHealth; Stamina = StaminaMax;
+		LevelFlash = 1.f;
+		ApplyEquipment();
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.6f, 0.4f);
+	}
+}
+
+void AErtCharacter::ApplyEquipment()
+{
+	AttackDamage = 30.f + (Level - 1) * 3.f + (SwordTier >= 2 ? 12.f : 0.f);
+	ArrowDamage = 45.f + (Level - 1) * 3.f + (BowTier >= 2 ? 20.f : 0.f);
+	MaxArrows = BowTier >= 2 ? 24 : 16;
+	if (Body && Body->IsBuilt()) { Body->SetShield(bShield); Body->SetSwordTier(SwordTier); }
+}
+
 void AErtCharacter::OnLock()
 {
 	if (!bInputEnabled || bDead) return;
@@ -677,6 +716,8 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_Map, ETriggerEvent::Started, this, &AErtCharacter::OnMap);
 	EIC->BindAction(IA_Lock, ETriggerEvent::Started, this, &AErtCharacter::OnLock);
 	EIC->BindAction(IA_Dodge, ETriggerEvent::Started, this, &AErtCharacter::OnDodge);
+	EIC->BindAction(IA_Inventory, ETriggerEvent::Started, this, &AErtCharacter::OnInventory);
+	EIC->BindAction(IA_Potion, ETriggerEvent::Started, this, &AErtCharacter::OnPotion);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)

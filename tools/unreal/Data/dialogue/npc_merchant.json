@@ -1,0 +1,70 @@
+{
+ "id": "npc_merchant",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Savdogar Yusuf",
+   "text_key": "DLG_NPC_MERCHANT_01",
+   "options": [
+    {
+     "text_key": "DLG_NPC_MERCHANT_OPT_NEWS",
+     "next": "b"
+    },
+    {
+     "text_key": "DLG_SHOP_POTION",
+     "next": "d",
+     "set_flag": "buy_potion"
+    },
+    {
+     "text_key": "DLG_SHOP_ARROWS",
+     "next": "d",
+     "set_flag": "buy_arrows"
+    },
+    {
+     "text_key": "DLG_SHOP_MORE",
+     "next": "s"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Savdogar Yusuf",
+   "text_key": "DLG_NPC_MERCHANT_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Savdogar Yusuf",
+   "text_key": "DLG_NPC_MERCHANT_03",
+   "next": "end"
+  },
+  "s": {
+   "speaker": "Savdogar Yusuf",
+   "text_key": "DLG_SHOP_MORE_Q",
+   "options": [
+    {
+     "text_key": "DLG_SHOP_SHIELD",
+     "next": "d",
+     "set_flag": "buy_shield"
+    },
+    {
+     "text_key": "DLG_SHOP_BOW",
+     "next": "d",
+     "set_flag": "buy_bow"
+    },
+    {
+     "text_key": "DLG_SHOP_SWORD",
+     "next": "d",
+     "set_flag": "buy_sword"
+    },
+    {
+     "text_key": "DLG_NPC_MERCHANT_OPT_BYE",
+     "next": "c"
+    }
+   ]
+  },
+  "d": {
+   "speaker": "Savdogar Yusuf",
+   "text_key": "DLG_SHOP_DONE",
+   "next": "end"
+  }
+ }
+}

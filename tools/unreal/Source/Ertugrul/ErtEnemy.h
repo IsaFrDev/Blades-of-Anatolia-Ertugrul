@@ -36,6 +36,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetHealth() const { return Health; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetMaxHealth() const { return MaxHealth; }
 	bool IsAnimal() const { return Kind == EErtEnemyKind::Deer; }
+	int32 XPValue() const { switch (Kind) { case EErtEnemyKind::Footman: return 20; case EErtEnemyKind::Sergeant: return 35; case EErtEnemyKind::Crossbow: return 25; case EErtEnemyKind::Elite: return 80; case EErtEnemyKind::Rider: return 50; default: return 10; } }
 	/** Kim o'ldirdi (o'yinchi bo'lsa hisoblanadi) */
 	AActor* Killer = nullptr;
 

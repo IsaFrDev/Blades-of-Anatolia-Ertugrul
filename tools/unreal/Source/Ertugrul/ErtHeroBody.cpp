@@ -142,6 +142,32 @@ void UErtHeroBody::Apply(const FPose& P)
 	LowerArmR->SetRelativeRotation(FRotator(-P.ElbowR, 0, 0));
 }
 
+void UErtHeroBody::SetShield(bool bOn)
+{
+	if (!IsBuilt()) return;
+	if (!bOn) { if (Shield) { Shield->DestroyComponent(); Shield = nullptr; } return; }
+	if (Shield) return;
+	Shield = MakePart(TEXT("Shield"), LowerArmL, FVector(0, -7, -18));
+	FErtMeshData M;
+	M.AddCylinder(FVector(0, 0, 0), 22.f, 22.f, 2.5f, 12, FLinearColor(0.35f, 0.22f, 0.10f), true, FRotator(0, 0, 90.f));
+	M.AddCylinder(FVector(0, -2.5f, 0), 6.f, 5.f, 3.f, 8, Steel, true, FRotator(0, 0, 90.f));
+	M.AddCylinder(FVector(0, -2.6f, 0), 22.5f, 22.5f, 1.f, 12, Trim, false, FRotator(0, 0, 90.f));
+	M.Commit(Shield, 0, false);
+}
+
+void UErtHeroBody::SetSwordTier(int32 Tier)
+{
+	if (!IsBuilt() || !bSwordInHand) return;
+	Steel = Tier >= 2 ? FLinearColor(0.55f, 0.62f, 0.75f) : FLinearColor(0.75f, 0.77f, 0.80f);
+	FErtMeshData M;
+	M.AddBox(FVector(0, 0, -13), FVector(5, 5, 13), Kaftan);
+	M.AddBox(FVector(0, 0, -22), FVector(5.4f, 5.4f, 5), Leather);
+	M.AddBox(FVector(0.5f, 0, -30), FVector(4, 3.5f, 5), Skin);
+	M.AddBox(FVector(0.5f, 0, -30), FVector(1.2f, 6, 1.2f), Trim);
+	M.AddBox(FVector(Tier >= 2 ? 46.f : 42.f, 0, -30), FVector(Tier >= 2 ? 44.f : 40.f, 0.6f, 2.8f), Steel);
+	M.Commit(LowerArmR, 0, false);
+}
+
 void UErtHeroBody::TriggerAttack() { AttackT = 1.f; }
 void UErtHeroBody::TriggerHurt() { HurtT = 1.f; }
 

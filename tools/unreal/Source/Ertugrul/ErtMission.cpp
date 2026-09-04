@@ -660,7 +660,7 @@ void AErtMissionDirector::Tick(float Dt)
 			H->AddArrows(4);
 			H->Heal(25.f);
 			if (PhaseIdx + 1 < Phases.Num()) { StartPhase(PhaseIdx + 1); State = EErtMissionState::Fighting; StateT = 0.f; }
-			else { State = EErtMissionState::Cleared; StateT = 0.f; SaveProgress(); UE_LOG(LogErtugrul, Log, TEXT("[Missiya] %s bajarildi: %d o'ldirildi, %d o'lim"), *EpisodeId, Kills, Deaths); }
+			else { State = EErtMissionState::Cleared; StateT = 0.f; H->AddXP(150); H->AddGold(40); SaveProgress(); UE_LOG(LogErtugrul, Log, TEXT("[Missiya] %s bajarildi: %d o'ldirildi, %d o'lim"), *EpisodeId, Kills, Deaths); }
 		}
 		break;
 	}

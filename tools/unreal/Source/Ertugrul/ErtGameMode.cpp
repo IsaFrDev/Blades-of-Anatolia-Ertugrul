@@ -54,6 +54,7 @@ void AErtGameMode::BeginPlay()
 	bUnlockAll = FParse::Param(FCommandLine::Get(), TEXT("ErtUnlockAll"));
 	SpawnNpcs();
 	LoadGame();
+	{ FTimerHandle Th2; GetWorldTimerManager().SetTimer(Th2, [this]() { LoadGame(); }, 0.5f, false); }   // o'yinchi paydo bo'lgach inventar/daraja
 	Sun = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(this, ADirectionalLight::StaticClass()));
 	Sky = Cast<ASkyLight>(UGameplayStatics::GetActorOfClass(this, ASkyLight::StaticClass()));
 
@@ -143,7 +144,20 @@ void AErtGameMode::EndDialog()
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
 		if (Flags.Contains(TEXT("give_arrows"))) { Flags.Remove(TEXT("give_arrows")); H->AddArrows(8); }
-		if (Flags.Contains(TEXT("sword_sharpened"))) { Flags.Remove(TEXT("sword_sharpened")); H->AttackDamage = 36.f; }
+		if (Flags.Contains(TEXT("sword_sharpened"))) { Flags.Remove(TEXT("sword_sharpened")); H->AttackDamage += 4.f; }
+		auto Buy = [&](const TCHAR* Flag, int32 Price, TFunction<void()> Give)
+		{
+			if (!Flags.Contains(Flag)) return;
+			Flags.Remove(Flag);
+			if (H->Gold >= Price) { H->AddGold(-Price); Give(); ShopMsg = FString::Printf(TEXT("Sotib olindi (-%d oltin)"), Price); }
+			else ShopMsg = TEXT("Oltin yetarli emas");
+			ShopMsgT = 3.f;
+		};
+		Buy(TEXT("buy_potion"), 15, [&]() { H->Potions += 1; });
+		Buy(TEXT("buy_arrows"), 10, [&]() { H->AddArrows(8); });
+		Buy(TEXT("buy_shield"), 60, [&]() { H->bShield = true; H->ApplyEquipment(); });
+		Buy(TEXT("buy_sword"), 120, [&]() { H->SwordTier = 2; H->ApplyEquipment(); });
+		Buy(TEXT("buy_bow"), 90, [&]() { H->BowTier = 2; H->ApplyEquipment(); });
 	}
 	if (Menu == EErtMenu::None) SetPlayerInput(true, false);
 	UE_LOG(LogErtugrul, Log, TEXT("Dialog tugadi, or/iymon: %d, bayroqlar: %d"), Honor, Flags.Num());
@@ -163,6 +177,12 @@ void AErtGameMode::SaveGame()
 	R->SetNumberField(TEXT("language"), Language);
 	R->SetNumberField(TEXT("mouse_sens"), MouseSens);
 	R->SetBoolField(TEXT("invert_y"), bInvertY);
+	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
+	{
+		R->SetNumberField(TEXT("gold"), H->Gold); R->SetNumberField(TEXT("potions"), H->Potions); R->SetNumberField(TEXT("arrows"), H->GetArrows());
+		R->SetNumberField(TEXT("level"), H->Level); R->SetNumberField(TEXT("xp"), H->XP);
+		R->SetNumberField(TEXT("sword"), H->SwordTier); R->SetNumberField(TEXT("bow"), H->BowTier); R->SetBoolField(TEXT("shield"), H->bShield);
+	}
 	FString Out;
 	const TSharedRef<TJsonWriter<>> W = TJsonWriterFactory<>::Create(&Out);
 	FJsonSerializer::Serialize(R.ToSharedRef(), W);
@@ -182,6 +202,19 @@ void AErtGameMode::LoadGame()
 		R->TryGetNumberField(TEXT("language"), Language);
 		double D = 1.0; if (R->TryGetNumberField(TEXT("mouse_sens"), D)) MouseSens = (float)D;
 		R->TryGetBoolField(TEXT("invert_y"), bInvertY);
+		if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
+		{
+			int32 V = 0;
+			if (R->TryGetNumberField(TEXT("gold"), V)) H->Gold = V;
+			if (R->TryGetNumberField(TEXT("potions"), V)) H->Potions = V;
+			if (R->TryGetNumberField(TEXT("arrows"), V)) H->AddArrows(V - H->GetArrows());
+			if (R->TryGetNumberField(TEXT("level"), V)) { H->Level = FMath::Max(1, V); H->MaxHealth = 100.f + (H->Level - 1) * 10.f; H->StaminaMax = 100.f + (H->Level - 1) * 5.f; }
+			if (R->TryGetNumberField(TEXT("xp"), V)) H->XP = V;
+			if (R->TryGetNumberField(TEXT("sword"), V)) H->SwordTier = V;
+			if (R->TryGetNumberField(TEXT("bow"), V)) H->BowTier = V;
+			bool B = false; if (R->TryGetBoolField(TEXT("shield"), B)) H->bShield = B;
+			H->ApplyEquipment();
+		}
 	}
 	// Eski matn formati
 	if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectSavedDir() / TEXT("ert_progress.txt")))) { TArray<FString> L; Text.ParseIntoArrayLines(L); for (const FString& S : L) Completed.AddUnique(S); }
@@ -208,6 +241,7 @@ void AErtGameMode::Tick(float Dt)
 {
 	Super::Tick(Dt);
 	DayT = FMath::Fmod(DayT + Dt / DayLength, 1.f);
+	ShopMsgT = FMath::Max(0.f, ShopMsgT - Dt);
 	if (!Sun) return;
 	// Quyosh balandligi: tongda ufqdan chiqadi, peshinda 62 gradus, shomda botadi; tunda ufq ostida (oy sifatida xira)
 	const float Elev = FMath::Sin((DayT - 0.25f) * 2.f * PI) * 62.f;
@@ -256,6 +290,13 @@ void AErtGameMode::ToggleMap()
 	else if (Menu == EErtMenu::None || Menu == EErtMenu::Pause) OpenMenu(EErtMenu::Map);
 }
 
+void AErtGameMode::ToggleInventory()
+{
+	if (Dialog.IsActive() || (Cutscene && Cutscene->IsPlaying())) return;
+	if (Menu == EErtMenu::Inventory) OpenMenu(EErtMenu::None);
+	else if (Menu == EErtMenu::None || Menu == EErtMenu::Pause) OpenMenu(EErtMenu::Inventory);
+}
+
 void AErtGameMode::HitStop(float Seconds, float Dilation)
 {
 	UGameplayStatics::SetGlobalTimeDilation(this, Dilation);
@@ -281,7 +322,7 @@ void AErtGameMode::MenuToggle()
 	case EErtMenu::None: OpenMenu(bEpisodeStarted ? EErtMenu::Pause : EErtMenu::Main); break;
 	case EErtMenu::Main: break;
 	case EErtMenu::Pause: OpenMenu(EErtMenu::None); break;
-	case EErtMenu::Map: OpenMenu(EErtMenu::None); break;
+	case EErtMenu::Map: case EErtMenu::Inventory: OpenMenu(EErtMenu::None); break;
 	case EErtMenu::Settings: SaveGame(); OpenMenu(Prev == EErtMenu::None ? EErtMenu::Pause : Prev); break;
 	case EErtMenu::Episodes: OpenMenu(Prev == EErtMenu::None ? (bEpisodeStarted ? EErtMenu::Pause : EErtMenu::Main) : Prev); break;
 	}
@@ -303,7 +344,7 @@ void AErtGameMode::MenuConfirm()
 {
 	if (Dialog.IsActive()) { OnAdvance(); return; }
 	if (Menu == EErtMenu::Settings) { SettingsAdjust(1); return; }
-	if (Menu == EErtMenu::Map) { OpenMenu(EErtMenu::None); return; }
+	if (Menu == EErtMenu::Map || Menu == EErtMenu::Inventory) { OpenMenu(EErtMenu::None); return; }
 	const TArray<FErtEpisode>& All = UErtEpisodeDb::Get()->All();
 	if (Menu == EErtMenu::Main)
 	{

@@ -52,6 +52,14 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetHealth() const { return Health; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetMaxHealth() const { return MaxHealth; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") int32 GetArrows() const { return Arrows; }
+	// Inventar va daraja
+	int32 Gold = 20, Potions = 1, Level = 1, XP = 0, SwordTier = 1, BowTier = 1; bool bShield = false;
+	int32 XPToNext() const { return 80 + (Level - 1) * 60; }
+	void AddXP(int32 N);
+	void AddGold(int32 N) { Gold = FMath::Max(0, Gold + N); }
+	bool UsePotion();
+	void ApplyEquipment();
+	float LevelFlash = 0.f;
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsDead() const { return bDead; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsBlocking() const { return bBlocking; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsSwimming() const { return bSwimming; }
@@ -113,6 +121,8 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Map;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Lock;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Dodge;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Inventory;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Potion;
 
 private:
 	void OnMenu();
@@ -122,7 +132,7 @@ private:
 	void OnInteract();
 	void OnChoice1(); void OnChoice2(); void OnChoice3(); void OnChoice4();
 	void OnMenuLeft(); void OnMenuRight(); void OnSettings(); void OnMap();
-	void OnLock(); void OnDodge(); void UpdateLock(float Dt);
+	void OnLock(); void OnDodge(); void UpdateLock(float Dt); void OnInventory(); void OnPotion();
 	UPROPERTY(Transient) TObjectPtr<AErtEnemy> LockTarget;
 	float DodgeT = 0.f;
 public:

@@ -58,6 +58,7 @@ void AErtHUD::DrawHUD()
 	if (GM && GM->GetMenu() == EErtMenu::Main) { DrawMainMenu(SW, SH, Sc, false); return; }
 	if (GM && GM->GetMenu() == EErtMenu::Pause) { DrawMainMenu(SW, SH, Sc, true); return; }
 	if (GM && GM->GetMenu() == EErtMenu::Map) { DrawMap(SW, SH, Sc); return; }
+	if (GM && GM->GetMenu() == EErtMenu::Inventory) { DrawInventory(SW, SH, Sc); return; }
 	if (GM && GM->IsDialogActive()) { DrawDialog(SW, SH, Sc); return; }
 	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f), Green(0.5f, 0.9f, 0.4f), Red(0.9f, 0.25f, 0.2f);
 
@@ -67,7 +68,10 @@ void AErtHUD::DrawHUD()
 		const float X = 24 * Sc, Y = SH - 78 * Sc;
 		Bar(X, Y, 260 * Sc, 16 * Sc, H->GetHealth() / H->GetMaxHealth(), H->GetHealth() > 30 ? FLinearColor(0.75f, 0.15f, 0.12f) : Red);
 		Bar(X, Y + 20 * Sc, 200 * Sc, 10 * Sc, H->GetStamina() / 100.f, FLinearColor(0.85f, 0.7f, 0.25f));
-		Text(FString::Printf(TEXT("%s %d   %s %d"), *L.Tr(TEXT("ui.hud.health")), (int32)H->GetHealth(), *L.Tr(TEXT("ui.hud.arrows")), H->GetArrows()), X, Y + 34 * Sc, White, Sc);
+		Bar(X, Y + 32 * Sc, 200 * Sc, 5 * Sc, (float)H->XP / H->XPToNext(), FLinearColor(0.4f, 0.7f, 1.f));
+		Text(FString::Printf(TEXT("%s %d   %s %d   Dori %d   Oltin %d   Daraja %d"), *L.Tr(TEXT("ui.hud.health")), (int32)H->GetHealth(), *L.Tr(TEXT("ui.hud.arrows")), H->GetArrows(), H->Potions, H->Gold, H->Level), X, Y + 40 * Sc, White, Sc);
+		if (H->LevelFlash > 0.f) Text(FString::Printf(TEXT("DARAJA %d!"), H->Level), SW * 0.5f - TextWidth(FString::Printf(TEXT("DARAJA %d!"), H->Level), 1.6f * Sc, true) * 0.5f, SH * 0.30f, FLinearColor(0.5f, 0.85f, 1.f, H->LevelFlash), 1.6f * Sc, true, true);
+		if (GM && GM->ShopMsgT > 0.f) Text(GM->ShopMsg, SW * 0.5f - TextWidth(GM->ShopMsg, Sc, false) * 0.5f, SH * 0.36f, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		if (H->GetExecuteFlash() > 0.f) Text(TEXT("IJRO!"), SW * 0.5f - TextWidth(TEXT("IJRO!"), 1.8f * Sc, true) * 0.5f, SH * 0.40f, FLinearColor(0.95f, 0.2f, 0.15f, H->GetExecuteFlash()), 1.8f * Sc, true, true);
 		else if (H->GetParryFlash() > 0.f) Text(TEXT("PARRY!"), SW * 0.5f - TextWidth(TEXT("PARRY!"), 1.6f * Sc, true) * 0.5f, SH * 0.42f, FLinearColor(1.f, 0.85f, 0.3f, H->GetParryFlash()), 1.6f * Sc, true, true);
 		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
@@ -459,4 +463,33 @@ void AErtHUD::DrawMap(float SW, float SH, float Sc)
 		for (const FErtObjective& O : D->GetObjectives()) { Text(O.Text(), 24 * Sc, Y, O.bDone ? FLinearColor(0.5f, 0.9f, 0.4f) : FLinearColor(0.95f, 0.95f, 0.9f), 0.95f * Sc); Y += 20 * Sc; }
 	}
 	Text(TEXT("XARITA   (M yoki Esc: yopish)   yashil - siz, oltin - maqsad, qizil - dushman, ko'k - odamlar"), 24 * Sc, SH - 28 * Sc, FLinearColor(0.6f, 0.6f, 0.55f), 0.9f * Sc);
+}
+
+// ---------------- Inventar ----------------
+
+void AErtHUD::DrawInventory(float SW, float SH, float Sc)
+{
+	AErtCharacter* H = Cast<AErtCharacter>(GetOwningPawn());
+	if (!H) return;
+	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f);
+	FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.02f, 0.02f, 0.03f, 0.85f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+	Text(TEXT("INVENTAR"), 40 * Sc, 30 * Sc, Gold, 1.5f * Sc, true, true);
+	float Y = 90 * Sc;
+	auto Row = [&](const FString& K, const FString& V) { Text(K, 44 * Sc, Y, Grey, Sc); Text(V, 300 * Sc, Y, White, Sc); Y += 26 * Sc; };
+	Row(TEXT("Daraja"), FString::Printf(TEXT("%d   (XP %d / %d)"), H->Level, H->XP, H->XPToNext()));
+	Row(TEXT("Sog'liq"), FString::Printf(TEXT("%d / %d"), (int32)H->GetHealth(), (int32)H->GetMaxHealth()));
+	Row(TEXT("Stamina"), FString::Printf(TEXT("%d / %d"), (int32)H->GetStamina(), (int32)H->StaminaMax));
+	Row(TEXT("Oltin"), FString::Printf(TEXT("%d"), H->Gold));
+	Row(TEXT("Dori (H)"), FString::Printf(TEXT("%d   (+45 sog'liq)"), H->Potions));
+	Row(TEXT("O'qlar"), FString::Printf(TEXT("%d / %d"), H->GetArrows(), H->MaxArrows));
+	Y += 10 * Sc;
+	Text(TEXT("JIHOZ"), 44 * Sc, Y, Gold, 1.1f * Sc, true, true); Y += 30 * Sc;
+	Row(TEXT("Qilich"), H->SwordTier >= 2 ? TEXT("Damashq po'lati (+12 zarar)") : TEXT("Oddiy qilich"));
+	Row(TEXT("Qalqon"), H->bShield ? TEXT("Yog'och qalqon (blok 95%, kam stamina)") : TEXT("Yo'q"));
+	Row(TEXT("Kamon"), H->BowTier >= 2 ? TEXT("Kompozit kamon (+20 zarar, 24 o'q)") : TEXT("Oddiy kamon"));
+	Row(TEXT("Zarar"), FString::Printf(TEXT("qilich %d, o'q %d"), (int32)H->AttackDamage, (int32)H->ArrowDamage));
+	Y += 16 * Sc;
+	Text(TEXT("Savdogar Yusuf (shahar bozori): dori 15, 8 o'q 10, qalqon 60, kompozit kamon 90, Damashq qilichi 120 oltin"), 44 * Sc, Y, Grey, 0.9f * Sc);
+	Text(TEXT("XP: dushman 20-80, epizod 150.  Oltin: dushmandan 4-14, epizod 40."), 44 * Sc, Y + 22 * Sc, Grey, 0.9f * Sc);
+	Text(TEXT("I yoki Esc: yopish"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
 }
