@@ -286,3 +286,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `BuildKaracahisar()` (ErtWorldBuilder): shimolda (E=-60, N=760) 45 m qora qoya (relyefda, tepasi 30 m tekis plato, tik qiyalik, qora tosh rangi); ustida Vizantiya qal'asi: 11 burchakli notekis g'isht qatorli devor, kungura, kvadrat burjlar, janubiy darvoza (temir panjara), 18 m donjon (tirqish derazalar, bayroq), cherkov (gumbaz, xoch), kazarma, sardoba, ombor, gulxan; janubdan uch bo'lakli ilon izi tosh yo'l; etakda 6 kulbali qishloq, quduq, tekfur bayrog'i. Yo'l Konya g'arbiy darvozasidan qal'a etagiga.
 - Xarita: `Karacahisar` belgisi; NPC joyi `karacahisar` (tekfur - EP041 dialogi, qishloq ayoli); `Karacahisar` epizodlari qoya etagidan (janub) boshlanadi.
 - Sinov skrinshoti: `31_karacahisar`.
+
+## So'g'ut qishlog'i
+
+- `BuildSogut()` (ErtWorldBuilder): Karacahisar janubi-g'arbida (E=-220, N=600, R=70 m) yashil vodiy qishlog'i: egri ariq (ko'k tasma, loy qirg'oq), ikki yog'och ko'prik, suv tegirmoni (charx); tosh poydevorli masjid (yog'och minora, qo'rg'oshin gumbaz), sakkiz qirrali yashil gumbazli Ertug'rul turbasi; bozor maydoni (soyabonli rastalar, quduq, gulxan); yog'och/oq suvoqli uylar (AddHouse) va bog'cha panjaralari; qo'ylar qo'rasi va pichan g'aramlari; mevazor qatorlari, bug'doy dalasi; osilgan shoxli tollar; kuzatuv minorasi va Qayi tug'i. Yo'l Karacahisar yo'lidan qishloqqa.
+- Xarita: `So'g'ut` belgisi; NPC joyi `sogut` (tegirmonchi, bozorchi, imom); `So'g'ut`/`Domaniç` epizodlari sharqiy kirishdan boshlanadi.
+- Sinov skrinshoti: `32_sogut`.

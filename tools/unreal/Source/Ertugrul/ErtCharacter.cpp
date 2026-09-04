@@ -576,7 +576,9 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(45.9f)) TakeShot(TEXT("nikeya"));
 	if (At(46.0f)) Teleport(-60.f, 610.f, 18.f + 40.f, -14.f, 0.f);
 	if (At(46.9f)) TakeShot(TEXT("karacahisar"));
-	if (At(47.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(47.0f)) Teleport(-220.f, 480.f, 16.f + 40.f, -17.f, 0.f);
+	if (At(47.9f)) TakeShot(TEXT("sogut"));
+	if (At(48.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;

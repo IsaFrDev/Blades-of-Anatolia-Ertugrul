@@ -524,6 +524,51 @@
     0.3
    ],
    "dialog": "npc_caravan"
+  },
+  {
+   "id": "sogut_tegirmonchi",
+   "name": "chr.sogut_tegirmonchi.name",
+   "place": "sogut",
+   "u": 44,
+   "v": -8,
+   "yaw": 270,
+   "woman": false,
+   "kaftan": [
+    0.6,
+    0.55,
+    0.45
+   ],
+   "dialog": "npc_caravan"
+  },
+  {
+   "id": "sogut_savdogar",
+   "name": "chr.sogut_savdogar.name",
+   "place": "sogut",
+   "u": 0,
+   "v": -10,
+   "yaw": 0,
+   "woman": false,
+   "kaftan": [
+    0.3,
+    0.45,
+    0.25
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "sogut_imom",
+   "name": "chr.sogut_imom.name",
+   "place": "sogut",
+   "u": 8,
+   "v": 16,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.9,
+    0.88,
+    0.8
+   ],
+   "dialog": "npc_geyikli_baba"
   }
  ]
 }
