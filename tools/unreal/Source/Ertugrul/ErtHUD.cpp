@@ -71,6 +71,7 @@ void AErtHUD::DrawHUD()
 		if (H->GetExecuteFlash() > 0.f) Text(TEXT("IJRO!"), SW * 0.5f - TextWidth(TEXT("IJRO!"), 1.8f * Sc, true) * 0.5f, SH * 0.40f, FLinearColor(0.95f, 0.2f, 0.15f, H->GetExecuteFlash()), 1.8f * Sc, true, true);
 		else if (H->GetParryFlash() > 0.f) Text(TEXT("PARRY!"), SW * 0.5f - TextWidth(TEXT("PARRY!"), 1.6f * Sc, true) * 0.5f, SH * 0.42f, FLinearColor(1.f, 0.85f, 0.3f, H->GetParryFlash()), 1.6f * Sc, true, true);
 		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
+		if (H->GetLockTarget()) Text(TEXT("Q: qulfni ochish   X: dodge"), X + 280 * Sc, Y + 34 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		else if (AErtNpc* Np = H->NearestNpc(280.f)) Text(FString::Printf(TEXT("[E] %s bilan gaplashish"), *Np->GetDisplayName()), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (H->NearestHorse(320.f)) Text(TEXT("[E] Otga minish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
@@ -115,13 +116,15 @@ void AErtHUD::DrawHUD()
 			const FString DS = FString::Printf(TEXT("%.0f m"), Dist);
 			Text(DS, S.X - TextWidth(DS, Sc, false) * 0.5f, S.Y + Sz + 2, Gold, Sc);
 		}
-		// Dushman ko'rsatkichlari (faol, yaqin)
+		// Dushman ko'rsatkichlari (faol, yaqin) + zarba oldidan "!" + qulf retikuli
 		for (const AErtEnemy* E : D->GetEnemies())
 		{
 			if (!E || E->IsDead() || E->IsAnimal() || !E->IsAlerted()) continue;
 			const FVector S = Project(E->GetActorLocation() + FVector(0, 0, 130.f));
 			if (S.Z <= 0.f) continue;
 			Bar(S.X - 20 * Sc, S.Y, 40 * Sc, 5 * Sc, E->GetHealth() / E->GetMaxHealth(), Red);
+			if (E->IsWindingUp()) Text(TEXT("!"), S.X - 5 * Sc, S.Y - 30 * Sc, FLinearColor(1.f, 0.25f, 0.1f), 1.6f * Sc, true, true);
+			if (E == H->GetLockTarget()) { const float R = 22 * Sc; for (int32 k = 0; k < 4; ++k) { const float A = k * PI * 0.5f + PI * 0.25f; FCanvasLineItem Ln(FVector2D(S.X + FMath::Cos(A) * R, S.Y + 8 * Sc + FMath::Sin(A) * R), FVector2D(S.X + FMath::Cos(A + 0.9f) * R, S.Y + 8 * Sc + FMath::Sin(A + 0.9f) * R)); Ln.SetColor(Gold); Ln.LineThickness = 2.f; Canvas->DrawItem(Ln); } }
 		}
 	}
 

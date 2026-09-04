@@ -111,6 +111,8 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuRight;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Settings;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Map;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Lock;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Dodge;
 
 private:
 	void OnMenu();
@@ -120,6 +122,13 @@ private:
 	void OnInteract();
 	void OnChoice1(); void OnChoice2(); void OnChoice3(); void OnChoice4();
 	void OnMenuLeft(); void OnMenuRight(); void OnSettings(); void OnMap();
+	void OnLock(); void OnDodge(); void UpdateLock(float Dt);
+	UPROPERTY(Transient) TObjectPtr<AErtEnemy> LockTarget;
+	float DodgeT = 0.f;
+public:
+	AErtEnemy* GetLockTarget() const { return LockTarget; }
+	bool IsDodging() const { return DodgeT > 0.f; }
+private:
 	float ShakeT = 0.f; FVector BoomBase = FVector(0, 45.f, 60.f);
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
 	float BlockT = 99.f, ParryFlash = 0.f, RiposteT = 0.f, ExecuteFlash = 0.f;

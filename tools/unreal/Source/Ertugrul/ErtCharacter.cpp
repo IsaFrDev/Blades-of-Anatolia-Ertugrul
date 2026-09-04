@@ -147,6 +147,7 @@ void AErtCharacter::OnAttack()
 	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f) return;
 	AttackCD = 0.62f;
 	Stamina = FMath::Max(0.f, Stamina - 6.f);
+	if (LockTarget && !LockTarget->IsDead()) SetActorRotation(FRotator(0, (LockTarget->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
 	if (Body) Body->TriggerAttack();
 	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), 0.8f, FMath::FRandRange(0.9f, 1.1f));
 	// Oldindagi sohada dushmanlarni qidiramiz (0.2 s dan keyin tegadi deb hisoblaymiz - soddalashtirilgan: darhol)
@@ -261,6 +262,7 @@ void AErtCharacter::OnShoot()
 void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker)
 {
 	if (bDead) return;
+	if (DodgeT > 0.2f) return;   // dodge daxlsizligi
 	const FVector To = (From - GetActorLocation()).GetSafeNormal2D();
 	const bool bFacing = FVector::DotProduct(GetActorForwardVector(), To) > 0.2f;
 	if (bBlocking && bFacing && BlockT < 0.25f)
@@ -497,6 +499,8 @@ void AErtCharacter::BuildInput()
 	IA_MenuRight = MakeAction(TEXT("IA_ErtMenuRight"), EInputActionValueType::Boolean);
 	IA_Settings = MakeAction(TEXT("IA_ErtSettings"), EInputActionValueType::Boolean);
 	IA_Map = MakeAction(TEXT("IA_ErtMap"), EInputActionValueType::Boolean);
+	IA_Lock = MakeAction(TEXT("IA_ErtLock"), EInputActionValueType::Boolean);
+	IA_Dodge = MakeAction(TEXT("IA_ErtDodge"), EInputActionValueType::Boolean);
 	// Menyu harakatlari pauzada ham ishlaydi
 	for (UInputAction* A : { IA_Menu, IA_MenuUp, IA_MenuDown, IA_Confirm, IA_MenuLeft, IA_MenuRight, IA_Settings, IA_Map, IA_Choice1, IA_Choice2, IA_Choice3, IA_Choice4, IA_Jump }) if (A) A->bTriggerWhenPaused = true;
 
@@ -556,10 +560,64 @@ void AErtCharacter::BuildInput()
 	Map(IA_MenuRight, EKeys::Right); Map(IA_MenuRight, EKeys::Gamepad_DPad_Right);
 	Map(IA_Settings, EKeys::O); Map(IA_Settings, EKeys::Gamepad_Special_Left);
 	Map(IA_Map, EKeys::M); Map(IA_Map, EKeys::Gamepad_RightThumbstick);
+	Map(IA_Lock, EKeys::Q); Map(IA_Lock, EKeys::MiddleMouseButton); Map(IA_Lock, EKeys::Gamepad_LeftThumbstick);
+	Map(IA_Dodge, EKeys::X); Map(IA_Dodge, EKeys::Gamepad_FaceButton_Right);
 }
 
 void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); } }
 void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); } }
+void AErtCharacter::OnLock()
+{
+	if (!bInputEnabled || bDead) return;
+	if (LockTarget) { LockTarget = nullptr; GetCharacterMovement()->bOrientRotationToMovement = true; return; }
+	// Oldindagi eng yaqin tirik dushman (18 m)
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtEnemy::StaticClass(), All);
+	AErtEnemy* Best = nullptr; float BestScore = 1e9f;
+	for (AActor* A : All)
+	{
+		AErtEnemy* E = Cast<AErtEnemy>(A);
+		if (!E || E->IsDead() || E->IsAnimal()) continue;
+		const FVector To = E->GetActorLocation() - GetActorLocation();
+		const float D = To.Size2D(); if (D > 1800.f) continue;
+		const float Facing = FVector::DotProduct(Cam->GetForwardVector().GetSafeNormal2D(), To.GetSafeNormal2D());
+		const float Score = D * (1.6f - Facing);
+		if (Score < BestScore) { BestScore = Score; Best = E; }
+	}
+	LockTarget = Best;
+	if (LockTarget) GetCharacterMovement()->bOrientRotationToMovement = false;
+}
+
+void AErtCharacter::UpdateLock(float Dt)
+{
+	if (!LockTarget) return;
+	if (LockTarget->IsDead() || FVector::Dist2D(LockTarget->GetActorLocation(), GetActorLocation()) > 2600.f || Horse || bSwimming)
+	{
+		LockTarget = nullptr; GetCharacterMovement()->bOrientRotationToMovement = true; return;
+	}
+	const FVector To = LockTarget->GetActorLocation() - GetActorLocation();
+	const float Yaw = To.Rotation().Yaw;
+	// Personaj nishonga qaraydi (strafe), kamera yumshoq ergashadi
+	SetActorRotation(FRotator(0, FMath::FixedTurn(GetActorRotation().Yaw, Yaw, 540.f * Dt), 0));
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		const FRotator C = PC->GetControlRotation();
+		PC->SetControlRotation(FRotator(FMath::FInterpTo(C.Pitch, -14.f, Dt, 2.f), FMath::FixedTurn(C.Yaw, Yaw, 200.f * Dt), 0));
+	}
+}
+
+void AErtCharacter::OnDodge()
+{
+	if (!bInputEnabled || bDead || bMantling || Horse || bSwimming || DodgeT > 0.f || Stamina < 8.f) return;
+	if (!GetCharacterMovement()->IsMovingOnGround()) return;
+	DodgeT = 0.5f;
+	Stamina = FMath::Max(0.f, Stamina - 12.f);
+	FVector Dir = GetLastMovementInputVector().GetSafeNormal2D();
+	if (Dir.IsNearlyZero()) Dir = -GetActorForwardVector();   // kirish bo'lmasa orqaga
+	LaunchCharacter(Dir * 620.f + FVector(0, 0, 140.f), true, true);
+	if (bIsCrouched) UnCrouch();
+	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), 0.4f, 1.3f);
+}
+
 void AErtCharacter::OnMap() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
 void AErtCharacter::OnSettings() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (!GM->IsDialogActive()) GM->SettingsToggle(); } }
 
@@ -617,6 +675,8 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_MenuRight, ETriggerEvent::Started, this, &AErtCharacter::OnMenuRight);
 	EIC->BindAction(IA_Settings, ETriggerEvent::Started, this, &AErtCharacter::OnSettings);
 	EIC->BindAction(IA_Map, ETriggerEvent::Started, this, &AErtCharacter::OnMap);
+	EIC->BindAction(IA_Lock, ETriggerEvent::Started, this, &AErtCharacter::OnLock);
+	EIC->BindAction(IA_Dodge, ETriggerEvent::Started, this, &AErtCharacter::OnDodge);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)
@@ -792,6 +852,8 @@ void AErtCharacter::Tick(float Dt)
 {
 	Super::Tick(Dt);
 	UpdateCombat(Dt);
+	DodgeT = FMath::Max(0.f, DodgeT - Dt);
+	UpdateLock(Dt);
 	if (ShakeT > 0.f) { ShakeT = FMath::Max(0.f, ShakeT - Dt); const float A = ShakeT * 40.f; Boom->SocketOffset = BoomBase + FVector(0, FMath::FRandRange(-A, A), FMath::FRandRange(-A, A)); }
 	else if (Boom->SocketOffset != BoomBase) Boom->SocketOffset = BoomBase;
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
@@ -818,7 +880,7 @@ void AErtCharacter::Tick(float Dt)
 		const UCharacterMovementComponent* CM = GetCharacterMovement();
 		const FVector V = CM->Velocity;
 		const float Lean = FVector::DotProduct(GetActorRightVector(), V.GetSafeNormal2D()) * FMath::Min(V.Size2D() / SprintSpeed, 1.f);
-		Body->Animate(Dt, V.Size2D(), CM->IsFalling() || bMantling, bIsCrouched || LandSquash > 0.35f, Lean, SlopeDeg);
+		Body->Animate(Dt, V.Size2D(), CM->IsFalling() || bMantling, bIsCrouched || LandSquash > 0.35f || DodgeT > 0.15f, Lean, SlopeDeg);
 	}
 	MoveInput = FVector2D::ZeroVector;
 	if (bShowDebug) DrawDebug();

@@ -117,6 +117,12 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - Zarba reaksiyasi: dushman zarba yeganda orqaga uchadi (kuchi zararga bog'liq) va 0.35 s gangiydi; o'yinchi zarba yeganda orqaga siljiydi,
   kamera silkinadi; har tegishda hitstop (0.07 s, ijroda 0.22 s).
 
+## Qulflash, dodge, ogohlantirish
+- Q / o'rta sichqoncha / chap stik: eng yaqin oldindagi dushmanga qulflash - personaj nishonga qaraydi (strafe), kamera yumshoq ergashadi,
+  zarba nishon tomon; o'lsa yoki 26 m dan uzoqlashsa ochiladi.
+- X / B: dodge - kirish yo'nalishida sakrab qochish (kirish yo'q bo'lsa orqaga), 0.5 s, 0.2 s dan keyingi qismi daxlsiz, stamina -12.
+- Dushman zarba oldidan (0.22 s) boshida qizil "!" chiqadi - parry/dodge vaqti. Qulflangan nishonda oltin retikul.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

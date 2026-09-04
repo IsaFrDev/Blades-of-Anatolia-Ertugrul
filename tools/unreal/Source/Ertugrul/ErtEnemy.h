@@ -24,6 +24,8 @@ public:
 	/** Parry natijasi: gangib qoladi (harakat/zarba yo'q) */
 	void Stagger(float Seconds);
 	bool IsStaggered() const { return StaggerT > 0.f; }
+	/** Zarba oldidan (ogohlantirish belgisi uchun) */
+	bool IsWindingUp() const { return HitPending > 0.f; }
 	/** Otliq dushman: otga o'tqazish */
 	void MountHorse(AErtHorse* H);
 	AErtHorse* GetMount() const { return Mount; }
