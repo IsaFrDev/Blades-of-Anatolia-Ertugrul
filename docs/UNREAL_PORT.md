@@ -306,3 +306,8 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Renderer: ekran-fazo GI (SSGI, sifat 3), SSR sifat 3, AO, kontakt soyalar, 4 kaskad 4096 soya. Lumen/RT yo'q (Intel GPU).
 - `BuildFortress()` (Bagras) qayta yozildi: glasisli dumaloq burjlar (qator choklari, mashikuli konsollari, parapet, kungura tishlari, o'q tirqishlari, konus cherepitsa tom), devorlar (poydevor, mashikuli tokchasi, parapet, tishlar, tirqishlar, ichki yog'och yo'lak va ustunlar), 7 burj, darvozaxona (ikki burj, ark, temir panjara, tushirilgan ko'tarma ko'prik, zanjirlar, xandaq), donjon (burchak ustunlari, 3 qavat peshtoqli derazalar, mashikuli, shiypon tom, bayroq, eshik, zina), cherkov (apsida, xoch), kazarma, otxona (ot), temirchi (mo'ri, sandon, olov), quduq, bochkalar, yashiklar, qurol ustuni, mash'alalar.
 - Skrinshotlarda birinchi kadrlar shader kompilyatsiyasi tugaguncha kulrang bo'lishi mumkin (DDC keshlanadi).
+
+## Barcha shaharlarga material uslublari
+
+- `ErtWorldBuilder.cpp` dagi barcha rang e'lonlari uslub bilan belgilandi (`ErtCol::Sty`): tosh nomlari (Stone, Lime, Basalt, HStone, KStone, SStone, NStone, BStone, Grey, StoneG...) -> `StyleStone`; yog'och (Wood, DarkWood, *Wood, Timber) -> `StyleWood`; Tile/Shingle -> `StyleRoof`; Brick/BrickD -> `StyleBrick`. `Vary` alfani saqlaydi, shuning uchun barcha ishlatishlar avtomatik uslub oladi. Qorong'i eshik tuslari (`* 0.3f` kabi) `StylePlain` da qoldirildi (alfa siljimasligi uchun).
+- Shunday qilib oba devori, Bagras shahri, Mo'g'ul lageri, cho'l binolari, Damashq, Halab, Konya, Qayseri, Sivas, Erzurum, Bursa, Nikeya, Karacahisar, So'g'ut, Domaniç hammasi naqshli PBR ko'rinishga o'tdi.

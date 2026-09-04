@@ -23,7 +23,7 @@ namespace
 		{{300, 300}, {275, 480}, 6}, {{300, 300}, {320, 110}, 6}, {{-300, 250}, {-180, 275}, 6}, {{500, 520}, {420, 615}, 6}, {{-300, 250}, {-420, 65}, 6}, {{-150, -150}, {-190, -60}, 6}, {{-30, 480}, {-60, 690}, 5}, {{-60, 690}, {-160, 610}, 5},
 		{{-470, -280}, {-470, -470}, 8}, {{-470, -470}, {-470, -660}, 8}, {{-660, -470}, {-280, -470}, 8},
 	};
-	const FLinearColor Stone(0.46f, 0.44f, 0.41f), Wood(0.36f, 0.24f, 0.13f), DarkWood(0.24f, 0.16f, 0.09f);
+	const FLinearColor Stone = ErtCol::Sty(FLinearColor(0.46f, 0.44f, 0.41f), ErtCol::StyleStone), Wood = ErtCol::Sty(FLinearColor(0.36f, 0.24f, 0.13f), ErtCol::StyleWood), DarkWood = ErtCol::Sty(FLinearColor(0.24f, 0.16f, 0.09f), ErtCol::StyleWood);
 	const FLinearColor Felt(0.86f, 0.82f, 0.72f), FeltDark(0.24f, 0.22f, 0.20f), Cream(0.90f, 0.86f, 0.74f);
 	const FLinearColor Gold(0.95f, 0.76f, 0.22f), Red(0.55f, 0.10f, 0.08f), Ochre(0.74f, 0.63f, 0.46f);
 	const FLinearColor Flame(1.0f, 0.55f, 0.08f), Ember(0.9f, 0.25f, 0.05f), Straw(0.80f, 0.70f, 0.40f);
@@ -581,7 +581,7 @@ void AErtWorldBuilder::BuildOba()
 			{
 				const float H = 3.4f + RS.FRandRange(-0.2f, 0.2f);
 				M.AddCylinder(W(OE(u), ON(v), Z - 0.2f), 0.3f, 0.26f, H, 5, ErtCol::Vary(Wood, 0.12f, (int32)(t * 10) + (int32)u), false);
-				M.AddCone(W(OE(u), ON(v), Z - 0.2f + H), 0.26f, 0.4f, 5, Wood * 0.8f);
+				M.AddCone(W(OE(u), ON(v), Z - 0.2f + H), 0.26f, 0.4f, 5, ErtCol::Sty(Wood * 0.8f, ErtCol::StyleWood));
 			};
 			if (FMath::Abs(t) > 4.5f) Log(t, -Half);
 			Log(t, Half); Log(-Half, t); Log(Half, t);
@@ -1221,7 +1221,7 @@ void AErtWorldBuilder::BuildDamascus()
 	const float Z = DamZ;
 	auto DE = [](float u) { return DamE + u; };
 	auto DN = [](float v) { return DamN + v; };
-	const FLinearColor Lime(0.86f, 0.82f, 0.70f), Basalt(0.30f, 0.30f, 0.32f), DWood(0.42f, 0.28f, 0.14f), DGold(0.9f, 0.75f, 0.25f), Teal(0.18f, 0.5f, 0.55f), Green(0.16f, 0.40f, 0.14f);
+	const FLinearColor Lime = ErtCol::Sty(FLinearColor(0.86f, 0.82f, 0.70f), ErtCol::StyleStone), Basalt = ErtCol::Sty(FLinearColor(0.30f, 0.30f, 0.32f), ErtCol::StyleStone), DWood = ErtCol::Sty(FLinearColor(0.42f, 0.28f, 0.14f), ErtCol::StyleWood), DGold(0.9f, 0.75f, 0.25f), Teal(0.18f, 0.5f, 0.55f), Green(0.16f, 0.40f, 0.14f);
 	// Devorlar (8 m baland, 2.5 m qalin), kungura, burjlar
 	const float WallH = 8.f;
 	for (int32 side = 0; side < 4; ++side)
@@ -1318,7 +1318,7 @@ void AErtWorldBuilder::BuildHalab()
 	const float Z = HalabZ, TopZ = HalabZ + HalabMoundH;
 	auto HE = [](float u) { return HalabE + u; };
 	auto HN = [](float v) { return HalabN + v; };
-	const FLinearColor HStone(0.72f, 0.68f, 0.60f), HDark(0.45f, 0.42f, 0.38f), HWood(0.40f, 0.27f, 0.13f), Copper(0.35f, 0.55f, 0.45f), HRed(0.6f, 0.12f, 0.1f);
+	const FLinearColor HStone = ErtCol::Sty(FLinearColor(0.72f, 0.68f, 0.60f), ErtCol::StyleStone), HDark = ErtCol::Sty(FLinearColor(0.45f, 0.42f, 0.38f), ErtCol::StyleStone), HWood = ErtCol::Sty(FLinearColor(0.40f, 0.27f, 0.13f), ErtCol::StyleWood), Copper(0.35f, 0.55f, 0.45f), HRed(0.6f, 0.12f, 0.1f);
 	// Tashqi devor: 16 burchakli halqa, har ikkinchi burchakda burj, sharqda darvoza
 	const int32 Sides = 16;
 	for (int32 i = 0; i < Sides; ++i)
@@ -1359,7 +1359,7 @@ void AErtWorldBuilder::BuildHalab()
 		}
 		// Qal'a darvozasi (janubda) va ko'prik: tepalikdan shahar tekisligiga qiya yo'lak, arklar ustida
 		M.AddBox(W(HE(0.f), HN(-CR), TopZ + 8.f), FVector(1000, 500, 800), ErtCol::Vary(HDark, 0.03f, ++S));
-		M.AddBox(W(HE(0.f), HN(-CR + 2.f), TopZ + 4.f), FVector(250, 400, 100), HStone * 0.3f);
+		M.AddBox(W(HE(0.f), HN(-CR + 2.f), TopZ + 4.f), FVector(250, 400, 100), ErtCol::Sty(HStone * 0.3f, ErtCol::StylePlain));
 		const int32 Steps = 14;
 		const float Run = HalabMoundR + 26.f - CR;
 		const float Pitch = FMath::RadiansToDegrees(FMath::Atan2(HalabMoundH, Run));
@@ -1449,7 +1449,7 @@ void AErtWorldBuilder::BuildKonya()
 	const float Z = KonZ, TopZ = KonZ + KonHillH;
 	auto KE = [](float u) { return KonE + u; };
 	auto KN = [](float v) { return KonN + v; };
-	const FLinearColor KStone(0.76f, 0.70f, 0.58f), KDark(0.50f, 0.45f, 0.38f), KWood(0.38f, 0.25f, 0.12f), Turq(0.12f, 0.58f, 0.62f), Tile(0.16f, 0.32f, 0.62f), KGold(0.9f, 0.75f, 0.25f), Plane(0.22f, 0.45f, 0.18f), Trunk(0.55f, 0.50f, 0.42f);
+	const FLinearColor KStone = ErtCol::Sty(FLinearColor(0.76f, 0.70f, 0.58f), ErtCol::StyleStone), KDark = ErtCol::Sty(FLinearColor(0.50f, 0.45f, 0.38f), ErtCol::StyleStone), KWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Turq(0.12f, 0.58f, 0.62f), Tile = ErtCol::Sty(FLinearColor(0.16f, 0.32f, 0.62f), ErtCol::StyleRoof), KGold(0.9f, 0.75f, 0.25f), Plane(0.22f, 0.45f, 0.18f), Trunk(0.55f, 0.50f, 0.42f);
 	// Devor: 24 burchak, har burchakda burj (Konya "yuz burj" shahri), sharqiy va g'arbiy darvozalar
 	const int32 Sides = 24;
 	for (int32 i = 0; i < Sides; ++i)
@@ -1512,7 +1512,7 @@ void AErtWorldBuilder::BuildKonya()
 		M.AddBox(W(KE(MU), KN(MV), Z + 3.f), FVector(1600, 1400, 300), ErtCol::Vary(KStone, 0.03f, ++S));
 		M.AddBox(W(KE(MU), KN(MV), Z + 0.2f), FVector(800, 700, 20), FLinearColor(0.9f, 0.88f, 0.82f));
 		M.AddBox(W(KE(MU), KN(MV - 14.f), Z + 6.f), FVector(500, 150, 600), ErtCol::Vary(KStone, 0.03f, ++S));   // portal
-		M.AddBox(W(KE(MU), KN(MV - 14.6f), Z + 3.5f), FVector(200, 40, 350), KStone * 0.3f);
+		M.AddBox(W(KE(MU), KN(MV - 14.6f), Z + 3.5f), FVector(200, 40, 350), ErtCol::Sty(KStone * 0.3f, ErtCol::StylePlain));
 		M.AddSphere(W(KE(MU - 10.f), KN(MV + 4.f), Z + 6.f), 4.5f, 12, Turq, FVector(1, 1, 0.75f));
 		M.AddCylinder(W(KE(MU + 10.f), KN(MV - 10.f), Z), 1.5f, 1.5f, 8.f, 8, KStone, true);
 		M.AddCylinder(W(KE(MU + 10.f), KN(MV - 10.f), Z + 8.f), 1.2f, 1.0f, 22.f, 12, Tile, true);
@@ -1592,7 +1592,7 @@ void AErtWorldBuilder::BuildKayseri()
 	const float Z = KayZ;
 	auto QE = [](float u) { return KayE + u; };
 	auto QN = [](float v) { return KayN + v; };
-	const FLinearColor Basalt(0.26f, 0.25f, 0.26f), BasaltL(0.40f, 0.38f, 0.37f), Mortar(0.62f, 0.58f, 0.52f), QWood(0.38f, 0.25f, 0.12f), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), QRed(0.55f, 0.10f, 0.08f), Poplar(0.30f, 0.50f, 0.20f);
+	const FLinearColor Basalt = ErtCol::Sty(FLinearColor(0.26f, 0.25f, 0.26f), ErtCol::StyleStone), BasaltL = ErtCol::Sty(FLinearColor(0.40f, 0.38f, 0.37f), ErtCol::StyleStone), Mortar(0.62f, 0.58f, 0.52f), QWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), QRed(0.55f, 0.10f, 0.08f), Poplar(0.30f, 0.50f, 0.20f);
 	// Tashqi devor: 20 burchak, qora bazalt, kungurali, yarim dumaloq burjlar; g'arbiy va shimoliy darvozalar
 	const int32 Sides = 20;
 	for (int32 i = 0; i < Sides; ++i)
@@ -1665,8 +1665,8 @@ void AErtWorldBuilder::BuildKayseri()
 		M.AddBox(W(QE(u), QN(0.f), Z + 2.5f), FVector(400, 1300, 250), ErtCol::Vary(BasaltL, 0.05f, ++S));
 		M.AddBox(W(QE(u), QN(0.f), Z + 5.1f), FVector(400, 1300, 15), Mortar);
 		for (int32 k = -1; k <= 1; ++k) M.AddSphere(W(QE(u), QN(k * 4.2f), Z + 5.f), 2.2f, 8, ErtCol::Vary(Lead, 0.05f, ++S), FVector(1, 1, 0.6f));
-		M.AddBox(W(QE(u), QN(-6.6f), Z + 1.5f), FVector(150, 20, 220), Basalt * 0.5f);   // eshiklar
-		M.AddBox(W(QE(u), QN(6.6f), Z + 1.5f), FVector(150, 20, 220), Basalt * 0.5f);
+		M.AddBox(W(QE(u), QN(-6.6f), Z + 1.5f), FVector(150, 20, 220), ErtCol::Sty(Basalt * 0.5f, ErtCol::StylePlain));   // eshiklar
+		M.AddBox(W(QE(u), QN(6.6f), Z + 1.5f), FVector(150, 20, 220), ErtCol::Sty(Basalt * 0.5f, ErtCol::StylePlain));
 	}
 	// Uylar: qora toshli, tekis tomli, oq choklar; radial ko'chalar
 	for (float R = 40.f; R < KayR - 12.f; R += 15.f)
@@ -1714,7 +1714,7 @@ void AErtWorldBuilder::BuildSivas()
 	const float Z = SivZ, TopZ = SivZ + SivHillH;
 	auto SE = [](float u) { return SivE + u; };
 	auto SN = [](float v) { return SivN + v; };
-	const FLinearColor Brick(0.62f, 0.40f, 0.28f), BrickD(0.48f, 0.30f, 0.20f), SStone(0.74f, 0.68f, 0.56f), Turq(0.12f, 0.58f, 0.62f), Cobalt(0.15f, 0.25f, 0.6f), SWood(0.38f, 0.25f, 0.12f), Lead(0.45f, 0.47f, 0.52f), SGreen(0.10f, 0.35f, 0.15f), Willow(0.35f, 0.55f, 0.25f);
+	const FLinearColor Brick = ErtCol::Sty(FLinearColor(0.62f, 0.40f, 0.28f), ErtCol::StyleBrick), BrickD = ErtCol::Sty(FLinearColor(0.48f, 0.30f, 0.20f), ErtCol::StyleBrick), SStone = ErtCol::Sty(FLinearColor(0.74f, 0.68f, 0.56f), ErtCol::StyleStone), Turq(0.12f, 0.58f, 0.62f), Cobalt(0.15f, 0.25f, 0.6f), SWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), SGreen(0.10f, 0.35f, 0.15f), Willow(0.35f, 0.55f, 0.25f);
 	// Minora yasovchi: g'isht tanasi, feruza halqalar, sharafa, konus
 	auto Minaret = [&](float u, float v, float Zb, float Hh, float R0, int32 Bands)
 	{
@@ -1770,7 +1770,7 @@ void AErtWorldBuilder::BuildSivas()
 		M.AddBox(W(SE(MU), SN(MV), Z + 0.2f), FVector(900, 800, 20), FLinearColor(0.9f, 0.88f, 0.82f));
 		M.AddBox(W(SE(MU + 17.f), SN(MV), Z + 6.f), FVector(150, 600, 600), ErtCol::Vary(SStone, 0.03f, ++S));   // portal fasadi
 		M.AddBox(W(SE(MU + 17.8f), SN(MV), Z + 6.f), FVector(20, 420, 500), Turq);                                  // koshin
-		M.AddBox(W(SE(MU + 18.2f), SN(MV), Z + 3.f), FVector(20, 200, 400), SStone * 0.3f);                           // eshik
+		M.AddBox(W(SE(MU + 18.2f), SN(MV), Z + 3.f), FVector(20, 200, 400), ErtCol::Sty(SStone * 0.3f, ErtCol::StylePlain));                           // eshik
 		Minaret(MU + 17.f, MV - 8.f, Z + 9.f, 14.f, 1.1f, 3); Minaret(MU + 17.f, MV + 8.f, Z + 9.f, 14.f, 1.1f, 3);
 		M.AddSphere(W(SE(MU - 8.f), SN(MV + 9.f), Z + 7.f), 3.5f, 10, Turq, FVector(1, 1, 0.7f));
 		M.AddSphere(W(SE(MU - 8.f), SN(MV - 9.f), Z + 7.f), 3.5f, 10, Turq, FVector(1, 1, 0.7f));
@@ -1780,7 +1780,7 @@ void AErtWorldBuilder::BuildSivas()
 		const float MU = 45.f, MV = 20.f;
 		M.AddBox(W(SE(MU), SN(MV), Z + 7.f), FVector(200, 1100, 700), ErtCol::Vary(SStone, 0.03f, ++S));
 		M.AddBox(W(SE(MU - 1.1f), SN(MV), Z + 5.f), FVector(20, 450, 700), ErtCol::Vary(BrickD, 0.03f, ++S));
-		M.AddBox(W(SE(MU - 1.3f), SN(MV), Z + 3.f), FVector(20, 220, 450), SStone * 0.3f);
+		M.AddBox(W(SE(MU - 1.3f), SN(MV), Z + 3.f), FVector(20, 220, 450), ErtCol::Sty(SStone * 0.3f, ErtCol::StylePlain));
 		Minaret(MU, MV - 9.f, Z + 14.f, 16.f, 1.2f, 4); Minaret(MU, MV + 9.f, Z + 14.f, 16.f, 1.2f, 4);
 		M.AddBox(W(SE(MU + 12.f), SN(MV), Z + 2.5f), FVector(1000, 1100, 250), ErtCol::Vary(SStone, 0.03f, ++S));
 		M.AddBox(W(SE(MU + 12.f), SN(MV), Z + 0.2f), FVector(600, 700, 20), FLinearColor(0.9f, 0.88f, 0.82f));
@@ -1861,7 +1861,7 @@ void AErtWorldBuilder::BuildErzurum()
 	const float Z = ErzZ, TopZ = ErzZ + ErzHillH;
 	auto XE = [](float u) { return ErzE + u; };
 	auto XN = [](float v) { return ErzN + v; };
-	const FLinearColor Grey(0.58f, 0.56f, 0.52f), GreyD(0.42f, 0.40f, 0.38f), Brick(0.60f, 0.38f, 0.26f), BrickD(0.46f, 0.28f, 0.18f), Turq(0.12f, 0.58f, 0.62f), XWood(0.36f, 0.24f, 0.12f), Lead(0.45f, 0.47f, 0.52f), XRed(0.55f, 0.10f, 0.08f), Pine(0.10f, 0.32f, 0.16f), Snow(0.95f, 0.96f, 1.0f);
+	const FLinearColor Grey = ErtCol::Sty(FLinearColor(0.58f, 0.56f, 0.52f), ErtCol::StyleStone), GreyD = ErtCol::Sty(FLinearColor(0.42f, 0.40f, 0.38f), ErtCol::StyleStone), Brick = ErtCol::Sty(FLinearColor(0.60f, 0.38f, 0.26f), ErtCol::StyleBrick), BrickD = ErtCol::Sty(FLinearColor(0.46f, 0.28f, 0.18f), ErtCol::StyleBrick), Turq(0.12f, 0.58f, 0.62f), XWood = ErtCol::Sty(FLinearColor(0.36f, 0.24f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), XRed(0.55f, 0.10f, 0.08f), Pine(0.10f, 0.32f, 0.16f), Snow(0.95f, 0.96f, 1.0f);
 	auto Minaret = [&](float u, float v, float Zb, float Hh, float R0)
 	{
 		M.AddBox(W(XE(u), XN(v), Zb + 2.5f), FVector(R0 * 130.f, R0 * 130.f, 250), Grey);
@@ -1916,7 +1916,7 @@ void AErtWorldBuilder::BuildErzurum()
 		const float MU = 0.f, MV = 8.f;
 		M.AddBox(W(XE(MU), XN(MV - 16.f), Z + 9.f), FVector(1100, 250, 900), ErtCol::Vary(Grey, 0.03f, ++S));
 		M.AddBox(W(XE(MU), XN(MV - 17.3f), Z + 6.5f), FVector(400, 20, 900), ErtCol::Vary(GreyD, 0.03f, ++S));
-		M.AddBox(W(XE(MU), XN(MV - 17.5f), Z + 3.f), FVector(200, 20, 450), Grey * 0.3f);
+		M.AddBox(W(XE(MU), XN(MV - 17.5f), Z + 3.f), FVector(200, 20, 450), ErtCol::Sty(Grey * 0.3f, ErtCol::StylePlain));
 		Minaret(MU - 8.f, MV - 16.f, Z + 18.f, 14.f, 1.3f); Minaret(MU + 8.f, MV - 16.f, Z + 18.f, 14.f, 1.3f);
 		M.AddBox(W(XE(MU), XN(MV + 4.f), Z + 3.5f), FVector(1100, 1800, 350), ErtCol::Vary(Grey, 0.03f, ++S));
 		M.AddBox(W(XE(MU), XN(MV + 2.f), Z + 0.2f), FVector(500, 1000, 20), FLinearColor(0.85f, 0.85f, 0.82f));
@@ -1945,7 +1945,7 @@ void AErtWorldBuilder::BuildErzurum()
 		{
 			M.AddBox(W(XE(k * 9.f), XN(v), Z + 1.6f), FVector(250, 320, 160), ErtCol::Vary(Grey, 0.06f, ++S));
 			M.AddCylinder(W(XE(k * 9.f), XN(v), Z + 3.2f), 2.4f, 0.2f, 1.6f, 4, Lead, true);
-			M.AddBox(W(XE(k * 6.5f), XN(v), Z + 0.9f), FVector(30, 200, 90), Grey * 0.3f);
+			M.AddBox(W(XE(k * 6.5f), XN(v), Z + 0.9f), FVector(30, 200, 90), ErtCol::Sty(Grey * 0.3f, ErtCol::StylePlain));
 			M.AddBox(W(XE(k * 6.f), XN(v), Z + 0.8f), FVector(40, 160, 20), FLinearColor(RS.FRand() * 0.5f + 0.2f, RS.FRand() * 0.4f + 0.2f, RS.FRand() * 0.5f + 0.2f));
 		}
 	// Uylar: past, qalin tosh, tekis tuproq tom (qish uchun), mo'rilar
@@ -1998,7 +1998,7 @@ void AErtWorldBuilder::BuildBursa()
 	const float Z = BurZ, TopZ = BurZ + BurHillH;
 	auto BE = [](float u) { return BurE + u; };
 	auto BN = [](float v) { return BurN + v; };
-	const FLinearColor BStone(0.80f, 0.74f, 0.62f), BStoneD(0.62f, 0.56f, 0.46f), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), TurqD(0.08f, 0.42f, 0.48f), Tile(0.62f, 0.30f, 0.18f), BWood(0.38f, 0.25f, 0.12f), White(0.92f, 0.90f, 0.85f), Plane(0.22f, 0.45f, 0.18f), Trunk(0.55f, 0.50f, 0.42f), BRed(0.55f, 0.10f, 0.08f), Steam(0.85f, 0.88f, 0.9f);
+	const FLinearColor BStone = ErtCol::Sty(FLinearColor(0.80f, 0.74f, 0.62f), ErtCol::StyleStone), BStoneD = ErtCol::Sty(FLinearColor(0.62f, 0.56f, 0.46f), ErtCol::StyleStone), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), TurqD(0.08f, 0.42f, 0.48f), Tile = ErtCol::Sty(FLinearColor(0.62f, 0.30f, 0.18f), ErtCol::StyleRoof), BWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), White(0.92f, 0.90f, 0.85f), Plane(0.22f, 0.45f, 0.18f), Trunk(0.55f, 0.50f, 0.42f), BRed(0.55f, 0.10f, 0.08f), Steam(0.85f, 0.88f, 0.9f);
 	auto Minaret = [&](float u, float v, float Zb, float Hh)
 	{
 		M.AddBox(W(BE(u), BN(v), Zb + 2.f), FVector(160, 160, 200), BStone);
@@ -2037,7 +2037,7 @@ void AErtWorldBuilder::BuildBursa()
 			M.AddSphere(W(BE(MU - 20.f + i * 10.f), BN(MV - 15.f + j * 10.f), Z + 10.f), 4.8f, 10, (i == 2 && j == 1) ? Turq : ErtCol::Vary(Lead, 0.05f, ++S), FVector(1, 1, 0.6f));
 		Minaret(MU - 24.f, MV - 22.f, Z, 26.f); Minaret(MU + 24.f, MV - 22.f, Z, 26.f);
 		M.AddBox(W(BE(MU), BN(MV - 25.f), Z + 3.f), FVector(1400, 200, 300), ErtCol::Vary(BStone, 0.03f, ++S));   // kirish portali
-		M.AddBox(W(BE(MU), BN(MV - 26.1f), Z + 2.f), FVector(200, 20, 350), BStone * 0.3f);
+		M.AddBox(W(BE(MU), BN(MV - 26.1f), Z + 2.f), FVector(200, 20, 350), ErtCol::Sty(BStone * 0.3f, ErtCol::StylePlain));
 		M.AddCylinder(W(BE(MU), BN(MV - 34.f), Z), 3.f, 3.f, 0.8f, 12, BStoneD, true);                        // shadirvon
 		M.AddCylinder(W(BE(MU), BN(MV - 34.f), Z + 0.8f), 0.4f, 0.3f, 2.f, 8, BStoneD, true);
 	}
@@ -2048,7 +2048,7 @@ void AErtWorldBuilder::BuildBursa()
 		M.AddBox(W(BE(MU), BN(MV), Z + 10.2f), FVector(800, 800, 60), BStoneD);
 		M.AddSphere(W(BE(MU), BN(MV), Z + 10.5f), 6.5f, 14, Lead, FVector(1, 1, 0.8f));
 		M.AddBox(W(BE(MU - 6.5f), BN(MV), Z + 5.f), FVector(20, 500, 700), Turq);                                 // koshinli fasad
-		M.AddBox(W(BE(MU - 6.7f), BN(MV), Z + 2.5f), FVector(20, 200, 400), BStone * 0.3f);
+		M.AddBox(W(BE(MU - 6.7f), BN(MV), Z + 2.5f), FVector(20, 200, 400), ErtCol::Sty(BStone * 0.3f, ErtCol::StylePlain));
 		Minaret(MU + 7.f, MV + 8.f, Z, 20.f);
 		M.AddCylinder(W(BE(MU + 2.f), BN(MV - 26.f), Z), 5.f, 5.f, 8.f, 8, ErtCol::Vary(Turq, 0.03f, ++S), true);   // Yashil maqbara (sakkiz qirra)
 		M.AddCylinder(W(BE(MU + 2.f), BN(MV - 26.f), Z + 8.f), 5.3f, 5.3f, 0.8f, 8, TurqD, true);
@@ -2066,7 +2066,7 @@ void AErtWorldBuilder::BuildBursa()
 		for (int32 i = 0; i < 8; ++i) { const float a = i * PI / 4; M.AddCylinder(W(BE(MU + FMath::Cos(a) * 2.6f), BN(MV + FMath::Sin(a) * 2.6f), Z + 4.2f), 0.3f, 0.3f, 3.f, 6, BStone, true); }
 		M.AddBox(W(BE(MU), BN(MV), Z + 7.3f), FVector(300, 300, 20), BStoneD);
 		M.AddSphere(W(BE(MU), BN(MV), Z + 7.5f), 2.6f, 10, Lead, FVector(1, 1, 0.8f));
-		M.AddBox(W(BE(MU), BN(MV + 8.f), Z + 2.f), FVector(200, 40, 350), BStone * 0.3f);   // darvoza
+		M.AddBox(W(BE(MU), BN(MV + 8.f), Z + 2.f), FVector(200, 40, 350), ErtCol::Sty(BStone * 0.3f, ErtCol::StylePlain));   // darvoza
 	}
 	// Hammom (g'arb): past ko'p gumbazli, issiq suv bug'i
 	{
@@ -2135,7 +2135,7 @@ void AErtWorldBuilder::BuildNikeya()
 	const float Z = NikZ;
 	auto NE = [](float u) { return NikE + u; };
 	auto NN = [](float v) { return NikN + v; };
-	const FLinearColor NStone(0.70f, 0.66f, 0.58f), NStoneD(0.55f, 0.52f, 0.46f), Brick(0.60f, 0.32f, 0.22f), Marble(0.90f, 0.88f, 0.84f), Lead(0.45f, 0.47f, 0.52f), Tile(0.62f, 0.32f, 0.20f), NWood(0.38f, 0.25f, 0.12f), Purple(0.35f, 0.10f, 0.35f), GoldC(0.9f, 0.75f, 0.25f), Cyp(0.10f, 0.30f, 0.14f);
+	const FLinearColor NStone = ErtCol::Sty(FLinearColor(0.70f, 0.66f, 0.58f), ErtCol::StyleStone), NStoneD = ErtCol::Sty(FLinearColor(0.55f, 0.52f, 0.46f), ErtCol::StyleStone), Brick = ErtCol::Sty(FLinearColor(0.60f, 0.32f, 0.22f), ErtCol::StyleBrick), Marble(0.90f, 0.88f, 0.84f), Lead(0.45f, 0.47f, 0.52f), Tile = ErtCol::Sty(FLinearColor(0.62f, 0.32f, 0.20f), ErtCol::StyleRoof), NWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Purple(0.35f, 0.10f, 0.35f), GoldC(0.9f, 0.75f, 0.25f), Cyp(0.10f, 0.30f, 0.14f);
 	// Vizantiya devori: g'isht qatorli tosh (band), dumaloq burjlar; qo'sh devor (tashqi past, ichki baland); 4 darvoza (N ko'l, S, E, W)
 	auto Ring = [&](float R, float Hh, float Thick, int32 Sides, bool bTowers, bool bGates)
 	{
@@ -2169,7 +2169,7 @@ void AErtWorldBuilder::BuildNikeya()
 		const float Yaw = FMath::RadiansToDegrees(A);
 		for (int32 k = -1; k <= 1; k += 2) M.AddBox(W(NE(gu - FMath::Sin(A) * k * 8.f), NN(gv + FMath::Cos(A) * k * 8.f), Z + 6.5f), FVector(350, 350, 650), ErtCol::Vary(NStone, 0.04f, ++S), FRotator(0, Yaw, 0));
 		M.AddBox(W(NE(gu), NN(gv), Z + 11.f), FVector(300, 1900, 150), ErtCol::Vary(Brick, 0.04f, ++S), FRotator(0, Yaw, 0));
-		M.AddCylinder(W(NE(gu), NN(gv), Z + 6.f), 5.f, 5.f, 3.f, 12, NStone * 0.35f, true, FRotator(90.f, Yaw, 0));   // ark (qorong'i yo'lak)
+		M.AddCylinder(W(NE(gu), NN(gv), Z + 6.f), 5.f, 5.f, 3.f, 12, ErtCol::Sty(NStone * 0.35f, ErtCol::StylePlain), true, FRotator(90.f, Yaw, 0));   // ark (qorong'i yo'lak)
 	}
 	// Ayo Sofiya bazilikasi (markaz): uzun nef, apsida (yarim silindr), markaziy gumbaz, sopol tom
 	{
@@ -2184,7 +2184,7 @@ void AErtWorldBuilder::BuildNikeya()
 		M.AddBox(W(NE(BU), NN(BV), Z + 16.6f), FVector(20, 20, 120), GoldC); M.AddBox(W(NE(BU), NN(BV), Z + 17.2f), FVector(20, 60, 15), GoldC);   // xoch
 		for (int32 k = -1; k <= 1; k += 2) for (int32 i = 0; i < 6; ++i) M.AddCylinder(W(NE(BU + k * 12.f), NN(BV - 18.f + i * 7.f), Z), 0.6f, 0.6f, 5.f, 8, Marble, true);   // yon ustunlar
 		M.AddBox(W(NE(BU), NN(BV - 22.5f), Z + 3.f), FVector(20, 600, 400), NStone * 0.9f);
-		M.AddBox(W(NE(BU), NN(BV - 22.7f), Z + 2.f), FVector(20, 200, 350), NStone * 0.3f);
+		M.AddBox(W(NE(BU), NN(BV - 22.7f), Z + 2.f), FVector(20, 200, 350), ErtCol::Sty(NStone * 0.3f, ErtCol::StylePlain));
 	}
 	// Agora (bazilika g'arbida): marmar ustunli maydon, favvora
 	{
@@ -2264,7 +2264,7 @@ void AErtWorldBuilder::BuildKaracahisar()
 	const float TopZ = KarBaseZ + KarH, Z0 = KarBaseZ;
 	auto KE = [](float u) { return KarE + u; };
 	auto KN = [](float v) { return KarN + v; };
-	const FLinearColor KStone(0.40f, 0.39f, 0.40f), KStoneL(0.52f, 0.50f, 0.48f), Brick(0.55f, 0.30f, 0.22f), KWood(0.36f, 0.24f, 0.12f), Lead(0.45f, 0.47f, 0.52f), Purple(0.35f, 0.10f, 0.35f), GoldC(0.9f, 0.75f, 0.25f), Iron(0.3f, 0.3f, 0.32f), Thatch(0.62f, 0.52f, 0.30f);
+	const FLinearColor KStone = ErtCol::Sty(FLinearColor(0.40f, 0.39f, 0.40f), ErtCol::StyleStone), KStoneL = ErtCol::Sty(FLinearColor(0.52f, 0.50f, 0.48f), ErtCol::StyleStone), Brick = ErtCol::Sty(FLinearColor(0.55f, 0.30f, 0.22f), ErtCol::StyleBrick), KWood = ErtCol::Sty(FLinearColor(0.36f, 0.24f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), Purple(0.35f, 0.10f, 0.35f), GoldC(0.9f, 0.75f, 0.25f), Iron(0.3f, 0.3f, 0.32f), Thatch(0.62f, 0.52f, 0.30f);
 	// Plato chetidagi notekis ko'pburchak devor (R ~ 28 m, 11 burchak), kungura, kvadrat burjlar, janubiy darvoza
 	const int32 Sides = 11; const float CR = 28.f;
 	TArray<FVector2D> Pts;
@@ -2298,7 +2298,7 @@ void AErtWorldBuilder::BuildKaracahisar()
 	for (float bz = 3.f; bz < 18.f; bz += 4.f) M.AddBox(W(KE(-4.f), KN(12.f), TopZ + bz), FVector(702, 702, 25), ErtCol::Vary(Brick, 0.05f, ++S));
 	M.AddBox(W(KE(-4.f), KN(12.f), TopZ + 18.4f), FVector(760, 760, 40), KStoneL);
 	for (int32 i = 0; i < 4; ++i) for (int32 j = 0; j < 4; ++j) if ((i + j) % 2 == 0) M.AddBox(W(KE(-4.f - 7.f + i * 4.6f), KN(12.f - 7.f + j * 4.6f), TopZ + 19.2f), FVector(60, 60, 60), KStoneL);
-	for (int32 i = 0; i < 3; ++i) M.AddBox(W(KE(-4.f - 7.1f), KN(12.f - 3.f + i * 3.f), TopZ + 6.f + i * 3.f), FVector(10, 40, 90), KStone * 0.2f);   // tirqish derazalar
+	for (int32 i = 0; i < 3; ++i) M.AddBox(W(KE(-4.f - 7.1f), KN(12.f - 3.f + i * 3.f), TopZ + 6.f + i * 3.f), FVector(10, 40, 90), ErtCol::Sty(KStone * 0.2f, ErtCol::StylePlain));   // tirqish derazalar
 	AddBanner(M, KE(-4.f), KN(12.f), TopZ + 18.6f, 5.f, Purple, false);
 	// Cherkov (g'arb): kichik bazilika, gumbaz, xoch
 	M.AddBox(W(KE(-16.f), KN(-4.f), TopZ + 3.f), FVector(500, 900, 300), ErtCol::Vary(KStoneL, 0.03f, ++S));
@@ -2352,7 +2352,7 @@ void AErtWorldBuilder::BuildSogut()
 	const float Z = SogZ;
 	auto GE = [](float u) { return SogE + u; };
 	auto GN = [](float v) { return SogN + v; };
-	const FLinearColor Timber(0.42f, 0.28f, 0.14f), TimberD(0.30f, 0.20f, 0.10f), Plaster(0.88f, 0.84f, 0.72f), Shingle(0.36f, 0.26f, 0.16f), WillowL(0.42f, 0.60f, 0.28f), WillowT(0.35f, 0.28f, 0.18f), Water(0.28f, 0.48f, 0.62f), StoneG(0.62f, 0.60f, 0.55f), Lead(0.45f, 0.47f, 0.52f), GreenF(0.16f, 0.45f, 0.18f), Fruit(0.30f, 0.52f, 0.20f), Wheat(0.80f, 0.68f, 0.35f), Hay(0.75f, 0.62f, 0.32f);
+	const FLinearColor Timber = ErtCol::Sty(FLinearColor(0.42f, 0.28f, 0.14f), ErtCol::StyleWood), TimberD = ErtCol::Sty(FLinearColor(0.30f, 0.20f, 0.10f), ErtCol::StyleWood), Plaster(0.88f, 0.84f, 0.72f), Shingle = ErtCol::Sty(FLinearColor(0.36f, 0.26f, 0.16f), ErtCol::StyleRoof), WillowL(0.42f, 0.60f, 0.28f), WillowT(0.35f, 0.28f, 0.18f), Water(0.28f, 0.48f, 0.62f), StoneG = ErtCol::Sty(FLinearColor(0.62f, 0.60f, 0.55f), ErtCol::StyleStone), Lead(0.45f, 0.47f, 0.52f), GreenF(0.16f, 0.45f, 0.18f), Fruit(0.30f, 0.52f, 0.20f), Wheat(0.80f, 0.68f, 0.35f), Hay(0.75f, 0.62f, 0.32f);
 	auto Willow = [&](float u, float v, float Sc, int32 Sd)
 	{
 		const float ZZ = HeightAt(GE(u), GN(v));
@@ -2468,7 +2468,7 @@ void AErtWorldBuilder::BuildDomanic()
 	auto DE = [](float u) { return DomE + u; };
 	auto DN = [](float v) { return DomN + v; };
 	auto Hz = [&](float u, float v) { return HeightAt(DomE + u, DomN + v); };
-	const FLinearColor DFelt(0.86f, 0.82f, 0.72f), DFeltD(0.55f, 0.48f, 0.38f), DWood(0.40f, 0.27f, 0.13f), Wool(0.92f, 0.90f, 0.84f), WoolD(0.35f, 0.30f, 0.25f), Water(0.28f, 0.50f, 0.62f), StoneG(0.60f, 0.58f, 0.52f), Cheese(0.95f, 0.88f, 0.6f), DRed(0.55f, 0.10f, 0.08f);
+	const FLinearColor DFelt(0.86f, 0.82f, 0.72f), DFeltD(0.55f, 0.48f, 0.38f), DWood = ErtCol::Sty(FLinearColor(0.40f, 0.27f, 0.13f), ErtCol::StyleWood), Wool(0.92f, 0.90f, 0.84f), WoolD(0.35f, 0.30f, 0.25f), Water(0.28f, 0.50f, 0.62f), StoneG = ErtCol::Sty(FLinearColor(0.60f, 0.58f, 0.52f), ErtCol::StyleStone), Cheese(0.95f, 0.88f, 0.6f), DRed(0.55f, 0.10f, 0.08f);
 	// Yozgi o'tovlar halqasi (8 ta kichik o'tov), markazda katta gulxan va tug'
 	for (int32 i = 0; i < 8; ++i)
 	{
