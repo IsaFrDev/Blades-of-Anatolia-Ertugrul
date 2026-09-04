@@ -65,6 +65,7 @@ private:
 	void SpawnNpcs();
 	UPROPERTY(Transient) TObjectPtr<class ADirectionalLight> Sun;
 	UPROPERTY(Transient) TObjectPtr<class ASkyLight> Sky;
+	UPROPERTY(Transient) TObjectPtr<class APostProcessVolume> PPV;
 	float DayT = 0.35f;      // 0 = yarim tun, 0.25 = tong, 0.5 = peshin, 0.75 = shom
 	float DayLength = 1200.f; // soniya (20 daqiqa)
 	virtual void Tick(float Dt) override;
