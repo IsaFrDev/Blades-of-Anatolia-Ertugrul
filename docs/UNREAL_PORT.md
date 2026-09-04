@@ -206,6 +206,12 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - MetaHuman: Quixel Bridge orqali Epic akkaunt bilan yuklab olinadi (tashqi asset, ~1-2 GB, Intel iGPU ga og'ir) - buyruq qatoridan
   avtomatlashtirib bo'lmaydi; Geometry Script plaginidagi AppendCylinder/AppendBox bizning FErtMeshData bilan ekvivalent.
 
+## Qayiq
+- `AErtBoat`: protsedural korpus (tub, qiya bortlar, tumshuq, o'rindiqlar) + 2 eshkak (tezlikka qarab eshadi), suv sathida tebranadi,
+  `IsWater` hududidan chiqmaydi (qirg'oqqa urilsa to'xtaydi, tovush). W 380 sm/s, S orqaga, A/D burilish.
+- [E] o'tirish (3.5 m ichida) / chiqish - eng yaqin qirg'oq nuqtasiga (16 yo'nalish, 3-30 m) qo'yadi. O'tirganda o'tirish pozasi, kamera uzoqroq,
+  jang/sakrash o'chadi. Daryoda 2 ta (N=480, 300), ko'lda 1 ta.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

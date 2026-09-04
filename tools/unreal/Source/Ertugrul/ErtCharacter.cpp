@@ -25,6 +25,7 @@
 #include "ErtAudio.h"
 #include "ErtArrow.h"
 #include "ErtLoot.h"
+#include "ErtBoat.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
@@ -87,7 +88,7 @@ AErtCharacter::AErtCharacter()
 void AErtCharacter::UpdateSwim(float Dt)
 {
 	if (!WorldRef) WorldRef = Cast<AErtWorldBuilder>(UGameplayStatics::GetActorOfClass(this, AErtWorldBuilder::StaticClass()));
-	if (!WorldRef || bDead || bMantling) return;
+	if (!WorldRef || bDead || bMantling || Boat) return;
 	const FVector L = GetActorLocation();
 	float Surf = 0.f;
 	const bool bWater = WorldRef->IsWater(L.Y / 100.f, L.X / 100.f, Surf);
@@ -170,7 +171,7 @@ void AErtCharacter::OnKick()
 
 void AErtCharacter::OnAttack()
 {
-	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f) return;
+	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f || Boat) return;
 	// Seriya: oyna ichida bosilsa keyingi zarba (0 o'ng, 1 chap, 2 yakunlovchi kuchli)
 	if (ComboWindowT <= 0.f) ComboStep = 0;
 	const int32 Step = ComboStep;
@@ -223,6 +224,8 @@ void AErtCharacter::OnInteract()
 {
 	if (!bInputEnabled || bDead) return;
 	if (Horse) { DismountHorse(); return; }
+	if (Boat) { AErtBoat* B = Boat; Boat = nullptr; B->Leave(); return; }
+	if (AErtBoat* Bt = NearestBoat(350.f)) { Boat = Bt; Bt->Board(this); if (LockTarget) { LockTarget = nullptr; GetCharacterMovement()->bOrientRotationToMovement = true; } return; }
 	if (AErtLoot* Lt = NearestLoot(260.f))
 	{
 		const FString Desc = Lt->Describe();
@@ -240,6 +243,14 @@ void AErtCharacter::OnInteract()
 	}
 	if (AErtNpc* N = NearestNpc(280.f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->StartDialog(N); return; }
 	if (AErtHorse* H = NearestHorse(320.f)) MountHorse(H);
+}
+
+AErtBoat* AErtCharacter::NearestBoat(float MaxDist) const
+{
+	AErtBoat* Best = nullptr; float BestD = MaxDist;
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtBoat::StaticClass(), All);
+	for (AActor* A : All) { AErtBoat* B = Cast<AErtBoat>(A); if (!B || B->IsOccupied()) continue; const float D = FVector::Dist2D(A->GetActorLocation(), GetActorLocation()); if (D < BestD) { BestD = D; Best = B; } }
+	return Best;
 }
 
 AErtLoot* AErtCharacter::NearestLoot(float MaxDist) const
@@ -381,6 +392,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 void AErtCharacter::ResetAt(const FVector& Pos, float Yaw)
 {
 	if (Horse) DismountHorse();
+	if (Boat) { AErtBoat* B = Boat; Boat = nullptr; B->Leave(); }
 	bDead = false; bMantling = false; bBlocking = false;
 	Health = MaxHealth; Stamina = StaminaMax; HurtFlash = 0.f;
 	Arrows = FMath::Max(Arrows, 8);
@@ -514,6 +526,10 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (ShotT > 29.5f && ShotT < 32.f) DebugMove = FVector2D(0, 1);
 	if (At(30.6f)) { if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-8.f, 90.f, 0.f)); TargetArm = 380.f; }
 	if (At(31.4f)) TakeShot(TEXT("swim"));
+	if (At(31.6f)) { if (AErtBoat* Bq = NearestBoat(4000.f)) { SetActorLocation(Bq->GetActorLocation() + FVector(0, 150.f, 100.f), false, nullptr, ETeleportType::TeleportPhysics); OnInteract(); } }
+	if (ShotT > 31.8f && ShotT < 32.4f) DebugMove = FVector2D(0, 1);
+	if (At(32.2f)) TakeShot(TEXT("boat"));
+	if (At(32.45f)) { if (Boat) OnInteract(); }
 	if (At(32.5f))
 	{
 		// Ot minish sinovi: otning yoniga qo'yib minamiz
@@ -865,7 +881,7 @@ void AErtCharacter::OnMove(const FInputActionValue& V)
 	if (!bInputEnabled || bMantling) return;
 	const FVector2D In = V.Get<FVector2D>();
 	MoveInput = In;
-	if (Horse) return;   // ot Tick da boshqariladi
+	if (Horse || Boat) return;   // ot/qayiq Tick da boshqariladi
 	const FRotator YawRot(0.f, GetControlRotation().Yaw, 0.f);
 	const FVector Fwd = FRotationMatrix(YawRot).GetUnitAxis(EAxis::X);
 	const FVector Right = FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y);
@@ -891,6 +907,7 @@ void AErtCharacter::OnJumpPressed()
 	}
 	if (bMantling) return;
 	if (Horse) { Horse->RiderJump(); return; }
+	if (Boat) return;
 	if (TryVault()) return;
 	if (bIsCrouched) { UnCrouch(); return; }
 	if (TryMantle()) return;
@@ -1095,6 +1112,14 @@ void AErtCharacter::Tick(float Dt)
 	else if (Boom->SocketOffset != BoomBase) Boom->SocketOffset = BoomBase;
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
 	if (bDead) { if (Horse) DismountHorse(); MoveInput = FVector2D::ZeroVector; if (bShowDebug) DrawDebug(); return; }
+	if (Boat)
+	{
+		Boat->SetInput(MoveInput);
+		Boom->TargetArmLength = FMath::FInterpTo(Boom->TargetArmLength, FMath::Max(TargetArm, 520.f), Dt, 6.f);
+		if (Body) Body->Animate(Dt, 0.f, false, true, 0.f, 0.f);   // o'tirgan poza
+		MoveInput = FVector2D::ZeroVector;
+		return;
+	}
 	if (Horse)
 	{
 		Horse->SetRiderInput(MoveInput, bWantSprint && Stamina > 1.f);

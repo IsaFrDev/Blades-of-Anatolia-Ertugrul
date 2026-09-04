@@ -14,6 +14,7 @@ class UErtHeroBody;
 class AErtHorse;
 class AErtEnemy;
 class AErtNpc;
+class AErtBoat;
 struct FInputActionValue;
 
 UENUM(BlueprintType)
@@ -66,6 +67,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsBlocking() const { return bBlocking; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsSwimming() const { return bSwimming; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsRiding() const { return Horse != nullptr; }
+	bool IsInBoat() const { return Boat != nullptr; }
+	AErtBoat* NearestBoat(float MaxDist) const;
+	UPROPERTY(Transient) TObjectPtr<AErtBoat> Boat;
 	AErtHorse* GetHorse() const { return Horse; }
 	AErtHorse* NearestHorse(float MaxDist) const;
 	AErtNpc* NearestNpc(float MaxDist) const;

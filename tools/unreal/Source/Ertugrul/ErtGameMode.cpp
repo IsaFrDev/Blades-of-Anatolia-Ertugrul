@@ -7,6 +7,7 @@
 #include "ErtHorse.h"
 #include "ErtNpc.h"
 #include "ErtLoot.h"
+#include "ErtBoat.h"
 #include "ErtWorldBuilder.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
@@ -50,6 +51,13 @@ void AErtGameMode::BeginPlay()
 		{
 			AErtHorse* Hs = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), FVector(44600.f + i * 350.f, -56000.f + i * 250.f, 2250.f), FRotator(0, 0.f, 0), SP);
 			if (Hs) Hs->Init(Coats[i]);
+		}
+		// Qayiqlar: daryoda (oba yaqinida) ikkita, ko'lda bitta
+		if (AErtWorldBuilder* Wb = Cast<AErtWorldBuilder>(UGameplayStatics::GetActorOfClass(this, AErtWorldBuilder::StaticClass())))
+		{
+			const float Ns[] = { 480.f, 300.f };
+			for (float N : Ns) { const float E = Wb->RiverE(N) + 8.f; GetWorld()->SpawnActor<AErtBoat>(AErtBoat::StaticClass(), FVector(N * 100.f, E * 100.f, ErtMap::WaterZ * 100.f + 10.f), FRotator(0, 0, 0), SP); }
+			GetWorld()->SpawnActor<AErtBoat>(AErtBoat::StaticClass(), FVector((ErtMap::LakeN - 20.f) * 100.f, (ErtMap::LakeE + 10.f) * 100.f, ErtMap::LakeZ * 100.f + 10.f), FRotator(0, 45.f, 0), SP);
 		}
 		// Karvonsaroy oldida ikkita tuya
 		for (int32 i = 0; i < 2; ++i)
