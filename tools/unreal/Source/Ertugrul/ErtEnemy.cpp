@@ -44,6 +44,8 @@ void AErtEnemy::Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadi
 	case EErtEnemyKind::Elite:    MaxHealth = 170.f; AttackDamage = 18.f; AttackCooldown = 1.2f; MoveSpeed = 430.f; AttackRange = 220.f;
 		Body->Kaftan = FLinearColor(0.08f, 0.06f, 0.07f); Body->Leather = FLinearColor(0.55f, 0.08f, 0.06f); Body->Trim = FLinearColor(0.9f, 0.75f, 0.2f); Body->bHelmet = true; break;
 	case EErtEnemyKind::Deer:     MaxHealth = 30.f;  MoveSpeed = 140.f; break;
+	case EErtEnemyKind::Boss:     MaxHealth = 400.f; AttackDamage = 22.f; AttackCooldown = 1.1f; MoveSpeed = 400.f; AttackRange = 240.f;
+		Body->Kaftan = FLinearColor(0.06f, 0.05f, 0.06f); Body->Leather = FLinearColor(0.45f, 0.08f, 0.06f); Body->Trim = FLinearColor(0.95f, 0.8f, 0.2f); Body->Fur = FLinearColor(0.2f, 0.18f, 0.16f); Body->bHelmet = true; break;
 	case EErtEnemyKind::Rider:    MaxHealth = 90.f;  AttackDamage = 15.f; AttackCooldown = 1.3f; MoveSpeed = 380.f; AttackRange = 300.f;
 		Body->Kaftan = FLinearColor(0.38f, 0.10f, 0.08f); Body->Leather = FLinearColor(0.35f, 0.33f, 0.30f); Body->bHelmet = true; break;
 	}
@@ -107,10 +109,10 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source, bool bGuardBreak)
 {
 	if (bDead) return;
 	// Qalqonli askarlar (serjant, elita, otliq) yengil zarbani 45% to'sadi - og'ir zarba/tepki yoki gangigan holatda yo'q
-	if (!bGuardBreak && StaggerT <= 0.f && HitPending <= 0.f && Source && (Kind == EErtEnemyKind::Sergeant || Kind == EErtEnemyKind::Elite || Kind == EErtEnemyKind::Rider))
+	if (!bGuardBreak && StaggerT <= 0.f && HitPending <= 0.f && Source && (Kind == EErtEnemyKind::Sergeant || Kind == EErtEnemyKind::Elite || Kind == EErtEnemyKind::Rider || Kind == EErtEnemyKind::Boss))
 	{
 		const FVector To = (Source->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
-		if (FVector::DotProduct(GetActorForwardVector(), To) > 0.3f && FMath::FRand() < 0.45f)
+		if (FVector::DotProduct(GetActorForwardVector(), To) > 0.3f && FMath::FRand() < (Kind == EErtEnemyKind::Boss ? 0.6f : 0.45f))
 		{
 			GuardT = 0.35f; bAlerted = true;
 			if (Body && Body->IsBuilt()) Body->SetBlocking(true);
@@ -125,7 +127,7 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source, bool bGuardBreak)
 	if (!Mount && Kind != EErtEnemyKind::Deer && Source)
 	{
 		const FVector Away = (GetActorLocation() - Source->GetActorLocation()).GetSafeNormal2D();
-		LaunchCharacter(Away * FMath::Clamp(Damage * 9.f, 180.f, 420.f) + FVector(0, 0, 90.f), true, true);
+		LaunchCharacter(Away * FMath::Clamp(Damage * 9.f, 180.f, 420.f) * (Kind == EErtEnemyKind::Boss ? 0.35f : 1.f) + FVector(0, 0, 90.f), true, true);
 		StaggerT = FMath::Max(StaggerT, 0.35f);
 		HitPending = -1.f;
 	}
@@ -171,8 +173,8 @@ void AErtEnemy::TickRider(float Dt, AErtCharacter* Hero, float DP)
 void AErtEnemy::Stagger(float Seconds)
 {
 	if (bDead) return;
-	StaggerT = FMath::Max(StaggerT, Seconds);
-	HitPending = -1.f;
+	StaggerT = FMath::Max(StaggerT, Kind == EErtEnemyKind::Boss ? Seconds * 0.5f : Seconds);
+	HitPending = -1.f; bHeavyPending = false;
 	AttackCD = FMath::Max(AttackCD, Seconds + 0.4f);
 	if (Body && Body->IsBuilt()) Body->TriggerHurt();
 	GetCharacterMovement()->Velocity = FVector::ZeroVector;
@@ -275,7 +277,7 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 	if (HitPending >= 0.f)
 	{
 		HitPending -= Dt;
-		if (HitPending < 0.f && bHeroAlive && DP < AttackRange + 60.f) Hero->ReceiveHit(AttackDamage, GetActorLocation(), this);
+		if (HitPending < 0.f && bHeroAlive && DP < AttackRange + 80.f) { Hero->ReceiveHit(bHeavyPending ? AttackDamage * 2.f : AttackDamage, GetActorLocation(), this, bHeavyPending); bHeavyPending = false; }
 	}
 
 	if (Mount && bAlerted) { TickRider(Dt, bHeroAlive ? Hero : nullptr, DP); return; }
@@ -303,7 +305,16 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 		}
 		if (DP > AttackRange * 0.85f) MoveToward(Hero->GetActorLocation(), MoveSpeed);
 		else SetActorRotation(FRotator(0, (Hero->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
-		if (DP <= AttackRange && AttackCD <= 0.f)
+		if (Kind == EErtEnemyKind::Boss) HeavyCD -= Dt;
+		if (Kind == EErtEnemyKind::Boss && HeavyCD <= 0.f && DP <= AttackRange + 60.f && AttackCD <= 0.f)
+		{
+			// Boss: to'sib bo'lmaydigan og'ir zarba (uzun ogohlantirish - dodge bilan qochish kerak)
+			HeavyCD = 8.f; AttackCD = 1.6f;
+			Body->TriggerAttack(2);
+			HitPending = 0.6f; bHeavyPending = true;
+			FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), 1.f, 0.7f);
+		}
+		else if (DP <= AttackRange && AttackCD <= 0.f)
 		{
 			AttackCD = AttackCooldown + FMath::FRandRange(0.f, 0.4f);
 			Body->TriggerAttack();

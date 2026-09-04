@@ -53,6 +53,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetMaxHealth() const { return MaxHealth; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") int32 GetArrows() const { return Arrows; }
 	// Inventar va daraja
+	int32 Meat = 0;
 	int32 Gold = 20, Potions = 1, Level = 1, XP = 0, SwordTier = 1, BowTier = 1; bool bShield = false;
 	int32 XPToNext() const { return 80 + (Level - 1) * 60; }
 	void AddXP(int32 N);
@@ -74,7 +75,7 @@ public:
 	void DismountHorse();
 	float GetHurtFlash() const { return HurtFlash; }
 	/** Dushman zarbasi (blok bo'lsa kamayadi) */
-	void ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker = nullptr);
+	void ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker = nullptr, bool bUnblockable = false);
 	void AddArrows(int32 N) { Arrows = FMath::Clamp(Arrows + N, 0, MaxArrows); }
 	void Heal(float V) { Health = FMath::Min(MaxHealth, Health + V); }
 	/** Nazorat nuqtasi / epizod boshi: joyga qo'yish, sog'liqni tiklash */
@@ -133,6 +134,9 @@ private:
 	void OnInteract();
 	void OnChoice1(); void OnChoice2(); void OnChoice3(); void OnChoice4();
 	void OnMenuLeft(); void OnMenuRight(); void OnSettings(); void OnMap();
+public:
+	AErtEnemy* NearestCarcass(float MaxDist) const;
+private:
 	void OnLock(); void OnDodge(); void UpdateLock(float Dt); void OnInventory(); void OnPotion();
 	void OnAttackPressed(); void OnAttackReleased(); void OnKick(); void DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, float Stagger, float Knock);
 	float AttackHoldT = -1.f, ComboWindowT = 0.f; int32 ComboStep = 0; bool bHeavyDone = false;

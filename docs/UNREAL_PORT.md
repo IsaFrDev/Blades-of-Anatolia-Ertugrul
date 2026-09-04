@@ -136,6 +136,14 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - V: tepki (0.3x, gangitadi 0.9 s, 4.2 m uloqtiradi, qalqonni chetlab o'tadi).
 - Qalqonli dushmanlar (serjant, elita, otliq): yuzma-yuz yengil zarbani 45% to'sadi (blok tovushi, qisqa kamera silkinishi); og'ir zarba/tepki/gangigan holatda yo'q.
 
+## Ov o'ljasi va No'yon dueli
+- O'lgan kiyik yonida [E]: +2 kiyik go'shti (+5 XP). H: dori bo'lmasa go'sht yeyiladi (+25). Inventar va saqlashda.
+- Boss `EErtEnemyKind::Boss` (No'yon): 400 sog'liq, 22 zarar, 60% qalqon, gangish yarim, uloqtirish 35%, ijro faqat 12% dan past;
+  har 8 s to'sib bo'lmaydigan og'ir zarba (0.6 s ogohlantirish, 2x zarar, blok/parry ishlamaydi - faqat dodge). XP 400.
+- `missions.json` "boss" bosqichi: EP012 (Bagras), EP035, EP047 yakunida (guards - 2 ta elita hamroh). HUD: tepada No'yon sog'liq chizig'i,
+  og'ir zarba oldidan "OG'IR ZARBA - DODGE (X)!".
+- Patch skriptlarida qo'shish-turidagi almashtirishlar takrorlanib qolmasligi uchun `rep` avval `b in s` ni tekshirsin (bir marta duplikatlar chiqdi, mirror'dan tiklandi).
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

@@ -396,6 +396,17 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 			else if (P.Type == TEXT("stealth")) AddStealth(P.Guards);
 			else if (P.Type == TEXT("defend")) AddDefend(30 + Tier * 6, P.Waves);
 			else if (P.Type == TEXT("duel")) AddDuel();
+			else if (P.Type == TEXT("boss"))
+			{
+				// No'yon bilan yakuniy duel
+				FErtPhase Ph; Ph.TitleKey = TEXT("ui.phase.boss");
+				FErtWave W; FErtSpawn S; S.Kind = EErtEnemyKind::Boss; S.Pos = FindSpot(Cursor, 1200.f, 1800.f); S.Yaw = (Cursor - S.Pos).Rotation().Yaw;
+				W.Spawns.Add(S);
+				for (int32 k = 0; k < FMath::Max(0, P.Guards - 2); ++k) { FErtSpawn G; G.Kind = EErtEnemyKind::Elite; G.Pos = FindSpot(Cursor, 1400.f, 2200.f); G.Yaw = S.Yaw; W.Spawns.Add(G); }
+				Ph.Waves.Add(W);
+				AddObj(Ph.Objectives, EErtObjKind::DefeatAll, TEXT("ui.obj.boss"), 0);
+				Phases.Add(Ph);
+			}
 			else if (P.Type == TEXT("fight")) AddFight(P.Waves, false);
 			else if (P.Type == TEXT("collect"))
 			{

@@ -10,7 +10,7 @@ class UProceduralMeshComponent;
 class AErtHorse;
 
 UENUM(BlueprintType)
-enum class EErtEnemyKind : uint8 { Footman, Sergeant, Crossbow, Elite, Deer, Rider };
+enum class EErtEnemyKind : uint8 { Footman, Sergeant, Crossbow, Elite, Deer, Rider, Boss };
 
 UCLASS()
 class ERTUGRUL_API AErtEnemy : public ACharacter
@@ -38,7 +38,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetHealth() const { return Health; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetMaxHealth() const { return MaxHealth; }
 	bool IsAnimal() const { return Kind == EErtEnemyKind::Deer; }
-	int32 XPValue() const { switch (Kind) { case EErtEnemyKind::Footman: return 20; case EErtEnemyKind::Sergeant: return 35; case EErtEnemyKind::Crossbow: return 25; case EErtEnemyKind::Elite: return 80; case EErtEnemyKind::Rider: return 50; default: return 10; } }
+	bool IsBoss() const { return Kind == EErtEnemyKind::Boss; }
+	float ExecuteThreshold() const { return IsBoss() ? 0.12f : 0.25f; }
+	bool bLooted = false;   // kiyik go'shti olindi
+	int32 XPValue() const { if (Kind == EErtEnemyKind::Boss) return 400; switch (Kind) { case EErtEnemyKind::Footman: return 20; case EErtEnemyKind::Sergeant: return 35; case EErtEnemyKind::Crossbow: return 25; case EErtEnemyKind::Elite: return 80; case EErtEnemyKind::Rider: return 50; default: return 10; } }
 	/** Kim o'ldirdi (o'yinchi bo'lsa hisoblanadi) */
 	AActor* Killer = nullptr;
 
@@ -54,7 +57,8 @@ private:
 	float Patrol = 0.f;
 	float Health = 60.f, MaxHealth = 60.f;
 	float AttackRange = 200.f, AttackDamage = 10.f, AttackCooldown = 1.5f, MoveSpeed = 380.f;
-	float AttackCD = 0.f, HitPending = -1.f, StaggerT = 0.f, GuardT = 0.f;
+	float AttackCD = 0.f, HitPending = -1.f, StaggerT = 0.f, GuardT = 0.f, HeavyCD = 6.f;
+	bool bHeavyPending = false;
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Mount;
 	void TickRider(float Dt, class AErtCharacter* Hero, float DP);
 	float WanderT = 0.f, FleeT = 0.f, DeerPhase = 0.f;

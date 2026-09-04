@@ -535,6 +535,10 @@
    {
     "type": "fight",
     "waves": 2
+   },
+   {
+    "type": "boss",
+    "guards": 2
    }
   ]
  },
@@ -1475,6 +1479,10 @@
    {
     "type": "fight",
     "waves": 3
+   },
+   {
+    "type": "boss",
+    "guards": 3
    }
   ]
  },
@@ -1961,6 +1969,10 @@
    {
     "type": "fight",
     "waves": 3
+   },
+   {
+    "type": "boss",
+    "guards": 4
    }
   ]
  },

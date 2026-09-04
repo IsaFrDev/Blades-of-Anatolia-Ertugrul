@@ -147,3 +147,5 @@ keys,uz,tr,en
 "DLG_SHOP_BOW","Kompozit kamon (90 oltin)","Kompozit yay (90 altın)","Composite bow (90 gold)"
 "DLG_SHOP_SWORD","Damashq qilichi (120 oltin)","Şam kılıcı (120 altın)","Damascus sword (120 gold)"
 "DLG_SHOP_DONE","Baraka topsin! Yana keling.","Bereket versin! Yine gelin.","May it bring fortune! Come again."
+"ui.phase.boss","No'yon bilan duel","Noyan ile düello","Duel with Noyan"
+"ui.obj.boss","No'yonni yenging","Noyan'ı yenin","Defeat Noyan"

@@ -195,7 +195,7 @@ void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, floa
 			if (!E || Done.Contains(E)) continue;
 			Done.Add(E);
 			// IJRO: gangigan yoki holdan toygan (<25%) raqib - bir zarbda
-			const bool bExecute = Kind != 3 && (E->IsStaggered() || E->GetHealth() < E->GetMaxHealth() * 0.25f);
+			const bool bExecute = Kind != 3 && ((E->IsStaggered() && !E->IsBoss()) || E->GetHealth() < E->GetMaxHealth() * E->ExecuteThreshold());
 			if (bExecute) { ExecuteFlash = 1.f; if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.9f, 0.25f); }
 			const float Dmg = bExecute ? 999.f : AttackDamage * DamageMul * (RiposteT > 0.f ? 2.f : 1.f);
 			const float HpBefore = E->GetHealth();
@@ -220,8 +220,29 @@ void AErtCharacter::OnInteract()
 {
 	if (!bInputEnabled || bDead) return;
 	if (Horse) { DismountHorse(); return; }
+	if (AErtEnemy* Cc = NearestCarcass(260.f))
+	{
+		Cc->bLooted = true; Meat += 2; AddXP(5);
+		FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.4f, 0.8f);
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = TEXT("Kiyik go'shti +2 (H bilan yeyiladi, +25)"); GM->ShopMsgT = 3.f; }
+		return;
+	}
 	if (AErtNpc* N = NearestNpc(280.f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->StartDialog(N); return; }
 	if (AErtHorse* H = NearestHorse(320.f)) MountHorse(H);
+}
+
+AErtEnemy* AErtCharacter::NearestCarcass(float MaxDist) const
+{
+	AErtEnemy* Best = nullptr; float BestD = MaxDist;
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtEnemy::StaticClass(), All);
+	for (AActor* A : All)
+	{
+		AErtEnemy* E = Cast<AErtEnemy>(A);
+		if (!E || !E->IsAnimal() || !E->IsDead() || E->bLooted) continue;
+		const float D = FVector::Dist2D(E->GetActorLocation(), GetActorLocation());
+		if (D < BestD) { BestD = D; Best = E; }
+	}
+	return Best;
 }
 
 AErtNpc* AErtCharacter::NearestNpc(float MaxDist) const
@@ -298,13 +319,13 @@ void AErtCharacter::OnShoot()
 	}
 }
 
-void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker)
+void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker, bool bUnblockable)
 {
 	if (bDead) return;
 	if (DodgeT > 0.2f) return;   // dodge daxlsizligi
 	const FVector To = (From - GetActorLocation()).GetSafeNormal2D();
 	const bool bFacing = FVector::DotProduct(GetActorForwardVector(), To) > 0.2f;
-	if (bBlocking && bFacing && BlockT < 0.25f)
+	if (bBlocking && bFacing && BlockT < 0.25f && !bUnblockable)
 	{
 		// PARRY: zarar yo'q, raqib gangiydi, keyingi zarba ikki baravar
 		ParryFlash = 1.f; RiposteT = 1.6f;
@@ -316,7 +337,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 		if (Footsteps) Footsteps->Step(GetActorLocation() - FVector(0, 0, 60.f), false, 1.2f);
 		return;
 	}
-	if (bBlocking && bFacing && Stamina > 5.f) { Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
+	if (bBlocking && bFacing && Stamina > 5.f && !bUnblockable) { Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
 	Health -= Damage;
 	HurtFlash = 1.f;
@@ -618,8 +639,11 @@ void AErtCharacter::OnPotion() { if (bInputEnabled && !bDead) UsePotion(); }
 
 bool AErtCharacter::UsePotion()
 {
-	if (Potions <= 0 || Health >= MaxHealth) return false;
-	--Potions; Heal(45.f); HurtFlash = 0.f;
+	if (Health >= MaxHealth) return false;
+	if (Potions > 0) { --Potions; Heal(45.f); }
+	else if (Meat > 0) { --Meat; Heal(25.f); }
+	else return false;
+	HurtFlash = 0.f;
 	FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.5f, 1.4f);
 	return true;
 }

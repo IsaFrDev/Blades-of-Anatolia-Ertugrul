@@ -69,7 +69,7 @@ void AErtHUD::DrawHUD()
 		Bar(X, Y, 260 * Sc, 16 * Sc, H->GetHealth() / H->GetMaxHealth(), H->GetHealth() > 30 ? FLinearColor(0.75f, 0.15f, 0.12f) : Red);
 		Bar(X, Y + 20 * Sc, 200 * Sc, 10 * Sc, H->GetStamina() / 100.f, FLinearColor(0.85f, 0.7f, 0.25f));
 		Bar(X, Y + 32 * Sc, 200 * Sc, 5 * Sc, (float)H->XP / H->XPToNext(), FLinearColor(0.4f, 0.7f, 1.f));
-		Text(FString::Printf(TEXT("%s %d   %s %d   Dori %d   Oltin %d   Daraja %d"), *L.Tr(TEXT("ui.hud.health")), (int32)H->GetHealth(), *L.Tr(TEXT("ui.hud.arrows")), H->GetArrows(), H->Potions, H->Gold, H->Level), X, Y + 40 * Sc, White, Sc);
+		Text(FString::Printf(TEXT("%s %d   %s %d   Dori %d  Go'sht %d   Oltin %d   Daraja %d"), *L.Tr(TEXT("ui.hud.health")), (int32)H->GetHealth(), *L.Tr(TEXT("ui.hud.arrows")), H->GetArrows(), H->Potions, H->Meat, H->Gold, H->Level), X, Y + 40 * Sc, White, Sc);
 		if (H->LevelFlash > 0.f) Text(FString::Printf(TEXT("DARAJA %d!"), H->Level), SW * 0.5f - TextWidth(FString::Printf(TEXT("DARAJA %d!"), H->Level), 1.6f * Sc, true) * 0.5f, SH * 0.30f, FLinearColor(0.5f, 0.85f, 1.f, H->LevelFlash), 1.6f * Sc, true, true);
 		if (GM && GM->ShopMsgT > 0.f) Text(GM->ShopMsg, SW * 0.5f - TextWidth(GM->ShopMsg, Sc, false) * 0.5f, SH * 0.36f, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		if (H->GetComboWindow() > 0.f && H->GetComboStep() > 0) Text(FString::Printf(TEXT("x%d"), H->GetComboStep() + 1), SW * 0.5f + 120 * Sc, SH * 0.5f - 40 * Sc, FLinearColor(1.f, 0.7f, 0.3f, FMath::Min(1.f, H->GetComboWindow() * 2.f)), 1.3f * Sc, true, true);
@@ -78,6 +78,7 @@ void AErtHUD::DrawHUD()
 		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
 		if (H->GetLockTarget()) Text(TEXT("LMB x3 seriya | LMB ushlab: og'ir | V: tepki | X: dodge | Q: qulfni ochish"), X + 280 * Sc, Y + 34 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
+		else if (H->NearestCarcass(260.f)) Text(TEXT("[E] Go'sht olish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (AErtNpc* Np = H->NearestNpc(280.f)) Text(FString::Printf(TEXT("[E] %s bilan gaplashish"), *Np->GetDisplayName()), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (H->NearestHorse(320.f)) Text(TEXT("[E] Otga minish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		if (H->GetHurtFlash() > 0.f)
@@ -107,6 +108,16 @@ void AErtHUD::DrawHUD()
 		Text(FString::Printf(TEXT("%s %d/%d   %s %d"), *L.Tr(TEXT("ui.hud.wave")), D->GetWaveIndex() + 1, D->GetWaveCount(), *L.Tr(TEXT("ui.hud.enemies")), D->AliveEnemies()), 36 * Sc, Y + 4 * Sc, Grey, Sc);
 	}
 
+	// --- boss sog'liq chizig'i ---
+	for (const AErtEnemy* E : D->GetEnemies())
+	{
+		if (!E || !E->IsBoss() || E->IsDead()) continue;
+		const float BW = SW * 0.5f, BX = (SW - BW) * 0.5f, BY = 26 * Sc;
+		Text(L.TrOr(TEXT("chr.noyan.name"), TEXT("No'yon")), BX, BY - 20 * Sc, FLinearColor(0.95f, 0.3f, 0.2f), 1.1f * Sc, true, true);
+		Bar(BX, BY, BW, 14 * Sc, E->GetHealth() / E->GetMaxHealth(), FLinearColor(0.8f, 0.12f, 0.1f));
+		if (E->IsWindingUp()) Text(TEXT("OG'IR ZARBA - DODGE (X)!"), SW * 0.5f - TextWidth(TEXT("OG'IR ZARBA - DODGE (X)!"), Sc, false) * 0.5f, BY + 18 * Sc, FLinearColor(1.f, 0.5f, 0.2f), Sc);
+		break;
+	}
 	// --- markerlar (dunyo -> ekran) ---
 	TArray<FVector> Pts; D->GetMarkers(Pts);
 	if (H)
@@ -482,6 +493,7 @@ void AErtHUD::DrawInventory(float SW, float SH, float Sc)
 	Row(TEXT("Stamina"), FString::Printf(TEXT("%d / %d"), (int32)H->GetStamina(), (int32)H->StaminaMax));
 	Row(TEXT("Oltin"), FString::Printf(TEXT("%d"), H->Gold));
 	Row(TEXT("Dori (H)"), FString::Printf(TEXT("%d   (+45 sog'liq)"), H->Potions));
+	Row(TEXT("Kiyik go'shti"), FString::Printf(TEXT("%d   (+25, dori bo'lmasa H bilan)"), H->Meat));
 	Row(TEXT("O'qlar"), FString::Printf(TEXT("%d / %d"), H->GetArrows(), H->MaxArrows));
 	Y += 10 * Sc;
 	Text(TEXT("JIHOZ"), 44 * Sc, Y, Gold, 1.1f * Sc, true, true); Y += 30 * Sc;
