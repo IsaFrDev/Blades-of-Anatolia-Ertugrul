@@ -1,0 +1,12 @@
+{
+  "npcs": [
+    {"id": "hayme_ana", "name": "chr.hayme_ana.name", "place": "oba", "u": 4, "v": -9, "yaw": 180, "woman": true, "kaftan": [0.30, 0.12, 0.28], "dialog": "npc_hayme_ana"},
+    {"id": "halime", "name": "chr.halime.name", "place": "oba", "u": 16, "v": 17, "yaw": 225, "woman": true, "kaftan": [0.16, 0.30, 0.40], "dialog": "npc_halime"},
+    {"id": "turgut", "name": "chr.turgut.name", "place": "oba", "u": 34, "v": -24, "yaw": 90, "woman": false, "kaftan": [0.20, 0.22, 0.12], "dialog": "npc_turgut"},
+    {"id": "deli_demir", "name": "chr.deli_demir.name", "place": "oba", "u": -39, "v": -31, "yaw": 135, "woman": false, "kaftan": [0.28, 0.18, 0.10], "dialog": "npc_deli_demir"},
+    {"id": "bamsi", "name": "chr.bamsi.name", "place": "oba", "u": -7, "v": -112, "yaw": 90, "woman": false, "kaftan": [0.36, 0.26, 0.10], "dialog": "npc_bamsi"},
+    {"id": "gundogdu", "name": "chr.gundogdu.name", "place": "oba", "u": -56, "v": 40, "yaw": 0, "woman": false, "kaftan": [0.14, 0.18, 0.36], "dialog": "npc_gundogdu"},
+    {"id": "savdogar", "name": "chr.savdogar.name", "place": "city", "u": 76, "v": -15, "yaw": 90, "woman": false, "kaftan": [0.45, 0.32, 0.12], "dialog": "npc_merchant"},
+    {"id": "karvonboshi", "name": "chr.karvonboshi.name", "place": "caravan", "u": 0, "v": 24, "yaw": 90, "woman": false, "kaftan": [0.40, 0.30, 0.22], "dialog": "npc_caravan"}
+  ]
+}

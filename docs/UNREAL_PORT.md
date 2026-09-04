@@ -63,6 +63,18 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - MUHIM: kontrollersiz `ACharacter` (dushman, ot) harakat qilishi uchun `bRunPhysicsWithNoController = true` shart -
   aks holda PhysWalking tezlikni nolga tenglashtiradi (dushmanlar ham shu sababli joyida turgan edi).
 
+## Otliq dushmanlar va NPC dialoglari
+- `EErtEnemyKind::Rider`: ot + chavandoz (`AErtEnemy::MountHorse`). AI otni boshqaradi: uzoqda chopib keladi, 2.6 m dan yaqinda aylanib o'tadi,
+  70 gradus ichida bo'lsa zarba (300 sm, 15 zarar). Ko'rish 26 m. O'lsa otdan yiqiladi, ot bo'shaydi - o'yinchi minishi mumkin.
+  Tier >= 2 da 14%, CHASE/ESCORT jangida 30%. O'yinchi qilich sferasi 150 sm (+45 sm balandlik) - otliqqa yetadi.
+- Dialog grafi (`FErtDialog`): `data/dialogue/*.json` formati (nodes/start, options: text_key, next, set_flag, honor, requires_evidence).
+  Matnlar `ertugrul_loc.csv` (DLG_*) va `npc_loc.csv` dan. Or/iymon hisobi (`Honor`) va bayroqlar (`Flags`) GameMode da;
+  maxsus bayroqlar: give_arrows (+8 o'q), sword_sharpened (zarar 36).
+- `AErtNpc` + `npcs.json`: 8 NPC (Hayma Ona, Halima, Turgut, Deli Demir, Bamsi, Gundo'g'di obada; savdogar shaharda; karvonboshi vohada),
+  reja koordinatalari (place + u,v), ayol varianti (ro'mol, uzun ko'ylak, soqolsiz). Yaqinlashganda o'yinchiga qaraydi, [E] dialog.
+  HUD: panel, gapiruvchi, tanlovlar (1-4 yoki Yuqori/Pastga+Enter), Esc chiqish. `tools/unreal/Scripts/make_npc_dialogs.py` NPC graflarini yaratadi.
+- UE 5.8: `FJsonObject::Values` kaliti `UE::FSharedString` - `FString(Key.ToView())` bilan o'giriladi.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

@@ -21,6 +21,7 @@
 #include "ErtWorldBuilder.h"
 #include "ErtFootsteps.h"
 #include "ErtHorse.h"
+#include "ErtNpc.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
@@ -147,10 +148,10 @@ void AErtCharacter::OnAttack()
 	Stamina = FMath::Max(0.f, Stamina - 6.f);
 	if (Body) Body->TriggerAttack();
 	// Oldindagi sohada dushmanlarni qidiramiz (0.2 s dan keyin tegadi deb hisoblaymiz - soddalashtirilgan: darhol)
-	const FVector C = GetActorLocation() + GetActorForwardVector() * 120.f;
+	const FVector C = GetActorLocation() + GetActorForwardVector() * 130.f + FVector(0, 0, Horse ? 0.f : 45.f);
 	TArray<FOverlapResult> Hits;
 	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtAttack), false, this);
-	if (GetWorld()->OverlapMultiByChannel(Hits, C, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(115.f), Q))
+	if (GetWorld()->OverlapMultiByChannel(Hits, C, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(150.f), Q))
 	{
 		TSet<AActor*> Done;
 		for (const FOverlapResult& R : Hits)
@@ -171,7 +172,20 @@ void AErtCharacter::OnInteract()
 {
 	if (!bInputEnabled || bDead) return;
 	if (Horse) { DismountHorse(); return; }
+	if (AErtNpc* N = NearestNpc(280.f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->StartDialog(N); return; }
 	if (AErtHorse* H = NearestHorse(320.f)) MountHorse(H);
+}
+
+AErtNpc* AErtCharacter::NearestNpc(float MaxDist) const
+{
+	AErtNpc* Best = nullptr; float BestD = MaxDist;
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtNpc::StaticClass(), All);
+	for (AActor* A : All)
+	{
+		const float D = FVector::Dist2D(A->GetActorLocation(), GetActorLocation());
+		if (D < BestD) { BestD = D; Best = Cast<AErtNpc>(A); }
+	}
+	return Best;
 }
 
 AErtHorse* AErtCharacter::NearestHorse(float MaxDist) const
@@ -401,7 +415,19 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(36.2f)) TakeShot(TEXT("ride"));
 	if (At(37.2f)) { bWantSprint = false; DismountHorse(); }
 	if (At(38.0f)) TakeShot(TEXT("dismount"));
-	if (At(38.6f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(38.6f))
+	{
+		// NPC dialog sinovi: Hayma Ona (oba u=4, v=-9)
+		SetActorLocation(FVector(54900.f, -55600.f, 2200.f), false, nullptr, ETeleportType::TeleportPhysics);
+		SetActorRotation(FRotator(0, 0, 0));
+		if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-10.f, 20.f, 0.f));
+		TargetArm = 320.f;
+	}
+	if (At(39.6f)) OnInteract();
+	if (At(40.6f)) TakeShot(TEXT("npc"));
+	if (At(41.0f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnAdvance(); }
+	if (At(41.8f)) TakeShot(TEXT("npc_choice"));
+	if (At(42.6f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;
@@ -438,6 +464,10 @@ void AErtCharacter::BuildInput()
 	IA_MenuDown = MakeAction(TEXT("IA_ErtMenuDown"), EInputActionValueType::Boolean);
 	IA_Confirm = MakeAction(TEXT("IA_ErtConfirm"), EInputActionValueType::Boolean);
 	IA_Interact = MakeAction(TEXT("IA_ErtInteract"), EInputActionValueType::Boolean);
+	IA_Choice1 = MakeAction(TEXT("IA_ErtChoice1"), EInputActionValueType::Boolean);
+	IA_Choice2 = MakeAction(TEXT("IA_ErtChoice2"), EInputActionValueType::Boolean);
+	IA_Choice3 = MakeAction(TEXT("IA_ErtChoice3"), EInputActionValueType::Boolean);
+	IA_Choice4 = MakeAction(TEXT("IA_ErtChoice4"), EInputActionValueType::Boolean);
 
 	IMC = NewObject<UInputMappingContext>(this, TEXT("IMC_Ertugrul"));
 	auto Map = [this](UInputAction* A, const FKey& K) -> FEnhancedActionKeyMapping& { return IMC->MapKey(A, K); };
@@ -490,7 +520,13 @@ void AErtCharacter::BuildInput()
 	Map(IA_Confirm, EKeys::Gamepad_FaceButton_Bottom);
 	Map(IA_Interact, EKeys::E);
 	Map(IA_Interact, EKeys::Gamepad_FaceButton_Top);
+	Map(IA_Choice1, EKeys::One); Map(IA_Choice2, EKeys::Two); Map(IA_Choice3, EKeys::Three); Map(IA_Choice4, EKeys::Four);
 }
+
+void AErtCharacter::OnChoice1() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->DialogChoose(0); }
+void AErtCharacter::OnChoice2() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->DialogChoose(1); }
+void AErtCharacter::OnChoice3() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->DialogChoose(2); }
+void AErtCharacter::OnChoice4() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->DialogChoose(3); }
 
 void AErtCharacter::OnMenu() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnSkip(); }
 void AErtCharacter::OnMenuUp() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->MenuMove(-1); }
@@ -533,6 +569,10 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_MenuDown, ETriggerEvent::Started, this, &AErtCharacter::OnMenuDown);
 	EIC->BindAction(IA_Confirm, ETriggerEvent::Started, this, &AErtCharacter::OnConfirm);
 	EIC->BindAction(IA_Interact, ETriggerEvent::Started, this, &AErtCharacter::OnInteract);
+	EIC->BindAction(IA_Choice1, ETriggerEvent::Started, this, &AErtCharacter::OnChoice1);
+	EIC->BindAction(IA_Choice2, ETriggerEvent::Started, this, &AErtCharacter::OnChoice2);
+	EIC->BindAction(IA_Choice3, ETriggerEvent::Started, this, &AErtCharacter::OnChoice3);
+	EIC->BindAction(IA_Choice4, ETriggerEvent::Started, this, &AErtCharacter::OnChoice4);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)

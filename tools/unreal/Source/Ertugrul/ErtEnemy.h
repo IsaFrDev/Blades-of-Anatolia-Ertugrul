@@ -7,9 +7,10 @@
 
 class UErtHeroBody;
 class UProceduralMeshComponent;
+class AErtHorse;
 
 UENUM(BlueprintType)
-enum class EErtEnemyKind : uint8 { Footman, Sergeant, Crossbow, Elite, Deer };
+enum class EErtEnemyKind : uint8 { Footman, Sergeant, Crossbow, Elite, Deer, Rider };
 
 UCLASS()
 class ERTUGRUL_API AErtEnemy : public ACharacter
@@ -23,6 +24,9 @@ public:
 	/** Parry natijasi: gangib qoladi (harakat/zarba yo'q) */
 	void Stagger(float Seconds);
 	bool IsStaggered() const { return StaggerT > 0.f; }
+	/** Otliq dushman: otga o'tqazish */
+	void MountHorse(AErtHorse* H);
+	AErtHorse* GetMount() const { return Mount; }
 
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsDead() const { return bDead; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsAlerted() const { return bAlerted; }
@@ -46,6 +50,8 @@ private:
 	float Health = 60.f, MaxHealth = 60.f;
 	float AttackRange = 200.f, AttackDamage = 10.f, AttackCooldown = 1.5f, MoveSpeed = 380.f;
 	float AttackCD = 0.f, HitPending = -1.f, StaggerT = 0.f;
+	UPROPERTY(Transient) TObjectPtr<AErtHorse> Mount;
+	void TickRider(float Dt, class AErtCharacter* Hero, float DP);
 	float WanderT = 0.f, FleeT = 0.f, DeerPhase = 0.f;
 	FVector WanderTarget = FVector::ZeroVector;
 	bool bAlerted = false, bDead = false, bInit = false;

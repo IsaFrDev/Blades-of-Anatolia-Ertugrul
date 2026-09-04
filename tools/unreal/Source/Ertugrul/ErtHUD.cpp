@@ -2,6 +2,7 @@
 #include "ErtCharacter.h"
 #include "ErtEnemy.h"
 #include "ErtHorse.h"
+#include "ErtNpc.h"
 #include "ErtLoc.h"
 #include "ErtMission.h"
 #include "ErtCutscene.h"
@@ -51,6 +52,7 @@ void AErtHUD::DrawHUD()
 	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GM && GM->GetCutscene() && GM->GetCutscene()->IsPlaying()) { DrawCutscene(SW, SH, Sc); return; }
 	if (GM && GM->IsMenuOpen()) { DrawMenu(SW, SH, Sc); return; }
+	if (GM && GM->IsDialogActive()) { DrawDialog(SW, SH, Sc); return; }
 	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f), Green(0.5f, 0.9f, 0.4f), Red(0.9f, 0.25f, 0.2f);
 
 	// --- pastki chap: sog'liq, stamina, o'q ---
@@ -63,6 +65,7 @@ void AErtHUD::DrawHUD()
 		if (H->GetParryFlash() > 0.f) Text(TEXT("PARRY!"), SW * 0.5f - TextWidth(TEXT("PARRY!"), 1.6f * Sc, true) * 0.5f, SH * 0.42f, FLinearColor(1.f, 0.85f, 0.3f, H->GetParryFlash()), 1.6f * Sc, true, true);
 		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
 		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
+		else if (AErtNpc* Np = H->NearestNpc(280.f)) Text(FString::Printf(TEXT("[E] %s bilan gaplashish"), *Np->GetDisplayName()), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (H->NearestHorse(320.f)) Text(TEXT("[E] Otga minish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		if (H->GetHurtFlash() > 0.f)
 		{
@@ -235,4 +238,36 @@ void AErtHUD::DrawMenu(float SW, float SH, float Sc)
 	}
 	const FString Hint = TEXT("Yuqori/Pastga: tanlash   Enter: boshlash   Esc/Tab: yopish");
 	Text(Hint, 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
+}
+
+// ---------------- Dialog paneli ----------------
+
+void AErtHUD::DrawDialog(float SW, float SH, float Sc)
+{
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!GM) return;
+	const FErtDialog& D = GM->GetDialog();
+	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f);
+	TArray<FString> Lines; Wrap(D.Text(), SW * 0.62f, 1.05f * Sc, Lines);
+	const int32 NOpt = D.OptionTexts().Num();
+	const float PanelH = (Lines.Num() * 24 + NOpt * 24 + 70) * Sc;
+	const float PX = SW * 0.17f, PY = SH - PanelH - 40 * Sc, PW = SW * 0.66f;
+	FCanvasTileItem Bg(FVector2D(PX, PY), FVector2D(PW, PanelH), FLinearColor(0.02f, 0.02f, 0.03f, 0.82f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+	FCanvasTileItem Line(FVector2D(PX, PY), FVector2D(PW, 3 * Sc), Gold); Canvas->DrawItem(Line);
+	float Y = PY + 12 * Sc;
+	Text(D.Speaker(), PX + 18 * Sc, Y, Gold, 1.1f * Sc, true, true); Y += 30 * Sc;
+	for (const FString& L : Lines) { Text(L, PX + 18 * Sc, Y, White, 1.05f * Sc); Y += 24 * Sc; }
+	if (NOpt > 0)
+	{
+		Y += 6 * Sc;
+		for (int32 i = 0; i < NOpt; ++i)
+		{
+			const bool bSel = i == D.Selection();
+			if (bSel) { FCanvasTileItem S(FVector2D(PX + 12 * Sc, Y - 3 * Sc), FVector2D(PW - 24 * Sc, 22 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.8f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }
+			Text(FString::Printf(TEXT("%d. %s"), i + 1, *D.OptionTexts()[i]), PX + 24 * Sc, Y, bSel ? Gold : White, Sc); Y += 24 * Sc;
+		}
+		Text(TEXT("1-4 yoki Yuqori/Pastga + Enter: tanlash   Esc: chiqish"), PX + 18 * Sc, PY + PanelH - 22 * Sc, Grey, 0.85f * Sc);
+	}
+	else Text(TEXT("Space/Enter: davom   Esc: chiqish"), PX + 18 * Sc, PY + PanelH - 22 * Sc, Grey, 0.85f * Sc);
+	Text(FString::Printf(TEXT("Or/iymon: %d"), GM->GetHonor()), SW - 150 * Sc, 24 * Sc, Grey, 0.9f * Sc);
 }

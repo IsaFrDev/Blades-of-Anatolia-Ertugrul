@@ -3,6 +3,7 @@
 #include "ErtHeroBody.h"
 #include "ErtCharacter.h"
 #include "ErtProcMesh.h"
+#include "ErtHorse.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -42,6 +43,8 @@ void AErtEnemy::Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadi
 	case EErtEnemyKind::Elite:    MaxHealth = 170.f; AttackDamage = 18.f; AttackCooldown = 1.2f; MoveSpeed = 430.f; AttackRange = 220.f;
 		Body->Kaftan = FLinearColor(0.08f, 0.06f, 0.07f); Body->Leather = FLinearColor(0.55f, 0.08f, 0.06f); Body->Trim = FLinearColor(0.9f, 0.75f, 0.2f); Body->bHelmet = true; break;
 	case EErtEnemyKind::Deer:     MaxHealth = 30.f;  MoveSpeed = 140.f; break;
+	case EErtEnemyKind::Rider:    MaxHealth = 90.f;  AttackDamage = 15.f; AttackCooldown = 1.3f; MoveSpeed = 380.f; AttackRange = 300.f;
+		Body->Kaftan = FLinearColor(0.38f, 0.10f, 0.08f); Body->Leather = FLinearColor(0.35f, 0.33f, 0.30f); Body->bHelmet = true; break;
 	}
 	Body->bSwordInHand = Kind != EErtEnemyKind::Deer && Kind != EErtEnemyKind::Crossbow;
 	Health = MaxHealth;
@@ -109,6 +112,41 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source)
 	if (Health <= 0.f) { Killer = Source; Die(); }
 }
 
+void AErtEnemy::MountHorse(AErtHorse* H)
+{
+	if (!H || Mount) return;
+	Mount = H;
+	H->Mount(this);
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);   // o'q/qilich tegishi uchun
+	AttachToComponent(H->GetSaddle(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	SetActorRelativeLocation(FVector(0, 0, 58.f));
+	SetActorRelativeRotation(FRotator::ZeroRotator);
+	AddTickPrerequisiteActor(H);
+	if (Body) Body->SetRiding(true);
+}
+
+void AErtEnemy::TickRider(float Dt, AErtCharacter* Hero, float DP)
+{
+	if (!Mount) return;
+	if (!bAlerted || !Hero) { Mount->SetRiderInput(FVector2D::ZeroVector, false); return; }
+	const FVector To = Hero->GetActorLocation() - Mount->GetActorLocation();
+	const float Delta = FMath::FindDeltaAngleDegrees(Mount->GetActorRotation().Yaw, To.Rotation().Yaw);
+	FVector2D In;
+	In.X = FMath::Clamp(Delta / 35.f, -1.f, 1.f);
+	if (DP > 700.f) In.Y = 1.f;
+	else if (DP < 260.f) { In.Y = 0.55f; In.X = FMath::Clamp(In.X + 0.8f, -1.f, 1.f); }   // yaqinda aylanib o'tadi
+	else In.Y = 0.7f;
+	Mount->SetRiderInput(In, DP > 1600.f);
+	if (DP <= AttackRange && FMath::Abs(Delta) < 70.f && AttackCD <= 0.f)
+	{
+		AttackCD = AttackCooldown + FMath::FRandRange(0.f, 0.4f);
+		Body->TriggerAttack();
+		HitPending = 0.22f;
+	}
+}
+
 void AErtEnemy::Stagger(float Seconds)
 {
 	if (bDead) return;
@@ -122,6 +160,19 @@ void AErtEnemy::Stagger(float Seconds)
 void AErtEnemy::Die()
 {
 	bDead = true;
+	if (Mount)
+	{
+		// Otdan yiqiladi; ot bo'shaydi (o'yinchi minishi mumkin)
+		AErtHorse* H = Mount; Mount = nullptr;
+		H->Dismount();
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		FHitResult Hit; const FVector Side = H->GetActorLocation() + H->GetActorRightVector() * 120.f;
+		FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtFall), false, this); Q.AddIgnoredActor(H);
+		FVector Ground = Side;
+		if (GetWorld()->LineTraceSingleByChannel(Hit, Side + FVector(0, 0, 300), Side - FVector(0, 0, 600), ECC_Visibility, Q)) Ground = Hit.ImpactPoint;
+		SetActorLocation(Ground + FVector(0, 0, GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight()), false, nullptr, ETeleportType::TeleportPhysics);
+		if (Body) Body->SetRiding(false);
+	}
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->DisableMovement();
 	GetCharacterMovement()->Velocity = FVector::ZeroVector;
@@ -156,7 +207,8 @@ void AErtEnemy::Tick(float Dt)
 	if (Body && Body->IsBuilt())
 	{
 		const UCharacterMovementComponent* CM = GetCharacterMovement();
-		Body->Animate(Dt, CM->Velocity.Size2D(), CM->IsFalling(), false, 0.f, 0.f);
+		if (Mount) Body->Animate(Dt, Mount->GetSpeed(), false, false, 0.f, 0.f);
+		else Body->Animate(Dt, CM->Velocity.Size2D(), CM->IsFalling(), false, 0.f, 0.f);
 	}
 }
 
@@ -203,11 +255,12 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 		if (HitPending < 0.f && bHeroAlive && DP < AttackRange + 60.f) Hero->ReceiveHit(AttackDamage, GetActorLocation(), this);
 	}
 
+	if (Mount && bAlerted) { TickRider(Dt, bHeroAlive ? Hero : nullptr, DP); return; }
 	if (!bAlerted && bHeroAlive)
 	{
 		const FVector To = (Hero->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
 		const float Facing = FVector::DotProduct(GetActorForwardVector(), To);
-		const float SeeRange = Hero->bIsCrouched ? 900.f : 1400.f;
+		const float SeeRange = Mount ? 2600.f : (Hero->bIsCrouched ? 900.f : 1400.f);
 		if ((DP < SeeRange && Facing > 0.35f && CanSee(Hero)) || DP < 320.f) bAlerted = true;
 	}
 	if (bAlerted && bHeroAlive)

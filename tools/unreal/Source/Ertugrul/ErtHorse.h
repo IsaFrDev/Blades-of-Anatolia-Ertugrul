@@ -23,8 +23,8 @@ public:
 
 	void Init(const FLinearColor& InCoat);
 	bool IsMounted() const { return Rider != nullptr; }
-	AErtCharacter* GetRider() const { return Rider; }
-	void Mount(AErtCharacter* InRider);
+	AActor* GetRider() const { return Rider; }
+	void Mount(AActor* InRider);
 	void Dismount();
 	/** Chavandoz kirishi: X - burilish (-1..1), Y - oldinga/orqaga, bGallop - chopish */
 	void SetRiderInput(const FVector2D& In, bool bGallop);
@@ -37,7 +37,7 @@ protected:
 	virtual void Tick(float Dt) override;
 
 private:
-	UPROPERTY(Transient) TObjectPtr<AErtCharacter> Rider;
+	UPROPERTY(Transient) TObjectPtr<AActor> Rider;
 	UPROPERTY(Transient) TObjectPtr<USceneComponent> Saddle;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> BodyMesh;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> HeadMesh;

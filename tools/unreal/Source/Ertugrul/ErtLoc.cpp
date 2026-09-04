@@ -15,6 +15,8 @@ FErtLoc::FErtLoc()
 	LoadCsv(Dir / TEXT("ui_loc.csv"));
 	LoadCsv(Dir / TEXT("episodes_loc.csv"));
 	LoadCsv(Dir / TEXT("cutscene_loc.csv"));
+	LoadCsv(Dir / TEXT("ertugrul_loc.csv"));
+	LoadCsv(Dir / TEXT("npc_loc.csv"));
 	UE_LOG(LogErtugrul, Log, TEXT("Lokalizatsiya: %d kalit"), Table.Num());
 }
 

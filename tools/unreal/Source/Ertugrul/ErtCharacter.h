@@ -13,6 +13,7 @@ class UInputAction;
 class UErtHeroBody;
 class AErtHorse;
 class AErtEnemy;
+class AErtNpc;
 struct FInputActionValue;
 
 UENUM(BlueprintType)
@@ -57,6 +58,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsRiding() const { return Horse != nullptr; }
 	AErtHorse* GetHorse() const { return Horse; }
 	AErtHorse* NearestHorse(float MaxDist) const;
+	AErtNpc* NearestNpc(float MaxDist) const;
 	float GetParryFlash() const { return ParryFlash; }
 	float GetRiposteT() const { return RiposteT; }
 	void MountHorse(AErtHorse* H);
@@ -100,6 +102,10 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuDown;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Confirm;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Interact;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Choice1;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Choice2;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Choice3;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Choice4;
 
 private:
 	void OnMenu();
@@ -107,6 +113,7 @@ private:
 	void OnMenuDown();
 	void OnConfirm();
 	void OnInteract();
+	void OnChoice1(); void OnChoice2(); void OnChoice3(); void OnChoice4();
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
 	float BlockT = 99.f, ParryFlash = 0.f, RiposteT = 0.f;
 	void OnAttack();

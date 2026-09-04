@@ -34,6 +34,8 @@ void AErtCutActor::Setup(const FString& ActorId, const FLinearColor& Tint, float
 		Body->Fur = FLinearColor(0.5f + RS.FRand() * 0.4f, 0.45f + RS.FRand() * 0.3f, 0.35f + RS.FRand() * 0.3f);
 		Body->Beard = RS.FRand() < 0.3f ? FLinearColor(0.75f, 0.72f, 0.68f) : FLinearColor(0.15f, 0.1f, 0.06f);
 	}
+	static const TCHAR* Women[] = { TEXT("halime"), TEXT("hayme_ana"), TEXT("aykiz"), TEXT("selcan"), TEXT("gulbahor") };
+	for (const TCHAR* W : Women) if (ActorId == W) Body->bWoman = true;
 	Body->Build(RootComponent, 92.f);
 	RootComponent->SetRelativeScale3D(FVector(Scale / 1.8f));
 	RootComponent->AddLocalOffset(FVector(0, 0, 92.f * Scale / 1.8f));

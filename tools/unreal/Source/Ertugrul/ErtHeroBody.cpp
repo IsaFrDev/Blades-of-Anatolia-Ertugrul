@@ -52,8 +52,9 @@ void UErtHeroBody::Build(USceneComponent* Parent, float HalfH)
 	M.AddBox(FVector(0, 0, 4), FVector(12, 16, 9), Kaftan);
 	M.AddBox(FVector(0, 0, 10), FVector(12.6f, 16.6f, 2.5f), Leather);
 	M.AddBox(FVector(12.8f, 0, 10), FVector(1.5f, 3, 3), Trim);
-	M.AddBox(FVector(-4, -19, -30), FVector(2.2f, 1.6f, 42), Leather, FRotator(12, 0, 8));
-	if (!bSwordInHand) M.AddBox(FVector(4, -19, 14), FVector(1.5f, 4.5f, 1.5f), Trim, FRotator(12, 0, 8));
+	if (!bWoman) M.AddBox(FVector(-4, -19, -30), FVector(2.2f, 1.6f, 42), Leather, FRotator(12, 0, 8));
+	if (!bSwordInHand && !bWoman) M.AddBox(FVector(4, -19, 14), FVector(1.5f, 4.5f, 1.5f), Trim, FRotator(12, 0, 8));
+	if (bWoman) { M.AddBox(FVector(0, 0, -34), FVector(14, 18, 42), Kaftan); M.AddBox(FVector(0, 0, -74), FVector(15, 19, 4), Trim); } // uzun ko'ylak
 	M.Commit(Pelvis, 0, false);
 
 	// Ko'krak: kaftan + ko'krak zirhi + oltin hoshiya + yelka bo'laklari + orqa plash
@@ -70,9 +71,16 @@ void UErtHeroBody::Build(USceneComponent* Parent, float HalfH)
 	M.Reset();
 	M.AddCylinder(FVector(0, 0, 0), 5, 5, 7, 8, Skin);
 	M.AddSphere(FVector(0, 0, 17), 11, 12, Skin, FVector(1.0f, 0.95f, 1.15f));
-	M.AddBox(FVector(8, 0, 9), FVector(4, 7, 6), Beard);
+	if (!bWoman) M.AddBox(FVector(8, 0, 9), FVector(4, 7, 6), Beard);
 	M.AddBox(FVector(11.5f, 0, 17), FVector(2, 2, 2.5f), Skin);
-	if (bHelmet)
+	if (bWoman)
+	{
+		// Ro'mol: bosh atrofida va orqaga tushgan
+		M.AddSphere(FVector(-1, 0, 19), 12.8f, 12, Fur, FVector(1, 1, 1.05f));
+		M.AddBox(FVector(-9, 0, 2), FVector(4, 12, 16), Fur);
+		M.AddCylinder(FVector(0, 0, 26), 12.f, 12.f, 3.f, 12, Trim);
+	}
+	else if (bHelmet)
 	{
 		M.AddSphere(FVector(0, 0, 20), 12.5f, 12, Steel, FVector(1, 1, 0.9f));
 		M.AddCone(FVector(0, 0, 30), 3.f, 8.f, 6, Steel);

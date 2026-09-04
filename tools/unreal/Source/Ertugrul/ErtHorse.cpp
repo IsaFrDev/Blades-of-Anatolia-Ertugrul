@@ -99,7 +99,7 @@ void AErtHorse::Build()
 	}
 }
 
-void AErtHorse::Mount(AErtCharacter* InRider)
+void AErtHorse::Mount(AActor* InRider)
 {
 	if (!InRider || Rider) return;
 	Rider = InRider;

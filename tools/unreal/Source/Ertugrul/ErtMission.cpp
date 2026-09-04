@@ -214,7 +214,7 @@ void AErtMissionDirector::StopEpisode()
 
 void AErtMissionDirector::ClearEnemies()
 {
-	for (AErtEnemy* E : Enemies) if (E) E->Destroy();
+	for (AErtEnemy* E : Enemies) if (E) { if (AErtHorse* Hs = E->GetMount()) Hs->Destroy(); E->Destroy(); }
 	Enemies.Reset();
 }
 
@@ -223,6 +223,7 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 	Phases.Reset();
 	const int32 Tier = FMath::Clamp(E.DifficultyTier, 1, 5);
 	const int32 SeasonN = (E.SeasonId.Len() >= 2) ? FMath::Clamp(E.SeasonId[1] - '0', 1, 4) : 1;
+	const FString A_Arch = E.Archetype;
 	int32 PerWave = E.MaxSimultaneous > 0 ? E.MaxSimultaneous : 3;
 	PerWave = FMath::Clamp(PerWave, 2, 6);
 
@@ -230,6 +231,8 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 	{
 		const float R = Rng.FRand();
 		if (SeasonN >= 3 && Tier >= 3 && R > 0.85f) return EErtEnemyKind::Elite;
+		if (Tier >= 2 && R > 0.86f) return EErtEnemyKind::Rider;
+		if ((A_Arch == TEXT("CHASE") || A_Arch == TEXT("ESCORT")) && R > 0.70f) return EErtEnemyKind::Rider;
 		if (Tier >= 2 && R > 0.80f) return EErtEnemyKind::Crossbow;
 		if (R > 0.62f) return EErtEnemyKind::Sergeant;
 		return EErtEnemyKind::Footman;
@@ -240,7 +243,7 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 		for (int32 i = 0; i < N; ++i)
 		{
 			FErtSpawn S; S.Kind = PickKind();
-			const float MinR = S.Kind == EErtEnemyKind::Crossbow ? 1800.f : 1300.f;
+			const float MinR = S.Kind == EErtEnemyKind::Crossbow ? 1800.f : (S.Kind == EErtEnemyKind::Rider ? 2600.f : 1300.f);
 			S.Pos = FindSpot(Cursor, MinR, MinR + 1300.f);
 			S.Yaw = (Cursor - S.Pos).Rotation().Yaw;
 			S.Patrol = bPatrol ? Rng.FRandRange(400.f, 800.f) : 0.f;
@@ -368,6 +371,11 @@ void AErtMissionDirector::SpawnWave(int32 Idx)
 		AErtEnemy* E = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), S.Pos + FVector(0, 0, 100.f), FRotator(0, S.Yaw, 0), SP);
 		if (!E) continue;
 		E->Init(S.Kind, S.Pos, S.Patrol);
+		if (S.Kind == EErtEnemyKind::Rider)
+		{
+			AErtHorse* Hs = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), S.Pos + FVector(0, 0, 110.f), FRotator(0, S.Yaw, 0), SP);
+			if (Hs) { Hs->Init(FLinearColor(0.18f, 0.13f, 0.10f)); E->MountHorse(Hs); }
+		}
 		Enemies.Add(E);
 	}
 	int32 Total = 0, Deer = 0;

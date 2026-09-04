@@ -3,10 +3,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "ErtDialog.h"
 #include "ErtGameMode.generated.h"
 
 class AErtMissionDirector;
 class AErtCutsceneDirector;
+class AErtNpc;
 struct FErtEpisode;
 
 UCLASS()
@@ -31,6 +33,15 @@ public:
 	void OnAdvance();
 	void OnSkip();
 
+	// Dialog
+	void StartDialog(AErtNpc* Npc);
+	void DialogChoose(int32 Index);
+	void EndDialog();
+	const FErtDialog& GetDialog() const { return Dialog; }
+	bool IsDialogActive() const { return Dialog.IsActive(); }
+	int32 GetHonor() const { return Honor; }
+	const TSet<FString>& GetFlags() const { return Flags; }
+
 	/** Epizodni boshlaydi: kat-sahna (bo'lsa) -> missiya */
 	void BeginEpisode(const FString& Id, bool bWithCutscene);
 
@@ -44,5 +55,9 @@ private:
 	bool bUnlockAll = false;
 	int32 MenuIndex = 0;
 	TArray<FString> Completed;
+	FErtDialog Dialog;
+	TSet<FString> Flags;
+	int32 Honor = 0;
+	void SpawnNpcs();
 	void SetPlayerInput(bool bEnabled, bool bHide);
 };

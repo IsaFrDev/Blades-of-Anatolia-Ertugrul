@@ -27,6 +27,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") FLinearColor Steel = FLinearColor(0.75f, 0.77f, 0.80f);
 	/** Bo'rk o'rniga dubulg'a (dushman askarlari) */
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") bool bHelmet = false;
+	/** Ayol: soqolsiz, ro'mol va uzun ko'ylak */
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") bool bWoman = false;
 	/** Qo'lida qilich (zarba pozasi uchun) */
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") bool bSwordInHand = false;
 
