@@ -48,48 +48,49 @@ void UErtHeroBody::Build(USceneComponent* Parent, float HalfH)
 	ShinR = MakePart(TEXT("ShinR"), ThighR, FVector(0, 0, -43));
 
 	FErtMeshData M;
+	const FLinearColor KaftanS = ErtCol::Sty(Kaftan, ErtCol::StyleCloth), TrousersS = ErtCol::Sty(Trousers, ErtCol::StyleCloth), LeatherS = ErtCol::Sty(Leather, ErtCol::StyleLeather), SkinS = ErtCol::Sty(Skin, ErtCol::StyleSkin), SteelS = ErtCol::Sty(Steel, ErtCol::StyleMetal), FurS = ErtCol::Sty(Fur, ErtCol::StyleFur), BeardS = ErtCol::Sty(Beard, ErtCol::StyleFur), TrimS = ErtCol::Sty(Trim, ErtCol::StyleMetal);
 	// Tos + kamar + (qilich belda, agar qo'lda bo'lmasa)
-	M.AddBox(FVector(0, 0, 4), FVector(12, 16, 9), Kaftan);
-	M.AddBox(FVector(0, 0, 10), FVector(12.6f, 16.6f, 2.5f), Leather);
-	M.AddBox(FVector(12.8f, 0, 10), FVector(1.5f, 3, 3), Trim);
-	if (!bWoman) M.AddBox(FVector(-4, -19, -30), FVector(2.2f, 1.6f, 42), Leather, FRotator(12, 0, 8));
-	if (!bSwordInHand && !bWoman) M.AddBox(FVector(4, -19, 14), FVector(1.5f, 4.5f, 1.5f), Trim, FRotator(12, 0, 8));
-	if (bWoman) { M.AddBox(FVector(0, 0, -34), FVector(14, 18, 42), Kaftan); M.AddBox(FVector(0, 0, -74), FVector(15, 19, 4), Trim); } // uzun ko'ylak
+	M.AddBox(FVector(0, 0, 4), FVector(12, 16, 9), KaftanS);
+	M.AddBox(FVector(0, 0, 10), FVector(12.6f, 16.6f, 2.5f), LeatherS);
+	M.AddBox(FVector(12.8f, 0, 10), FVector(1.5f, 3, 3), TrimS);
+	if (!bWoman) M.AddBox(FVector(-4, -19, -30), FVector(2.2f, 1.6f, 42), LeatherS, FRotator(12, 0, 8));
+	if (!bSwordInHand && !bWoman) M.AddBox(FVector(4, -19, 14), FVector(1.5f, 4.5f, 1.5f), TrimS, FRotator(12, 0, 8));
+	if (bWoman) { M.AddBox(FVector(0, 0, -34), FVector(14, 18, 42), KaftanS); M.AddBox(FVector(0, 0, -74), FVector(15, 19, 4), TrimS); } // uzun ko'ylak
 	M.Commit(Pelvis, 0, false);
 
 	// Ko'krak: kaftan + ko'krak zirhi + oltin hoshiya + yelka bo'laklari + orqa plash
 	M.Reset();
-	M.AddBox(FVector(0, 0, 23), FVector(13, 19, 23), Kaftan);
-	M.AddBox(FVector(10, 0, 24), FVector(4, 13, 18), Leather);
-	M.AddBox(FVector(14.2f, 0, 24), FVector(0.6f, 1.6f, 18), Trim);
-	M.AddBox(FVector(0, -21, 40), FVector(8, 4, 5), Fur);
-	M.AddBox(FVector(0, 21, 40), FVector(8, 4, 5), Fur);
-	M.AddBox(FVector(-13.5f, 0, 24), FVector(1.5f, 17, 22), Fur);
+	M.AddBox(FVector(0, 0, 23), FVector(13, 19, 23), KaftanS);
+	M.AddBox(FVector(10, 0, 24), FVector(4, 13, 18), LeatherS);
+	M.AddBox(FVector(14.2f, 0, 24), FVector(0.6f, 1.6f, 18), TrimS);
+	M.AddBox(FVector(0, -21, 40), FVector(8, 4, 5), FurS);
+	M.AddBox(FVector(0, 21, 40), FVector(8, 4, 5), FurS);
+	M.AddBox(FVector(-13.5f, 0, 24), FVector(1.5f, 17, 22), FurS);
 	M.Commit(Torso, 0, false);
 
 	// Bosh: bo'yin, bosh, soqol, burun, bo'rk yoki dubulg'a
 	M.Reset();
-	M.AddCylinder(FVector(0, 0, 0), 5, 5, 7, 8, Skin);
-	M.AddSphere(FVector(0, 0, 17), 11, 12, Skin, FVector(1.0f, 0.95f, 1.15f));
-	if (!bWoman) M.AddBox(FVector(8, 0, 9), FVector(4, 7, 6), Beard);
-	M.AddBox(FVector(11.5f, 0, 17), FVector(2, 2, 2.5f), Skin);
+	M.AddCylinder(FVector(0, 0, 0), 5, 5, 7, 8, SkinS);
+	M.AddSphere(FVector(0, 0, 17), 11, 12, SkinS, FVector(1.0f, 0.95f, 1.15f));
+	if (!bWoman) M.AddBox(FVector(8, 0, 9), FVector(4, 7, 6), BeardS);
+	M.AddBox(FVector(11.5f, 0, 17), FVector(2, 2, 2.5f), SkinS);
 	if (bWoman)
 	{
 		// Ro'mol: bosh atrofida va orqaga tushgan
-		M.AddSphere(FVector(-1, 0, 19), 12.8f, 12, Fur, FVector(1, 1, 1.05f));
-		M.AddBox(FVector(-9, 0, 2), FVector(4, 12, 16), Fur);
-		M.AddCylinder(FVector(0, 0, 26), 12.f, 12.f, 3.f, 12, Trim);
+		M.AddSphere(FVector(-1, 0, 19), 12.8f, 12, FurS, FVector(1, 1, 1.05f));
+		M.AddBox(FVector(-9, 0, 2), FVector(4, 12, 16), FurS);
+		M.AddCylinder(FVector(0, 0, 26), 12.f, 12.f, 3.f, 12, TrimS);
 	}
 	else if (bHelmet)
 	{
-		M.AddSphere(FVector(0, 0, 20), 12.5f, 12, Steel, FVector(1, 1, 0.9f));
-		M.AddCone(FVector(0, 0, 30), 3.f, 8.f, 6, Steel);
-		M.AddBox(FVector(11.8f, 0, 14), FVector(1.5f, 1.5f, 6), Steel); // burun himoyasi
+		M.AddSphere(FVector(0, 0, 20), 12.5f, 12, SteelS, FVector(1, 1, 0.9f));
+		M.AddCone(FVector(0, 0, 30), 3.f, 8.f, 6, SteelS);
+		M.AddBox(FVector(11.8f, 0, 14), FVector(1.5f, 1.5f, 6), SteelS); // burun himoyasi
 	}
 	else
 	{
-		M.AddCylinder(FVector(0, 0, 24), 12.5f, 12.5f, 9, 12, Fur);
-		M.AddCylinder(FVector(0, 0, 33), 11.5f, 8, 9, 12, ErtCol::Vary(Kaftan, 0.15f, 3));
+		M.AddCylinder(FVector(0, 0, 24), 12.5f, 12.5f, 9, 12, FurS);
+		M.AddCylinder(FVector(0, 0, 33), 11.5f, 8, 9, 12, ErtCol::Vary(KaftanS, 0.15f, 3));
 	}
 	M.Commit(Head, 0, false);
 
@@ -97,16 +98,16 @@ void UErtHeroBody::Build(USceneComponent* Parent, float HalfH)
 	for (int32 Side = 0; Side < 2; ++Side)
 	{
 		M.Reset();
-		M.AddBox(FVector(0, 0, -15), FVector(5.5f, 5.5f, 15), Kaftan);
+		M.AddBox(FVector(0, 0, -15), FVector(5.5f, 5.5f, 15), KaftanS);
 		M.Commit(Side ? UpperArmR : UpperArmL, 0, false);
 		M.Reset();
-		M.AddBox(FVector(0, 0, -13), FVector(5, 5, 13), Kaftan);
-		M.AddBox(FVector(0, 0, -22), FVector(5.4f, 5.4f, 5), Leather);
-		M.AddBox(FVector(0.5f, 0, -30), FVector(4, 3.5f, 5), Skin);
+		M.AddBox(FVector(0, 0, -13), FVector(5, 5, 13), KaftanS);
+		M.AddBox(FVector(0, 0, -22), FVector(5.4f, 5.4f, 5), LeatherS);
+		M.AddBox(FVector(0.5f, 0, -30), FVector(4, 3.5f, 5), SkinS);
 		if (Side == 1 && bSwordInHand)
 		{
-			M.AddBox(FVector(0.5f, 0, -30), FVector(1.2f, 6, 1.2f), Trim);               // qo'riqlovchi
-			M.AddBox(FVector(42, 0, -30), FVector(40, 0.6f, 2.8f), Steel);               // tig'
+			M.AddBox(FVector(0.5f, 0, -30), FVector(1.2f, 6, 1.2f), TrimS);               // qo'riqlovchi
+			M.AddBox(FVector(42, 0, -30), FVector(40, 0.6f, 2.8f), SteelS);               // tig'
 		}
 		M.Commit(Side ? LowerArmR : LowerArmL, 0, false);
 	}
@@ -114,12 +115,12 @@ void UErtHeroBody::Build(USceneComponent* Parent, float HalfH)
 	for (int32 Side = 0; Side < 2; ++Side)
 	{
 		M.Reset();
-		M.AddBox(FVector(0, 0, -22), FVector(7, 7, 22), Trousers);
+		M.AddBox(FVector(0, 0, -22), FVector(7, 7, 22), TrousersS);
 		M.Commit(Side ? ThighR : ThighL, 0, false);
 		M.Reset();
-		M.AddBox(FVector(0, 0, -20), FVector(6, 6, 20), Trousers);
-		M.AddBox(FVector(0, 0, -30), FVector(6.5f, 6.5f, 12), Leather);
-		M.AddBox(FVector(6, 0, -43), FVector(13, 6, 3.5f), Leather);
+		M.AddBox(FVector(0, 0, -20), FVector(6, 6, 20), TrousersS);
+		M.AddBox(FVector(0, 0, -30), FVector(6.5f, 6.5f, 12), LeatherS);
+		M.AddBox(FVector(6, 0, -43), FVector(13, 6, 3.5f), LeatherS);
 		M.Commit(Side ? ShinR : ShinL, 0, false);
 	}
 	Apply(Cur);
@@ -149,9 +150,10 @@ void UErtHeroBody::SetShield(bool bOn)
 	if (Shield) return;
 	Shield = MakePart(TEXT("Shield"), LowerArmL, FVector(0, -7, -18));
 	FErtMeshData M;
-	M.AddCylinder(FVector(0, 0, 0), 22.f, 22.f, 2.5f, 12, FLinearColor(0.35f, 0.22f, 0.10f), true, FRotator(0, 0, 90.f));
-	M.AddCylinder(FVector(0, -2.5f, 0), 6.f, 5.f, 3.f, 8, Steel, true, FRotator(0, 0, 90.f));
-	M.AddCylinder(FVector(0, -2.6f, 0), 22.5f, 22.5f, 1.f, 12, Trim, false, FRotator(0, 0, 90.f));
+	const FLinearColor KaftanS = ErtCol::Sty(Kaftan, ErtCol::StyleCloth), TrousersS = ErtCol::Sty(Trousers, ErtCol::StyleCloth), LeatherS = ErtCol::Sty(Leather, ErtCol::StyleLeather), SkinS = ErtCol::Sty(Skin, ErtCol::StyleSkin), SteelS = ErtCol::Sty(Steel, ErtCol::StyleMetal), FurS = ErtCol::Sty(Fur, ErtCol::StyleFur), BeardS = ErtCol::Sty(Beard, ErtCol::StyleFur), TrimS = ErtCol::Sty(Trim, ErtCol::StyleMetal);
+	M.AddCylinder(FVector(0, 0, 0), 22.f, 22.f, 2.5f, 12, ErtCol::Sty(FLinearColor(0.35f, 0.22f, 0.10f), ErtCol::StyleWood), true, FRotator(0, 0, 90.f));
+	M.AddCylinder(FVector(0, -2.5f, 0), 6.f, 5.f, 3.f, 8, SteelS, true, FRotator(0, 0, 90.f));
+	M.AddCylinder(FVector(0, -2.6f, 0), 22.5f, 22.5f, 1.f, 12, TrimS, false, FRotator(0, 0, 90.f));
 	M.Commit(Shield, 0, false);
 }
 
@@ -160,11 +162,12 @@ void UErtHeroBody::SetSwordTier(int32 Tier)
 	if (!IsBuilt() || !bSwordInHand) return;
 	Steel = Tier >= 2 ? FLinearColor(0.55f, 0.62f, 0.75f) : FLinearColor(0.75f, 0.77f, 0.80f);
 	FErtMeshData M;
-	M.AddBox(FVector(0, 0, -13), FVector(5, 5, 13), Kaftan);
-	M.AddBox(FVector(0, 0, -22), FVector(5.4f, 5.4f, 5), Leather);
-	M.AddBox(FVector(0.5f, 0, -30), FVector(4, 3.5f, 5), Skin);
-	M.AddBox(FVector(0.5f, 0, -30), FVector(1.2f, 6, 1.2f), Trim);
-	M.AddBox(FVector(Tier >= 2 ? 46.f : 42.f, 0, -30), FVector(Tier >= 2 ? 44.f : 40.f, 0.6f, 2.8f), Steel);
+	const FLinearColor KaftanS = ErtCol::Sty(Kaftan, ErtCol::StyleCloth), TrousersS = ErtCol::Sty(Trousers, ErtCol::StyleCloth), LeatherS = ErtCol::Sty(Leather, ErtCol::StyleLeather), SkinS = ErtCol::Sty(Skin, ErtCol::StyleSkin), SteelS = ErtCol::Sty(Steel, ErtCol::StyleMetal), FurS = ErtCol::Sty(Fur, ErtCol::StyleFur), BeardS = ErtCol::Sty(Beard, ErtCol::StyleFur), TrimS = ErtCol::Sty(Trim, ErtCol::StyleMetal);
+	M.AddBox(FVector(0, 0, -13), FVector(5, 5, 13), KaftanS);
+	M.AddBox(FVector(0, 0, -22), FVector(5.4f, 5.4f, 5), LeatherS);
+	M.AddBox(FVector(0.5f, 0, -30), FVector(4, 3.5f, 5), SkinS);
+	M.AddBox(FVector(0.5f, 0, -30), FVector(1.2f, 6, 1.2f), TrimS);
+	M.AddBox(FVector(Tier >= 2 ? 46.f : 42.f, 0, -30), FVector(Tier >= 2 ? 44.f : 40.f, 0.6f, 2.8f), SteelS);
 	M.Commit(LowerArmR, 0, false);
 }
 

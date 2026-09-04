@@ -46,6 +46,7 @@ namespace ErtCol
 {
 	// Material uslubi (M_ErtVertexColor): vertex rangining alfa kanali naqshni tanlaydi
 	constexpr float StyleGround = 0.0f, StyleStone = 0.2f, StyleWood = 0.4f, StyleRoof = 0.6f, StyleBrick = 0.8f, StylePlain = 1.0f;
+	constexpr float StyleCloth = 0.10f, StyleLeather = 0.32f, StyleMetal = 0.50f, StyleFur = 0.70f, StyleSkin = 0.90f;   // personaj/ot: to'qima, charm, metall/zanjir, jun, badan
 	inline FLinearColor Sty(const FLinearColor& C, float Style) { return FLinearColor(C.R, C.G, C.B, Style); }
 	inline FLinearColor Vary(const FLinearColor& C, float Amount, int32 Seed)
 	{

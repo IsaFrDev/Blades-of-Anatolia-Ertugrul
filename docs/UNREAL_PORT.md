@@ -311,3 +311,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 
 - `ErtWorldBuilder.cpp` dagi barcha rang e'lonlari uslub bilan belgilandi (`ErtCol::Sty`): tosh nomlari (Stone, Lime, Basalt, HStone, KStone, SStone, NStone, BStone, Grey, StoneG...) -> `StyleStone`; yog'och (Wood, DarkWood, *Wood, Timber) -> `StyleWood`; Tile/Shingle -> `StyleRoof`; Brick/BrickD -> `StyleBrick`. `Vary` alfani saqlaydi, shuning uchun barcha ishlatishlar avtomatik uslub oladi. Qorong'i eshik tuslari (`* 0.3f` kabi) `StylePlain` da qoldirildi (alfa siljimasligi uchun).
 - Shunday qilib oba devori, Bagras shahri, Mo'g'ul lageri, cho'l binolari, Damashq, Halab, Konya, Qayseri, Sivas, Erzurum, Bursa, Nikeya, Karacahisar, So'g'ut, Domaniç hammasi naqshli PBR ko'rinishga o'tdi.
+
+## Personaj va ot materiallari
+
+- Yangi uslublar (`ErtCol::StyleCloth` 0.10, `StyleLeather` 0.32, `StyleMetal` 0.50, `StyleFur` 0.70, `StyleSkin` 0.90): material HLSL 11 diapazonga bo'lindi (0.05 qadam). Mato: mayda to'qima; charm: ikki shovqinli don; metall: halqa (zanjir) naqshi, metallik 0.7, roughness 0.45+; jun: tolali chiziqlar; badan: nozik teri doni. Roughness va metallik alohida Custom tugunlarda (`ErtRough`, `ErtMetal`).
+- `UErtHeroBody`: Build/SetShield/SetSwordTier ichida a'zo ranglari uslubli mahalliy nusxalar (KaftanS, LeatherS, SkinS, SteelS, FurS, BeardS, TrimS, TrousersS) bilan ishlatiladi; qalqon yog'och uslubi. Dushman va NPC ham shu tanadan foydalanadi.
+- `AErtHorse`: yung (CoatF, Dark, Mane, WhiteM) jun uslubi, egar/tasmalar charm, gilam mato, uzangi/suvliq metall; tuya ham. Kiyik (`BuildDeer`) jun.

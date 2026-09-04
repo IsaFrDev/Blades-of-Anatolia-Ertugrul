@@ -70,7 +70,7 @@ void AErtEnemy::BeginPlay()
 void AErtEnemy::BuildDeer()
 {
 	UMaterialInterface* Mat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtVertexColor.M_ErtVertexColor"));
-	const FLinearColor Coat(0.55f, 0.36f, 0.18f), Belly(0.75f, 0.62f, 0.45f), Dark(0.25f, 0.16f, 0.08f);
+	const FLinearColor Coat = ErtCol::Sty(FLinearColor(0.55f, 0.36f, 0.18f), ErtCol::StyleFur), Belly = ErtCol::Sty(FLinearColor(0.75f, 0.62f, 0.45f), ErtCol::StyleFur), Dark(0.25f, 0.16f, 0.08f);
 	const float HH = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
 	auto Make = [&](const TCHAR* Name, const FVector& Rel)
 	{
@@ -102,7 +102,7 @@ void AErtEnemy::BuildDeer()
 		const float X = (i < 2) ? 36.f : -36.f, Y = (i & 1) ? 11.f : -11.f;
 		UProceduralMeshComponent* Leg = Make(TEXT("DeerLeg"), FVector(X, Y, -HH + 78.f));
 		M.Reset();
-		M.AddBox(FVector(0, 0, -38), FVector(5, 4.5f, 38), i < 2 ? Coat : Coat * 0.95f);
+		M.AddBox(FVector(0, 0, -38), FVector(5, 4.5f, 38), i < 2 ? Coat : ErtCol::Sty(Coat * 0.95f, ErtCol::StyleFur));
 		M.AddBox(FVector(1, 0, -78), FVector(6, 5, 3), Dark);
 		M.Commit(Leg, 0, false);
 	}
