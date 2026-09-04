@@ -537,5 +537,1476 @@
     "waves": 2
    }
   ]
+ },
+ "EP013": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep013_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep013_npc",
+      "name": "chr.mongol_chavandoz.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.3,
+       0.1,
+       0.08
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "fight",
+    "waves": 2
+   }
+  ]
+ },
+ "EP014": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep014_clue_a",
+     "ep014_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep014_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep014_npc",
+      "name": "chr.dogan.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.22,
+       0.18,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP015": {
+  "phases": [
+   {
+    "type": "collect",
+    "n": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep015_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep015_npc",
+      "name": "chr.haci_bektas.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.85,
+       0.82,
+       0.75
+      ]
+     }
+    ]
+   },
+   {
+    "type": "hunt",
+    "n": 1
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP016": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep016_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep016_npc",
+      "name": "chr.ahi_evren.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.5,
+       0.42,
+       0.22
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP017": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep017_clue_a",
+     "ep017_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep017_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep017_npc",
+      "name": "chr.alauddin.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.45,
+       0.35,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP018": {
+  "phases": [
+   {
+    "type": "hunt",
+    "n": 2
+   },
+   {
+    "type": "council",
+    "dialog": "ep018_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep018_npc",
+      "name": "chr.bamsi.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.36,
+       0.26,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 3
+   },
+   {
+    "type": "fight",
+    "waves": 2
+   }
+  ]
+ },
+ "EP019": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep019_clue_a",
+     "ep019_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep019_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep019_npc",
+      "name": "chr.dogan.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.22,
+       0.18,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP020": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep020_clue_a",
+     "ep020_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep020_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep020_npc",
+      "name": "chr.alauddin.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.45,
+       0.35,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP021": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep021_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep021_npc",
+      "name": "chr.mongol_katib.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.25,
+       0.25,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "collect",
+    "n": 2
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   }
+  ]
+ },
+ "EP022": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep022_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep022_npc",
+      "name": "chr.turgut.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.2,
+       0.22,
+       0.12
+      ]
+     }
+    ]
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "fight",
+    "waves": 3
+   }
+  ]
+ },
+ "EP023": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 3,
+    "timed": true
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   },
+   {
+    "type": "council",
+    "dialog": "ep023_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep023_npc",
+      "name": "chr.dundar.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.18,
+       0.28,
+       0.2
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP024": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep024_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep024_npc",
+      "name": "chr.mongol_katib.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.25,
+       0.25,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "collect",
+    "n": 2
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   }
+  ]
+ },
+ "EP025": {
+  "phases": [
+   {
+    "type": "hunt",
+    "n": 2
+   },
+   {
+    "type": "council",
+    "dialog": "ep025_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep025_npc",
+      "name": "chr.bamsi.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.36,
+       0.26,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 3
+   },
+   {
+    "type": "fight",
+    "waves": 3
+   }
+  ]
+ },
+ "EP026": {
+  "phases": [
+   {
+    "type": "collect",
+    "n": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep026_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep026_npc",
+      "name": "chr.haci_bektas.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.85,
+       0.82,
+       0.75
+      ]
+     }
+    ]
+   },
+   {
+    "type": "hunt",
+    "n": 1
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP027": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep027_clue_a",
+     "ep027_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep027_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep027_npc",
+      "name": "chr.alauddin.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.45,
+       0.35,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP028": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep028_clue_a",
+     "ep028_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep028_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep028_npc",
+      "name": "chr.dogan.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.22,
+       0.18,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP029": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 3,
+    "timed": true
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   },
+   {
+    "type": "council",
+    "dialog": "ep029_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep029_npc",
+      "name": "chr.dundar.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.18,
+       0.28,
+       0.2
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP030": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep030_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep030_npc",
+      "name": "chr.turgut.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.2,
+       0.22,
+       0.12
+      ]
+     }
+    ]
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "fight",
+    "waves": 3
+   }
+  ]
+ },
+ "EP031": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep031_clue_a",
+     "ep031_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep031_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep031_npc",
+      "name": "chr.alauddin.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.45,
+       0.35,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP032": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep032_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep032_npc",
+      "name": "chr.mongol_katib.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.25,
+       0.25,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "collect",
+    "n": 2
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   }
+  ]
+ },
+ "EP033": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep033_clue_a",
+     "ep033_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep033_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep033_npc",
+      "name": "chr.alauddin.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.45,
+       0.35,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP034": {
+  "phases": [
+   {
+    "type": "collect",
+    "n": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep034_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep034_npc",
+      "name": "chr.haci_bektas.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.85,
+       0.82,
+       0.75
+      ]
+     }
+    ]
+   },
+   {
+    "type": "hunt",
+    "n": 1
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP035": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep035_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep035_npc",
+      "name": "chr.mongol_chavandoz.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.3,
+       0.1,
+       0.08
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "fight",
+    "waves": 3
+   }
+  ]
+ },
+ "EP036": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep036_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep036_npc",
+      "name": "chr.mongol_katib.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.25,
+       0.25,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "collect",
+    "n": 2
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   }
+  ]
+ },
+ "EP037": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep037_clue_a",
+     "ep037_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep037_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep037_npc",
+      "name": "chr.alauddin.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.45,
+       0.35,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP038": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep038_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep038_npc",
+      "name": "chr.ahi_evren.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.5,
+       0.42,
+       0.22
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP039": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep039_clue_a",
+     "ep039_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep039_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep039_npc",
+      "name": "chr.dogan.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.22,
+       0.18,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP040": {
+  "phases": [
+   {
+    "type": "collect",
+    "n": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep040_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep040_npc",
+      "name": "chr.haci_bektas.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.85,
+       0.82,
+       0.75
+      ]
+     }
+    ]
+   },
+   {
+    "type": "hunt",
+    "n": 1
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP041": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep041_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep041_npc",
+      "name": "chr.mongol_chavandoz.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.3,
+       0.1,
+       0.08
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "fight",
+    "waves": 3
+   }
+  ]
+ },
+ "EP042": {
+  "phases": [
+   {
+    "type": "collect",
+    "n": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep042_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep042_npc",
+      "name": "chr.haci_bektas.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.85,
+       0.82,
+       0.75
+      ]
+     }
+    ]
+   },
+   {
+    "type": "hunt",
+    "n": 1
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP043": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep043_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep043_npc",
+      "name": "chr.mongol_katib.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.25,
+       0.25,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "collect",
+    "n": 2
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   }
+  ]
+ },
+ "EP044": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep044_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep044_npc",
+      "name": "chr.turgut.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.2,
+       0.22,
+       0.12
+      ]
+     }
+    ]
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "fight",
+    "waves": 3
+   }
+  ]
+ },
+ "EP045": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep045_clue_a",
+     "ep045_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep045_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep045_npc",
+      "name": "chr.dogan.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.22,
+       0.18,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP046": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep046_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep046_npc",
+      "name": "chr.mongol_katib.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.25,
+       0.25,
+       0.3
+      ]
+     }
+    ]
+   },
+   {
+    "type": "collect",
+    "n": 2
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   }
+  ]
+ },
+ "EP047": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep047_talk",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ep047_npc",
+      "name": "chr.mongol_chavandoz.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.3,
+       0.1,
+       0.08
+      ]
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "fight",
+    "waves": 3
+   }
+  ]
+ },
+ "EP048": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "ep048_clue_a",
+     "ep048_clue_b"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep048_talk",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "ep048_npc",
+      "name": "chr.alauddin.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": false,
+      "kaftan": [
+       0.45,
+       0.35,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
  }
 }

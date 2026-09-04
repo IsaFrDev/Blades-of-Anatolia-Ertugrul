@@ -93,6 +93,14 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - Sozlamalar (O tugmasi): til (uz/tr/en - darhol qo'llanadi), sezgirlik 0.2-3.0, Y teskari. Chap/O'ng yoki Enter bilan o'zgartiriladi.
 - EP007-EP012 qo'lda ssenariylar va 6 dialog (Al-Aziz, Ibn Arabiy, Gundo'g'di, yarador Turgut, Ko'pek, No'yon elchisi); generator `make_ep7_12.py`.
 
+## Kun/tun, barcha 48 epizod, lagerga bosqinchilik
+- Kun/tun sikli (`AErtGameMode::Tick`): 20 daqiqalik kun, quyosh balandligi/rangi/intensivligi va osmon nuri DayT bo'yicha; epizodning
+  `time_of_day` (dawn/day/dusk/night) boshlang'ich vaqtni beradi.
+- EP013-EP048: arxetip shablonlari bilan `make_ep13_48.py` - har epizodga kengash/suhbat dialogi (COURT/INVESTIGATION dalil dueli 2 ball;
+  SIEGE elchi; DEFENSE Turgut; SURVIVAL Bamsi; INFILTRATION asir kotib; CHASE yarador Dundor; ESCORT Axi Evren; RITUAL Hoji Bektosh) va bayroqlar `<ep>_...`.
+- INFILTRATION yashirin bosqichi: qorovullar mo'g'ul lageri ichida (CampE/CampN +-60 m) - o'yinchi lagerga kirib boradi.
+- Ot ustida kamon: F tugmasi minib turganda ham ishlaydi (kamera nuri).
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

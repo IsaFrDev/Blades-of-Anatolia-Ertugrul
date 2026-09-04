@@ -63,7 +63,14 @@ private:
 	TSet<FString> Flags;
 	int32 Honor = 0;
 	void SpawnNpcs();
+	UPROPERTY(Transient) TObjectPtr<class ADirectionalLight> Sun;
+	UPROPERTY(Transient) TObjectPtr<class ASkyLight> Sky;
+	float DayT = 0.35f;      // 0 = yarim tun, 0.25 = tong, 0.5 = peshin, 0.75 = shom
+	float DayLength = 1200.f; // soniya (20 daqiqa)
+	virtual void Tick(float Dt) override;
 public:
+	void SetTimeOfDay(const FString& Name);
+	float GetDayT() const { return DayT; }
 	void SaveGame();
 	void LoadGame();
 	// Sozlamalar

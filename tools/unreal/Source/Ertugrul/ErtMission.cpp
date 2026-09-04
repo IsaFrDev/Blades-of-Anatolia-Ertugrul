@@ -184,6 +184,7 @@ bool AErtMissionDirector::StartEpisode(const FString& Id)
 	EpisodeDate = E->Gregorian;
 	IntroText = FErtLoc::Get().TrOr(E->LocIntro, TEXT(""));
 	Cliffhanger = FErtLoc::Get().TrOr(E->LocCliffhanger, TEXT(""));
+	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SetTimeOfDay(E->TimeOfDay);
 	NextEpisodeId = E->NextId;
 	Kills = 0; Deaths = 0;
 	Rng.Initialize(GetTypeHash(E->Id));
@@ -304,6 +305,8 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 	auto AddStealth = [&](int32 Guards)
 	{
 		FErtPhase P; P.TitleKey = TEXT("ui.phase.stealth");
+		// Bosqinchilik: qorovullar mo'g'ul lageri ichida - o'yinchi lagerga kirib boradi
+		if (A_Arch == TEXT("INFILTRATION")) Cursor = GroundAt((CampN + Rng.FRandRange(-60.f, 60.f)) * 100.f, (CampE + Rng.FRandRange(-60.f, 60.f)) * 100.f);
 		P.Waves.Add(MakeWave(Guards, 0.f, true));
 		P.Reinforce = MakeWave(FMath::Max(2, PerWave - 1), 0.f, false);
 		AddObj(P.Objectives, EErtObjKind::StayUndetected, TEXT("ui.obj.undetected"), 0, true);

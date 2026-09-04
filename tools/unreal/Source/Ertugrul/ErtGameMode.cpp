@@ -12,6 +12,10 @@
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
 #include "ErtLoc.h"
+#include "Engine/DirectionalLight.h"
+#include "Engine/SkyLight.h"
+#include "Components/DirectionalLightComponent.h"
+#include "Components/SkyLightComponent.h"
 #include "ErtMission.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,6 +27,7 @@
 
 AErtGameMode::AErtGameMode()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	DefaultPawnClass = AErtCharacter::StaticClass();
 	HUDClass = AErtHUD::StaticClass();
 }
@@ -45,6 +50,8 @@ void AErtGameMode::BeginPlay()
 	bUnlockAll = FParse::Param(FCommandLine::Get(), TEXT("ErtUnlockAll"));
 	SpawnNpcs();
 	LoadGame();
+	Sun = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(this, ADirectionalLight::StaticClass()));
+	Sky = Cast<ASkyLight>(UGameplayStatics::GetActorOfClass(this, ASkyLight::StaticClass()));
 
 	FString Ep;
 	const bool bDirect = FParse::Value(FCommandLine::Get(), TEXT("-ErtEpisode="), Ep);
@@ -174,6 +181,32 @@ void AErtGameMode::LoadGame()
 	if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectSavedDir() / TEXT("ert_progress.txt")))) { TArray<FString> L; Text.ParseIntoArrayLines(L); for (const FString& S : L) Completed.AddUnique(S); }
 	FErtLoc::Get().SetLanguage(Language);
 	GErtMouseSens = MouseSens; GErtInvertY = bInvertY;
+}
+
+void AErtGameMode::SetTimeOfDay(const FString& Name)
+{
+	if (Name == TEXT("dawn")) DayT = 0.24f;
+	else if (Name == TEXT("dusk")) DayT = 0.74f;
+	else if (Name == TEXT("night")) DayT = 0.95f;
+	else DayT = 0.38f;
+}
+
+void AErtGameMode::Tick(float Dt)
+{
+	Super::Tick(Dt);
+	DayT = FMath::Fmod(DayT + Dt / DayLength, 1.f);
+	if (!Sun) return;
+	// Quyosh balandligi: tongda ufqdan chiqadi, peshinda 62 gradus, shomda botadi; tunda ufq ostida (oy sifatida xira)
+	const float Elev = FMath::Sin((DayT - 0.25f) * 2.f * PI) * 62.f;
+	const float Yaw = 28.f + (DayT - 0.25f) * 180.f;
+	Sun->SetActorRotation(FRotator(-FMath::Max(Elev, 6.f), Yaw, 0.f));
+	const float Day = FMath::Clamp((Elev + 4.f) / 16.f, 0.f, 1.f);
+	if (UDirectionalLightComponent* DL = Sun->GetComponent())
+	{
+		DL->SetIntensity(FMath::Lerp(0.25f, 7.f, Day));
+		DL->SetLightColor(FMath::Lerp(FLinearColor(0.45f, 0.55f, 0.9f), FMath::Lerp(FLinearColor(1.f, 0.62f, 0.35f), FLinearColor(1.f, 0.96f, 0.9f), FMath::Clamp(Elev / 25.f, 0.f, 1.f)), Day));
+	}
+	if (Sky && Sky->GetLightComponent()) Sky->GetLightComponent()->SetIntensity(FMath::Lerp(0.15f, 1.f, Day));
 }
 
 void AErtGameMode::SettingsToggle()
