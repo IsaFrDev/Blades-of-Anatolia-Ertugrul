@@ -255,3 +255,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `BuildSivas()` (ErtWorldBuilder): shimoli-g'arbda (E=-180, N=400, R=120 m) Saljuq madrasalar shahri: 14 burchakli tosh devor, burjlar, janubiy va sharqiy darvozalar; shimolda past qal'a tepaligi (devor halqasi, burj, saroy); Go'k Madrasa (feruza koshinli portal, qo'sh minora), Chifte Minorali madrasa (baland fasad, qo'sh minora), Burujiya madrasasi, Ulu Jome' (keng past bino, qiyshaygan g'isht minora); yog'och soyabonli bozor, g'isht-tosh uylar, tollar. Yo'l (-300,250) dan janubiy darvozaga.
 - Xarita: `Sivas` belgisi; NPC joyi `sivas` (Sivas savdogari, Go'k Madrasa mudarrisi); `Sivas` epizodlari janubiy darvoza oldidan boshlanadi.
 - Sinov skrinshoti: `20_sivas`.
+
+## Erzurum shahri
+
+- `BuildErzurum()` (ErtWorldBuilder): shimoli-sharqda (E=420, N=730, R=110 m, 22 m balandlik) sovuq tekislik shahri: 12 burchakli qalin kulrang devor, qiya tomli kvadrat burjlar, janubiy va g'arbiy darvozalar; shimoli-sharq tepaligida qal'a (ichki devor, Tepsi minora soat xonasi bilan, saroy); Chifte Minorali madrasa (baland portal, qo'sh minora, orqada katta kumbet); Uch Kumbet; Ulu Jome' (ko'p gumbazli tom, kalta minora); tunuka tomli tosh do'konlar; past tuproq tomli uylar (mo'ri, tomda qor); qarag'aylar. Yo'l (500,520) dan janubiy darvozaga.
+- Xarita: `Erzurum` belgisi; NPC joyi `erzurum` (savdogar, Erzurum beyi); `Erzurum`/`Erzincan` epizodlari janubiy darvoza oldidan boshlanadi.
+- Sinov: `27_erzurum` skrinshoti (ssenariy oxirida); xarita skrinshoti uchun xarita 0.7 s ochiq turadi (kadr kechikishi tufayli).

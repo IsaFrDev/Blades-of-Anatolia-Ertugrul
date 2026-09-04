@@ -509,8 +509,8 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(24.6f)) TakeShot(TEXT("river"));
 	if (At(24.7f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
 	if (At(24.9f)) TakeShot(TEXT("map"));
-	if (At(24.95f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
-	if (At(25.0f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
+	if (At(25.4f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
+	if (At(25.5f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
 	if (At(26.6f)) TakeShot(TEXT("oasis"));
 	if (At(26.62f)) Teleport(720.f, -1000.f, 11.f + 45.f, -18.f, 0.f);
 	if (At(27.1f)) TakeShot(TEXT("damascus"));
@@ -565,7 +565,10 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(40.6f)) TakeShot(TEXT("npc"));
 	if (At(41.0f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnAdvance(); }
 	if (At(41.8f)) TakeShot(TEXT("npc_choice"));
-	if (At(42.6f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(41.9f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnAdvance(); }
+	if (At(42.0f)) Teleport(420.f, 560.f, 22.f + 55.f, -18.f, 0.f);
+	if (At(42.9f)) TakeShot(TEXT("erzurum"));
+	if (At(43.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;

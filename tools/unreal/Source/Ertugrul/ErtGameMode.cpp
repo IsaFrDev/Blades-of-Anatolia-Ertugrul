@@ -131,6 +131,7 @@ void AErtGameMode::SpawnNpcs()
 		else if (Place == TEXT("konya")) { E = ErtMap::KonE; Nn = ErtMap::KonN; }
 		else if (Place == TEXT("kayseri")) { E = ErtMap::KayE; Nn = ErtMap::KayN; }
 		else if (Place == TEXT("sivas")) { E = ErtMap::SivE; Nn = ErtMap::SivN; }
+		else if (Place == TEXT("erzurum")) { E = ErtMap::ErzE; Nn = ErtMap::ErzN; }
 		E += U; Nn += Vv;
 		const float X = Nn * 100.f, Y = E * 100.f;
 		FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtNpcGround), true);

@@ -404,6 +404,36 @@
     0.75
    ],
    "dialog": "ep014_talk"
+  },
+  {
+   "id": "erzurum_savdogar",
+   "name": "chr.erzurum_savdogar.name",
+   "place": "erzurum",
+   "u": -6,
+   "v": -60,
+   "yaw": 90,
+   "woman": false,
+   "kaftan": [
+    0.3,
+    0.3,
+    0.35
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "erzurum_beyi",
+   "name": "chr.erzurum_beyi.name",
+   "place": "erzurum",
+   "u": 0,
+   "v": -22,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.5,
+    0.1,
+    0.1
+   ],
+   "dialog": "ep015_talk"
   }
  ]
 }
