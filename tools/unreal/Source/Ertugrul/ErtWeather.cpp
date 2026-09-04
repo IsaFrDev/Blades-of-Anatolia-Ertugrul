@@ -22,7 +22,7 @@ void AErtWeather::BeginPlay()
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Mesh->SetCastShadow(false);
 	Mesh->RegisterComponent();
-	if (UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtDust.M_ErtDust"))) Mesh->SetMaterial(0, M);
+	if (UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtVertexColor.M_ErtVertexColor"))) Mesh->SetMaterial(0, M);
 	Fog = Cast<AExponentialHeightFog>(UGameplayStatics::GetActorOfClass(this, AExponentialHeightFog::StaticClass()));
 }
 
@@ -46,17 +46,17 @@ void AErtWeather::SetWeather(const FString& Name)
 	float FogDensity = 0.0006f;
 	if (Name == TEXT("rain") || Name == TEXT("storm"))
 	{
-		Build(Name == TEXT("storm") ? 900 : 500, FVector(0.6f, 0.6f, 14.f), FLinearColor(0.75f, 0.8f, 0.95f, 0.45f), 1.5f);
+		Build(Name == TEXT("storm") ? 900 : 500, FVector(0.4f, 0.4f, 10.f), FLinearColor(0.85f, 0.9f, 1.f, 1.f), 1.5f);
 		FallSpeed = 1400.f; Drift = Name == TEXT("storm") ? 500.f : 120.f; FogDensity = 0.0018f;
 	}
 	else if (Name == TEXT("snow") || Name == TEXT("blizzard"))
 	{
-		Build(Name == TEXT("blizzard") ? 900 : 450, FVector(4.f, 4.f, 4.f), FLinearColor(1.f, 1.f, 1.f, 0.85f), 0.f);
+		Build(Name == TEXT("blizzard") ? 900 : 450, FVector(1.6f, 1.6f, 1.6f), FLinearColor(1.f, 1.f, 1.f, 1.f), 0.f);
 		FallSpeed = 180.f; Drift = Name == TEXT("blizzard") ? 400.f : 60.f; FogDensity = 0.0025f;
 	}
 	else if (Name == TEXT("dust") || Name == TEXT("sandstorm"))
 	{
-		Build(600, FVector(6.f, 6.f, 3.f), FLinearColor(0.8f, 0.68f, 0.45f, 0.35f), 0.f);
+		Build(600, FVector(2.5f, 2.5f, 1.2f), FLinearColor(0.8f, 0.68f, 0.45f, 1.f), 0.f);
 		FallSpeed = 40.f; Drift = 700.f; FogDensity = 0.004f;
 	}
 	else if (Name == TEXT("fog") || Name == TEXT("mist")) FogDensity = 0.006f;
