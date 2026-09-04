@@ -13,7 +13,7 @@ class ACameraActor;
 struct FErtCutKey { float T = 0.f; FVector Pos = FVector::ZeroVector; float Yaw = 0.f; FString Clip = TEXT("Idle"); };
 struct FErtCutActorDef { FString Id, LocName; float Scale = 1.8f; FLinearColor Tint = FLinearColor::White; TArray<FErtCutKey> Keys; };
 struct FErtCutCamKey { float T = 0.f; FVector Pos = FVector::ZeroVector; FVector Look = FVector::ZeroVector; float Fov = 45.f; };
-struct FErtCutLine { float T = 0.f, Dur = 0.f; FString ActorId, LocKey; };
+struct FErtCutLine { float T = 0.f, Dur = 0.f; FString ActorId, LocKey, VoId; };
 struct FErtCutScene
 {
 	FString Id, EpisodeId;

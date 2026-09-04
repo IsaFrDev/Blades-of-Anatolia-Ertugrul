@@ -86,6 +86,13 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - Cliffhanger ekrani: epizod tugagach qora fon, sarlavha, `ep.epXXX.cliffhanger` matni satrma-satr, statistika; 16 s yoki Enter/Space bilan keyingi epizod.
 - Dialogda ishlatilgan dalil bayroqdan o'chiriladi (qayta ko'rsatib bo'lmaydi). Natija HUD da: "Kengash sizni qo'lladi!" yoki "Dalillar yetarli emas edi".
 
+## Ovoz, saqlash, sozlamalar, EP007-EP012
+- `FErtAudio`: `assets/audio` dagi WAV fayllar import qilinmasdan ish vaqtida o'qiladi (`Content/Ertugrul/Data/audio/`, RIFF parser -> `USoundWaveProcedural`).
+  SFX: swing/hit/kill/block/parry/bowshot/arrow_hit/arrow_wall/death (o'yinchi va dushman); VO: kat-sahna replikalari `vo/<til>/<id>.wav` (311 x 3 til).
+- Saqlash `Saved/ert_save.json`: bajarilgan epizodlar, bayroqlar, or/iymon, til, sichqoncha sezgirligi, Y teskari. Dialog tugaganda va epizod bajarilganda yoziladi.
+- Sozlamalar (O tugmasi): til (uz/tr/en - darhol qo'llanadi), sezgirlik 0.2-3.0, Y teskari. Chap/O'ng yoki Enter bilan o'zgartiriladi.
+- EP007-EP012 qo'lda ssenariylar va 6 dialog (Al-Aziz, Ibn Arabiy, Gundo'g'di, yarador Turgut, Ko'pek, No'yon elchisi); generator `make_ep7_12.py`.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

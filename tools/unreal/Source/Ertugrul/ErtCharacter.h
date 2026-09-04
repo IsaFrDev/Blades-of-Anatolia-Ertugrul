@@ -106,6 +106,9 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Choice2;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Choice3;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Choice4;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuLeft;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuRight;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Settings;
 
 private:
 	void OnMenu();
@@ -114,6 +117,7 @@ private:
 	void OnConfirm();
 	void OnInteract();
 	void OnChoice1(); void OnChoice2(); void OnChoice3(); void OnChoice4();
+	void OnMenuLeft(); void OnMenuRight(); void OnSettings();
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
 	float BlockT = 99.f, ParryFlash = 0.f, RiposteT = 0.f;
 	void OnAttack();

@@ -284,5 +284,258 @@
     "waves": 1
    }
   ]
+ },
+ "EP007": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "vizier_letter",
+     "guard_witness"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep007_aziz",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "al_aziz",
+      "name": "chr.al_aziz_np.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "kaftan": [
+       0.55,
+       0.45,
+       0.12
+      ],
+      "woman": false
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP008": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "council",
+    "dialog": "ep008_arabi",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "ibn_arabi",
+      "name": "chr.ibn_arabi_np.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "kaftan": [
+       0.85,
+       0.82,
+       0.75
+      ],
+      "woman": false
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP009": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "sheep_sale",
+     "enemy_arrows"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep009_gundogdu",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "gundogdu_cut",
+      "name": "chr.gundogdu.name",
+      "u": -56,
+      "v": 40,
+      "yaw": 0,
+      "kaftan": [
+       0.14,
+       0.18,
+       0.36
+      ],
+      "woman": false
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP010": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 3,
+    "timed": true
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   },
+   {
+    "type": "council",
+    "dialog": "ep010_turgut",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "turgut_wounded",
+      "name": "chr.turgut.name",
+      "u": 34,
+      "v": -24,
+      "yaw": 90,
+      "kaftan": [
+       0.2,
+       0.22,
+       0.12
+      ],
+      "woman": false
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "duel"
+   }
+  ]
+ },
+ "EP011": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "stealth",
+    "guards": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep011_kopek",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "kopek",
+      "name": "chr.kopek_np.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "kaftan": [
+       0.1,
+       0.1,
+       0.12
+      ],
+      "woman": false
+     }
+    ]
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "kopek_letter",
+     "mongol_seal"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   }
+  ]
+ },
+ "EP012": {
+  "phases": [
+   {
+    "type": "council",
+    "dialog": "ep012_noyan",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "noyan_envoy",
+      "name": "chr.noyan_np.name",
+      "u": -8,
+      "v": -30,
+      "yaw": 0,
+      "kaftan": [
+       0.3,
+       0.1,
+       0.08
+      ],
+      "woman": false
+     }
+    ]
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "defend",
+    "waves": 3
+   },
+   {
+    "type": "fight",
+    "waves": 2
+   }
+  ]
  }
 }

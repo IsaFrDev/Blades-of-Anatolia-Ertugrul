@@ -51,6 +51,7 @@ void AErtHUD::DrawHUD()
 	const FErtLoc& L = FErtLoc::Get();
 	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GM && GM->GetCutscene() && GM->GetCutscene()->IsPlaying()) { DrawCutscene(SW, SH, Sc); return; }
+	if (GM && GM->IsSettingsOpen()) { DrawSettings(SW, SH, Sc); return; }
 	if (GM && GM->IsMenuOpen()) { DrawMenu(SW, SH, Sc); return; }
 	if (GM && GM->IsDialogActive()) { DrawDialog(SW, SH, Sc); return; }
 	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f), Green(0.5f, 0.9f, 0.4f), Red(0.9f, 0.25f, 0.2f);
@@ -283,4 +284,28 @@ void AErtHUD::DrawDialog(float SW, float SH, float Sc)
 	}
 	else Text(TEXT("Space/Enter: davom   Esc: chiqish"), PX + 18 * Sc, PY + PanelH - 22 * Sc, Grey, 0.85f * Sc);
 	Text(FString::Printf(TEXT("Or/iymon: %d"), GM->GetHonor()), SW - 150 * Sc, 24 * Sc, Grey, 0.9f * Sc);
+}
+
+// ---------------- Sozlamalar ----------------
+
+void AErtHUD::DrawSettings(float SW, float SH, float Sc)
+{
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!GM) return;
+	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f);
+	FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.02f, 0.02f, 0.03f, 0.85f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+	Text(TEXT("SOZLAMALAR / AYARLAR / SETTINGS"), 40 * Sc, 30 * Sc, Gold, 1.4f * Sc, true, true);
+	static const TCHAR* LangNames[] = { TEXT("O'zbek"), TEXT("Türkçe"), TEXT("English") };
+	const FString Rows[3] = {
+		FString::Printf(TEXT("Til / Dil / Language:   < %s >"), LangNames[FMath::Clamp(GM->Language, 0, 2)]),
+		FString::Printf(TEXT("Sichqoncha sezgirligi / Mouse:   < %.1f >"), GM->MouseSens),
+		FString::Printf(TEXT("Y o'qini teskari / Invert Y:   < %s >"), GM->bInvertY ? TEXT("Ha / Yes") : TEXT("Yo'q / No")) };
+	for (int32 i = 0; i < 3; ++i)
+	{
+		const float Y = 110 * Sc + i * 34 * Sc;
+		if (i == GM->GetSettingsRow()) { FCanvasTileItem S(FVector2D(32 * Sc, Y - 4 * Sc), FVector2D(SW * 0.6f, 30 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.8f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }
+		Text(Rows[i], 44 * Sc, Y, i == GM->GetSettingsRow() ? Gold : White, 1.1f * Sc);
+	}
+	Text(FString::Printf(TEXT("Or/iymon: %d    Bajarilgan epizodlar: saqlangan (Saved/ert_save.json)"), GM->GetHonor()), 44 * Sc, 240 * Sc, Grey, Sc);
+	Text(TEXT("Yuqori/Pastga: qator   Chap/O'ng yoki Enter: o'zgartirish   O yoki Esc: yopish"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
 }

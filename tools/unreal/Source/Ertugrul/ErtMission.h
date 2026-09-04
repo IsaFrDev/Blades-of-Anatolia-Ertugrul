@@ -74,6 +74,7 @@ public:
 	const FString& GetEpisodeDate() const { return EpisodeDate; }
 	const FString& GetIntroText() const { return IntroText; }
 	const FString& GetCliffhanger() const { return Cliffhanger; }
+	TArray<FString> LoadProgressPublic() const { return LoadProgress(); }
 	/** Cliffhanger ekranini o'tkazib yuborish (Enter/Space) */
 	void SkipCleared() { if (State == EErtMissionState::Cleared) StateT = 99.f; }
 	int32 GetKills() const { return Kills; }

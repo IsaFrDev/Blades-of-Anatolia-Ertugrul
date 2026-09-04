@@ -2,6 +2,7 @@
 #include "Ertugrul.h"
 #include "ErtHeroBody.h"
 #include "ErtLoc.h"
+#include "ErtAudio.h"
 #include "Camera/CameraActor.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -126,6 +127,8 @@ bool AErtCutsceneDirector::LoadScene(const FString& Path)
 			if (O->TryGetNumberField(TEXT("dur"), D)) L.Dur = D;
 			O->TryGetStringField(TEXT("actor"), L.ActorId);
 			O->TryGetStringField(TEXT("loc"), L.LocKey);
+			O->TryGetStringField(TEXT("vo"), L.VoId);
+			if (L.VoId.IsEmpty()) L.VoId = L.LocKey;
 			if (L.Dur <= 0.f) L.Dur = 1.5f + 0.055f * FErtLoc::Get().Tr(L.LocKey).Len();
 			Scene.Lines.Add(L);
 		}
@@ -201,6 +204,7 @@ void AErtCutsceneDirector::Advance()
 void AErtCutsceneDirector::Finish()
 {
 	bPlaying = false;
+	FErtAudio::StopVo();
 	for (AErtCutActor* A : Spawned) if (A) A->Destroy();
 	Spawned.Reset(); PrevPos.Reset();
 	if (APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0))
@@ -274,6 +278,7 @@ void AErtCutsceneDirector::Tick(float Dt)
 		{
 			CurLine = i; LineEnd = L.T + L.Dur;
 			Subtitle = FErtLoc::Get().Tr(L.LocKey);
+			FErtAudio::PlayVo(GetWorld(), L.VoId, 1.f);
 			Speaker.Reset();
 			for (const FErtCutActorDef& A : Scene.Actors) if (A.Id == L.ActorId) Speaker = FErtLoc::Get().TrOr(A.LocName, A.Id);
 		}

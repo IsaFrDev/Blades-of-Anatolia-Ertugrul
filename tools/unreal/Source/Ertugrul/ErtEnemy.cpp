@@ -4,6 +4,7 @@
 #include "ErtCharacter.h"
 #include "ErtProcMesh.h"
 #include "ErtHorse.h"
+#include "ErtAudio.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -160,6 +161,7 @@ void AErtEnemy::Stagger(float Seconds)
 void AErtEnemy::Die()
 {
 	bDead = true;
+	if (Kind != EErtEnemyKind::Deer) FErtAudio::PlaySfx(GetWorld(), TEXT("death"), GetActorLocation(), 0.9f, FMath::FRandRange(0.85f, 1.1f));
 	if (Mount)
 	{
 		// Otdan yiqiladi; ot bo'shaydi (o'yinchi minishi mumkin)
@@ -284,6 +286,7 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 		{
 			AttackCD = AttackCooldown + FMath::FRandRange(0.f, 0.4f);
 			Body->TriggerAttack();
+			FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), 0.7f, FMath::FRandRange(0.85f, 1.05f));
 			HitPending = 0.22f;
 		}
 		return;

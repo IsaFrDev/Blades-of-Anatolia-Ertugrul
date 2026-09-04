@@ -10,6 +10,8 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonWriter.h"
+#include "ErtLoc.h"
 #include "ErtMission.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -42,8 +44,7 @@ void AErtGameMode::BeginPlay()
 	Cutscene = GetWorld()->SpawnActor<AErtCutsceneDirector>();
 	bUnlockAll = FParse::Param(FCommandLine::Get(), TEXT("ErtUnlockAll"));
 	SpawnNpcs();
-	FString Text;
-	if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectSavedDir() / TEXT("ert_progress.txt")))) Text.ParseIntoArrayLines(Completed);
+	LoadGame();
 
 	FString Ep;
 	const bool bDirect = FParse::Value(FCommandLine::Get(), TEXT("-ErtEpisode="), Ep);
@@ -125,6 +126,7 @@ void AErtGameMode::EndDialog()
 	LastDialogId = Dialog.GetId(); LastDuelPoints = Dialog.GetDuelPoints(); LastDuelThreshold = Dialog.GetDuelThreshold();
 	LastDialogEndTime = GetWorld()->GetTimeSeconds();
 	Dialog.End();
+	SaveGame();
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
 		if (Flags.Contains(TEXT("give_arrows"))) { Flags.Remove(TEXT("give_arrows")); H->AddArrows(8); }
@@ -134,10 +136,66 @@ void AErtGameMode::EndDialog()
 	UE_LOG(LogErtugrul, Log, TEXT("Dialog tugadi, or/iymon: %d, bayroqlar: %d"), Honor, Flags.Num());
 }
 
+extern float GErtMouseSens; extern bool GErtInvertY;
+
+void AErtGameMode::SaveGame()
+{
+	TSharedPtr<FJsonObject> R = MakeShared<FJsonObject>();
+	TArray<TSharedPtr<FJsonValue>> Comp; for (const FString& C : Completed) Comp.Add(MakeShared<FJsonValueString>(C));
+	TArray<TSharedPtr<FJsonValue>> Fl; for (const FString& F : Flags) Fl.Add(MakeShared<FJsonValueString>(F));
+	if (Director) for (const FString& C : Director->LoadProgressPublic()) if (!Completed.Contains(C)) { Completed.Add(C); Comp.Add(MakeShared<FJsonValueString>(C)); }
+	R->SetArrayField(TEXT("completed"), Comp);
+	R->SetArrayField(TEXT("flags"), Fl);
+	R->SetNumberField(TEXT("honor"), Honor);
+	R->SetNumberField(TEXT("language"), Language);
+	R->SetNumberField(TEXT("mouse_sens"), MouseSens);
+	R->SetBoolField(TEXT("invert_y"), bInvertY);
+	FString Out;
+	const TSharedRef<TJsonWriter<>> W = TJsonWriterFactory<>::Create(&Out);
+	FJsonSerializer::Serialize(R.ToSharedRef(), W);
+	FFileHelper::SaveStringToFile(Out, *(FPaths::ProjectSavedDir() / TEXT("ert_save.json")));
+}
+
+void AErtGameMode::LoadGame()
+{
+	FString Text;
+	TSharedPtr<FJsonObject> R;
+	if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectSavedDir() / TEXT("ert_save.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), R) && R.IsValid())
+	{
+		const TArray<TSharedPtr<FJsonValue>>* A = nullptr;
+		if (R->TryGetArrayField(TEXT("completed"), A)) for (const auto& V : *A) Completed.AddUnique(V->AsString());
+		if (R->TryGetArrayField(TEXT("flags"), A)) for (const auto& V : *A) Flags.Add(V->AsString());
+		R->TryGetNumberField(TEXT("honor"), Honor);
+		R->TryGetNumberField(TEXT("language"), Language);
+		double D = 1.0; if (R->TryGetNumberField(TEXT("mouse_sens"), D)) MouseSens = (float)D;
+		R->TryGetBoolField(TEXT("invert_y"), bInvertY);
+	}
+	// Eski matn formati
+	if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectSavedDir() / TEXT("ert_progress.txt")))) { TArray<FString> L; Text.ParseIntoArrayLines(L); for (const FString& S : L) Completed.AddUnique(S); }
+	FErtLoc::Get().SetLanguage(Language);
+	GErtMouseSens = MouseSens; GErtInvertY = bInvertY;
+}
+
+void AErtGameMode::SettingsToggle()
+{
+	bSettingsOpen = !bSettingsOpen;
+	if (!bSettingsOpen) SaveGame();
+}
+
+void AErtGameMode::SettingsMove(int32 Delta) { SettingsRow = (SettingsRow + Delta + 3) % 3; }
+
+void AErtGameMode::SettingsAdjust(int32 Delta)
+{
+	if (SettingsRow == 0) { Language = (Language + Delta + 3) % 3; FErtLoc::Get().SetLanguage(Language); }
+	else if (SettingsRow == 1) { MouseSens = FMath::Clamp(MouseSens + Delta * 0.1f, 0.2f, 3.f); GErtMouseSens = MouseSens; }
+	else { bInvertY = !bInvertY; GErtInvertY = bInvertY; }
+}
+
 void AErtGameMode::MenuToggle()
 {
 	if (Cutscene && Cutscene->IsPlaying()) return;
 	if (Dialog.IsActive()) { EndDialog(); return; }
+	if (bSettingsOpen) { SettingsToggle(); return; }
 	bMenuOpen = !bMenuOpen;
 	if (bMenuOpen)
 	{
@@ -151,6 +209,7 @@ void AErtGameMode::MenuToggle()
 void AErtGameMode::MenuMove(int32 Delta)
 {
 	if (Dialog.IsActive()) { Dialog.MoveSelection(Delta); return; }
+	if (bSettingsOpen) { SettingsMove(Delta); return; }
 	if (!bMenuOpen) return;
 	const int32 N = UErtEpisodeDb::Get()->All().Num();
 	if (N == 0) return;
@@ -160,6 +219,7 @@ void AErtGameMode::MenuMove(int32 Delta)
 void AErtGameMode::MenuConfirm()
 {
 	if (Dialog.IsActive()) { OnAdvance(); return; }
+	if (bSettingsOpen) { SettingsAdjust(1); return; }
 	if (!bMenuOpen) return;
 	const TArray<FErtEpisode>& All = UErtEpisodeDb::Get()->All();
 	if (!All.IsValidIndex(MenuIndex) || !IsUnlocked(All[MenuIndex])) return;

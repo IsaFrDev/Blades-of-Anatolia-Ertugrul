@@ -22,6 +22,7 @@
 #include "ErtFootsteps.h"
 #include "ErtHorse.h"
 #include "ErtNpc.h"
+#include "ErtAudio.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
@@ -147,6 +148,7 @@ void AErtCharacter::OnAttack()
 	AttackCD = 0.62f;
 	Stamina = FMath::Max(0.f, Stamina - 6.f);
 	if (Body) Body->TriggerAttack();
+	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), 0.8f, FMath::FRandRange(0.9f, 1.1f));
 	// Oldindagi sohada dushmanlarni qidiramiz (0.2 s dan keyin tegadi deb hisoblaymiz - soddalashtirilgan: darhol)
 	const FVector C = GetActorLocation() + GetActorForwardVector() * 130.f + FVector(0, 0, Horse ? 0.f : 45.f);
 	TArray<FOverlapResult> Hits;
@@ -160,6 +162,7 @@ void AErtCharacter::OnAttack()
 			if (!E || Done.Contains(E)) continue;
 			Done.Add(E);
 			E->ApplyHit(AttackDamage * (RiposteT > 0.f ? 2.f : 1.f), this);
+			FErtAudio::PlaySfx(GetWorld(), E->IsDead() ? TEXT("kill") : TEXT("hit"), E->GetActorLocation(), 1.f, FMath::FRandRange(0.9f, 1.1f));
 			RiposteT = 0.f;
 		}
 	}
@@ -238,12 +241,16 @@ void AErtCharacter::OnShoot()
 	ShootCD = 0.9f;
 	--Arrows;
 	if (Body) Body->TriggerAttack();
+	FErtAudio::PlaySfx(GetWorld(), TEXT("bowshot"), GetActorLocation(), 0.9f);
 	const FVector A = Cam->GetComponentLocation();
 	const FVector Dir = Cam->GetForwardVector();
 	FHitResult H;
 	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtArrow), false, this);
 	if (GetWorld()->LineTraceSingleByChannel(H, A, A + Dir * 5000.f, ECC_Pawn, Q))
-		if (AErtEnemy* E = Cast<AErtEnemy>(H.GetActor())) E->ApplyHit(ArrowDamage, this);
+	{
+		if (AErtEnemy* E = Cast<AErtEnemy>(H.GetActor())) { E->ApplyHit(ArrowDamage, this); FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_hit"), H.ImpactPoint, 1.f); }
+		else FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_wall"), H.ImpactPoint, 0.8f);
+	}
 }
 
 void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker)
@@ -255,13 +262,15 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	{
 		// PARRY: zarar yo'q, raqib gangiydi, keyingi zarba ikki baravar
 		ParryFlash = 1.f; RiposteT = 1.6f;
+		FErtAudio::PlaySfx(GetWorld(), TEXT("parry"), GetActorLocation(), 1.f);
 		Stamina = FMath::Min(StaminaMax, Stamina + 6.f);
 		if (Attacker) Attacker->Stagger(1.3f);
 		if (Body) Body->TriggerParry();
 		if (Footsteps) Footsteps->Step(GetActorLocation() - FVector(0, 0, 60.f), false, 1.2f);
 		return;
 	}
-	if (bBlocking && bFacing && Stamina > 5.f) { Damage *= 0.2f; Stamina = FMath::Max(0.f, Stamina - 12.f); }
+	if (bBlocking && bFacing && Stamina > 5.f) { Damage *= 0.2f; Stamina = FMath::Max(0.f, Stamina - 12.f); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
+	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
 	Health -= Damage;
 	HurtFlash = 1.f;
 	NoDamageT = 0.f;
@@ -269,6 +278,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	if (Health <= 0.f)
 	{
 		Health = 0.f; bDead = true;
+		FErtAudio::PlaySfx(GetWorld(), TEXT("death"), GetActorLocation(), 1.f);
 		GetCharacterMovement()->DisableMovement();
 		if (Body) Body->SetDead(GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight());
 	}
@@ -469,6 +479,9 @@ void AErtCharacter::BuildInput()
 	IA_Choice2 = MakeAction(TEXT("IA_ErtChoice2"), EInputActionValueType::Boolean);
 	IA_Choice3 = MakeAction(TEXT("IA_ErtChoice3"), EInputActionValueType::Boolean);
 	IA_Choice4 = MakeAction(TEXT("IA_ErtChoice4"), EInputActionValueType::Boolean);
+	IA_MenuLeft = MakeAction(TEXT("IA_ErtMenuLeft"), EInputActionValueType::Boolean);
+	IA_MenuRight = MakeAction(TEXT("IA_ErtMenuRight"), EInputActionValueType::Boolean);
+	IA_Settings = MakeAction(TEXT("IA_ErtSettings"), EInputActionValueType::Boolean);
 
 	IMC = NewObject<UInputMappingContext>(this, TEXT("IMC_Ertugrul"));
 	auto Map = [this](UInputAction* A, const FKey& K) -> FEnhancedActionKeyMapping& { return IMC->MapKey(A, K); };
@@ -522,7 +535,14 @@ void AErtCharacter::BuildInput()
 	Map(IA_Interact, EKeys::E);
 	Map(IA_Interact, EKeys::Gamepad_FaceButton_Top);
 	Map(IA_Choice1, EKeys::One); Map(IA_Choice2, EKeys::Two); Map(IA_Choice3, EKeys::Three); Map(IA_Choice4, EKeys::Four);
+	Map(IA_MenuLeft, EKeys::Left); Map(IA_MenuLeft, EKeys::Gamepad_DPad_Left);
+	Map(IA_MenuRight, EKeys::Right); Map(IA_MenuRight, EKeys::Gamepad_DPad_Right);
+	Map(IA_Settings, EKeys::O); Map(IA_Settings, EKeys::Gamepad_Special_Left);
 }
+
+void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); } }
+void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); } }
+void AErtCharacter::OnSettings() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (!GM->IsDialogActive()) GM->SettingsToggle(); } }
 
 void AErtCharacter::OnChoice1() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->DialogChoose(0); }
 void AErtCharacter::OnChoice2() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->DialogChoose(1); }
@@ -574,6 +594,9 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_Choice2, ETriggerEvent::Started, this, &AErtCharacter::OnChoice2);
 	EIC->BindAction(IA_Choice3, ETriggerEvent::Started, this, &AErtCharacter::OnChoice3);
 	EIC->BindAction(IA_Choice4, ETriggerEvent::Started, this, &AErtCharacter::OnChoice4);
+	EIC->BindAction(IA_MenuLeft, ETriggerEvent::Started, this, &AErtCharacter::OnMenuLeft);
+	EIC->BindAction(IA_MenuRight, ETriggerEvent::Started, this, &AErtCharacter::OnMenuRight);
+	EIC->BindAction(IA_Settings, ETriggerEvent::Started, this, &AErtCharacter::OnSettings);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)
@@ -589,12 +612,13 @@ void AErtCharacter::OnMove(const FInputActionValue& V)
 	AddMovementInput(Right, In.X);
 }
 
+float GErtMouseSens = 1.f; bool GErtInvertY = false;
 void AErtCharacter::OnLook(const FInputActionValue& V)
 {
 	if (!bInputEnabled) return;
 	const FVector2D L = V.Get<FVector2D>();
-	AddControllerYawInput(L.X);
-	AddControllerPitchInput(L.Y);
+	AddControllerYawInput(GErtMouseSens * L.X);
+	AddControllerPitchInput((GErtInvertY ? -1.f : 1.f) * GErtMouseSens * L.Y);
 }
 
 void AErtCharacter::OnJumpPressed()

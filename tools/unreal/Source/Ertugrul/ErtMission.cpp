@@ -698,4 +698,5 @@ void AErtMissionDirector::SaveProgress()
 	TArray<FString> Done = LoadProgress();
 	Done.AddUnique(EpisodeId);
 	FFileHelper::SaveStringToFile(FString::Join(Done, TEXT("\n")), *(FPaths::ProjectSavedDir() / TEXT("ert_progress.txt")));
+	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SaveGame();
 }

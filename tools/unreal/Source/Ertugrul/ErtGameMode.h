@@ -63,5 +63,17 @@ private:
 	TSet<FString> Flags;
 	int32 Honor = 0;
 	void SpawnNpcs();
+public:
+	void SaveGame();
+	void LoadGame();
+	// Sozlamalar
+	bool IsSettingsOpen() const { return bSettingsOpen; }
+	int32 GetSettingsRow() const { return SettingsRow; }
+	void SettingsToggle();
+	void SettingsMove(int32 Delta);
+	void SettingsAdjust(int32 Delta);
+	int32 Language = 0; float MouseSens = 1.f; bool bInvertY = false;
+private:
+	bool bSettingsOpen = false; int32 SettingsRow = 0;
 	void SetPlayerInput(bool bEnabled, bool bHide);
 };
