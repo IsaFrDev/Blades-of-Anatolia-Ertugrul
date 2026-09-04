@@ -225,7 +225,7 @@ void AErtCharacter::OnInteract()
 	if (!bInputEnabled || bDead) return;
 	if (Horse) { DismountHorse(); return; }
 	if (Boat) { AErtBoat* B = Boat; Boat = nullptr; B->Leave(); return; }
-	if (AErtBoat* Bt = NearestBoat(350.f)) { Boat = Bt; Bt->Board(this); if (LockTarget) { LockTarget = nullptr; GetCharacterMovement()->bOrientRotationToMovement = true; } return; }
+	if (AErtBoat* Bt = NearestBoat(350.f)) { if (bSwimming) { bSwimming = false; if (Body) Body->SetSwimming(false); } Boat = Bt; Bt->Board(this); if (LockTarget) { LockTarget = nullptr; GetCharacterMovement()->bOrientRotationToMovement = true; } return; }
 	if (AErtLoot* Lt = NearestLoot(260.f))
 	{
 		const FString Desc = Lt->Describe();
