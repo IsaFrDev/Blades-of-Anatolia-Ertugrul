@@ -20,6 +20,9 @@ public:
 
 	void Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadius);
 	void ApplyHit(float Damage, AActor* Source);
+	/** Parry natijasi: gangib qoladi (harakat/zarba yo'q) */
+	void Stagger(float Seconds);
+	bool IsStaggered() const { return StaggerT > 0.f; }
 
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsDead() const { return bDead; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsAlerted() const { return bAlerted; }
@@ -42,7 +45,7 @@ private:
 	float Patrol = 0.f;
 	float Health = 60.f, MaxHealth = 60.f;
 	float AttackRange = 200.f, AttackDamage = 10.f, AttackCooldown = 1.5f, MoveSpeed = 380.f;
-	float AttackCD = 0.f, HitPending = -1.f;
+	float AttackCD = 0.f, HitPending = -1.f, StaggerT = 0.f;
 	float WanderT = 0.f, FleeT = 0.f, DeerPhase = 0.f;
 	FVector WanderTarget = FVector::ZeroVector;
 	bool bAlerted = false, bDead = false, bInit = false;

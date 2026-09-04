@@ -42,6 +42,10 @@ public:
 	void TriggerHurt();
 	/** Suzish pozasi (gorizontal, qo'l-oyoq harakati) */
 	void SetSwimming(bool bOn) { bSwim = bOn; }
+	void SetRiding(bool bOn) { bRide = bOn; }
+	void SetBlocking(bool bOn) { bBlock = bOn; }
+	/** Parry: qisqa keskin harakat */
+	void TriggerParry() { ParryT = 1.f; }
 	/** Yiqilgan holat (o'lim) */
 	void SetDead(float CapsuleHalfHeight);
 	bool IsBuilt() const { return Pelvis != nullptr; }
@@ -68,13 +72,17 @@ private:
 	float HurtT = 0.f;
 	bool bDead = false;
 	bool bSwim = false;
+	bool bRide = false;
+	bool bBlock = false;
+	float ParryT = 0.f;
+	float RideBob = 0.f;
 	FVector PelvisBase = FVector::ZeroVector;
 
 	struct FPose
 	{
 		float PelvisZ = 0.f, PelvisPitch = 0.f, TorsoPitch = 0.f, TorsoRoll = 0.f, TorsoYaw = 0.f, HeadPitch = 0.f;
 		float ThighL = 0.f, ThighR = 0.f, KneeL = 0.f, KneeR = 0.f;
-		float ArmL = 0.f, ArmR = 0.f, ElbowL = 0.f, ElbowR = 0.f, ArmSpread = 0.f;
+		float ArmL = 0.f, ArmR = 0.f, ElbowL = 0.f, ElbowR = 0.f, ArmSpread = 0.f, LegSpread = 0.f;
 	} Cur;
 
 	UProceduralMeshComponent* MakePart(const FName& Name, USceneComponent* Parent, const FVector& RelLoc);

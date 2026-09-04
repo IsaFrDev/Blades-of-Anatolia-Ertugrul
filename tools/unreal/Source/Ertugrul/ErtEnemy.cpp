@@ -17,6 +17,7 @@ AErtEnemy::AErtEnemy()
 	UCharacterMovementComponent* CM = GetCharacterMovement();
 	CM->bOrientRotationToMovement = true;
 	CM->RotationRate = FRotator(0, 420.f, 0);
+	CM->bRunPhysicsWithNoController = true;   // kontrollersiz ham harakat/gravitatsiya
 	CM->MaxWalkSpeed = 380.f;
 	CM->GravityScale = 1.5f;
 	CM->SetWalkableFloorAngle(48.f);
@@ -108,6 +109,16 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source)
 	if (Health <= 0.f) { Killer = Source; Die(); }
 }
 
+void AErtEnemy::Stagger(float Seconds)
+{
+	if (bDead) return;
+	StaggerT = FMath::Max(StaggerT, Seconds);
+	HitPending = -1.f;
+	AttackCD = FMath::Max(AttackCD, Seconds + 0.4f);
+	if (Body && Body->IsBuilt()) Body->TriggerHurt();
+	GetCharacterMovement()->Velocity = FVector::ZeroVector;
+}
+
 void AErtEnemy::Die()
 {
 	bDead = true;
@@ -180,6 +191,7 @@ void AErtEnemy::TickDeer(float Dt, APawn* Player)
 void AErtEnemy::TickGuard(float Dt, APawn* Player)
 {
 	AttackCD -= Dt;
+	if (StaggerT > 0.f) { StaggerT -= Dt; return; }
 	AErtCharacter* Hero = Cast<AErtCharacter>(Player);
 	const bool bHeroAlive = Hero && !Hero->IsDead();
 	const float DP = bHeroAlive ? FVector::Dist2D(Hero->GetActorLocation(), GetActorLocation()) : 1e9f;
@@ -188,7 +200,7 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 	if (HitPending >= 0.f)
 	{
 		HitPending -= Dt;
-		if (HitPending < 0.f && bHeroAlive && DP < AttackRange + 60.f) Hero->ReceiveHit(AttackDamage, GetActorLocation());
+		if (HitPending < 0.f && bHeroAlive && DP < AttackRange + 60.f) Hero->ReceiveHit(AttackDamage, GetActorLocation(), this);
 	}
 
 	if (!bAlerted && bHeroAlive)
@@ -209,7 +221,7 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 			{
 				AttackCD = AttackCooldown;
 				Body->TriggerAttack();
-				if (FMath::FRand() < 0.65f) Hero->ReceiveHit(AttackDamage, GetActorLocation());
+				if (FMath::FRand() < 0.65f) Hero->ReceiveHit(AttackDamage, GetActorLocation(), this);
 			}
 			return;
 		}

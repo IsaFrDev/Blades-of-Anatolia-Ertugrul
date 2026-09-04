@@ -5,6 +5,7 @@
 #include "ErtLoc.h"
 #include "ErtProcMesh.h"
 #include "ErtWorldBuilder.h"
+#include "ErtHorse.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProceduralMeshComponent.h"
 #include "Materials/MaterialInterface.h"
@@ -183,6 +184,14 @@ bool AErtMissionDirector::StartEpisode(const FString& Id)
 	const FVector Start = AnchorFor(*E);
 	H->ResetAt(Start + FVector(0, 0, 100.f), 0.f);
 	Cursor = Start;
+	if (E->bHorse)
+	{
+		// Ot minish epizodi: ot boshlanish nuqtasi yonida kutadi
+		FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		const FVector HP = FindSpot(Start, 350.f, 600.f);
+		if (Horse) Horse->Destroy();
+		Horse = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), HP + FVector(0, 0, 110.f), FRotator(0, (Start - HP).Rotation().Yaw, 0), SP);
+	}
 	BuildPhases(*E);
 	int32 StartIdx = 0;
 	FParse::Value(FCommandLine::Get(), TEXT("-ErtPhase="), StartIdx);   // sinov: bosqichdan boshlash

@@ -123,8 +123,8 @@ void UErtHeroBody::Apply(const FPose& P)
 	Pelvis->SetRelativeRotation(FRotator(P.PelvisPitch, 0, 0));
 	Torso->SetRelativeRotation(FRotator(P.TorsoPitch, P.TorsoYaw, P.TorsoRoll));
 	Head->SetRelativeRotation(FRotator(P.HeadPitch, -P.TorsoYaw * 0.6f, -P.TorsoRoll * 0.5f));
-	ThighL->SetRelativeRotation(FRotator(P.ThighL, 0, 0));
-	ThighR->SetRelativeRotation(FRotator(P.ThighR, 0, 0));
+	ThighL->SetRelativeRotation(FRotator(P.ThighL, 0, -P.LegSpread));
+	ThighR->SetRelativeRotation(FRotator(P.ThighR, 0, P.LegSpread));
 	// Pitch < 0 = oldinga (pivot ostidagi bo'lak uchun). Tizza faqat orqaga bukiladi.
 	ShinL->SetRelativeRotation(FRotator(P.KneeL, 0, 0));
 	ShinR->SetRelativeRotation(FRotator(P.KneeR, 0, 0));
@@ -154,6 +154,7 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 	IdleT += Dt;
 	AttackT = FMath::Max(0.f, AttackT - Dt / 0.45f);
 	HurtT = FMath::Max(0.f, HurtT - Dt / 0.35f);
+	ParryT = FMath::Max(0.f, ParryT - Dt / 0.3f);
 	const float S = FMath::Clamp(Speed / 330.f, 0.f, 1.9f);
 	const float Freq = Speed > 15.f ? (1.3f + Speed / 260.f) : 0.f;
 	Phase += Dt * Freq * 2.f * PI;
@@ -162,7 +163,15 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 	FPose T;
 	const float Sw = FMath::Sin(Phase);
 	const float Swing = 27.f * FMath::Min(S, 1.35f);
-	if (bSwim)
+	if (bRide)
+	{
+		// Egarda: sonlar oldinga-yonga, tizza bukilgan, qo'llar jilovda, tana engil oldinga
+		RideBob = FMath::Sin(IdleT * 6.f) * FMath::Min(Speed / 400.f, 1.f);
+		T.PelvisZ = -2.f + RideBob * 2.f; T.TorsoPitch = -6.f - 8.f * FMath::Min(Speed / 900.f, 1.f); T.HeadPitch = 4.f;
+		T.ThighL = -72.f; T.ThighR = -72.f; T.LegSpread = 32.f; T.KneeL = 88.f; T.KneeR = 88.f;
+		T.ArmL = -42.f; T.ArmR = -42.f; T.ElbowL = 48.f; T.ElbowR = 48.f; T.ArmSpread = 6.f;
+	}
+	else if (bSwim)
 	{
 		// Suzish: tana gorizontal, oyoqlar navbatma-navbat tepadi, qo'llar oldinga cho'ziladi (brass)
 		const float Ph = IdleT * 4.5f + Phase;
@@ -208,7 +217,16 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 		T.HeadPitch = 3.f + 6.f * FMath::Min(S, 1.6f);
 		T.PelvisZ = -FMath::Abs(Sw) * (2.f + 3.f * FMath::Min(S, 1.5f));
 	}
-	if (bSwordInHand && AttackT <= 0.f && !bInAir)
+	if (bBlock && AttackT <= 0.f)
+	{
+		// Blok: qilich ko'krak oldida ko'ndalang, chap qo'l yuzni yopadi
+		T.ArmR = -70.f; T.ElbowR = 95.f; T.ArmL = -55.f; T.ElbowL = 80.f; T.ArmSpread = 14.f; T.TorsoPitch -= 4.f;
+	}
+	if (ParryT > 0.f)
+	{
+		T.ArmR = -95.f + 30.f * ParryT; T.ElbowR = 60.f; T.TorsoYaw = -18.f * ParryT; T.TorsoPitch -= 6.f * ParryT;
+	}
+	if (bSwordInHand && AttackT <= 0.f && !bInAir && !bBlock)
 	{
 		// Qilich tayyor holat: o'ng qo'l oldinda, tirsak bukilgan
 		T.ArmR = -15.f; T.ElbowR = 70.f;
@@ -230,6 +248,6 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 	auto L = [A](float& C, float Tg) { C = FMath::Lerp(C, Tg, A); };
 	L(Cur.PelvisZ, T.PelvisZ); L(Cur.PelvisPitch, T.PelvisPitch); L(Cur.TorsoPitch, T.TorsoPitch); L(Cur.TorsoRoll, T.TorsoRoll); L(Cur.TorsoYaw, T.TorsoYaw); L(Cur.HeadPitch, T.HeadPitch);
 	L(Cur.ThighL, T.ThighL); L(Cur.ThighR, T.ThighR); L(Cur.KneeL, T.KneeL); L(Cur.KneeR, T.KneeR);
-	L(Cur.ArmL, T.ArmL); L(Cur.ArmR, T.ArmR); L(Cur.ElbowL, T.ElbowL); L(Cur.ElbowR, T.ElbowR); L(Cur.ArmSpread, T.ArmSpread);
+	L(Cur.ArmL, T.ArmL); L(Cur.ArmR, T.ArmR); L(Cur.ElbowL, T.ElbowL); L(Cur.ElbowR, T.ElbowR); L(Cur.ArmSpread, T.ArmSpread); L(Cur.LegSpread, T.LegSpread);
 	Apply(Cur);
 }

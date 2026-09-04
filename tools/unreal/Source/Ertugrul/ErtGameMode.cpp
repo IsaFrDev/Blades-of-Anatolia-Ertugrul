@@ -4,6 +4,7 @@
 #include "ErtCutscene.h"
 #include "ErtEpisodeDb.h"
 #include "ErtHUD.h"
+#include "ErtHorse.h"
 #include "ErtMission.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,6 +24,16 @@ void AErtGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	Director = GetWorld()->SpawnActor<AErtMissionDirector>();
+	// Oba darvozasi oldida ikkita ot
+	{
+		FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		const FLinearColor Coats[] = { FLinearColor(0.36f, 0.22f, 0.11f), FLinearColor(0.15f, 0.12f, 0.10f) };
+		for (int32 i = 0; i < 2; ++i)
+		{
+			AErtHorse* Hs = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), FVector(44600.f + i * 350.f, -56000.f + i * 250.f, 2250.f), FRotator(0, 0.f, 0), SP);
+			if (Hs) Hs->Init(Coats[i]);
+		}
+	}
 	Cutscene = GetWorld()->SpawnActor<AErtCutsceneDirector>();
 	bUnlockAll = FParse::Param(FCommandLine::Get(), TEXT("ErtUnlockAll"));
 	FString Text;

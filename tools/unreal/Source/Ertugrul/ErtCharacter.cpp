@@ -20,6 +20,7 @@
 #include "ErtGameMode.h"
 #include "ErtWorldBuilder.h"
 #include "ErtFootsteps.h"
+#include "ErtHorse.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
@@ -157,13 +158,65 @@ void AErtCharacter::OnAttack()
 			AErtEnemy* E = Cast<AErtEnemy>(R.GetActor());
 			if (!E || Done.Contains(E)) continue;
 			Done.Add(E);
-			E->ApplyHit(AttackDamage, this);
+			E->ApplyHit(AttackDamage * (RiposteT > 0.f ? 2.f : 1.f), this);
+			RiposteT = 0.f;
 		}
 	}
 }
 
-void AErtCharacter::OnBlockOn() { if (!bDead) bBlocking = true; }
-void AErtCharacter::OnBlockOff() { bBlocking = false; }
+void AErtCharacter::OnBlockOn() { if (!bDead) { bBlocking = true; BlockT = 0.f; if (Body) Body->SetBlocking(true); } }
+void AErtCharacter::OnBlockOff() { bBlocking = false; if (Body) Body->SetBlocking(false); }
+
+void AErtCharacter::OnInteract()
+{
+	if (!bInputEnabled || bDead) return;
+	if (Horse) { DismountHorse(); return; }
+	if (AErtHorse* H = NearestHorse(320.f)) MountHorse(H);
+}
+
+AErtHorse* AErtCharacter::NearestHorse(float MaxDist) const
+{
+	AErtHorse* Best = nullptr; float BestD = MaxDist;
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtHorse::StaticClass(), All);
+	for (AActor* A : All)
+	{
+		AErtHorse* H = Cast<AErtHorse>(A);
+		if (!H || H->IsMounted()) continue;
+		const float D = FVector::Dist2D(H->GetActorLocation(), GetActorLocation());
+		if (D < BestD) { BestD = D; Best = H; }
+	}
+	return Best;
+}
+
+void AErtCharacter::MountHorse(AErtHorse* H)
+{
+	if (!H || Horse || bSwimming || bMantling) return;
+	Horse = H;
+	H->Mount(this);
+	if (bIsCrouched) UnCrouch();
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AttachToComponent(H->GetSaddle(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	AddTickPrerequisiteActor(H);
+	SetActorRelativeLocation(FVector(0, 0, 58.f));
+	SetActorRelativeRotation(FRotator::ZeroRotator);
+	if (Body) Body->SetRiding(true);
+}
+
+void AErtCharacter::DismountHorse()
+{
+	if (!Horse) return;
+	AErtHorse* H = Horse;
+	Horse = nullptr;
+	H->Dismount();
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	SetActorRotation(FRotator(0, H->GetActorRotation().Yaw, 0));
+	SetActorLocation(H->GetActorLocation() + H->GetActorRightVector() * -130.f + FVector(0, 0, 10.f), false, nullptr, ETeleportType::TeleportPhysics);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	if (Body) Body->SetRiding(false);
+}
 
 void AErtCharacter::OnShoot()
 {
@@ -179,11 +232,21 @@ void AErtCharacter::OnShoot()
 		if (AErtEnemy* E = Cast<AErtEnemy>(H.GetActor())) E->ApplyHit(ArrowDamage, this);
 }
 
-void AErtCharacter::ReceiveHit(float Damage, const FVector& From)
+void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker)
 {
 	if (bDead) return;
 	const FVector To = (From - GetActorLocation()).GetSafeNormal2D();
 	const bool bFacing = FVector::DotProduct(GetActorForwardVector(), To) > 0.2f;
+	if (bBlocking && bFacing && BlockT < 0.25f)
+	{
+		// PARRY: zarar yo'q, raqib gangiydi, keyingi zarba ikki baravar
+		ParryFlash = 1.f; RiposteT = 1.6f;
+		Stamina = FMath::Min(StaminaMax, Stamina + 6.f);
+		if (Attacker) Attacker->Stagger(1.3f);
+		if (Body) Body->TriggerParry();
+		if (Footsteps) Footsteps->Step(GetActorLocation() - FVector(0, 0, 60.f), false, 1.2f);
+		return;
+	}
 	if (bBlocking && bFacing && Stamina > 5.f) { Damage *= 0.2f; Stamina = FMath::Max(0.f, Stamina - 12.f); }
 	Health -= Damage;
 	HurtFlash = 1.f;
@@ -199,6 +262,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From)
 
 void AErtCharacter::ResetAt(const FVector& Pos, float Yaw)
 {
+	if (Horse) DismountHorse();
 	bDead = false; bMantling = false; bBlocking = false;
 	Health = MaxHealth; Stamina = StaminaMax; HurtFlash = 0.f;
 	Arrows = FMath::Max(Arrows, 8);
@@ -229,6 +293,9 @@ void AErtCharacter::UpdateCombat(float Dt)
 	AttackCD = FMath::Max(0.f, AttackCD - Dt);
 	ShootCD = FMath::Max(0.f, ShootCD - Dt);
 	HurtFlash = FMath::Max(0.f, HurtFlash - Dt * 2.f);
+	ParryFlash = FMath::Max(0.f, ParryFlash - Dt * 1.6f);
+	RiposteT = FMath::Max(0.f, RiposteT - Dt);
+	BlockT += Dt;
 	NoDamageT += Dt;
 	if (!bDead && NoDamageT > 5.f) Health = FMath::Min(MaxHealth, Health + 4.f * Dt);
 }
@@ -320,10 +387,25 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (ShotT > 29.5f && ShotT < 32.f) DebugMove = FVector2D(0, 1);
 	if (At(30.6f)) { if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-8.f, 90.f, 0.f)); TargetArm = 380.f; }
 	if (At(31.4f)) TakeShot(TEXT("swim"));
-	if (At(32.5f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(32.5f))
+	{
+		// Ot minish sinovi: otning yoniga qo'yib minamiz
+		bSwimming = false; if (Body) Body->SetSwimming(false);
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		SetActorLocation(FVector(44400.f, -56000.f, 2200.f), false, nullptr, ETeleportType::TeleportPhysics);
+		if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-14.f, 0.f, 0.f));
+		TargetArm = 520.f;
+	}
+	if (At(33.2f)) { if (AErtHorse* Hh = NearestHorse(2500.f)) MountHorse(Hh); }
+	if (ShotT > 33.5f && ShotT < 37.f) { DebugMove = FVector2D(0, 1); bWantSprint = ShotT > 34.5f; }
+	if (At(36.2f)) TakeShot(TEXT("ride"));
+	if (At(37.2f)) { bWantSprint = false; DismountHorse(); }
+	if (At(38.0f)) TakeShot(TEXT("dismount"));
+	if (At(38.6f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;
+		if (Horse) return;
 		const FRotator YawRot(0.f, GetControlRotation().Yaw, 0.f);
 		AddMovementInput(FRotationMatrix(YawRot).GetUnitAxis(EAxis::X), DebugMove.Y);
 		AddMovementInput(FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y), DebugMove.X);
@@ -355,6 +437,7 @@ void AErtCharacter::BuildInput()
 	IA_MenuUp = MakeAction(TEXT("IA_ErtMenuUp"), EInputActionValueType::Boolean);
 	IA_MenuDown = MakeAction(TEXT("IA_ErtMenuDown"), EInputActionValueType::Boolean);
 	IA_Confirm = MakeAction(TEXT("IA_ErtConfirm"), EInputActionValueType::Boolean);
+	IA_Interact = MakeAction(TEXT("IA_ErtInteract"), EInputActionValueType::Boolean);
 
 	IMC = NewObject<UInputMappingContext>(this, TEXT("IMC_Ertugrul"));
 	auto Map = [this](UInputAction* A, const FKey& K) -> FEnhancedActionKeyMapping& { return IMC->MapKey(A, K); };
@@ -405,6 +488,8 @@ void AErtCharacter::BuildInput()
 	Map(IA_MenuDown, EKeys::Gamepad_DPad_Down);
 	Map(IA_Confirm, EKeys::Enter);
 	Map(IA_Confirm, EKeys::Gamepad_FaceButton_Bottom);
+	Map(IA_Interact, EKeys::E);
+	Map(IA_Interact, EKeys::Gamepad_FaceButton_Top);
 }
 
 void AErtCharacter::OnMenu() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnSkip(); }
@@ -447,6 +532,7 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_MenuUp, ETriggerEvent::Started, this, &AErtCharacter::OnMenuUp);
 	EIC->BindAction(IA_MenuDown, ETriggerEvent::Started, this, &AErtCharacter::OnMenuDown);
 	EIC->BindAction(IA_Confirm, ETriggerEvent::Started, this, &AErtCharacter::OnConfirm);
+	EIC->BindAction(IA_Interact, ETriggerEvent::Started, this, &AErtCharacter::OnInteract);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)
@@ -454,6 +540,7 @@ void AErtCharacter::OnMove(const FInputActionValue& V)
 	if (!bInputEnabled || bMantling) return;
 	const FVector2D In = V.Get<FVector2D>();
 	MoveInput = In;
+	if (Horse) return;   // ot Tick da boshqariladi
 	const FRotator YawRot(0.f, GetControlRotation().Yaw, 0.f);
 	const FVector Fwd = FRotationMatrix(YawRot).GetUnitAxis(EAxis::X);
 	const FVector Right = FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y);
@@ -477,6 +564,7 @@ void AErtCharacter::OnJumpPressed()
 		return;
 	}
 	if (bMantling) return;
+	if (Horse) { Horse->RiderJump(); return; }
 	if (bIsCrouched) { UnCrouch(); return; }
 	if (TryMantle()) return;
 	Jump();
@@ -488,7 +576,7 @@ void AErtCharacter::OnSprintOff() { bWantSprint = false; }
 
 void AErtCharacter::OnCrouchToggle()
 {
-	if (!bInputEnabled || bMantling) return;
+	if (!bInputEnabled || bMantling || Horse) return;
 	if (bIsCrouched) UnCrouch(); else Crouch();
 }
 
@@ -620,7 +708,16 @@ void AErtCharacter::Tick(float Dt)
 	Super::Tick(Dt);
 	UpdateCombat(Dt);
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
-	if (bDead) { MoveInput = FVector2D::ZeroVector; if (bShowDebug) DrawDebug(); return; }
+	if (bDead) { if (Horse) DismountHorse(); MoveInput = FVector2D::ZeroVector; if (bShowDebug) DrawDebug(); return; }
+	if (Horse)
+	{
+		Horse->SetRiderInput(MoveInput, bWantSprint && Stamina > 1.f);
+		if (bWantSprint && !MoveInput.IsNearlyZero()) Stamina = FMath::Max(0.f, Stamina - 5.f * Dt); else Stamina = FMath::Min(StaminaMax, Stamina + StaminaRegen * 0.6f * Dt);
+		Boom->TargetArmLength = FMath::FInterpTo(Boom->TargetArmLength, FMath::Max(TargetArm, 480.f), Dt, 6.f);
+		if (Body) Body->Animate(Dt, Horse->GetSpeed(), false, false, 0.f, 0.f);
+		MoveInput = FVector2D::ZeroVector;
+		return;
+	}
 	UpdateSwim(Dt);
 	if (bMantling) UpdateMantle(Dt);
 	else if (!bSwimming) { UpdateSlope(Dt); UpdateGait(Dt); UpdateSteps(Dt); }

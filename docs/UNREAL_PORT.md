@@ -52,6 +52,17 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - `ErtFootsteps` - qadam changi (6 ta pooled protsedural shar, `M_ErtDust` translucent, qumda kattaroq) va protsedural qadam tovushi
   (`USoundWaveProcedural`: shovqin + konvert + past chastota filtri, tasodifiy balandlik; qumda yumshoqroq). Qadam oralig'i tezlikka bog'liq.
 
+## Ot minish va parry
+- `AErtHorse` - protsedural ot (tana, bo'yin/bosh, yol, dum, 4 oyoq, egar, uzangi), `ACharacter` asosida (relyef, gravitatsiya).
+  [E] minish/tushish (320 sm ichida), W yurish 250 / yo'rtish 520, Shift chopish 950 sm/s, A/D burilish (tezlikda radius kengayadi),
+  Space sakrash, orqaga 140. Oyoq animatsiyasi: yo'rtishda diagonal juftlar, chopishda oldingi/orqa juftlar; bosh tebranishi.
+  Minilmaganda o'tlab yuradi. Chavandoz egarga attach, poza: sonlar oldinga-yonga (LegSpread), tizza 88, qo'llar jilovda.
+  Otlar: oba darvozasi oldida 2 ta; `traversal` da HORSE/CAMEL bo'lgan epizodlarda boshlanish nuqtasi yonida.
+- Parry: RMB bosilgach 0.25 s ichida zarba kelsa (yuzma-yuz) - zarar yo'q, "PARRY!" chaqnashi, raqib 1.3 s gangiydi (Stagger),
+  keyingi qilich zarbasi 1.6 s davomida x2 (riposte). Oddiy blok: zarar x0.2, stamina -12. Blok/parry pozalari tanada.
+- MUHIM: kontrollersiz `ACharacter` (dushman, ot) harakat qilishi uchun `bRunPhysicsWithNoController = true` shart -
+  aks holda PhysWalking tezlikni nolga tenglashtiradi (dushmanlar ham shu sababli joyida turgan edi).
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

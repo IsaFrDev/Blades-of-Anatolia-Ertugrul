@@ -26,6 +26,7 @@ struct FErtEpisode
 	UPROPERTY(BlueprintReadOnly) FString Region;
 	UPROPERTY(BlueprintReadOnly) FString NextId;         // unlocks[0]
 	UPROPERTY(BlueprintReadOnly) TArray<FString> Prerequisites;
+	UPROPERTY(BlueprintReadOnly) bool bHorse = false;   // traversal: HORSE / CAMEL
 };
 
 UCLASS()

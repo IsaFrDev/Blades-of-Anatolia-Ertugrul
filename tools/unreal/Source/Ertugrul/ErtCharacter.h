@@ -11,6 +11,8 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class UErtHeroBody;
+class AErtHorse;
+class AErtEnemy;
 struct FInputActionValue;
 
 UENUM(BlueprintType)
@@ -52,9 +54,16 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsDead() const { return bDead; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsBlocking() const { return bBlocking; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsSwimming() const { return bSwimming; }
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsRiding() const { return Horse != nullptr; }
+	AErtHorse* GetHorse() const { return Horse; }
+	AErtHorse* NearestHorse(float MaxDist) const;
+	float GetParryFlash() const { return ParryFlash; }
+	float GetRiposteT() const { return RiposteT; }
+	void MountHorse(AErtHorse* H);
+	void DismountHorse();
 	float GetHurtFlash() const { return HurtFlash; }
 	/** Dushman zarbasi (blok bo'lsa kamayadi) */
-	void ReceiveHit(float Damage, const FVector& From);
+	void ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker = nullptr);
 	void AddArrows(int32 N) { Arrows = FMath::Clamp(Arrows + N, 0, MaxArrows); }
 	void Heal(float V) { Health = FMath::Min(MaxHealth, Health + V); }
 	/** Nazorat nuqtasi / epizod boshi: joyga qo'yish, sog'liqni tiklash */
@@ -90,12 +99,16 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuUp;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuDown;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Confirm;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Interact;
 
 private:
 	void OnMenu();
 	void OnMenuUp();
 	void OnMenuDown();
 	void OnConfirm();
+	void OnInteract();
+	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
+	float BlockT = 99.f, ParryFlash = 0.f, RiposteT = 0.f;
 	void OnAttack();
 	void OnBlockOn();
 	void OnBlockOff();

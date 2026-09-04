@@ -9,6 +9,7 @@
 #include "ErtMission.generated.h"
 
 class AErtCharacter;
+class AErtHorse;
 class AErtWorldBuilder;
 class UProceduralMeshComponent;
 struct FErtEpisode;
@@ -84,6 +85,7 @@ protected:
 
 private:
 	UPROPERTY(Transient) TArray<TObjectPtr<AErtEnemy>> Enemies;
+	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
 	UPROPERTY(Transient) TObjectPtr<AErtWorldBuilder> World;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> MarkerMesh;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> MarkerMat;

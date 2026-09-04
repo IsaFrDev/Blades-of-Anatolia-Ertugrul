@@ -1,6 +1,7 @@
 #include "ErtHUD.h"
 #include "ErtCharacter.h"
 #include "ErtEnemy.h"
+#include "ErtHorse.h"
 #include "ErtLoc.h"
 #include "ErtMission.h"
 #include "ErtCutscene.h"
@@ -59,6 +60,10 @@ void AErtHUD::DrawHUD()
 		Bar(X, Y, 260 * Sc, 16 * Sc, H->GetHealth() / H->GetMaxHealth(), H->GetHealth() > 30 ? FLinearColor(0.75f, 0.15f, 0.12f) : Red);
 		Bar(X, Y + 20 * Sc, 200 * Sc, 10 * Sc, H->GetStamina() / 100.f, FLinearColor(0.85f, 0.7f, 0.25f));
 		Text(FString::Printf(TEXT("%s %d   %s %d"), *L.Tr(TEXT("ui.hud.health")), (int32)H->GetHealth(), *L.Tr(TEXT("ui.hud.arrows")), H->GetArrows()), X, Y + 34 * Sc, White, Sc);
+		if (H->GetParryFlash() > 0.f) Text(TEXT("PARRY!"), SW * 0.5f - TextWidth(TEXT("PARRY!"), 1.6f * Sc, true) * 0.5f, SH * 0.42f, FLinearColor(1.f, 0.85f, 0.3f, H->GetParryFlash()), 1.6f * Sc, true, true);
+		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
+		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
+		else if (H->NearestHorse(320.f)) Text(TEXT("[E] Otga minish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		if (H->GetHurtFlash() > 0.f)
 		{
 			FCanvasTileItem V(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.6f, 0.f, 0.f, 0.35f * H->GetHurtFlash())); V.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(V);
