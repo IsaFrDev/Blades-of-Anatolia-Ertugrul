@@ -301,7 +301,7 @@ void AErtCharacter::MountHorse(AErtHorse* H)
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AttachToComponent(H->GetSaddle(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	AddTickPrerequisiteActor(H);
-	SetActorRelativeLocation(FVector(0, 0, 58.f));
+	SetActorRelativeLocation(FVector(0, 0, H->IsCamel() ? 66.f : 58.f));
 	SetActorRelativeRotation(FRotator::ZeroRotator);
 	if (Body) Body->SetRiding(true);
 }
@@ -891,6 +891,7 @@ void AErtCharacter::OnJumpPressed()
 	}
 	if (bMantling) return;
 	if (Horse) { Horse->RiderJump(); return; }
+	if (TryVault()) return;
 	if (bIsCrouched) { UnCrouch(); return; }
 	if (TryMantle()) return;
 	Jump();
@@ -958,6 +959,40 @@ void AErtCharacter::UpdateSlope(float Dt)
 	}
 }
 
+bool AErtCharacter::TryVault()
+{
+	// ACRPGVaultingComponent::FindVaultTargets asosida: oldindagi 40-120 sm to'siq, usti tekis, orqasida qo'nish joyi
+	UCharacterMovementComponent* CM = GetCharacterMovement();
+	if (!CM->IsMovingOnGround() || CM->Velocity.Size2D() < 150.f || bSwimming) return false;
+	const FVector Loc = GetActorLocation(), Fwd = GetActorForwardVector();
+	const float HalfH = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtVault), false, this);
+	const FCollisionShape Sph = FCollisionShape::MakeSphere(18.f);
+	FHitResult Front;
+	if (!GetWorld()->SweepSingleByChannel(Front, Loc + FVector(0, 0, -HalfH + 40.f), Loc + FVector(0, 0, -HalfH + 40.f) + Fwd * 130.f, FQuat::Identity, ECC_Visibility, Sph, Q)) return false;
+	if (FMath::Abs(Front.ImpactNormal.Z) > 0.3f) return false;
+	FHitResult Top;
+	const FVector TopStart = Front.ImpactPoint + Fwd * 28.f + FVector(0, 0, 120.f);
+	if (!GetWorld()->SweepSingleByChannel(Top, TopStart, TopStart - FVector(0, 0, 240.f), FQuat::Identity, ECC_Visibility, Sph, Q)) return false;
+	const float ObsH = Top.ImpactPoint.Z - (Loc.Z - HalfH);
+	if (ObsH < 40.f || ObsH > 120.f || Top.ImpactNormal.Z < 0.7f) return false;
+	FHitResult Land;
+	const FVector LandStart = Top.ImpactPoint + Fwd * 150.f + FVector(0, 0, 20.f);
+	if (!GetWorld()->SweepSingleByChannel(Land, LandStart, LandStart - FVector(0, 0, 360.f), FQuat::Identity, ECC_Visibility, Sph, Q)) return false;
+	const FVector LandCenter = Land.ImpactPoint + FVector(0, 0, HalfH + 5.f);
+	if (GetWorld()->OverlapAnyTestByChannel(LandCenter, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeCapsule(GetCapsuleComponent()->GetScaledCapsuleRadius(), HalfH), Q)) return false;
+	// Mantle mexanizmi bilan silliq o'tish: boshlanish -> to'siq usti -> qo'nish
+	bMantling = true; MantleT = 0.f;
+	MantleStart = Loc; MantleEnd = LandCenter;
+	VaultMid = Top.ImpactPoint + FVector(0, 0, HalfH + 10.f);
+	bVaulting = true;
+	CM->SetMovementMode(MOVE_Flying);
+	CM->Velocity = FVector::ZeroVector;
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Ignore);
+	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), Loc, 0.3f, 1.5f);
+	return true;
+}
+
 bool AErtCharacter::TryMantle()
 {
 	UWorld* W = GetWorld();
@@ -1004,6 +1039,15 @@ bool AErtCharacter::TryMantle()
 
 void AErtCharacter::UpdateMantle(float Dt)
 {
+	if (bVaulting)
+	{
+		MantleT += Dt / 0.45f;
+		const float U = FMath::Clamp(MantleT, 0.f, 1.f);
+		const FVector P = FMath::Lerp(FMath::Lerp(MantleStart, VaultMid, U), FMath::Lerp(VaultMid, MantleEnd, U), U);
+		SetActorLocation(P, false, nullptr, ETeleportType::TeleportPhysics);
+		if (U >= 1.f) { bMantling = false; bVaulting = false; GetCharacterMovement()->SetMovementMode(MOVE_Walking); GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block); GetCharacterMovement()->Velocity = GetActorForwardVector() * 300.f; }
+		return;
+	}
 	MantleT += Dt / FMath::Max(0.05f, MantleDuration);
 	const float T = FMath::Clamp(MantleT, 0.f, 1.f);
 	// Avval ko'tariladi, keyin oldinga o'tadi

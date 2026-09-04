@@ -197,6 +197,15 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
   (+50 XP, +2 or), 0% - mag'lubiyat. HUD paneli va natija matni.
 - Dialogdagi `act_archery` / `act_wrestle` bayroqlari -> `StartActivity(1|2)`.
 
+## Tuya va vault
+- `AErtHorse::Init(Coat, bCamel)`: tuya varianti (o'rkach, uzun bo'yin, uzun oyoqlar, keng tovon, gilam va egar, popuklar), yo'rg'a yurish,
+  260 sog'liq, tezlik 200/420/760, qumda sekinlashmaydi (ot qumda 0.75x). Karvonsaroy oldida 2 ta tuya; `traversal` da CAMEL bo'lgan
+  epizodlar (EP008) tuya bilan boshlanadi, ESCORT+CAMEL anchor - karvonsaroy.
+- Vault (ACRPGVaultingComponent::FindVaultTargets asosida, montajsiz): yugurib 40-120 sm to'siqqa Space - usti tekis va orqasida joy bo'lsa
+  0.45 s parabola bilan sakrab o'tadi (kolliziya vaqtincha o'chadi), qo'ngach oldinga tezlik. Mantle mexanizmi bilan bir xil holat.
+- MetaHuman: Quixel Bridge orqali Epic akkaunt bilan yuklab olinadi (tashqi asset, ~1-2 GB, Intel iGPU ga og'ir) - buyruq qatoridan
+  avtomatlashtirib bo'lmaydi; Geometry Script plaginidagi AppendCylinder/AppendBox bizning FErtMeshData bilan ekvivalent.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

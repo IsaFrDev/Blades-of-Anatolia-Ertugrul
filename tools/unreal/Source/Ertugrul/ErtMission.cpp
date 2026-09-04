@@ -156,6 +156,7 @@ FVector AErtMissionDirector::AnchorFor(const FErtEpisode& E) const
 	else if (A == TEXT("SURVIVAL"))      { PE = -330.f;        PN = 700.f; }           // o'rmon
 	else if (A == TEXT("INFILTRATION"))  { PE = CampE - 240.f; PN = CampN + 20.f; }    // lager g'arbi
 	else if (A == TEXT("CHASE"))         { PE = CrossE;        PN = CrossN + 30.f; }
+	else if (A == TEXT("ESCORT") && E.bCamel) { PE = CaravanE - 60.f; PN = CaravanN + 40.f; }   // karvonsaroy (tuya)
 	else if (A == TEXT("ESCORT"))        { PE = -640.f;        PN = 120.f; }           // daryo yo'li
 	else if (A == TEXT("RITUAL"))        { PE = -250.f;        PN = 520.f; }
 	else if (A == TEXT("COURT"))         { PE = CityE;         PN = CityN + 250.f; }   // shahar shimoli
@@ -246,7 +247,8 @@ bool AErtMissionDirector::StartEpisodeData(const FErtEpisode& EData, const FVect
 		FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		const FVector HP = FindSpot(Start, 350.f, 600.f);
 		if (Horse) Horse->Destroy();
-		Horse = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), HP + FVector(0, 0, 110.f), FRotator(0, (Start - HP).Rotation().Yaw, 0), SP);
+		Horse = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), HP + FVector(0, 0, 130.f), FRotator(0, (Start - HP).Rotation().Yaw, 0), SP);
+		if (Horse) Horse->Init(E->bCamel ? FLinearColor(0.72f, 0.58f, 0.36f) : FLinearColor(0.36f, 0.22f, 0.11f), E->bCamel);
 	}
 	BuildPhases(*E);
 	int32 StartIdx = 0;

@@ -65,7 +65,7 @@ void UErtEpisodeDb::Load()
 		const TArray<TSharedPtr<FJsonValue>>* L = nullptr;
 		if (O->TryGetArrayField(TEXT("unlocks"), L) && L->Num() > 0) E.NextId = (*L)[0]->AsString();
 		if (O->TryGetArrayField(TEXT("prerequisites"), L)) for (const auto& P : *L) E.Prerequisites.Add(P->AsString());
-		if (O->TryGetArrayField(TEXT("traversal"), L)) for (const auto& T : *L) { const FString S = T->AsString(); if (S == TEXT("HORSE") || S == TEXT("CAMEL")) E.bHorse = true; }
+		if (O->TryGetArrayField(TEXT("traversal"), L)) for (const auto& T : *L) { const FString S = T->AsString(); if (S == TEXT("HORSE") || S == TEXT("CAMEL")) E.bHorse = true; if (S == TEXT("CAMEL")) E.bCamel = true; }
 		Episodes.Add(E);
 	}
 	Episodes.Sort([](const FErtEpisode& A, const FErtEpisode& B) { return A.GlobalIndex < B.GlobalIndex; });

@@ -194,6 +194,8 @@ private:
 	void OnZoom(const FInputActionValue& V);
 
 	bool TryMantle();
+	bool TryVault();
+	bool bVaulting = false; FVector VaultMid;
 	void UpdateMantle(float Dt);
 	void UpdateGait(float Dt);
 	void UpdateSlope(float Dt);

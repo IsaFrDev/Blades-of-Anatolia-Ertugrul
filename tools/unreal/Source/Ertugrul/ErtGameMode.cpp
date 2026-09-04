@@ -51,6 +51,12 @@ void AErtGameMode::BeginPlay()
 			AErtHorse* Hs = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), FVector(44600.f + i * 350.f, -56000.f + i * 250.f, 2250.f), FRotator(0, 0.f, 0), SP);
 			if (Hs) Hs->Init(Coats[i]);
 		}
+		// Karvonsaroy oldida ikkita tuya
+		for (int32 i = 0; i < 2; ++i)
+		{
+			AErtHorse* Cm = GetWorld()->SpawnActor<AErtHorse>(AErtHorse::StaticClass(), FVector((ErtMap::CaravanN + 30.f) * 100.f, (ErtMap::CaravanE - 10.f + i * 6.f) * 100.f, 1500.f), FRotator(0, 90.f, 0), SP);
+			if (Cm) Cm->Init(FLinearColor(0.72f + i * 0.05f, 0.58f, 0.36f), true);
+		}
 	}
 	Cutscene = GetWorld()->SpawnActor<AErtCutsceneDirector>();
 	Weather = GetWorld()->SpawnActor<AErtWeather>();

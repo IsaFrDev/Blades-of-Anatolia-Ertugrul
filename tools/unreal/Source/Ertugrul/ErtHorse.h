@@ -21,7 +21,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ot") float TrotSpeed = 520.f;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ot") float GallopSpeed = 950.f;
 
-	void Init(const FLinearColor& InCoat);
+	void Init(const FLinearColor& InCoat, bool bInCamel = false);
+	bool bCamel = false;
+	bool IsCamel() const { return bCamel; }
 	bool IsMounted() const { return Rider != nullptr; }
 	AActor* GetRider() const { return Rider; }
 	void Mount(AActor* InRider);

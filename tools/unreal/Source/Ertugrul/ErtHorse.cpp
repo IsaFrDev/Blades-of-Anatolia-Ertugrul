@@ -2,6 +2,7 @@
 #include "Ertugrul.h"
 #include "ErtCharacter.h"
 #include "ErtEnemy.h"
+#include "ErtWorldBuilder.h"
 #include "ErtProcMesh.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -31,7 +32,11 @@ AErtHorse::AErtHorse()
 	AutoPossessAI = EAutoPossessAI::Disabled;
 }
 
-void AErtHorse::Init(const FLinearColor& InCoat) { Coat = InCoat; }
+void AErtHorse::Init(const FLinearColor& InCoat, bool bInCamel)
+{
+	Coat = InCoat; bCamel = bInCamel;
+	if (bCamel) { WalkSpeed = 200.f; TrotSpeed = 420.f; GallopSpeed = 760.f; MaxHealth = 260.f; Health = 260.f; GetCapsuleComponent()->SetCapsuleSize(62.f, 118.f); Saddle->SetRelativeLocation(FVector(-10.f, 0.f, 90.f)); }
+}
 
 void AErtHorse::BeginPlay()
 {
@@ -46,6 +51,47 @@ void AErtHorse::Build()
 {
 	if (bBuilt) return;
 	bBuilt = true;
+	if (bCamel)
+	{
+		// Tuya: uzun oyoqlar, o'rkach, uzun bo'yin, kichik bosh; egar o'rkach ustida
+		UMaterialInterface* MatC = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtVertexColor.M_ErtVertexColor"));
+		auto MakeC = [&](const TCHAR* Name, USceneComponent* Parent, const FVector& Rel)
+		{
+			UProceduralMeshComponent* P = NewObject<UProceduralMeshComponent>(this, MakeUniqueObjectName(this, UProceduralMeshComponent::StaticClass(), Name));
+			P->SetupAttachment(Parent); P->SetRelativeLocation(Rel); P->SetCollisionEnabled(ECollisionEnabled::NoCollision); P->RegisterComponent();
+			if (MatC) P->SetMaterial(0, MatC); return P;
+		};
+		const FLinearColor Sand = Coat, Dark = Coat * 0.6f, Leather(0.30f, 0.18f, 0.09f), Cloth(0.55f, 0.15f, 0.12f), Tassel(0.85f, 0.7f, 0.2f);
+		BodyMesh = MakeC(TEXT("CamelBody"), GetCapsuleComponent(), FVector(0, 0, 45.f));
+		FErtMeshData M;
+		M.AddBox(FVector(0, 0, 0), FVector(85, 24, 28), Sand);
+		M.AddSphere(FVector(-5, 0, 34.f), 26.f, 10, ErtCol::Vary(Sand, 0.05f, 2), FVector(1.1f, 0.9f, 1.f));             // o'rkach
+		M.AddBox(FVector(-88, 0, -6), FVector(4, 4, 32), Dark, FRotator(-25, 0, 0));                                    // dum
+		M.AddBox(FVector(-5, 0, 52.f), FVector(30, 22, 5), Cloth);                                                        // gilam
+		M.AddBox(FVector(-5, 0, 60.f), FVector(22, 16, 6), Leather);                                                      // egar
+		for (int32 s = -1; s <= 1; s += 2) for (int32 k = 0; k < 5; ++k) M.AddBox(FVector(-30 + k * 12, s * 25.f, 30.f - k * 0), FVector(2, 1.5f, 8), Tassel);
+		M.Commit(BodyMesh, 0, false);
+		HeadMesh = MakeC(TEXT("CamelHead"), BodyMesh, FVector(80.f, 0, 10.f));
+		M.Reset();
+		M.AddBox(FVector(25, 0, 40), FVector(14, 11, 55), Sand, FRotator(-28, 0, 0));                                    // bo'yin (uzun, egilgan)
+		M.AddBox(FVector(52, 0, 96), FVector(16, 10, 12), Sand, FRotator(15, 0, 0));                                     // bosh
+		M.AddBox(FVector(70, 0, 92), FVector(8, 8, 8), Dark);                                                             // tumshuq
+		M.AddBox(FVector(44, -7, 108), FVector(3, 2, 6), Sand, FRotator(0, 0, -25)); M.AddBox(FVector(44, 7, 108), FVector(3, 2, 6), Sand, FRotator(0, 0, 25));
+		M.AddBox(FVector(56, 0, 88), FVector(20, 11, 1.5f), Leather);                                                     // yugan
+		M.Commit(HeadMesh, 0, false);
+		for (int32 i = 0; i < 4; ++i)
+		{
+			const float X = (i < 2) ? 60.f : -60.f, Y = (i & 1) ? 18.f : -18.f;
+			UProceduralMeshComponent* Leg = MakeC(TEXT("CamelLeg"), GetCapsuleComponent(), FVector(X, Y, 18.f));
+			M.Reset();
+			M.AddBox(FVector(0, 0, -30), FVector(7, 7, 32), ErtCol::Vary(Sand, 0.05f, 10 + i));
+			M.AddBox(FVector(0, 0, -95), FVector(5.5f, 5.5f, 36), ErtCol::Vary(Sand * 0.92f, 0.05f, 20 + i));
+			M.AddBox(FVector(2, 0, -134), FVector(10, 9, 4), Dark);                                                        // keng tovon
+			M.Commit(Leg, 0, false);
+			Legs.Add(Leg);
+		}
+		return;
+	}
 	UMaterialInterface* Mat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtVertexColor.M_ErtVertexColor"));
 	auto Make = [&](const TCHAR* Name, USceneComponent* Parent, const FVector& Rel)
 	{
@@ -162,7 +208,8 @@ void AErtHorse::Tick(float Dt)
 		const float TurnRate = FMath::Lerp(120.f, 55.f, FMath::Clamp(FMath::Abs(CurSpeed) / GallopSpeed, 0.f, 1.f));
 		if (FMath::Abs(CurSpeed) > 20.f || FMath::Abs(Input.X) > 0.2f)
 			AddActorWorldRotation(FRotator(0, Input.X * TurnRate * Dt * (CurSpeed < 0 ? -1.f : 1.f), 0));
-		CM->MaxWalkSpeed = FMath::Max(50.f, FMath::Abs(CurSpeed));
+		const bool bSand = AErtWorldBuilder::IsDesert(GetActorLocation().Y / 100.f, GetActorLocation().X / 100.f);
+		CM->MaxWalkSpeed = FMath::Max(50.f, FMath::Abs(CurSpeed) * ((bSand && !bCamel) ? 0.75f : 1.f));
 		if (FMath::Abs(CurSpeed) > 5.f) AddMovementInput(GetActorForwardVector(), CurSpeed > 0 ? 1.f : -1.f);
 	}
 	else
@@ -189,7 +236,7 @@ void AErtHorse::Tick(float Dt)
 void AErtHorse::Animate(float Dt)
 {
 	const float Sp = GetCharacterMovement()->Velocity.Size2D();
-	const float Stride = Sp > 600.f ? 300.f : 190.f;
+	const float Stride = bCamel ? 340.f : (Sp > 600.f ? 300.f : 190.f);
 	if (Sp > 10.f) Phase += Dt * (Sp / Stride) * 2.f * PI;
 	const float Amp = FMath::Clamp(Sp / 500.f, 0.f, 1.3f) * 28.f;
 	const bool bInAir = GetCharacterMovement()->IsFalling();
@@ -197,13 +244,14 @@ void AErtHorse::Animate(float Dt)
 	{
 		// Yo'rtish: diagonal juftlar (FL+BR, FR+BL); chopishda oldingi/orqa juftlar
 		float Ph = Phase;
-		if (Sp > 600.f) Ph += (i < 2) ? 0.f : PI * 0.6f; else Ph += ((i == 0 || i == 3) ? 0.f : PI);
+		if (bCamel) Ph += ((i & 1) ? 0.f : PI);   // tuya: bir tomon oyoqlari birga (yo'rg'a)
+		else if (Sp > 600.f) Ph += (i < 2) ? 0.f : PI * 0.6f; else Ph += ((i == 0 || i == 3) ? 0.f : PI);
 		float Pitch = FMath::Sin(Ph) * Amp;
 		if (bInAir) Pitch = (i < 2) ? -35.f : 30.f;
 		Legs[i]->SetRelativeRotation(FRotator(Pitch, 0, 0));
 	}
 	HeadBob = FMath::Sin(Phase) * FMath::Min(Sp / 300.f, 1.f) * 6.f;
 	if (HeadMesh) HeadMesh->SetRelativeRotation(FRotator(HeadBob - (Sp > 600.f ? 10.f : 0.f), 0, 0));
-	if (BodyMesh) BodyMesh->SetRelativeLocation(FVector(0, 0, 25.f + FMath::Abs(FMath::Sin(Phase)) * FMath::Min(Sp / 400.f, 1.f) * 5.f));
+	if (BodyMesh) BodyMesh->SetRelativeLocation(FVector(0, 0, (bCamel ? 45.f : 25.f) + FMath::Abs(FMath::Sin(Phase)) * FMath::Min(Sp / 400.f, 1.f) * (bCamel ? 8.f : 5.f)));
 	// Chavandozni egarda ushlab turamiz (pozitsiya egar bilan birga yuradi - attach)
 }
