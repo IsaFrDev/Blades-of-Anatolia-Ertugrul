@@ -327,3 +327,10 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 
 - `tools/unreal/Scripts/ert_make_water.py` (commandlet): `M_ErtWater` qayta yaratiladi. Custom HLSL `ErtWaves` (dunyo koordinatalari + Time): uch sinus to'lqin va ikki qatlam shovqin balandligidan dunyo-fazo normal. Rang: chuqur/sayoz `DepthFade`(350) bo'yicha, Fresnel (daraja 5) bilan osmon tusi; qirg'oq ko'pigi `1 - DepthFade(90)`; shaffoflik chuqurlikka bog'liq (0.35 -> 0.85) + Fresnel; roughness 0.06, specular 1, sindirish 1.2, ekran-fazo aks, ikki tomonlama, yuzaki per-pixel yoritish.
 - Eslatma: translucent shader birinchi marta 3-4 daqiqa kompilyatsiya bo'ladi ("Preparing Shaders"), shundan keyin DDC keshda. Sinovdan oldin o'yinni bir marta 4 daqiqa ishlatib kesh isitildi.
+
+## Osmon va yorug'lik
+
+- `tools/unreal/Scripts/ert_make_sky.py`: `M_ErtClouds` (unlit translucent, Custom HLSL: 4 oktava shovqin, `Coverage`/`Density`/`Tint` parametrlari, kameradan 9-16 km da so'nadi, vaqt bilan oqadi) va `M_ErtStars` (unlit additive: yo'nalish bo'yicha hash yulduzlar, miltillash, ufqda so'nish, `Vis` parametri).
+- `AErtWeather`: BeginPlay da 36 km bulut tekisligi (2 qatlam, 2.0 va 2.7 km) va 60 km yulduz sferasi (dinamik material nusxalari). `UpdateSky(Day, SunColor, Elev)`: bulut tusi (kunduzi oq, tong/shomda quyosh rangi, tunda ko'kimtir, bo'ronda qora), yulduz ko'rinishi (tunda, bulut qoplamiga bog'liq), tuman rangi (tun ko'k-qora, kunduz och ko'k, tong/shom zarhal, bo'ron kulrang). Ob-havo bulut qoplamini o'zgartiradi (rain/storm/snow/fog/dust/wind).
+- `AErtGameMode::Tick`: quyosh rangi rampasi (`SunCol`) ajratildi, yomg'ir/bo'ronda quyosh 45% xiralashadi, har kadr `Weather->UpdateSky`.
+- Sinov skriptida shom, tun va bo'ron skrinshotlari (`34_dusk`, `35_night`, `36_storm`).

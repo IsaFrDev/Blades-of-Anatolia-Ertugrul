@@ -580,7 +580,13 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(47.9f)) TakeShot(TEXT("sogut"));
 	if (At(48.0f)) Teleport(-440.f, 150.f, 60.f, -16.f, 0.f);
 	if (At(48.9f)) TakeShot(TEXT("domanic"));
-	if (At(49.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(49.0f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SetTimeOfDay(TEXT("dusk")); Teleport(-560.f, 380.f, 12.f + 30.f, -8.f, -20.f); }
+	if (At(50.2f)) TakeShot(TEXT("dusk"));
+	if (At(50.3f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SetTimeOfDay(TEXT("night")); }
+	if (At(51.5f)) TakeShot(TEXT("night"));
+	if (At(51.6f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->SetTimeOfDay(TEXT("day")); GM->SetWeather(TEXT("storm")); } }
+	if (At(52.8f)) TakeShot(TEXT("storm"));
+	if (At(53.3f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;

@@ -386,11 +386,13 @@ void AErtGameMode::Tick(float Dt)
 	const float Yaw = 28.f + (DayT - 0.25f) * 180.f;
 	Sun->SetActorRotation(FRotator(-FMath::Max(Elev, 14.f), Yaw, 0.f));   // tunda oy nuri (14 gradus)
 	const float Day = FMath::Clamp((Elev + 4.f) / 16.f, 0.f, 1.f);
+	const FLinearColor SunCol = FMath::Lerp(FLinearColor(0.45f, 0.55f, 0.9f), FMath::Lerp(FLinearColor(1.f, 0.55f, 0.28f), FLinearColor(1.f, 0.96f, 0.9f), FMath::Clamp(Elev / 25.f, 0.f, 1.f)), Day);
 	if (UDirectionalLightComponent* DL = Sun->GetComponent())
 	{
-		DL->SetIntensity(FMath::Lerp(0.9f, 7.f, Day));
-		DL->SetLightColor(FMath::Lerp(FLinearColor(0.45f, 0.55f, 0.9f), FMath::Lerp(FLinearColor(1.f, 0.62f, 0.35f), FLinearColor(1.f, 0.96f, 0.9f), FMath::Clamp(Elev / 25.f, 0.f, 1.f)), Day));
+		DL->SetIntensity(FMath::Lerp(0.9f, 7.f, Day) * (1.f - 0.45f * (Weather ? (Weather->GetWeather() == TEXT("storm") || Weather->GetWeather() == TEXT("rain") ? 1.f : 0.f) : 0.f)));
+		DL->SetLightColor(SunCol);
 	}
+	if (Weather) Weather->UpdateSky(Day, SunCol, Elev);
 	if (Sky && Sky->GetLightComponent()) Sky->GetLightComponent()->SetIntensity(FMath::Lerp(0.4f, 1.f, Day));
 	if (!PPV) PPV = Cast<APostProcessVolume>(UGameplayStatics::GetActorOfClass(this, APostProcessVolume::StaticClass()));
 	if (PPV)
