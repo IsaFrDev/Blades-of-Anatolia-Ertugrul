@@ -434,6 +434,36 @@
     0.1
    ],
    "dialog": "ep015_talk"
+  },
+  {
+   "id": "bursa_savdogar",
+   "name": "chr.bursa_savdogar.name",
+   "place": "bursa",
+   "u": -8,
+   "v": -44,
+   "yaw": 0,
+   "woman": false,
+   "kaftan": [
+    0.2,
+    0.5,
+    0.45
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "bursa_qozi",
+   "name": "chr.bursa_qozi.name",
+   "place": "bursa",
+   "u": 0,
+   "v": -30,
+   "yaw": 0,
+   "woman": false,
+   "kaftan": [
+    0.85,
+    0.82,
+    0.75
+   ],
+   "dialog": "ep016_talk"
   }
  ]
 }

@@ -48,6 +48,9 @@ private:
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> BodyMesh;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> HeadMesh;
 	UPROPERTY(Transient) TArray<TObjectPtr<UProceduralMeshComponent>> Legs;
+	UPROPERTY(Transient) TArray<TObjectPtr<UProceduralMeshComponent>> LowerLegs;
+	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> TailMesh;
+	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> NeckMesh;
 	FVector2D Input = FVector2D::ZeroVector;
 	bool bGallopIn = false, bBuilt = false;
 	float CurSpeed = 0.f, Phase = 0.f, WanderT = 0.f, HeadBob = 0.f;

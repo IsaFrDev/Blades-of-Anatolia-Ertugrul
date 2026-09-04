@@ -544,8 +544,8 @@ void AErtCharacter::UpdateShotScript(float Dt)
 		bSwimming = false; if (Body) Body->SetSwimming(false);
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 		SetActorLocation(FVector(44400.f, -56000.f, 2200.f), false, nullptr, ETeleportType::TeleportPhysics);
-		if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-14.f, 0.f, 0.f));
-		TargetArm = 520.f;
+		if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-14.f, 180.f, 0.f));
+		TargetArm = 620.f;
 	}
 	if (At(33.2f)) { if (AErtHorse* Hh = NearestHorse(2500.f)) MountHorse(Hh); }
 	if (ShotT > 33.5f && ShotT < 37.f) { DebugMove = FVector2D(0, 1); bWantSprint = ShotT > 34.5f; }
@@ -568,7 +568,11 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(41.9f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnAdvance(); }
 	if (At(42.0f)) Teleport(420.f, 560.f, 22.f + 55.f, -18.f, 0.f);
 	if (At(42.9f)) TakeShot(TEXT("erzurum"));
-	if (At(43.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(43.0f)) Teleport(-380.f, 60.f, 9.f + 55.f, -18.f, -90.f);
+	if (At(43.9f)) TakeShot(TEXT("bursa"));
+	if (At(44.0f)) { if (AErtHorse* Hh = NearestHorse(1e7f)) Teleport(Hh->GetActorLocation().Y / 100.f + 4.5f, Hh->GetActorLocation().X / 100.f - 3.f, Hh->GetActorLocation().Z / 100.f + 1.0f, -10.f, -35.f); }
+	if (At(44.9f)) TakeShot(TEXT("horse"));
+	if (At(45.4f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;

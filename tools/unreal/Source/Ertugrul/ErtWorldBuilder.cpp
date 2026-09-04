@@ -20,7 +20,7 @@ namespace
 		{{10, 40}, {250, -200}, 6}, {{250, -200}, {370, -460}, 6},
 		{{10, 40}, {300, 300}, 5}, {{300, 300}, {500, 520}, 5}, {{500, 520}, {620, 626}, 5},
 		{{-560, 435}, {-560, 560}, 4}, {{-560, 560}, {-560, 680}, 4},
-		{{300, 300}, {275, 480}, 6}, {{300, 300}, {320, 110}, 6}, {{-300, 250}, {-180, 275}, 6}, {{500, 520}, {420, 615}, 6},
+		{{300, 300}, {275, 480}, 6}, {{300, 300}, {320, 110}, 6}, {{-300, 250}, {-180, 275}, 6}, {{500, 520}, {420, 615}, 6}, {{-300, 250}, {-420, 65}, 6},
 		{{-470, -280}, {-470, -470}, 8}, {{-470, -470}, {-470, -660}, 8}, {{-660, -470}, {-280, -470}, 8},
 	};
 	const FLinearColor Stone(0.46f, 0.44f, 0.41f), Wood(0.36f, 0.24f, 0.13f), DarkWood(0.24f, 0.16f, 0.09f);
@@ -101,6 +101,7 @@ void AErtWorldBuilder::Build()
 		BuildKayseri();
 		BuildSivas();
 		BuildErzurum();
+		BuildBursa();
 	}
 	if (bBuildForest) { BuildForest(); BuildRocks(); }
 	bBuilt = true;
@@ -165,6 +166,16 @@ float AErtWorldBuilder::HeightAt(float E, float N) const
 		const float Des = Smooth01((-N - 700.f) / 140.f);
 		const float Dune = 10.f + 5.f * Noise(E, N, 0.004f) + 4.f * FMath::Abs(Noise(E + 300.f, N, 0.012f)) + 1.2f * FMath::Abs(Noise(E, N, 0.045f));
 		H = FMath::Lerp(H, Dune, Des);
+	}
+	// Uludog': o'rmonli tog' (cho'qqisi qorli) va Bursa tekisligi + shimolda Hisor tepaligi
+	{
+		const float DM = FVector2D::Distance(FVector2D(E, N), FVector2D(UluE, UluN));
+		const float T = Smooth01(1.f - DM / UluR);
+		H += UluH * T * T + Noise(E, N, 0.025f) * 7.f * T;
+		const float DB = FVector2D::Distance(FVector2D(E, N), FVector2D(BurE, BurN));
+		H = FMath::Lerp(H, BurZ, 1.f - Smooth01((DB - BurR - 10.f) / 50.f));
+		const float DH = FVector2D::Distance(FVector2D(E, N), FVector2D(BurE - 30.f, BurN + 55.f));
+		H += BurHillH * Smooth01(1.f - (DH - 8.f) / (BurHillR - 8.f));
 	}
 	// Erzurum: baland tekis aylana + shimoli-sharqda qal'a tepaligi
 	{
@@ -287,6 +298,14 @@ FLinearColor AErtWorldBuilder::TerrainColor(float E, float N, float H, float Slo
 		const float DS = FVector2D::Distance(FVector2D(E, N), FVector2D(ErzE, ErzN));
 		C = FMath::Lerp(C, FLinearColor(0.50f, 0.48f, 0.46f), 1.f - Smooth01((DS - ErzR) / 8.f));
 		C = FMath::Lerp(C, FLinearColor(0.80f, 0.80f, 0.78f), (1.f - Smooth01((DS - ErzR - 20.f) / 60.f)) * 0.35f);   // sovuq qirov o'tloq
+	}
+	{
+		const float DM = FVector2D::Distance(FVector2D(E, N), FVector2D(UluE, UluN));
+		const float T = Smooth01(1.f - (DM - 10.f) / (UluR - 10.f));
+		C = FMath::Lerp(C, FLinearColor(0.20f, 0.36f, 0.16f), T * 0.7f);                                  // o'rmon yashili
+		C = FMath::Lerp(C, FLinearColor(0.95f, 0.96f, 1.0f), Smooth01((H - 62.f) / 18.f) * T);            // qor
+		const float DB = FVector2D::Distance(FVector2D(E, N), FVector2D(BurE, BurN));
+		C = FMath::Lerp(C, FLinearColor(0.62f, 0.58f, 0.50f), 1.f - Smooth01((DB - BurR) / 8.f));
 	}
 	// Daryo bo'yi
 	const float DR = FMath::Abs(E - RiverE(N));
@@ -873,6 +892,7 @@ bool AErtWorldBuilder::IsBuildable(float E, float N) const
 	if (FVector2D::Distance(FVector2D(E, N), FVector2D(KayE, KayN)) < KayR + 30.f) return false;   // Qayseri
 	if (FVector2D::Distance(FVector2D(E, N), FVector2D(SivE, SivN)) < SivR + 30.f) return false;   // Sivas
 	if (FVector2D::Distance(FVector2D(E, N), FVector2D(ErzE, ErzN)) < ErzR + 30.f) return false;   // Erzurum
+	if (FVector2D::Distance(FVector2D(E, N), FVector2D(BurE, BurN)) < BurR + 30.f) return false;   // Bursa
 	if (FVector2D::Distance(FVector2D(E, N), FVector2D(ErcE, ErcN)) < ErcR * 0.8f) return false;   // Erciyes
 	float Wd; if (RoadDist(E, N, &Wd) < Wd + 3.f) return false;
 	return true;
@@ -1835,4 +1855,141 @@ void AErtWorldBuilder::BuildErzurum()
 	AddBanner(M, XE(-10.f), XN(-ErzR - 3.f), Z, 6.f, XRed, false);
 	AddBanner(M, XE(10.f), XN(-ErzR - 3.f), Z, 6.f, XRed, false);
 	M.Commit(NewPart(TEXT("Erzurum"), true), 0, true);
+}
+
+// ---------------- Bursa: Uludog' etagidagi yashil shahar ----------------
+
+void AErtWorldBuilder::BuildBursa()
+{
+	FRandomStream RS(Seed + 197);
+	FErtMeshData M(100.f);
+	int32 S = 7500;
+	const float Z = BurZ, TopZ = BurZ + BurHillH;
+	auto BE = [](float u) { return BurE + u; };
+	auto BN = [](float v) { return BurN + v; };
+	const FLinearColor BStone(0.80f, 0.74f, 0.62f), BStoneD(0.62f, 0.56f, 0.46f), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), TurqD(0.08f, 0.42f, 0.48f), Tile(0.62f, 0.30f, 0.18f), BWood(0.38f, 0.25f, 0.12f), White(0.92f, 0.90f, 0.85f), Plane(0.22f, 0.45f, 0.18f), Trunk(0.55f, 0.50f, 0.42f), BRed(0.55f, 0.10f, 0.08f), Steam(0.85f, 0.88f, 0.9f);
+	auto Minaret = [&](float u, float v, float Zb, float Hh)
+	{
+		M.AddBox(W(BE(u), BN(v), Zb + 2.f), FVector(160, 160, 200), BStone);
+		M.AddCylinder(W(BE(u), BN(v), Zb + 4.f), 1.1f, 0.9f, Hh, 12, ErtCol::Vary(BStone, 0.03f, ++S), true);
+		M.AddCylinder(W(BE(u), BN(v), Zb + 4.f + Hh * 0.6f), 1.5f, 1.5f, 0.8f, 12, BStoneD, true);
+		M.AddCylinder(W(BE(u), BN(v), Zb + 4.f + Hh), 0.9f, 0.2f, 4.f, 8, Lead, true);
+	};
+	// Tashqi devor faqat Hisor tepaligida; shahar ochiq, bog'lar bilan o'ralgan. Hisor: tosh devor, burjlar, Usmon va O'rxon maqbaralari
+	{
+		const float HU = -30.f, HV = 55.f, CR = BurHillR - 6.f;
+		for (int32 i = 0; i < 14; ++i)
+		{
+			if (i == 10) continue;   // janubiy darvoza
+			const float Am = (i + 0.5f) * 2.f * PI / 14, Len = 2.f * CR * FMath::Sin(PI / 14);
+			M.AddBox(W(BE(HU + FMath::Cos(Am) * CR), BN(HV + FMath::Sin(Am) * CR), TopZ + 3.f), FVector(Len * 50.f + 20.f, 120, 350), ErtCol::Vary(BStoneD, 0.05f, ++S), FRotator(0, FMath::RadiansToDegrees(Am) + 90.f, 0));
+			if (i % 2 == 0) { const float A0 = i * 2.f * PI / 14; M.AddBox(W(BE(HU + FMath::Cos(A0) * CR), BN(HV + FMath::Sin(A0) * CR), TopZ + 4.5f), FVector(300, 300, 500), ErtCol::Vary(BStoneD, 0.04f, ++S), FRotator(0, FMath::RadiansToDegrees(A0), 0)); }
+		}
+		for (int32 k = 0; k < 2; ++k)
+		{
+			const float u = HU - 10.f + k * 20.f, v = HV + 6.f;
+			M.AddCylinder(W(BE(u), BN(v), TopZ), 4.5f, 4.5f, 6.f, 8, ErtCol::Vary(White, 0.03f, ++S), true);
+			M.AddSphere(W(BE(u), BN(v), TopZ + 6.f), 4.7f, 12, Lead, FVector(1, 1, 0.75f));
+		}
+		M.AddBox(W(BE(HU + 2.f), BN(HV - 14.f), TopZ + 3.f), FVector(1200, 600, 300), ErtCol::Vary(BStone, 0.03f, ++S));   // bey saroyi
+		M.AddBox(W(BE(HU + 2.f), BN(HV - 14.f), TopZ + 6.5f), FVector(1300, 700, 40), Tile);
+		AddBanner(M, BE(HU - 6.f), BN(HV - CR + 4.f), TopZ, 7.f, BRed, false);
+		AddBanner(M, BE(HU + 6.f), BN(HV - CR + 4.f), TopZ, 7.f, BRed, false);
+		AddFire(M, BE(HU + 14.f), BN(HV + 4.f), TopZ, true);
+	}
+	// Ulu Jome' (markaz): 4x5 = 20 gumbazli to'rtburchak, ikki minora, shadirvon
+	{
+		const float MU = 0.f, MV = 5.f;
+		M.AddBox(W(BE(MU), BN(MV), Z + 5.f), FVector(2600, 2100, 500), ErtCol::Vary(BStone, 0.03f, ++S));
+		M.AddBox(W(BE(MU), BN(MV), Z + 10.2f), FVector(2600, 2100, 20), BStoneD);
+		for (int32 i = 0; i < 5; ++i) for (int32 j = 0; j < 4; ++j)
+			M.AddSphere(W(BE(MU - 20.f + i * 10.f), BN(MV - 15.f + j * 10.f), Z + 10.f), 4.8f, 10, (i == 2 && j == 1) ? Turq : ErtCol::Vary(Lead, 0.05f, ++S), FVector(1, 1, 0.6f));
+		Minaret(MU - 24.f, MV - 22.f, Z, 26.f); Minaret(MU + 24.f, MV - 22.f, Z, 26.f);
+		M.AddBox(W(BE(MU), BN(MV - 25.f), Z + 3.f), FVector(1400, 200, 300), ErtCol::Vary(BStone, 0.03f, ++S));   // kirish portali
+		M.AddBox(W(BE(MU), BN(MV - 26.1f), Z + 2.f), FVector(200, 20, 350), BStone * 0.3f);
+		M.AddCylinder(W(BE(MU), BN(MV - 34.f), Z), 3.f, 3.f, 0.8f, 12, BStoneD, true);                        // shadirvon
+		M.AddCylinder(W(BE(MU), BN(MV - 34.f), Z + 0.8f), 0.4f, 0.3f, 2.f, 8, BStoneD, true);
+	}
+	// Yashil masjid va Yashil maqbara (sharq): feruza koshinli
+	{
+		const float MU = 62.f, MV = 15.f;
+		M.AddBox(W(BE(MU), BN(MV), Z + 5.f), FVector(1200, 1200, 500), ErtCol::Vary(BStone, 0.03f, ++S));
+		M.AddBox(W(BE(MU), BN(MV), Z + 10.2f), FVector(800, 800, 60), BStoneD);
+		M.AddSphere(W(BE(MU), BN(MV), Z + 10.5f), 6.5f, 14, Lead, FVector(1, 1, 0.8f));
+		M.AddBox(W(BE(MU - 6.5f), BN(MV), Z + 5.f), FVector(20, 500, 700), Turq);                                 // koshinli fasad
+		M.AddBox(W(BE(MU - 6.7f), BN(MV), Z + 2.5f), FVector(20, 200, 400), BStone * 0.3f);
+		Minaret(MU + 7.f, MV + 8.f, Z, 20.f);
+		M.AddCylinder(W(BE(MU + 2.f), BN(MV - 26.f), Z), 5.f, 5.f, 8.f, 8, ErtCol::Vary(Turq, 0.03f, ++S), true);   // Yashil maqbara (sakkiz qirra)
+		M.AddCylinder(W(BE(MU + 2.f), BN(MV - 26.f), Z + 8.f), 5.3f, 5.3f, 0.8f, 8, TurqD, true);
+		M.AddSphere(W(BE(MU + 2.f), BN(MV - 26.f), Z + 8.5f), 5.2f, 12, TurqD, FVector(1, 1, 0.75f));
+	}
+	// Koza xon (ipak bozori, janub): ikki qavatli hovlili bino, o'rtada kichik masjid ustunlarda
+	{
+		const float MU = -8.f, MV = -55.f;
+		M.AddBox(W(BE(MU), BN(MV), Z + 4.f), FVector(1800, 1500, 400), ErtCol::Vary(BStone, 0.03f, ++S));
+		M.AddBox(W(BE(MU), BN(MV), Z + 8.3f), FVector(1900, 1600, 40), Tile);
+		M.AddBox(W(BE(MU), BN(MV), Z + 0.2f), FVector(1000, 800, 20), FLinearColor(0.85f, 0.83f, 0.78f));
+		for (float a = 0; a < 2.f * PI; a += PI / 12) { const float ru = FMath::Cos(a) * 10.f, rv = FMath::Sin(a) * 8.f; M.AddCylinder(W(BE(MU + ru), BN(MV + rv), Z), 0.4f, 0.4f, 8.f, 6, BStone, true); }
+		for (int32 i = 0; i < 8; ++i) M.AddCylinder(W(BE(MU - 7.f + i * 2.f), BN(MV - 4.f), Z + 4.2f), 0.3f, 0.3f, 4.f, 6, BStone, true);
+		M.AddBox(W(BE(MU), BN(MV), Z + 4.f), FVector(600, 600, 20), BStoneD);
+		for (int32 i = 0; i < 8; ++i) { const float a = i * PI / 4; M.AddCylinder(W(BE(MU + FMath::Cos(a) * 2.6f), BN(MV + FMath::Sin(a) * 2.6f), Z + 4.2f), 0.3f, 0.3f, 3.f, 6, BStone, true); }
+		M.AddBox(W(BE(MU), BN(MV), Z + 7.3f), FVector(300, 300, 20), BStoneD);
+		M.AddSphere(W(BE(MU), BN(MV), Z + 7.5f), 2.6f, 10, Lead, FVector(1, 1, 0.8f));
+		M.AddBox(W(BE(MU), BN(MV + 8.f), Z + 2.f), FVector(200, 40, 350), BStone * 0.3f);   // darvoza
+	}
+	// Hammom (g'arb): past ko'p gumbazli, issiq suv bug'i
+	{
+		const float MU = -60.f, MV = -20.f;
+		M.AddBox(W(BE(MU), BN(MV), Z + 2.5f), FVector(1400, 1000, 250), ErtCol::Vary(BStone, 0.03f, ++S));
+		M.AddSphere(W(BE(MU - 5.f), BN(MV), Z + 5.f), 5.f, 12, ErtCol::Vary(Lead, 0.04f, ++S), FVector(1, 1, 0.7f));
+		for (int32 i = 0; i < 4; ++i) M.AddSphere(W(BE(MU + 6.f), BN(MV - 6.f + i * 4.f), Z + 5.f), 1.8f, 8, ErtCol::Vary(Lead, 0.04f, ++S), FVector(1, 1, 0.6f));
+		M.AddSphere(W(BE(MU - 5.f), BN(MV), Z + 11.f), 2.f, 6, Steam, FVector(1.4f, 1.f, 0.6f));
+		M.AddCylinder(W(BE(MU - 14.f), BN(MV + 8.f), Z), 1.4f, 1.4f, 0.8f, 10, BStoneD, true);   // buloq havzasi
+	}
+	// Uylar: oq suvoq, yog'och ayvon, sopol tom (Usmonli uslubi); radial va bog'li
+	for (float R = 34.f; R < BurR - 12.f; R += 15.f)
+	{
+		const int32 Cnt = FMath::RoundToInt(2.f * PI * R / 15.f);
+		for (int32 i = 0; i < Cnt; ++i)
+		{
+			const float A = (i + RS.FRandRange(-0.2f, 0.2f)) * 2.f * PI / Cnt;
+			const float u = FMath::Cos(A) * R, v = FMath::Sin(A) * R;
+			if (FMath::Abs(v) < 8.f && u > 0.f) continue;                                                // sharqiy ko'cha
+			if (FMath::Abs(u) < 8.f && v < -20.f) continue;                                              // janubiy ko'cha
+			if (FMath::Abs(u) < 16.f && FMath::Abs(v - 5.f) < 14.f) continue;                            // Ulu Jome'
+			if (FVector2D::Distance(FVector2D(u, v), FVector2D(-30.f, 55.f)) < BurHillR + 2.f) continue; // Hisor
+			if (FMath::Abs(u - 62.f) < 16.f && FMath::Abs(v - 2.f) < 30.f) continue;                     // Yashil
+			if (FMath::Abs(u + 8.f) < 20.f && FMath::Abs(v + 55.f) < 17.f) continue;                     // Koza xon
+			if (FMath::Abs(u + 60.f) < 16.f && FMath::Abs(v + 20.f) < 12.f) continue;                    // hammom
+			if (RS.FRand() < 0.2f) continue;
+			const float HW = RS.FRandRange(4.f, 6.f), HD = RS.FRandRange(4.f, 6.f), HH = RS.FRand() < 0.6f ? 6.5f : 4.f;
+			const float Yaw = FMath::RadiansToDegrees(A);
+			M.AddBox(W(BE(u), BN(v), Z + HH * 0.5f), FVector(HW * 50.f, HD * 50.f, HH * 50.f), ErtCol::Vary(White, 0.06f, ++S), FRotator(0, Yaw, 0));
+			if (HH > 5.f) M.AddBox(W(BE(u), BN(v), Z + 5.2f), FVector(HW * 50.f + 40.f, HD * 50.f + 40.f, 100.f), ErtCol::Vary(BWood, 0.08f, ++S), FRotator(0, Yaw, 0));   // chiqma ayvon (cumba)
+			M.AddCylinder(W(BE(u), BN(v), Z + HH), FMath::Max(HW, HD) * 0.8f, 0.3f, 2.2f, 4, ErtCol::Vary(Tile, 0.06f, ++S), true, FRotator(0, Yaw + 45.f, 0));   // to'rt nishabli sopol tom
+		}
+	}
+	// Chinorlar va tut bog'lari (ipak uchun)
+	for (int32 i = 0; i < 20; ++i)
+	{
+		const float A = RS.FRand() * 2.f * PI, R = RS.FRandRange(30.f, BurR - 8.f);
+		const float u = FMath::Cos(A) * R, v = FMath::Sin(A) * R;
+		if (FVector2D::Distance(FVector2D(u, v), FVector2D(-30.f, 55.f)) < BurHillR + 2.f) continue;
+		if (FMath::Abs(u) < 16.f && FMath::Abs(v - 5.f) < 14.f) continue;
+		const float ZZ = HeightAt(BE(u), BN(v));
+		M.AddCylinder(W(BE(u), BN(v), ZZ), 0.5f, 0.4f, 5.f, 6, Trunk, true);
+		M.AddSphere(W(BE(u), BN(v), ZZ + 7.5f), 4.5f, 8, ErtCol::Vary(Plane, 0.08f, ++S), FVector(1, 1, 0.8f));
+	}
+	for (int32 i = 0; i < 40; ++i)
+	{
+		const float A = RS.FRand() * 2.f * PI, R = RS.FRandRange(BurR + 6.f, BurR + 28.f);
+		const float u = FMath::Cos(A) * R, v = FMath::Sin(A) * R;
+		if (FMath::Abs(v) < 10.f && u > 0.f) continue;
+		const float ZZ = HeightAt(BE(u), BN(v));
+		M.AddCylinder(W(BE(u), BN(v), ZZ), 0.25f, 0.2f, 1.8f, 5, Trunk * 0.8f, true);
+		M.AddSphere(W(BE(u), BN(v), ZZ + 2.8f), 2.f, 6, ErtCol::Vary(FLinearColor(0.30f, 0.52f, 0.18f), 0.1f, ++S), FVector(1, 1, 0.8f));
+	}
+	AddBanner(M, BE(BurR + 3.f), BN(-9.f), Z, 6.f, BRed, false);
+	AddBanner(M, BE(BurR + 3.f), BN(9.f), Z, 6.f, BRed, false);
+	M.Commit(NewPart(TEXT("Bursa"), true), 0, true);
 }

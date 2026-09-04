@@ -261,3 +261,15 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `BuildErzurum()` (ErtWorldBuilder): shimoli-sharqda (E=420, N=730, R=110 m, 22 m balandlik) sovuq tekislik shahri: 12 burchakli qalin kulrang devor, qiya tomli kvadrat burjlar, janubiy va g'arbiy darvozalar; shimoli-sharq tepaligida qal'a (ichki devor, Tepsi minora soat xonasi bilan, saroy); Chifte Minorali madrasa (baland portal, qo'sh minora, orqada katta kumbet); Uch Kumbet; Ulu Jome' (ko'p gumbazli tom, kalta minora); tunuka tomli tosh do'konlar; past tuproq tomli uylar (mo'ri, tomda qor); qarag'aylar. Yo'l (500,520) dan janubiy darvozaga.
 - Xarita: `Erzurum` belgisi; NPC joyi `erzurum` (savdogar, Erzurum beyi); `Erzurum`/`Erzincan` epizodlari janubiy darvoza oldidan boshlanadi.
 - Sinov: `27_erzurum` skrinshoti (ssenariy oxirida); xarita skrinshoti uchun xarita 0.7 s ochiq turadi (kadr kechikishi tufayli).
+
+## Bursa shahri va Uludog'
+
+- `BuildBursa()` (ErtWorldBuilder): g'arbda (E=-540, N=60, R=120 m) ochiq (devorsiz) yashil shahar: shimolda Hisor tepaligi (tosh devor, burjlar, Usmon va O'rxon maqbaralari, bey saroyi); Ulu Jome' (4x5 = 20 gumbaz, ikki minora, shadirvon); Yashil masjid (feruza fasad) va sakkiz qirrali Yashil maqbara; Koza xon (ikki qavatli hovli, ustunlar ustidagi masjidcha); hammom (gumbazlar, bug'); oq suvoqli chiqma ayvonli sopol tomli uylar; chinorlar; tashqarida tut bog'lari. Yo'l (-300,250) dan sharqiy kirishga.
+- Uludog': relyefda o'rmonli tog' (E=-620, N=-200, R=110 m, 95 m), cho'qqisi qorli.
+- Xarita: `Bursa`, `Uludog'` belgilari; NPC joyi `bursa` (ipak savdogari, qozi); `Bursa`/`Nikeya` epizodlari sharqiy kirishdan boshlanadi.
+
+## Realistik ot
+
+- `AErtHorse::Build` qayta yozildi: ellipsoid tana (bochka, sag'ri, son, ko'krak, yag'rin), 52 gradus egilgan konus bo'yin (`NeckMesh`) va yol tolalari, tumshuqli bosh (ko'zlar, burun teshiklari, konus quloqlar, peshona dog'i), yugan/jilov/suvliq, dum dastasi (`TailMesh`), ikki bo'g'inli oyoqlar (`Legs` yelka/son + `LowerLegs` bilak, to'piq, tuyoq). Tasodifiy belgilar: qora oyoq-tumshuq, oq paypoqlar, peshona dog'i. Egar: o'rindiq, oldingi/orqa qosh, qanotlar, ayil, uzangi tasmalari va temir uzangilar, gilam.
+- Animatsiya: pastki bo'g'in oyoq oldinga uchganda bukiladi, chopishda bo'yin cho'ziladi, turganda o'tlaydi (bosh pastga), dum va quloqlar tebranadi, tana yengil chayqaladi.
+- Sinov skrinshotlari: `28_bursa`, `29_horse`; minish sinovi endi janubga chopadi.

@@ -28,7 +28,7 @@ AErtHorse::AErtHorse()
 	if (USkeletalMeshComponent* SK = GetMesh()) SK->SetVisibility(false);
 	Saddle = CreateDefaultSubobject<USceneComponent>(TEXT("Saddle"));
 	Saddle->SetupAttachment(GetCapsuleComponent());
-	Saddle->SetRelativeLocation(FVector(-5.f, 0.f, 62.f));
+	Saddle->SetRelativeLocation(FVector(-8.f, 0.f, 66.f));
 	AutoPossessAI = EAutoPossessAI::Disabled;
 }
 
@@ -103,46 +103,101 @@ void AErtHorse::Build()
 		if (Mat) P->SetMaterial(0, Mat);
 		return P;
 	};
-	const FLinearColor Dark = Coat * 0.55f, Mane(0.12f, 0.09f, 0.06f), Leather(0.30f, 0.18f, 0.09f), Cloth(0.55f, 0.12f, 0.10f);
-	// Kapsula markazi yerdan 100 sm balandda. Tana markazi yerdan 125 sm.
+	// ---- Realistik ot: ellipsoid tana, egilgan bo'yin, tumshuqli bosh, yol, dum, ikki bo'g'inli oyoqlar, egar-jabduq ----
+	FRandomStream RS(GetUniqueID());
+	const bool bDarkPoints = RS.FRand() < 0.55f;                          // qora oyoq/tumshuq (bay)
+	const bool bBlaze = RS.FRand() < 0.35f;                               // peshonada oq dog'
+	const int32 Socks = RS.RandRange(0, 3);                               // oq paypoqlar soni
+	const FLinearColor Dark = bDarkPoints ? FLinearColor(0.08f, 0.06f, 0.05f) : Coat * 0.6f;
+	const FLinearColor Mane = bDarkPoints ? FLinearColor(0.07f, 0.05f, 0.04f) : Coat * 0.45f;
+	const FLinearColor Hoof(0.16f, 0.13f, 0.11f), Leather(0.30f, 0.18f, 0.09f), LeatherD(0.20f, 0.12f, 0.06f), Cloth(0.55f, 0.12f, 0.10f), ClothTrim(0.85f, 0.7f, 0.25f), Iron(0.6f, 0.6f, 0.62f), Eye(0.05f, 0.04f, 0.04f), WhiteM(0.92f, 0.9f, 0.86f);
+	auto Sph = [&](FErtMeshData& D, const FVector& C, float R, const FLinearColor& Col, const FVector& Sc, int32 Sd) { D.AddSphere(C, R, 12, ErtCol::Vary(Col, 0.04f, Sd), Sc); };
+	// Kapsula markazi yerdan 100 sm balandda. Tana markazi yerdan ~130 sm.
 	BodyMesh = Make(TEXT("HorseBody"), GetCapsuleComponent(), FVector(0, 0, 25.f));
 	FErtMeshData M;
-	M.AddBox(FVector(0, 0, 0), FVector(80, 26, 30), Coat);
-	M.AddBox(FVector(-70, 0, 6), FVector(22, 24, 26), ErtCol::Vary(Coat, 0.05f, 2));         // sag'ri
-	M.AddBox(FVector(78, 0, 8), FVector(18, 22, 26), ErtCol::Vary(Coat, 0.05f, 3));          // ko'krak
-	M.AddBox(FVector(-92, 0, -8), FVector(6, 5, 45), Mane, FRotator(-20, 0, 0));             // dum
-	M.AddBox(FVector(-12, 0, 24), FVector(34, 22, 5), Cloth);                                 // egar ostidagi mato
-	M.AddBox(FVector(-8, 0, 33), FVector(28, 18, 6), Leather);                                // egar
-	M.AddBox(FVector(-34, 0, 44), FVector(5, 12, 8), Leather);                                // egar orqasi
-	M.AddBox(FVector(16, 0, 42), FVector(4, 8, 6), Leather);                                  // egar oldi
-	M.AddBox(FVector(-6, -26, 18), FVector(3, 2, 40), Leather);                               // uzangi tasmasi
-	M.AddBox(FVector(-6, 26, 18), FVector(3, 2, 40), Leather);
-	M.AddBox(FVector(-6, -27, -22), FVector(8, 3, 3), FLinearColor(0.6f, 0.6f, 0.62f));      // uzangi
-	M.AddBox(FVector(-6, 27, -22), FVector(8, 3, 3), FLinearColor(0.6f, 0.6f, 0.62f));
+	Sph(M, FVector(0, 0, 2), 30.f, Coat, FVector(2.6f, 1.0f, 1.05f), 1);                         // tana (bochka)
+	Sph(M, FVector(-62, 0, 10), 30.f, Coat, FVector(1.15f, 0.95f, 1.0f), 2);                     // sag'ri
+	Sph(M, FVector(-70, 0, -8), 22.f, Coat, FVector(0.9f, 1.05f, 1.1f), 3);                      // son
+	Sph(M, FVector(66, 0, 6), 28.f, Coat, FVector(1.05f, 0.95f, 1.05f), 4);                      // ko'krak/yelka
+	Sph(M, FVector(40, 0, 32), 18.f, Coat, FVector(1.4f, 0.8f, 0.6f), 5);                        // yag'rin (withers)
+	Sph(M, FVector(74, 0, -6), 16.f, Coat, FVector(1.1f, 0.9f, 1.0f), 6);                        // ko'krak oldi
+	// Egar ostidagi gilam, egar (o'rindiq, oldingi qosh, orqa qosh), ayil, uzangi tasmalari va uzangilar, ko'krak tasmasi
+	M.AddBox(FVector(-8, 0, 30), FVector(36, 30, 3), Cloth);
+	M.AddBox(FVector(-8, 0, 30.5f), FVector(37, 31, 1.5f), ClothTrim);
+	M.AddBox(FVector(-8, 0, 33), FVector(36, 28, 2), Cloth);
+	Sph(M, FVector(-8, 0, 36), 14.f, Leather, FVector(2.0f, 1.25f, 0.45f), 7);                  // o'rindiq
+	Sph(M, FVector(-34, 0, 44), 8.f, LeatherD, FVector(0.5f, 1.4f, 1.0f), 8);                   // orqa qosh
+	Sph(M, FVector(18, 0, 45), 6.f, LeatherD, FVector(0.6f, 1.0f, 1.2f), 9);                    // oldingi qosh
+	for (int32 s = -1; s <= 1; s += 2)
+	{
+		M.AddBox(FVector(-8, s * 27.f, 10), FVector(3, 1.5f, 38), Leather);                     // uzangi tasmasi
+		M.AddBox(FVector(-8, s * 28.f, -30), FVector(7, 2.5f, 1.5f), Iron);                     // uzangi (tagi)
+		M.AddBox(FVector(-8, s * 28.f, -25), FVector(1.5f, 2.5f, 6), Iron);                     // uzangi (yon)
+		M.AddBox(FVector(-8, s * 25.f, 33), FVector(20, 4, 4), LeatherD);                       // egar qanoti
+	}
+	for (float a = -1.2f; a <= 1.2f; a += 0.3f) M.AddBox(FVector(-4, FMath::Sin(a) * 31.f, 8 + FMath::Cos(a) * 30.f - 30.f), FVector(4, 3, 3), LeatherD);   // ayil
+	M.AddBox(FVector(70, 0, 8), FVector(3, 26, 2.5f), LeatherD);                                  // ko'krak tasmasi
 	M.Commit(BodyMesh, 0, false);
 
-	HeadMesh = Make(TEXT("HorseHead"), BodyMesh, FVector(88.f, 0, 22.f));
+	// Bo'yin: yag'rindan yuqoriga egilgan; ustida yol tolalari
+	NeckMesh = Make(TEXT("HorseNeck"), BodyMesh, FVector(52.f, 0, 22.f));
 	M.Reset();
-	M.AddBox(FVector(18, 0, 30), FVector(20, 12, 36), Coat, FRotator(-35, 0, 0));           // bo'yin
-	M.AddBox(FVector(10, 0, 44), FVector(16, 3, 30), Mane, FRotator(-35, 0, 0));            // yol
-	M.AddBox(FVector(48, 0, 58), FVector(28, 10, 12), ErtCol::Vary(Coat, 0.06f, 4), FRotator(-8, 0, 0)); // bosh
-	M.AddBox(FVector(74, 0, 52), FVector(6, 8, 7), Dark);                                    // tumshuq
-	M.AddBox(FVector(34, -8, 72), FVector(3, 2, 7), Coat, FRotator(0, 0, -20));             // quloqlar
-	M.AddBox(FVector(34, 8, 72), FVector(3, 2, 7), Coat, FRotator(0, 0, 20));
-	M.AddBox(FVector(50, 0, 50), FVector(24, 11, 2), Leather);                               // yugan
-	M.AddBox(FVector(30, 0, 40), FVector(30, 0.8f, 0.8f), Leather, FRotator(30, 0, 0));      // jilov
+	M.AddCylinder(FVector(0, 0, 0), 20.f, 13.f, 74.f, 12, Coat, true, FRotator(-52.f, 0, 0));
+	Sph(M, FVector(0, 0, 0), 20.f, Coat, FVector(1.0f, 1.0f, 1.0f), 10);
+	for (int32 i = 0; i < 9; ++i)
+	{
+		const float t = i / 8.f, X = 0.f + t * 46.f - 10.f, Zz = 12.f + t * 58.f;
+		M.AddBox(FVector(X - 6, 0, Zz + 6), FVector(4, 1.6f, 9 + RS.FRand() * 3.f), Mane, FRotator(-52.f + RS.FRandRange(-8.f, 8.f), 0, RS.FRandRange(-10.f, 10.f)));
+	}
+	M.Commit(NeckMesh, 0, false);
+
+	// Bosh: kalla + peshona + tumshuq, burun teshiklari, ko'zlar, quloqlar, yugan, jilov
+	HeadMesh = Make(TEXT("HorseHead"), NeckMesh, FVector(44.f, 0, 62.f));
+	M.Reset();
+	Sph(M, FVector(6, 0, 4), 13.f, Coat, FVector(1.3f, 1.0f, 1.15f), 11);                        // kalla
+	M.AddCylinder(FVector(6, 0, 4), 11.f, 7.5f, 34.f, 10, Coat, true, FRotator(-100.f, 0, 0));    // yuz (pastga-oldinga)
+	Sph(M, FVector(40, 0, -2), 8.f, Dark, FVector(1.2f, 1.0f, 0.9f), 12);                        // tumshuq
+	if (bBlaze) M.AddBox(FVector(18, 0, 6), FVector(14, 1.5f, 3), WhiteM, FRotator(-100.f + 90.f, 0, 0));
+	for (int32 s = -1; s <= 1; s += 2)
+	{
+		Sph(M, FVector(43, s * 4.5f, 1), 1.6f, Eye, FVector(1, 1, 1), 13);                       // burun teshigi
+		Sph(M, FVector(12, s * 10.5f, 7), 2.6f, Eye, FVector(0.7f, 1, 1), 14);                    // ko'z
+		M.AddCylinder(FVector(2, s * 6.f, 14), 3.2f, 0.6f, 12.f, 6, Coat, true, FRotator(-10.f, 0, s * 22.f));   // quloq
+		M.AddBox(FVector(22, s * 8.5f, 3), FVector(1.2f, 1.f, 5.f), Leather, FRotator(-10.f, 0, 0));           // yugan yon tasma
+		M.AddBox(FVector(30, s * 6.5f, -3), FVector(1.f, 1.f, 22.f), LeatherD, FRotator(85.f, 0, 0));          // jilov (orqaga)
+	}
+	M.AddBox(FVector(36, 0, -6), FVector(1.5f, 9, 1.5f), Leather);                               // burun tasmasi
+	M.AddBox(FVector(-2, 0, 12), FVector(1.5f, 12, 1.5f), Leather);                               // peshona tasmasi
+	M.AddBox(FVector(38, 0, -8), FVector(1, 8, 1), Iron);                                        // suvliq
 	M.Commit(HeadMesh, 0, false);
 
+	// Dum: sag'ridan tushuvchi qalin tola dastasi
+	TailMesh = Make(TEXT("HorseTail"), BodyMesh, FVector(-92.f, 0, 22.f));
+	M.Reset();
+	M.AddCylinder(FVector(0, 0, 0), 5.f, 3.f, 22.f, 8, Mane, true, FRotator(-150.f, 0, 0));
+	for (int32 i = 0; i < 7; ++i) M.AddBox(FVector(-12 + RS.FRandRange(-3.f, 3.f), RS.FRandRange(-4.f, 4.f), -26.f - i * 2.f), FVector(2.5f, 2.f, 30.f), ErtCol::Vary(Mane, 0.06f, 30 + i), FRotator(RS.FRandRange(-12.f, 4.f), 0, RS.FRandRange(-8.f, 8.f)));
+	M.Commit(TailMesh, 0, false);
+
+	// Oyoqlar: yuqori qism (son/yelka) kapsulaga, pastki qism (bilak+tuyoq) yuqori qismga bog'langan (tirsak/hock bo'g'ini)
 	for (int32 i = 0; i < 4; ++i)
 	{
-		const float X = (i < 2) ? 58.f : -58.f, Y = (i & 1) ? 19.f : -19.f;
-		UProceduralMeshComponent* Leg = Make(TEXT("HorseLeg"), GetCapsuleComponent(), FVector(X, Y, -2.f));
+		const bool bFront = i < 2;
+		const float X = bFront ? 56.f : -60.f, Y = (i & 1) ? 19.f : -19.f;
+		const bool bSock = i < Socks;
+		UProceduralMeshComponent* Leg = Make(TEXT("HorseLeg"), GetCapsuleComponent(), FVector(X, Y, 4.f));
 		M.Reset();
-		M.AddBox(FVector(0, 0, -22), FVector(8, 8, 24), ErtCol::Vary(Coat, 0.05f, 10 + i));
-		M.AddBox(FVector(0, 0, -68), FVector(6, 6, 26), ErtCol::Vary(Coat * 0.9f, 0.05f, 20 + i));
-		M.AddBox(FVector(2, 0, -96), FVector(8, 7, 5), Dark);                                 // tuyoq
+		Sph(M, FVector(0, 0, 0), 12.f, Coat, FVector(1.1f, 0.8f, 1.0f), 40 + i);                                 // bo'g'in (yelka/son)
+		M.AddCylinder(FVector(0, 0, 0), 9.f, 6.5f, 44.f, 10, Coat, true, FRotator(180.f + (bFront ? 6.f : -10.f), 0, 0));   // yuqori suyak
 		M.Commit(Leg, 0, false);
 		Legs.Add(Leg);
+		UProceduralMeshComponent* Low = Make(TEXT("HorseLowerLeg"), Leg, FVector(bFront ? 4.5f : -7.6f, 0, -43.5f));
+		M.Reset();
+		Sph(M, FVector(0, 0, 0), 7.f, Coat, FVector(1.2f, 0.9f, 1.0f), 50 + i);                                    // tizza/hock
+		M.AddCylinder(FVector(0, 0, 0), 5.5f, 4.2f, 40.f, 8, bSock ? WhiteM : (bDarkPoints ? Dark : Coat * 0.92f), true, FRotator(180.f, 0, 0));   // bilak (cannon)
+		Sph(M, FVector(1, 0, -42), 5.2f, bSock ? WhiteM : Dark, FVector(1.1f, 1.0f, 0.8f), 60 + i);                  // to'piq (fetlock)
+		M.AddCylinder(FVector(3, 0, -55), 6.5f, 5.f, 9.f, 8, Hoof, true);                                          // tuyoq
+		M.Commit(Low, 0, false);
+		LowerLegs.Add(Low);
 	}
 }
 
@@ -165,6 +220,7 @@ void AErtHorse::ApplyDamage(float D)
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	if (BodyMesh) { BodyMesh->SetRelativeRotation(FRotator(0, 0, 75.f)); BodyMesh->SetRelativeLocation(FVector(0, 0, -40.f)); }
 	for (UProceduralMeshComponent* L : Legs) if (L) { L->SetRelativeRotation(FRotator(0, 0, 75.f)); L->AddRelativeLocation(FVector(0, 0, -60.f)); }
+	for (UProceduralMeshComponent* L : LowerLegs) if (L) L->SetRelativeRotation(FRotator(0, 0, 0));
 	SetLifeSpan(25.f);
 }
 
@@ -240,6 +296,7 @@ void AErtHorse::Animate(float Dt)
 	if (Sp > 10.f) Phase += Dt * (Sp / Stride) * 2.f * PI;
 	const float Amp = FMath::Clamp(Sp / 500.f, 0.f, 1.3f) * 28.f;
 	const bool bInAir = GetCharacterMovement()->IsFalling();
+	const float T = GetWorld()->GetTimeSeconds();
 	for (int32 i = 0; i < Legs.Num(); ++i)
 	{
 		// Yo'rtish: diagonal juftlar (FL+BR, FR+BL); chopishda oldingi/orqa juftlar
@@ -249,9 +306,26 @@ void AErtHorse::Animate(float Dt)
 		float Pitch = FMath::Sin(Ph) * Amp;
 		if (bInAir) Pitch = (i < 2) ? -35.f : 30.f;
 		Legs[i]->SetRelativeRotation(FRotator(Pitch, 0, 0));
+		if (LowerLegs.IsValidIndex(i) && LowerLegs[i])
+		{
+			// Pastki bo'g'in: oyoq oldinga uchganda bukiladi (oldingi oyoq orqaga, orqa oyoq oldinga buklanadi)
+			const float Bend = FMath::Max(0.f, FMath::Sin(Ph + PI * 0.5f)) * Amp * 1.6f;
+			float LP = (i < 2) ? -Bend : Bend * 0.8f;
+			if (bInAir) LP = (i < 2) ? -50.f : 25.f;
+			else if (Sp < 10.f) LP = 0.f;
+			LowerLegs[i]->SetRelativeRotation(FRotator(LP, 0, 0));
+		}
 	}
 	HeadBob = FMath::Sin(Phase) * FMath::Min(Sp / 300.f, 1.f) * 6.f;
-	if (HeadMesh) HeadMesh->SetRelativeRotation(FRotator(HeadBob - (Sp > 600.f ? 10.f : 0.f), 0, 0));
+	if (NeckMesh)
+	{
+		// Chopishda bo'yin cho'ziladi, turganda bosh biroz pastga (o'tlash)
+		const float Stretch = FMath::Clamp((Sp - 300.f) / 600.f, 0.f, 1.f) * 22.f;
+		const float Graze = (Sp < 5.f && !Rider) ? (FMath::Sin(T * 0.35f) > 0.3f ? 38.f : 0.f) : 0.f;
+		NeckMesh->SetRelativeRotation(FMath::RInterpTo(NeckMesh->GetRelativeRotation(), FRotator(HeadBob * 0.6f + Stretch + Graze, 0, 0), Dt, 4.f));
+	}
+	if (HeadMesh) HeadMesh->SetRelativeRotation(FRotator(HeadBob - (Sp > 600.f ? 8.f : 0.f) + FMath::Sin(T * 1.7f) * 2.f, FMath::Sin(T * 0.9f) * 3.f, 0));
+	if (TailMesh) TailMesh->SetRelativeRotation(FRotator(FMath::Clamp(Sp / 900.f, 0.f, 1.f) * 25.f, FMath::Sin(T * 2.3f) * 12.f + FMath::Sin(Phase) * 4.f, 0));
 	if (BodyMesh) BodyMesh->SetRelativeLocation(FVector(0, 0, (bCamel ? 45.f : 25.f) + FMath::Abs(FMath::Sin(Phase)) * FMath::Min(Sp / 400.f, 1.f) * (bCamel ? 8.f : 5.f)));
-	// Chavandozni egarda ushlab turamiz (pozitsiya egar bilan birga yuradi - attach)
+	if (BodyMesh && !bCamel && !bDead) BodyMesh->SetRelativeRotation(FRotator(FMath::Sin(Phase) * FMath::Min(Sp / 700.f, 1.f) * 3.f, 0, 0));
 }
