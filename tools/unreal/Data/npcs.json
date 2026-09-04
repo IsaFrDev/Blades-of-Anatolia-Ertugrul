@@ -314,6 +314,36 @@
     0.1
    ],
    "dialog": "ep007_aziz"
+  },
+  {
+   "id": "konya_savdogar",
+   "name": "chr.konya_savdogar.name",
+   "place": "konya",
+   "u": 85,
+   "v": 8,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.2,
+    0.45,
+    0.5
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "konya_kopek",
+   "name": "chr.kopek.name",
+   "place": "konya",
+   "u": 30,
+   "v": -40,
+   "yaw": 0,
+   "woman": false,
+   "kaftan": [
+    0.15,
+    0.15,
+    0.2
+   ],
+   "dialog": "ep011_kopek"
   }
  ]
 }

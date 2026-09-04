@@ -28,6 +28,7 @@ namespace ErtMap
 	constexpr float DesertN = -700.f;   // shundan janubda cho'l
 	constexpr float DamE = 720.f, DamN = -850.f, DamHalfE = 140.f, DamHalfN = 110.f, DamZ = 11.f;   // Damashq
 	constexpr float HalabE = 800.f, HalabN = 120.f, HalabR = 130.f, HalabZ = 14.f, HalabMoundR = 42.f, HalabMoundH = 24.f;   // Halab
+	constexpr float KonE = 120.f, KonN = 480.f, KonR = 150.f, KonZ = 12.f, KonHillR = 55.f, KonHillH = 9.f;   // Konya
 }
 
 UCLASS()
@@ -78,6 +79,7 @@ private:
 	void BuildDesert();
 	void BuildDamascus();
 	void BuildHalab();
+	void BuildKonya();
 	void AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S);
 	void BuildForest();
 	void BuildRocks();

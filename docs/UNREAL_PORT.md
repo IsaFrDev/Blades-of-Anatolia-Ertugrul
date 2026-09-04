@@ -236,3 +236,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `BuildHalab()` (ErtWorldBuilder): sharqda (E=800, N=120, R=130 m) aylana shahar: 16 burchakli kungurali devor, 8 burj, sharqiy darvoza; markazda 24 m glasis tepaligida qal'a (halqa devor, burjlar, saroy, hammom gumbazlari, minora) va tepalikdan tushuvchi arkali ko'prik; yopiq gumbazli bozor ko'chasi, halqa-halqa uylar, katta masjid (dumaloq minora), sarvlar. Tepalik `HeightAt` da yasaladi (yurish mumkin).
 - Xarita: `Halab` belgisi; NPC joyi `halab` (Halab savdogari, Al-Aziz); `Halab` epizodlari (EP007) sharqiy darvoza oldidan boshlanadi, Sham/Damashq esa Damashqdan.
 - Sinov skrinshoti: `17_halab`.
+
+## Konya shahri
+
+- `BuildKonya()` (ErtWorldBuilder): shimoliy-markazda (E=120, N=480, R=150 m) Saljuqiylar poytaxti: 24 burchakli devor, har burchakda kvadrat burj, sharqiy va g'arbiy darvozalar; markazda 9 m Aloiddin tepaligi (masjid, feruza gumbaz, kvadrat minora, chodir tomli saroy ko'shki, ichki devor); konus tomli kumbetlar, madrasa (portal, naqshli baland minora), karvonsaroy, bozor, sopol tomli ayvonli uylar, chinor xiyoboni. Yo'l (300,300) dan sharqiy darvozaga.
+- Xarita: `Konya` belgisi; NPC joyi `konya` (Konya savdogari, Sa'duddin Ko'pek); Konya/Kubadabad/Kayseri epizodlari sharqiy darvoza oldidan boshlanadi.
+- Sinov skrinshoti: `18_konya`.

@@ -163,6 +163,7 @@ FVector AErtMissionDirector::AnchorFor(const FErtEpisode& E) const
 	// Sham / Halab / Damashq epizodlari - Damashq shimoliy darvozasi oldi
 	if (E.Region.Contains(TEXT("Damashq")) || E.Region.Contains(TEXT("Sham"))) { PE = DamE; PN = DamN - DamHalfN - 40.f; }
 	else if (E.Region.Contains(TEXT("Halab"))) { PE = HalabE + HalabR + 45.f; PN = HalabN; }   // Halab sharqiy darvozasi oldi
+	else if (E.Region.Contains(TEXT("Konya")) || E.Region.Contains(TEXT("Kubadabad")) || E.Region.Contains(TEXT("Kayseri"))) { PE = KonE + KonR + 45.f; PN = KonN; }   // Konya sharqiy darvozasi oldi
 	// Epizod indeksiga qarab biroz siljitamiz - har epizod boshqa joyda
 	const float Off = (E.GlobalIndex % 5) * 35.f;
 	return GroundAt(PN * 100.f + Off * 100.f, PE * 100.f - Off * 60.f);

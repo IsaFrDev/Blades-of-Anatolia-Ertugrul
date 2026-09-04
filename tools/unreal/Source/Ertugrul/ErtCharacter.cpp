@@ -512,10 +512,12 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(24.95f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
 	if (At(25.0f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
 	if (At(26.6f)) TakeShot(TEXT("oasis"));
-	if (At(26.65f)) Teleport(720.f, -1000.f, 11.f + 45.f, -18.f, 0.f);
-	if (At(27.6f)) TakeShot(TEXT("damascus"));
-	if (At(27.7f)) Teleport(965.f, 120.f, 14.f + 60.f, -20.f, -90.f);
-	if (At(28.7f)) TakeShot(TEXT("halab"));
+	if (At(26.62f)) Teleport(720.f, -1000.f, 11.f + 45.f, -18.f, 0.f);
+	if (At(27.3f)) TakeShot(TEXT("damascus"));
+	if (At(27.32f)) Teleport(965.f, 120.f, 14.f + 60.f, -20.f, -90.f);
+	if (At(28.0f)) TakeShot(TEXT("halab"));
+	if (At(28.02f)) Teleport(310.f, 480.f, 12.f + 55.f, -18.f, -90.f);
+	if (At(28.7f)) TakeShot(TEXT("konya"));
 	if (At(29.0f))
 	{
 		// Suzish sinovi: ko'lga tushiriladi
