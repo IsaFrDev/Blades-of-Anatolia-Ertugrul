@@ -59,6 +59,43 @@ def make_water_material():
     return m
 
 
+def make_dust_material():
+    p = MAT_DIR + "/M_ErtDust"
+    if EAL.does_asset_exist(p):
+        return EAL.load_asset(p)
+    m = AT.create_asset("M_ErtDust", MAT_DIR, unreal.Material, unreal.MaterialFactoryNew())
+    m.set_editor_property("blend_mode", unreal.BlendMode.BLEND_TRANSLUCENT)
+    m.set_editor_property("shading_model", unreal.MaterialShadingModel.MSM_UNLIT)
+    m.set_editor_property("two_sided", True)
+    vc = MEL.create_material_expression(m, unreal.MaterialExpressionVertexColor, -400, 0)
+    MEL.connect_material_property(vc, "RGB", unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    MEL.connect_material_property(vc, "A", unreal.MaterialProperty.MP_OPACITY)
+    MEL.recompile_material(m)
+    EAL.save_asset(p)
+    log("yaratildi: " + p)
+    return m
+
+
+def ensure_postprocess(eas):
+    for a in eas.get_all_level_actors():
+        if isinstance(a, unreal.PostProcessVolume):
+            return
+    pp = eas.spawn_actor_from_class(unreal.PostProcessVolume, unreal.Vector(0, 0, 0))
+    pp.set_actor_label("PostProcess")
+    pp.set_editor_property("unbound", True)
+    s = pp.get_editor_property("settings")
+    s.set_editor_property("override_color_saturation", True)
+    s.set_editor_property("color_saturation", unreal.Vector4(1.12, 1.12, 1.12, 1.0))
+    s.set_editor_property("override_color_contrast", True)
+    s.set_editor_property("color_contrast", unreal.Vector4(1.06, 1.06, 1.06, 1.0))
+    s.set_editor_property("override_bloom_intensity", True)
+    s.set_editor_property("bloom_intensity", 0.35)
+    s.set_editor_property("override_auto_exposure_bias", True)
+    s.set_editor_property("auto_exposure_bias", 0.3)
+    pp.set_editor_property("settings", s)
+    log("post-process qo'shildi")
+
+
 def make_level():
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
     eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
@@ -80,6 +117,7 @@ def make_level():
                 # Intel GPU: hajmli bulut shaderlari juda og'ir - olib tashlanadi
                 eas.destroy_actor(a)
                 log("bulut olib tashlandi")
+        ensure_postprocess(eas)
         saved = les.save_current_level()
         log("save_current_level -> %s" % saved)
         return
@@ -126,5 +164,6 @@ def make_level():
 
 make_vertex_color_material()
 make_water_material()
+make_dust_material()
 make_level()
 log("tayyor")

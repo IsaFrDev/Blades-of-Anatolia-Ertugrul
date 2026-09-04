@@ -120,6 +120,7 @@ void UErtHeroBody::Build(USceneComponent* Parent, float HalfH)
 void UErtHeroBody::Apply(const FPose& P)
 {
 	Pelvis->SetRelativeLocation(PelvisBase + FVector(0, 0, P.PelvisZ));
+	Pelvis->SetRelativeRotation(FRotator(P.PelvisPitch, 0, 0));
 	Torso->SetRelativeRotation(FRotator(P.TorsoPitch, P.TorsoYaw, P.TorsoRoll));
 	Head->SetRelativeRotation(FRotator(P.HeadPitch, -P.TorsoYaw * 0.6f, -P.TorsoRoll * 0.5f));
 	ThighL->SetRelativeRotation(FRotator(P.ThighL, 0, 0));
@@ -161,7 +162,18 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 	FPose T;
 	const float Sw = FMath::Sin(Phase);
 	const float Swing = 27.f * FMath::Min(S, 1.35f);
-	if (bInAir)
+	if (bSwim)
+	{
+		// Suzish: tana gorizontal, oyoqlar navbatma-navbat tepadi, qo'llar oldinga cho'ziladi (brass)
+		const float Ph = IdleT * 4.5f + Phase;
+		T.PelvisPitch = -78.f; T.PelvisZ = -30.f; T.TorsoPitch = 6.f; T.HeadPitch = 45.f;
+		T.ThighL = 12.f + 18.f * FMath::Sin(Ph); T.ThighR = 12.f - 18.f * FMath::Sin(Ph);
+		T.KneeL = 20.f + 15.f * FMath::Max(0.f, -FMath::Sin(Ph)); T.KneeR = 20.f + 15.f * FMath::Max(0.f, FMath::Sin(Ph));
+		const float St = FMath::Sin(Ph * 0.5f);
+		T.ArmL = -120.f + 50.f * St; T.ArmR = -120.f + 50.f * St;
+		T.ElbowL = 10.f + 25.f * (1.f - St); T.ElbowR = T.ElbowL; T.ArmSpread = 30.f + 25.f * St;
+	}
+	else if (bInAir)
 	{
 		T.ThighL = -35.f; T.ThighR = -10.f; T.KneeL = 70.f; T.KneeR = 35.f;
 		T.ArmL = -35.f; T.ArmR = -35.f; T.ElbowL = 30.f; T.ElbowR = 30.f; T.ArmSpread = 20.f;
@@ -216,7 +228,7 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 
 	const float A = FMath::Clamp(Dt * (AttackT > 0.f ? 22.f : 12.f), 0.f, 1.f);
 	auto L = [A](float& C, float Tg) { C = FMath::Lerp(C, Tg, A); };
-	L(Cur.PelvisZ, T.PelvisZ); L(Cur.TorsoPitch, T.TorsoPitch); L(Cur.TorsoRoll, T.TorsoRoll); L(Cur.TorsoYaw, T.TorsoYaw); L(Cur.HeadPitch, T.HeadPitch);
+	L(Cur.PelvisZ, T.PelvisZ); L(Cur.PelvisPitch, T.PelvisPitch); L(Cur.TorsoPitch, T.TorsoPitch); L(Cur.TorsoRoll, T.TorsoRoll); L(Cur.TorsoYaw, T.TorsoYaw); L(Cur.HeadPitch, T.HeadPitch);
 	L(Cur.ThighL, T.ThighL); L(Cur.ThighR, T.ThighR); L(Cur.KneeL, T.KneeL); L(Cur.KneeR, T.KneeR);
 	L(Cur.ArmL, T.ArmL); L(Cur.ArmR, T.ArmR); L(Cur.ElbowL, T.ElbowL); L(Cur.ElbowR, T.ElbowR); L(Cur.ArmSpread, T.ArmSpread);
 	Apply(Cur);

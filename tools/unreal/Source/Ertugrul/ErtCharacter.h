@@ -51,6 +51,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") int32 GetArrows() const { return Arrows; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsDead() const { return bDead; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsBlocking() const { return bBlocking; }
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsSwimming() const { return bSwimming; }
 	float GetHurtFlash() const { return HurtFlash; }
 	/** Dushman zarbasi (blok bo'lsa kamayadi) */
 	void ReceiveHit(float Damage, const FVector& From);
@@ -85,13 +86,30 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Attack;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Block;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Shoot;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Menu;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuUp;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_MenuDown;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Confirm;
 
 private:
+	void OnMenu();
+	void OnMenuUp();
+	void OnMenuDown();
+	void OnConfirm();
 	void OnAttack();
 	void OnBlockOn();
 	void OnBlockOff();
 	void OnShoot();
 	void UpdateCombat(float Dt);
+
+	// Suzish (daryo/ko'l/voha) va qadamlar
+	void UpdateSwim(float Dt);
+	void UpdateSteps(float Dt);
+	UPROPERTY(Transient) TObjectPtr<class AErtWorldBuilder> WorldRef;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class UErtFootsteps> Footsteps;
+	bool bSwimming = false;
+	float StepDist = 0.f;
+	int32 StepFoot = 0;
 
 	float Health = 100.f;
 	int32 Arrows = 12;

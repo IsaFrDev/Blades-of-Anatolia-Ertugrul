@@ -3,6 +3,9 @@
 #include "ErtEnemy.h"
 #include "ErtLoc.h"
 #include "ErtMission.h"
+#include "ErtCutscene.h"
+#include "ErtEpisodeDb.h"
+#include "ErtGameMode.h"
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
 #include "Engine/Font.h"
@@ -44,6 +47,9 @@ void AErtHUD::DrawHUD()
 	AErtCharacter* H = Cast<AErtCharacter>(GetOwningPawn());
 	AErtMissionDirector* D = Director();
 	const FErtLoc& L = FErtLoc::Get();
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GM && GM->GetCutscene() && GM->GetCutscene()->IsPlaying()) { DrawCutscene(SW, SH, Sc); return; }
+	if (GM && GM->IsMenuOpen()) { DrawMenu(SW, SH, Sc); return; }
 	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f), Green(0.5f, 0.9f, 0.4f), Red(0.9f, 0.25f, 0.2f);
 
 	// --- pastki chap: sog'liq, stamina, o'q ---
@@ -132,4 +138,96 @@ void AErtHUD::DrawHUD()
 			Center(L.Tr(TEXT("ui.hud.checkpoint")), SH * 0.16f, FLinearColor(1, 0.85f, 0.35f, D->GetCheckpointFlash()), 1.1f * Sc);
 		break;
 	}
+}
+
+// ---------------- Kat-sahna qatlami ----------------
+
+void AErtHUD::Wrap(const FString& S, float MaxW, float Scale, TArray<FString>& Out) const
+{
+	TArray<FString> Words; S.ParseIntoArray(Words, TEXT(" "), true);
+	FString Line;
+	for (const FString& W : Words)
+	{
+		const FString Try = Line.IsEmpty() ? W : Line + TEXT(" ") + W;
+		if (TextWidth(Try, Scale, false) > MaxW && !Line.IsEmpty()) { Out.Add(Line); Line = W; }
+		else Line = Try;
+	}
+	if (!Line.IsEmpty()) Out.Add(Line);
+}
+
+void AErtHUD::DrawCutscene(float SW, float SH, float Sc)
+{
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	AErtCutsceneDirector* C = GM ? GM->GetCutscene() : nullptr;
+	if (!C) return;
+	const float LB = C->GetLetterbox() * SH * 0.11f;
+	if (LB > 0.f)
+	{
+		FCanvasTileItem T(FVector2D(0, 0), FVector2D(SW, LB), FLinearColor::Black); Canvas->DrawItem(T);
+		FCanvasTileItem B(FVector2D(0, SH - LB), FVector2D(SW, LB), FLinearColor::Black); Canvas->DrawItem(B);
+	}
+	if (!C->GetSubtitle().IsEmpty())
+	{
+		TArray<FString> Lines; Wrap(C->GetSubtitle(), SW * 0.7f, 1.15f * Sc, Lines);
+		float Y = SH - LB - (Lines.Num() + 1) * 26 * Sc - 12 * Sc;
+		if (!C->GetSpeaker().IsEmpty()) { Text(C->GetSpeaker(), (SW - TextWidth(C->GetSpeaker(), Sc, false)) * 0.5f, Y, FLinearColor(1.f, 0.85f, 0.35f), Sc); }
+		Y += 24 * Sc;
+		for (const FString& Ln : Lines) { Text(Ln, (SW - TextWidth(Ln, 1.15f * Sc, false)) * 0.5f, Y, FLinearColor(0.97f, 0.97f, 0.93f), 1.15f * Sc); Y += 26 * Sc; }
+	}
+	if (C->GetFade() > 0.f)
+	{
+		FCanvasTileItem F(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0, 0, 0, FMath::Clamp(C->GetFade(), 0.f, 1.f))); F.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(F);
+	}
+	const FString Hint = TEXT("Space/Enter: keyingi replika   Esc: tashlab ketish");
+	Text(Hint, SW - TextWidth(Hint, 0.85f * Sc, false) - 18 * Sc, SH - 22 * Sc, FLinearColor(0.7f, 0.7f, 0.65f, 0.8f), 0.85f * Sc);
+}
+
+// ---------------- Epizod menyusi ----------------
+
+void AErtHUD::DrawMenu(float SW, float SH, float Sc)
+{
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!GM) return;
+	const FErtLoc& L = FErtLoc::Get();
+	const TArray<FErtEpisode>& All = UErtEpisodeDb::Get()->All();
+	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.5f, 0.5f, 0.45f), Green(0.5f, 0.9f, 0.4f), Dim(0.35f, 0.33f, 0.3f);
+	FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.02f, 0.02f, 0.03f, 0.82f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+	Text(TEXT("BLADES OF ANATOLIA: ERTUG'RUL"), 40 * Sc, 26 * Sc, Gold, 1.5f * Sc, true, true);
+	Text(L.Tr(TEXT("ui.episodes.title")), 40 * Sc, 66 * Sc, White, 1.1f * Sc, true, true);
+
+	const int32 Rows = FMath::Clamp((int32)((SH - 150 * Sc) / (24 * Sc)), 6, 18);
+	const int32 Sel = GM->GetMenuIndex();
+	int32 First = FMath::Clamp(Sel - Rows / 2, 0, FMath::Max(0, All.Num() - Rows));
+	float Y = 104 * Sc;
+	FString LastSeason;
+	for (int32 i = First; i < All.Num() && i < First + Rows; ++i)
+	{
+		const FErtEpisode& E = All[i];
+		const bool bUnl = GM->IsUnlocked(E), bDone = GM->IsCompleted(E.Id);
+		if (i == Sel) { FCanvasTileItem S(FVector2D(32 * Sc, Y - 3 * Sc), FVector2D(SW * 0.5f, 23 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.8f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }
+		const FLinearColor C = !bUnl ? Dim : (bDone ? Green : (i == Sel ? Gold : White));
+		const FString Mark = bDone ? TEXT("[x] ") : (bUnl ? TEXT("[ ] ") : TEXT("[-] "));
+		Text(FString::Printf(TEXT("%s%s  %s"), *Mark, *E.Id, *UErtEpisodeDb::Get()->Title(E)), 40 * Sc, Y, C, Sc);
+		Text(FString::Printf(TEXT("%s  %s  T%d"), *E.Gregorian, *E.Archetype, E.DifficultyTier), SW * 0.5f - 250 * Sc, Y, i == Sel ? White : Grey, 0.85f * Sc);
+		Y += 24 * Sc;
+	}
+	// O'ng panel: tanlangan epizod tafsiloti
+	if (All.IsValidIndex(Sel))
+	{
+		const FErtEpisode& E = All[Sel];
+		const float X = SW * 0.55f, W = SW * 0.42f;
+		float PY = 104 * Sc;
+		Text(UErtEpisodeDb::Get()->Title(E), X, PY, Gold, 1.3f * Sc, true, true); PY += 34 * Sc;
+		Text(FString::Printf(TEXT("%s  |  %s  |  %s %d  |  %d %s"), *E.Gregorian, *E.Region, *L.Tr(TEXT("ui.episodes.tier")), E.DifficultyTier, E.EstimatedMinutes, *L.Tr(TEXT("ui.episodes.minutes"))), X, PY, Grey, 0.9f * Sc); PY += 26 * Sc;
+		TArray<FString> Lines; Wrap(L.TrOr(E.LocSynopsis, TEXT("")), W, Sc, Lines);
+		for (const FString& Ln : Lines) { Text(Ln, X, PY, White, Sc); PY += 20 * Sc; }
+		PY += 12 * Sc;
+		const FString Intro = L.TrOr(E.LocIntro, TEXT(""));
+		if (!Intro.IsEmpty()) { Lines.Reset(); Wrap(Intro, W, 0.9f * Sc, Lines); for (const FString& Ln : Lines) { Text(Ln, X, PY, Grey, 0.9f * Sc); PY += 18 * Sc; } }
+		PY += 16 * Sc;
+		if (!GM->IsUnlocked(E)) Text(L.Tr(TEXT("ui.episodes.locked")), X, PY, FLinearColor(0.9f, 0.3f, 0.2f), Sc);
+		else Text(L.Tr(TEXT("ui.episodes.start")) + TEXT("  [Enter]"), X, PY, Green, 1.1f * Sc);
+	}
+	const FString Hint = TEXT("Yuqori/Pastga: tanlash   Enter: boshlash   Esc/Tab: yopish");
+	Text(Hint, 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
 }

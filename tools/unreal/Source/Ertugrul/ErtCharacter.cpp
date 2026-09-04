@@ -17,6 +17,10 @@
 #include "CollisionShape.h"
 #include "UnrealClient.h"
 #include "ErtEnemy.h"
+#include "ErtGameMode.h"
+#include "ErtWorldBuilder.h"
+#include "ErtFootsteps.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
@@ -70,6 +74,67 @@ AErtCharacter::AErtCharacter()
 
 	Body = CreateDefaultSubobject<UErtHeroBody>(TEXT("Body"));
 	Body->bSwordInHand = true;
+	Footsteps = CreateDefaultSubobject<UErtFootsteps>(TEXT("Footsteps"));
+}
+
+// ---------------- Suzish va qadamlar ----------------
+
+void AErtCharacter::UpdateSwim(float Dt)
+{
+	if (!WorldRef) WorldRef = Cast<AErtWorldBuilder>(UGameplayStatics::GetActorOfClass(this, AErtWorldBuilder::StaticClass()));
+	if (!WorldRef || bDead || bMantling) return;
+	const FVector L = GetActorLocation();
+	float Surf = 0.f;
+	const bool bWater = WorldRef->IsWater(L.Y / 100.f, L.X / 100.f, Surf);
+	const float SurfZ = Surf * 100.f;
+	const float FeetZ = L.Z - GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	UCharacterMovementComponent* CM = GetCharacterMovement();
+	if (!bSwimming && bWater && FeetZ < SurfZ - 105.f)
+	{
+		bSwimming = true;
+		if (bIsCrouched) UnCrouch();
+		CM->SetMovementMode(MOVE_Flying);
+		CM->MaxFlySpeed = 240.f;
+		CM->BrakingDecelerationFlying = 450.f;
+		if (Body) Body->SetSwimming(true);
+		if (Footsteps) Footsteps->Splash(FVector(L.X, L.Y, SurfZ));
+		UE_LOG(LogErtugrul, Log, TEXT("Suzish boshlandi (suv sathi %.0f, oyoq %.0f)"), SurfZ, FeetZ);
+	}
+	else if (bSwimming && (!bWater || FeetZ > SurfZ - 70.f))
+	{
+		bSwimming = false;
+		CM->SetMovementMode(MOVE_Walking);
+		if (Body) Body->SetSwimming(false);
+	}
+	if (bSwimming)
+	{
+		// Suzuvchanlik: kapsula markazi suv sathidan 35 sm past; qirg'oqqa yaqinlashganda yuqoriga
+		FVector V = CM->Velocity;
+		V.Z = (SurfZ - 35.f - L.Z) * 4.f;
+		CM->Velocity = V;
+		CM->MaxFlySpeed = bWantSprint && Stamina > 1.f ? 330.f : 240.f;
+		Stamina = FMath::Max(0.f, Stamina - (bWantSprint ? 9.f : 3.f) * Dt);
+		if (Stamina <= 0.f) { Health = FMath::Max(1.f, Health - 4.f * Dt); HurtFlash = 0.4f; }
+	}
+}
+
+void AErtCharacter::UpdateSteps(float Dt)
+{
+	const UCharacterMovementComponent* CM = GetCharacterMovement();
+	if (!Footsteps || bSwimming || bDead || !CM->IsMovingOnGround()) { return; }
+	const float Speed = CM->Velocity.Size2D();
+	if (Speed < 20.f) { StepDist = 0.f; return; }
+	StepDist += Speed * Dt;
+	const float Stride = (bIsCrouched ? 70.f : 95.f) + Speed * 0.22f;   // sm: sekin - qisqa, chopish - uzun
+	if (StepDist >= Stride)
+	{
+		StepDist -= Stride;
+		StepFoot ^= 1;
+		const FVector L = GetActorLocation();
+		const FVector Foot = L - FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() - 2.f) + GetActorRightVector() * (StepFoot ? 12.f : -12.f);
+		const bool bSand = AErtWorldBuilder::IsDesert(L.Y / 100.f, L.X / 100.f);
+		Footsteps->Step(Foot, bSand, FMath::Clamp(Speed / 400.f, 0.4f, 1.6f) * (bIsCrouched ? 0.4f : 1.f));
+	}
 }
 
 // ---------------- Jang ----------------
@@ -239,7 +304,23 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(22.6f)) TakeShot(TEXT("world"));
 	if (At(23.0f)) Teleport(-820.f, 300.f, 6.f + 25.f, -25.f, 0.f);
 	if (At(24.6f)) TakeShot(TEXT("river"));
-	if (At(26.0f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(25.0f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
+	if (At(26.6f)) TakeShot(TEXT("oasis"));
+	if (At(27.0f)) Teleport(300.f, -975.f, 12.f + 18.f, -14.f, 0.f);
+	if (At(28.6f)) TakeShot(TEXT("caravan"));
+	if (At(29.0f))
+	{
+		// Suzish sinovi: ko'lga tushiriladi
+		SetActorHiddenInGame(false);
+		Boom->bDoCollisionTest = false; TargetArm = 300.f;
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		SetActorLocation(FVector(700.f * 100.f, -700.f * 100.f, 6.f * 100.f), false, nullptr, ETeleportType::TeleportPhysics);
+		if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-18.f, 0.f, 0.f));
+	}
+	if (ShotT > 29.5f && ShotT < 32.f) DebugMove = FVector2D(0, 1);
+	if (At(30.6f)) { if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-8.f, 90.f, 0.f)); TargetArm = 380.f; }
+	if (At(31.4f)) TakeShot(TEXT("swim"));
+	if (At(32.5f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;
@@ -270,6 +351,10 @@ void AErtCharacter::BuildInput()
 	IA_Attack = MakeAction(TEXT("IA_ErtAttack"), EInputActionValueType::Boolean);
 	IA_Block = MakeAction(TEXT("IA_ErtBlock"), EInputActionValueType::Boolean);
 	IA_Shoot = MakeAction(TEXT("IA_ErtShoot"), EInputActionValueType::Boolean);
+	IA_Menu = MakeAction(TEXT("IA_ErtMenu"), EInputActionValueType::Boolean);
+	IA_MenuUp = MakeAction(TEXT("IA_ErtMenuUp"), EInputActionValueType::Boolean);
+	IA_MenuDown = MakeAction(TEXT("IA_ErtMenuDown"), EInputActionValueType::Boolean);
+	IA_Confirm = MakeAction(TEXT("IA_ErtConfirm"), EInputActionValueType::Boolean);
 
 	IMC = NewObject<UInputMappingContext>(this, TEXT("IMC_Ertugrul"));
 	auto Map = [this](UInputAction* A, const FKey& K) -> FEnhancedActionKeyMapping& { return IMC->MapKey(A, K); };
@@ -311,6 +396,26 @@ void AErtCharacter::BuildInput()
 	Map(IA_Block, EKeys::Gamepad_LeftShoulder);
 	Map(IA_Shoot, EKeys::F);
 	Map(IA_Shoot, EKeys::Gamepad_RightShoulder);
+	Map(IA_Menu, EKeys::Escape);
+	Map(IA_Menu, EKeys::Tab);
+	Map(IA_Menu, EKeys::Gamepad_Special_Right);
+	Map(IA_MenuUp, EKeys::Up);
+	Map(IA_MenuUp, EKeys::Gamepad_DPad_Up);
+	Map(IA_MenuDown, EKeys::Down);
+	Map(IA_MenuDown, EKeys::Gamepad_DPad_Down);
+	Map(IA_Confirm, EKeys::Enter);
+	Map(IA_Confirm, EKeys::Gamepad_FaceButton_Bottom);
+}
+
+void AErtCharacter::OnMenu() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnSkip(); }
+void AErtCharacter::OnMenuUp() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->MenuMove(-1); }
+void AErtCharacter::OnMenuDown() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->MenuMove(1); }
+void AErtCharacter::OnConfirm()
+{
+	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
+	{
+		if (GM->IsMenuOpen()) GM->MenuConfirm(); else GM->OnAdvance();
+	}
 }
 
 void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
@@ -338,6 +443,10 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_Block, ETriggerEvent::Started, this, &AErtCharacter::OnBlockOn);
 	EIC->BindAction(IA_Block, ETriggerEvent::Completed, this, &AErtCharacter::OnBlockOff);
 	EIC->BindAction(IA_Shoot, ETriggerEvent::Started, this, &AErtCharacter::OnShoot);
+	EIC->BindAction(IA_Menu, ETriggerEvent::Started, this, &AErtCharacter::OnMenu);
+	EIC->BindAction(IA_MenuUp, ETriggerEvent::Started, this, &AErtCharacter::OnMenuUp);
+	EIC->BindAction(IA_MenuDown, ETriggerEvent::Started, this, &AErtCharacter::OnMenuDown);
+	EIC->BindAction(IA_Confirm, ETriggerEvent::Started, this, &AErtCharacter::OnConfirm);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)
@@ -362,7 +471,12 @@ void AErtCharacter::OnLook(const FInputActionValue& V)
 
 void AErtCharacter::OnJumpPressed()
 {
-	if (!bInputEnabled || bMantling) return;
+	if (!bInputEnabled)
+	{
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsMenuOpen()) GM->MenuConfirm(); else GM->OnAdvance(); }
+		return;
+	}
+	if (bMantling) return;
 	if (bIsCrouched) { UnCrouch(); return; }
 	if (TryMantle()) return;
 	Jump();
@@ -507,8 +621,9 @@ void AErtCharacter::Tick(float Dt)
 	UpdateCombat(Dt);
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
 	if (bDead) { MoveInput = FVector2D::ZeroVector; if (bShowDebug) DrawDebug(); return; }
+	UpdateSwim(Dt);
 	if (bMantling) UpdateMantle(Dt);
-	else { UpdateSlope(Dt); UpdateGait(Dt); }
+	else if (!bSwimming) { UpdateSlope(Dt); UpdateGait(Dt); UpdateSteps(Dt); }
 	if (bBlocking) GetCharacterMovement()->MaxWalkSpeed = FMath::Min(GetCharacterMovement()->MaxWalkSpeed, WalkSpeed);
 
 	Boom->TargetArmLength = FMath::FInterpTo(Boom->TargetArmLength, TargetArm, Dt, 10.f);

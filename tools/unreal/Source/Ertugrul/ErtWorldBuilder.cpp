@@ -93,6 +93,7 @@ void AErtWorldBuilder::Build()
 		BuildFortress();
 		BuildCity();
 		BuildCamp();
+		BuildDesert();
 	}
 	if (bBuildForest) { BuildForest(); BuildRocks(); }
 	bBuilt = true;
@@ -150,6 +151,23 @@ float AErtWorldBuilder::HeightAt(float E, float N) const
 	FlatDisk(CityE, CityN, CityR + 22.f, CityZ, 50.f);
 	FlatDisk(CampE, CampN, CampR + 18.f, CampZ, 45.f);
 	FlatDisk(CrossE, CrossN, 55.f, CrossZ, 60.f);
+	// Shimoliy tog' tizmasi (N > 850)
+	H += Smooth01((N - 850.f) / 130.f) * (55.f + 45.f * FMath::Abs(Noise(E, N, 0.008f)) + 10.f * FMath::Abs(Noise(E, N, 0.03f)));
+	// Janubiy cho'l: barxanlar (N < -700)
+	{
+		const float Des = Smooth01((-N - 700.f) / 140.f);
+		const float Dune = 10.f + 5.f * Noise(E, N, 0.004f) + 4.f * FMath::Abs(Noise(E + 300.f, N, 0.012f)) + 1.2f * FMath::Abs(Noise(E, N, 0.045f));
+		H = FMath::Lerp(H, Dune, Des);
+	}
+	// Voha ko'li va oba yonidagi ko'l: qirg'oq tekis, o'rtasi chuqur
+	{
+		const float D = FVector2D::Distance(FVector2D(E, N), FVector2D(OasisE, OasisN));
+		H = FMath::Lerp(H, OasisZ + 1.f, 1.f - Smooth01((D - (OasisR + 12.f)) / 40.f));
+		if (D < OasisR) H -= 5.f * Smooth01(1.f - D / OasisR);
+		const float DL = FVector2D::Distance(FVector2D(E, N), FVector2D(LakeE, LakeN));
+		H = FMath::Lerp(H, LakeZ + 1.f, 1.f - Smooth01((DL - (LakeR + 15.f)) / 35.f));
+		if (DL < LakeR) H -= 4.5f * Smooth01(1.f - DL / LakeR);
+	}
 	// Daryo (g'arb): qirg'oq tekisligi va o'zan
 	{
 		const float D = FMath::Abs(E - RiverE(N));
@@ -183,6 +201,15 @@ FLinearColor AErtWorldBuilder::TerrainColor(float E, float N, float H, float Slo
 	C = FMath::Lerp(C, Rock * (1.f + 0.1f * Nz), Smooth01((Slope - 0.42f) / 0.25f));
 	const float SnowLine = 150.f + 12.f * Nz;
 	C = FMath::Lerp(C, FLinearColor(0.93f, 0.94f, 0.97f), Smooth01((H - SnowLine) / 25.f) * (1.f - Smooth01((Slope - 0.9f) / 0.3f)));
+	// Cho'l qumi (janub) va voha atrofidagi yashillik
+	{
+		const float Des = Smooth01((-N - 700.f) / 140.f);
+		const FLinearColor Sand = FLinearColor(0.80f, 0.68f, 0.44f) * (1.f + 0.07f * Nz + 0.05f * Noise(E, N, 0.15f));
+		C = FMath::Lerp(C, Sand, Des);
+		const float DO = FVector2D::Distance(FVector2D(E, N), FVector2D(OasisE, OasisN));
+		C = FMath::Lerp(C, FLinearColor(0.30f, 0.45f, 0.14f), (1.f - Smooth01((DO - OasisR - 4.f) / 22.f)) * Des);
+		C = FMath::Lerp(C, FLinearColor(0.55f, 0.50f, 0.34f), 1.f - Smooth01((DO - OasisR + 4.f) / 10.f));
+	}
 	// Daryo bo'yi
 	const float DR = FMath::Abs(E - RiverE(N));
 	C = FMath::Lerp(C, FLinearColor(0.60f, 0.54f, 0.38f), 1.f - Smooth01((DR - 22.f) / 14.f));
@@ -233,16 +260,17 @@ void AErtWorldBuilder::BuildWater()
 		const float E0 = RiverE(N), E1 = RiverE(N + 20.f);
 		M.AddQuad(W(E0 - 27.f, N, WaterZ), W(E0 + 27.f, N, WaterZ), W(E1 + 27.f, N + 20.f, WaterZ), W(E1 - 27.f, N + 20.f, WaterZ), FVector::UpVector, Wc);
 	}
-	// Oba yonidagi kichik ko'l
+	// Oba yonidagi ko'l va cho'ldagi voha
+	auto Disk = [&](float CE, float CN, float R, float Z)
 	{
-		const float LE = -700.f, LN = 700.f;
-		for (int32 i = 0; i < 24; ++i)
+		for (int32 i = 0; i < 28; ++i)
 		{
-			const float A0 = 2.f * PI * i / 24, A1 = 2.f * PI * (i + 1) / 24;
-			const float R0 = 38.f + 6.f * FMath::Sin(A0 * 3), R1 = 38.f + 6.f * FMath::Sin(A1 * 3);
-			M.AddTri(W(LE, LN, WaterZ + 1.5f), W(LE + FMath::Cos(A0) * R0, LN + FMath::Sin(A0) * R0, WaterZ + 1.5f), W(LE + FMath::Cos(A1) * R1, LN + FMath::Sin(A1) * R1, WaterZ + 1.5f), FVector::UpVector, Wc);
+			const float A0 = 2.f * PI * i / 28, A1 = 2.f * PI * (i + 1) / 28;
+			M.AddTri(W(CE, CN, Z), W(CE + FMath::Cos(A0) * R, CN + FMath::Sin(A0) * R, Z), W(CE + FMath::Cos(A1) * R, CN + FMath::Sin(A1) * R, Z), FVector::UpVector, Wc);
 		}
-	}
+	};
+	Disk(LakeE, LakeN, LakeR + 6.f, LakeZ);
+	Disk(OasisE, OasisN, OasisR + 4.f, OasisZ);
 	M.Commit(NewPart(TEXT("Water"), false, WaterMat), 0, false);
 }
 
@@ -758,7 +786,9 @@ bool AErtWorldBuilder::IsBuildable(float E, float N) const
 	if (FVector2D::Distance(FVector2D(E, N), FVector2D(CampE, CampN)) < CampR + 14.f) return false;
 	if (FVector2D::Distance(FVector2D(E, N), FVector2D(FortE, FortN)) < FortHalf + 40.f) return false;
 	if (FMath::Abs(E - RiverE(N)) < 30.f) return false;
-	if (FVector2D::Distance(FVector2D(E, N), FVector2D(-700.f, 700.f)) < 50.f) return false; // ko'l
+	if (FVector2D::Distance(FVector2D(E, N), FVector2D(LakeE, LakeN)) < LakeR + 12.f) return false; // ko'l
+	if (FVector2D::Distance(FVector2D(E, N), FVector2D(OasisE, OasisN)) < OasisR + 30.f) return false; // voha
+	if (FMath::Max(FMath::Abs(E - CaravanE), FMath::Abs(N - CaravanN)) < 40.f) return false;          // karvonsaroy
 	float Wd; if (RoadDist(E, N, &Wd) < Wd + 3.f) return false;
 	return true;
 }
@@ -784,7 +814,7 @@ void AErtWorldBuilder::BuildForest()
 		if (!IsBuildable(E, N)) continue;
 		const float H = HeightAt(E, N);
 		const FVector Nm = TerrainNormal(E, N);
-		if (H > 150.f || Nm.Z < 0.72f || H < WaterZ + 1.5f) continue;
+		if (H > 150.f || Nm.Z < 0.72f || H < WaterZ + 1.5f || N < DesertN + 40.f) continue;
 		const bool bPine = H > 60.f || RS.FRand() < 0.55f;
 		const int32 cx = FMath::Clamp((int32)((E + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
 		const int32 cy = FMath::Clamp((int32)((N + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
@@ -818,4 +848,129 @@ void AErtWorldBuilder::BuildRocks()
 		++Placed;
 	}
 	if (M.Verts.Num()) M.Commit(NewPart(TEXT("Rocks"), true), 0, true);
+}
+
+// ---------------- Cho'l: voha, palmalar, karvonsaroy, xarobalar ----------------
+
+bool AErtWorldBuilder::IsWater(float E, float N, float& SurfZ) const
+{
+	if (FMath::Abs(E - RiverE(N)) < 25.f) { SurfZ = WaterZ; return true; }
+	if (FVector2D::Distance(FVector2D(E, N), FVector2D(LakeE, LakeN)) < LakeR + 4.f) { SurfZ = LakeZ; return true; }
+	if (FVector2D::Distance(FVector2D(E, N), FVector2D(OasisE, OasisN)) < OasisR + 2.f) { SurfZ = OasisZ; return true; }
+	SurfZ = 0.f;
+	return false;
+}
+
+void AErtWorldBuilder::AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S)
+{
+	FRandomStream RS(S);
+	const float LeanA = RS.FRandRange(0.f, 2.f * PI), Lean = RS.FRandRange(0.6f, 1.8f);
+	const FLinearColor Trunk(0.42f, 0.32f, 0.18f), Leaf(0.16f, 0.40f, 0.14f);
+	FVector Top = W(E, N, Z);
+	const int32 Segs = 6;
+	for (int32 i = 0; i < Segs; ++i)
+	{
+		const float T0 = (float)i / Segs, T1 = (float)(i + 1) / Segs;
+		const float Off0 = Lean * T0 * T0, Off1 = Lean * T1 * T1;
+		const FVector A = W(E + FMath::Cos(LeanA) * Off0, N + FMath::Sin(LeanA) * Off0, Z + H * T0);
+		const FVector B = W(E + FMath::Cos(LeanA) * Off1, N + FMath::Sin(LeanA) * Off1, Z + H * T1);
+		M.AddCylinder(A, 0.30f - 0.12f * T0, 0.30f - 0.12f * T1, (B - A).Size() / 100.f, 6, ErtCol::Vary(Trunk, 0.1f, S + i), false, (B - A).Rotation() + FRotator(-90.f, 0, 0));
+		Top = B;
+	}
+	// Bargli toj: 8 ta uzun yassi quti, tashqariga-pastga qiya
+	for (int32 i = 0; i < 8; ++i)
+	{
+		const float A = 2.f * PI * i / 8 + RS.FRandRange(-0.2f, 0.2f);
+		const FRotator R(0, FMath::RadiansToDegrees(A), 0);
+		const FVector Dir = R.RotateVector(FVector::ForwardVector);
+		M.AddBox(Top + Dir * 170.f + FVector(0, 0, 20.f), FVector(180.f, 22.f, 4.f), ErtCol::Vary(Leaf, 0.15f, S + 10 + i), R + FRotator(-28.f + RS.FRandRange(-8.f, 8.f), 0, 0));
+	}
+	M.AddSphere(Top + FVector(0, 0, 10.f), 0.35f, 6, FLinearColor(0.55f, 0.35f, 0.1f));
+}
+
+void AErtWorldBuilder::BuildDesert()
+{
+	FRandomStream RS(Seed + 41);
+	FErtMeshData M(100.f);
+	int32 S = 900;
+	// Palmalar - voha atrofida
+	for (int32 i = 0; i < 26; ++i)
+	{
+		const float A = 2.f * PI * i / 26 + RS.FRandRange(-0.15f, 0.15f);
+		const float R = OasisR + RS.FRandRange(4.f, 22.f);
+		const float E = OasisE + FMath::Cos(A) * R, N = OasisN + FMath::Sin(A) * R;
+		AddPalm(M, E, N, HeightAt(E, N), RS.FRandRange(6.f, 10.f), ++S);
+	}
+	// Butalar va toshlar
+	for (int32 i = 0; i < 40; ++i)
+	{
+		const float A = RS.FRandRange(0.f, 2.f * PI), R = OasisR + RS.FRandRange(6.f, 60.f);
+		const float E = OasisE + FMath::Cos(A) * R, N = OasisN + FMath::Sin(A) * R;
+		if (i % 3 == 0) M.AddSphere(W(E, N, HeightAt(E, N) - 0.3f), RS.FRandRange(0.8f, 2.2f), 7, ErtCol::Vary(FLinearColor(0.62f, 0.52f, 0.36f), 0.1f, ++S), FVector(1.2f, 1.f, 0.6f), 0.2f, S);
+		else M.AddSphere(W(E, N, HeightAt(E, N)), RS.FRandRange(0.5f, 1.1f), 6, ErtCol::Vary(FLinearColor(0.35f, 0.42f, 0.16f), 0.2f, ++S), FVector(1.f, 1.f, 0.6f), 0.25f, S);
+	}
+	// Karvonsaroy: 40x40 m devor, darvoza shimolda, ichkarida hovli + hujralar, burchak minoralari, gumbazli masjid
+	{
+		const float Z = HeightAt(CaravanE, CaravanN);
+		auto KE = [](float u) { return CaravanE + u; };
+		auto KN = [](float v) { return CaravanN + v; };
+		const FLinearColor Mud(0.72f, 0.58f, 0.38f);
+		const float Half = 20.f, WallH = 6.f;
+		for (int32 side = 0; side < 4; ++side)
+		{
+			const bool bNS = side < 2;
+			const float Sign = (side & 1) ? 1.f : -1.f;
+			for (float t = -Half; t < Half; t += 4.f)
+			{
+				const float u = bNS ? t + 2.f : Sign * Half, v = bNS ? Sign * Half : t + 2.f;
+				if (side == 1 && FMath::Abs(u) < 4.f) { M.AddBox(W(KE(u), KN(v), Z + 5.5f), FVector(bNS ? 100 : 200, bNS ? 200 : 100, 60), ErtCol::Vary(Mud, 0.08f, ++S)); continue; }
+				M.AddBox(W(KE(u), KN(v), Z + WallH * 0.5f), FVector(bNS ? 100 : 200, bNS ? 200 : 100, WallH * 50.f), ErtCol::Vary(Mud, 0.08f, ++S));
+				M.AddBox(W(KE(u), KN(v), Z + WallH + 0.4f), FVector(bNS ? 50 : 90, bNS ? 90 : 50, 40), ErtCol::Vary(Mud * 0.9f, 0.08f, ++S));
+			}
+		}
+		for (int32 i = 0; i < 4; ++i)
+		{
+			const float u = (i & 1) ? Half : -Half, v = (i & 2) ? Half : -Half;
+			M.AddCylinder(W(KE(u), KN(v), Z), 3.2f, 2.8f, 9.f, 10, ErtCol::Vary(Mud, 0.06f, ++S), true);
+			M.AddSphere(W(KE(u), KN(v), Z + 9.f), 2.9f, 10, Mud * 0.95f, FVector(1, 1, 0.6f));
+		}
+		// Hujralar (ichki devor bo'ylab), masjid gumbazi, quduq, yuk to'plari
+		for (float t = -14.f; t <= 14.f; t += 7.f)
+		{
+			M.AddBox(W(KE(t), KN(-Half + 4.f), Z + 1.8f), FVector(300, 330, 180), ErtCol::Vary(Mud * 1.05f, 0.06f, ++S));
+			M.AddBox(W(KE(-Half + 4.f), KN(t), Z + 1.8f), FVector(330, 300, 180), ErtCol::Vary(Mud * 1.05f, 0.06f, ++S));
+			M.AddBox(W(KE(Half - 4.f), KN(t), Z + 1.8f), FVector(330, 300, 180), ErtCol::Vary(Mud * 1.05f, 0.06f, ++S));
+		}
+		M.AddBox(W(KE(0), KN(0), Z + 2.5f), FVector(600, 600, 250), FLinearColor(0.85f, 0.80f, 0.68f));
+		M.AddSphere(W(KE(0), KN(0), Z + 5.f), 5.f, 12, FLinearColor(0.20f, 0.45f, 0.55f), FVector(1, 1, 0.75f));
+		M.AddCylinder(W(KE(9), KN(9), Z), 1.1f, 1.1f, 0.9f, 10, Stone, false);
+		for (int32 i = 0; i < 6; ++i) M.AddBox(W(KE(-8.f + i * 3.f), KN(10.f), Z + 0.6f), FVector(70, 50, 60), ErtCol::Vary(FLinearColor(0.45f, 0.35f, 0.2f), 0.2f, ++S));
+		for (int32 s2 = -1; s2 <= 1; s2 += 2) AddBanner(M, KE(s2 * 5.f), KN(Half + 1.5f), Z, 5.f, FLinearColor(0.2f, 0.45f, 0.55f), false);
+		AddFire(M, KE(-10), KN(-2), Z, true);
+	}
+	// Qadimiy xarobalar (g'arbda): singan ustunlar, devor parchalari
+	{
+		const float RE = -120.f, RN = -860.f;
+		const float Z = HeightAt(RE, RN);
+		const FLinearColor Marble(0.78f, 0.74f, 0.66f);
+		for (int32 i = 0; i < 14; ++i)
+		{
+			const float u = -18.f + (i % 7) * 6.f, v = (i / 7) ? 8.f : -8.f;
+			const float Hh = RS.FRandRange(1.5f, 7.f);
+			M.AddCylinder(W(RE + u, RN + v, HeightAt(RE + u, RN + v) - 0.2f), 0.7f, 0.62f, Hh, 8, ErtCol::Vary(Marble, 0.08f, ++S), true);
+			M.AddBox(W(RE + u, RN + v, HeightAt(RE + u, RN + v)), FVector(110, 110, 25), Marble * 0.9f);
+		}
+		M.AddBox(W(RE, RN - 14.f, Z + 2.f), FVector(1800, 120, 200), ErtCol::Vary(Marble * 0.85f, 0.1f, ++S), FRotator(0, 0, 4.f));
+		M.AddBox(W(RE + 16.f, RN + 2.f, Z + 1.f), FVector(120, 900, 100), ErtCol::Vary(Marble * 0.85f, 0.1f, ++S));
+		for (int32 i = 0; i < 10; ++i)
+			M.AddSphere(W(RE + RS.FRandRange(-25.f, 25.f), RN + RS.FRandRange(-20.f, 20.f), Z), RS.FRandRange(0.5f, 1.4f), 6, ErtCol::Vary(Marble * 0.8f, 0.1f, ++S), FVector(1.3f, 1.f, 0.5f), 0.3f, S);
+	}
+	// Cho'l toshlari
+	for (int32 i = 0; i < 90; ++i)
+	{
+		const float E = RS.FRandRange(-950.f, 950.f), N = RS.FRandRange(-990.f, DesertN - 20.f);
+		if (!IsBuildable(E, N)) continue;
+		M.AddSphere(W(E, N, HeightAt(E, N) - 0.4f), RS.FRandRange(0.8f, 3.5f), 7, ErtCol::Vary(FLinearColor(0.66f, 0.55f, 0.38f), 0.12f, ++S), FVector(RS.FRandRange(0.8f, 1.6f), 1.f, RS.FRandRange(0.4f, 0.8f)), 0.2f, S);
+	}
+	M.Commit(NewPart(TEXT("Desert"), true), 0, true);
 }

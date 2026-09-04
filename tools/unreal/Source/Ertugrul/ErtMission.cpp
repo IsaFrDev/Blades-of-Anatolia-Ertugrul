@@ -157,6 +157,12 @@ FVector AErtMissionDirector::AnchorFor(const FErtEpisode& E) const
 	return GroundAt(PN * 100.f + Off * 100.f, PE * 100.f - Off * 60.f);
 }
 
+FVector AErtMissionDirector::GetAnchor(const FString& InEpisodeId) const
+{
+	const FErtEpisode* E = UErtEpisodeDb::Get()->ById(InEpisodeId);
+	return E ? AnchorFor(*E) : GroundAt(0.f, 0.f);
+}
+
 // ---------------- Epizod ----------------
 
 bool AErtMissionDirector::StartEpisode(const FString& Id)

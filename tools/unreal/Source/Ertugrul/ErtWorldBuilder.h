@@ -22,6 +22,10 @@ namespace ErtMap
 	constexpr float CampE = 520.f, CampN = -460.f, CampZ = 10.f, CampR = 150.f;
 	constexpr float CrossE = 10.f, CrossN = 40.f, CrossZ = 9.f;
 	constexpr float WaterZ = 3.5f;
+	constexpr float LakeE = -700.f, LakeN = 700.f, LakeR = 40.f, LakeZ = 2.5f;
+	constexpr float OasisE = 150.f, OasisN = -880.f, OasisR = 55.f, OasisZ = 6.f;
+	constexpr float CaravanE = 300.f, CaravanN = -900.f;
+	constexpr float DesertN = -700.f;   // shundan janubda cho'l
 }
 
 UCLASS()
@@ -45,6 +49,9 @@ public:
 	/** Reja -> UE dunyo nuqtasi (sm). */
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") static FVector PlanToWorld(float E, float N, float Z) { return FVector(N * 100.f, E * 100.f, Z * 100.f); }
 	UFUNCTION(CallInEditor, Category = "Ertugrul") void Rebuild();
+	/** Reja nuqtasi suv ustidami (daryo/ko'l/voha); SurfZ - suv sathi (metr) */
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsWater(float E, float N, float& SurfZ) const;
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") static bool IsDesert(float E, float N) { return N < -700.f + 60.f; }
 
 protected:
 	virtual void OnConstruction(const FTransform& T) override;
@@ -66,6 +73,8 @@ private:
 	void BuildFortress();
 	void BuildCity();
 	void BuildCamp();
+	void BuildDesert();
+	void AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S);
 	void BuildForest();
 	void BuildRocks();
 

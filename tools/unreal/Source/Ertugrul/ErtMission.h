@@ -53,6 +53,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ertugrul") bool StartEpisode(const FString& EpisodeId);
 	UFUNCTION(BlueprintCallable, Category = "Ertugrul") void RestartFromCheckpoint();
 	UFUNCTION(BlueprintCallable, Category = "Ertugrul") void StopEpisode();
+	/** Epizod boshlanadigan joy (dunyo, sm) - kat-sahna sahnasi uchun ham */
+	FVector GetAnchor(const FString& InEpisodeId) const;
 
 	// HUD uchun
 	EErtMissionState GetState() const { return State; }
