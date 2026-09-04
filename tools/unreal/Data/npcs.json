@@ -494,6 +494,36 @@
     0.35
    ],
    "dialog": "ep017_talk"
+  },
+  {
+   "id": "karacahisar_tekfur",
+   "name": "chr.karacahisar_tekfur.name",
+   "place": "karacahisar",
+   "u": 0,
+   "v": -2,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.35,
+    0.1,
+    0.35
+   ],
+   "dialog": "ep041_talk"
+  },
+  {
+   "id": "karacahisar_dehqon",
+   "name": "chr.karacahisar_dehqon.name",
+   "place": "karacahisar",
+   "u": -6,
+   "v": -84,
+   "yaw": 0,
+   "woman": true,
+   "kaftan": [
+    0.5,
+    0.45,
+    0.3
+   ],
+   "dialog": "npc_caravan"
   }
  ]
 }

@@ -280,3 +280,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Askaniya ko'li: yangi ko'l (E=-300, N=95, R=65 m, suv sathi 4.5 m): `IsWater`, relyef chuqurligi, suv diski, qumloq qirg'oq, 2 qayiq.
 - Xarita: `Nikeya`, `Askaniya ko'li` belgilari; NPC joyi `nikeya` (savdogar, tekfur); `Nikeya` epizodlari sharqiy darvoza oldidan boshlanadi. Yo'l (-150,-150) dan sharqiy darvozaga.
 - Sinov skrinshoti: `30_nikeya`.
+
+## Karacahisar qal'asi
+
+- `BuildKaracahisar()` (ErtWorldBuilder): shimolda (E=-60, N=760) 45 m qora qoya (relyefda, tepasi 30 m tekis plato, tik qiyalik, qora tosh rangi); ustida Vizantiya qal'asi: 11 burchakli notekis g'isht qatorli devor, kungura, kvadrat burjlar, janubiy darvoza (temir panjara), 18 m donjon (tirqish derazalar, bayroq), cherkov (gumbaz, xoch), kazarma, sardoba, ombor, gulxan; janubdan uch bo'lakli ilon izi tosh yo'l; etakda 6 kulbali qishloq, quduq, tekfur bayrog'i. Yo'l Konya g'arbiy darvozasidan qal'a etagiga.
+- Xarita: `Karacahisar` belgisi; NPC joyi `karacahisar` (tekfur - EP041 dialogi, qishloq ayoli); `Karacahisar` epizodlari qoya etagidan (janub) boshlanadi.
+- Sinov skrinshoti: `31_karacahisar`.
