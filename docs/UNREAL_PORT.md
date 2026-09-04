@@ -167,6 +167,13 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - Yon kvest mukofotlari (`sidequests.json` "reward"): pelt (bo'ri terisi zirhi, zarar -15%, saqlanadi), potions3, arrows12, xp100, shield, bow, meat6.
   Yakuniy ekranda mukofot matni ko'rsatiladi; inventarda "Zirh" qatori.
 
+## Tugmalarni sozlash
+- Sozlamalar (O) -> "Tugmalar >" sahifasi: 15 harakat (sakrash, chopish, cho'kish, yurish, zarba, blok, kamon, gaplashish/minish,
+  dodge, qulflash, tepki, inventar, dori, xarita, sozlamalar). Enter -> "tugmani bosing..." -> keyingi bosilgan klaviatura/sichqoncha tugmasi
+  (`WasInputKeyJustPressed` bilan barcha `EKeys` bo'yicha), Esc bekor qiladi. Gamepad xaritalari o'zgarmaydi.
+- `AErtCharacter::SetBinding` IMC dagi klaviatura xaritalarini olib tashlab yangisini qo'yadi va `RequestRebuildControlMappings` chaqiradi.
+  `ert_save.json` "keys" obyektida saqlanadi, o'yin boshida qo'llanadi.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

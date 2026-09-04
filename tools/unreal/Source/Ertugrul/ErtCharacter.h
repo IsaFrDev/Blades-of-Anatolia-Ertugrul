@@ -84,6 +84,12 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsMantling() const { return bMantling; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetGroundSlopeDeg() const { return SlopeDeg; }
 
+	// Tugmalarni sozlash: harakat nomi -> klaviatura/sichqoncha tugmasi (gamepad o'zgarmaydi)
+	static const TArray<FString>& BindableActions();
+	FString GetBindingName(const FString& Action) const;   // hozirgi tugma (ko'rsatish uchun)
+	void SetBinding(const FString& Action, const FKey& Key);
+	void ApplyBindings();
+	TMap<FString, FKey> Bindings;
 	/** Kirish yoqilgan/o'chirilgan (kat-sahna, dialog). */
 	UPROPERTY(BlueprintReadWrite, Category = "Ertugrul") bool bInputEnabled = true;
 
@@ -175,6 +181,7 @@ private:
 	bool bBlocking = false, bDead = false;
 
 	void BuildInput();
+	UInputAction* ActionByName(const FString& Name) const;
 	void OnMove(const FInputActionValue& V);
 	void OnLook(const FInputActionValue& V);
 	void OnJumpPressed();

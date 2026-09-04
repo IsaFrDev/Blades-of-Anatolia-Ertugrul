@@ -323,12 +323,31 @@ void AErtHUD::DrawSettings(float SW, float SH, float Sc)
 	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f);
 	FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.02f, 0.02f, 0.03f, 0.85f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
 	Text(TEXT("SOZLAMALAR / AYARLAR / SETTINGS"), 40 * Sc, 30 * Sc, Gold, 1.4f * Sc, true, true);
+	if (GM->SettingsPage == 1)
+	{
+		static const TCHAR* Labels[] = { TEXT("Sakrash / chiqish"), TEXT("Chopish"), TEXT("Cho'kish"), TEXT("Yurish rejimi"), TEXT("Qilich zarbasi"), TEXT("Blok / parry"), TEXT("Kamon"), TEXT("Gaplashish / minish / olish"), TEXT("Dodge"), TEXT("Nishonga qulflash"), TEXT("Tepki"), TEXT("Inventar"), TEXT("Dori / go'sht"), TEXT("Xarita"), TEXT("Sozlamalar") };
+		const TArray<FString>& Acts = AErtCharacter::BindableActions();
+		AErtCharacter* Hc = Cast<AErtCharacter>(GetOwningPawn());
+		Text(TEXT("TUGMALAR"), 44 * Sc, 76 * Sc, Gold, 1.1f * Sc, true, true);
+		for (int32 i = 0; i <= Acts.Num(); ++i)
+		{
+			const float Y = 108 * Sc + i * 24 * Sc;
+			const bool bSel = i == GM->KeyRow;
+			if (bSel) { FCanvasTileItem S(FVector2D(32 * Sc, Y - 3 * Sc), FVector2D(SW * 0.55f, 22 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.8f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }
+			if (i == Acts.Num()) { Text(TEXT("< Orqaga"), 44 * Sc, Y, bSel ? Gold : White, Sc); break; }
+			Text(Labels[i], 44 * Sc, Y, bSel ? Gold : White, Sc);
+			Text((bSel && GM->bCapturing) ? TEXT("[ tugmani bosing... ]") : (Hc ? Hc->GetBindingName(Acts[i]) : TEXT("-")), 320 * Sc, Y, (bSel && GM->bCapturing) ? FLinearColor(1.f, 0.5f, 0.2f) : White, Sc);
+		}
+		Text(TEXT("Yuqori/Pastga: qator   Enter: tugmani o'zgartirish   Esc: bekor / orqaga   (gamepad tugmalari o'zgarmaydi)"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
+		return;
+	}
 	static const TCHAR* LangNames[] = { TEXT("O'zbek"), TEXT("Türkçe"), TEXT("English") };
-	const FString Rows[3] = {
+	const FString Rows[4] = {
 		FString::Printf(TEXT("Til / Dil / Language:   < %s >"), LangNames[FMath::Clamp(GM->Language, 0, 2)]),
 		FString::Printf(TEXT("Sichqoncha sezgirligi / Mouse:   < %.1f >"), GM->MouseSens),
-		FString::Printf(TEXT("Y o'qini teskari / Invert Y:   < %s >"), GM->bInvertY ? TEXT("Ha / Yes") : TEXT("Yo'q / No")) };
-	for (int32 i = 0; i < 3; ++i)
+		FString::Printf(TEXT("Y o'qini teskari / Invert Y:   < %s >"), GM->bInvertY ? TEXT("Ha / Yes") : TEXT("Yo'q / No")),
+		TEXT("Tugmalar / Keys   >") };
+	for (int32 i = 0; i < 4; ++i)
 	{
 		const float Y = 110 * Sc + i * 34 * Sc;
 		if (i == GM->GetSettingsRow()) { FCanvasTileItem S(FVector2D(32 * Sc, Y - 4 * Sc), FVector2D(SW * 0.6f, 30 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.8f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }

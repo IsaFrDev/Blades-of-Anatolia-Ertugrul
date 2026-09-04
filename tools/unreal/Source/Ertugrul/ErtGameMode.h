@@ -100,6 +100,9 @@ public:
 	void HitStop(float Seconds, float Dilation = 0.12f);
 	int32 GetSettingsRow() const { return SettingsRow; }
 	void SettingsToggle();
+	int32 SettingsPage = 0, KeyRow = 0; bool bCapturing = false;   // 0 umumiy, 1 tugmalar
+	TMap<FString, FString> SavedKeys;
+	void ApplySavedKeys();
 	void SettingsMove(int32 Delta);
 	void SettingsAdjust(int32 Delta);
 	int32 Language = 0; float MouseSens = 1.f; bool bInvertY = false;

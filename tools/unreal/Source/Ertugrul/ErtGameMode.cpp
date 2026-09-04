@@ -206,6 +206,7 @@ void AErtGameMode::SaveGame()
 	R->SetNumberField(TEXT("language"), Language);
 	R->SetNumberField(TEXT("mouse_sens"), MouseSens);
 	R->SetBoolField(TEXT("invert_y"), bInvertY);
+	{ TSharedPtr<FJsonObject> KO = MakeShared<FJsonObject>(); for (const auto& P : SavedKeys) KO->SetStringField(P.Key, P.Value); R->SetObjectField(TEXT("keys"), KO); }
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
 		R->SetNumberField(TEXT("meat"), H->Meat); R->SetBoolField(TEXT("pelt"), H->bPeltArmor);
@@ -232,6 +233,7 @@ void AErtGameMode::LoadGame()
 		R->TryGetNumberField(TEXT("language"), Language);
 		double D = 1.0; if (R->TryGetNumberField(TEXT("mouse_sens"), D)) MouseSens = (float)D;
 		R->TryGetBoolField(TEXT("invert_y"), bInvertY);
+		{ const TSharedPtr<FJsonObject>* KO = nullptr; if (R->TryGetObjectField(TEXT("keys"), KO)) for (const auto& P : (*KO)->Values) SavedKeys.Add(FString(P.Key.ToView()), P.Value->AsString()); ApplySavedKeys(); }
 		if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 		{
 			int32 V = 0;
@@ -273,6 +275,24 @@ void AErtGameMode::SetTimeOfDay(const FString& Name)
 void AErtGameMode::Tick(float Dt)
 {
 	Super::Tick(Dt);
+	if (bCapturing)
+	{
+		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+		AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+		if (PC && H)
+		{
+			TArray<FKey> All; EKeys::GetAllKeys(All);
+			for (const FKey& K : All)
+			{
+				if (K.IsGamepadKey() || K.IsAxis1D() || K.IsAxis2D() || K.IsAxis3D() || K.IsTouch() || !PC->WasInputKeyJustPressed(K)) continue;
+				if (K == EKeys::Escape) { bCapturing = false; break; }
+				const FString Act = AErtCharacter::BindableActions()[KeyRow];
+				H->SetBinding(Act, K); SavedKeys.Add(Act, K.GetFName().ToString());
+				bCapturing = false; SaveGame();
+				break;
+			}
+		}
+	}
 	DayT = FMath::Fmod(DayT + Dt / DayLength, 1.f);
 	ShopMsgT = FMath::Max(0.f, ShopMsgT - Dt);
 	if (!Sun) return;
@@ -337,10 +357,32 @@ void AErtGameMode::HitStop(float Seconds, float Dilation)
 	GetWorldTimerManager().SetTimer(Th, [this]() { UGameplayStatics::SetGlobalTimeDilation(this, 1.f); }, Seconds * Dilation, false);
 }
 
-void AErtGameMode::SettingsMove(int32 Delta) { SettingsRow = (SettingsRow + Delta + 3) % 3; }
+void AErtGameMode::SettingsMove(int32 Delta)
+{
+	if (bCapturing) return;
+	if (SettingsPage == 1) { const int32 N = AErtCharacter::BindableActions().Num() + 1; KeyRow = (KeyRow + Delta + N) % N; return; }
+	SettingsRow = (SettingsRow + Delta + 4) % 4;
+}
+
+void AErtGameMode::ApplySavedKeys()
+{
+	AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+	if (!H) return;
+	for (const auto& P : SavedKeys) { const FKey K(*P.Value); if (K.IsValid()) H->Bindings.Add(P.Key, K); }
+	H->ApplyBindings();
+}
 
 void AErtGameMode::SettingsAdjust(int32 Delta)
 {
+	if (bCapturing) return;
+	if (SettingsPage == 1)
+	{
+		const TArray<FString>& Acts = AErtCharacter::BindableActions();
+		if (KeyRow >= Acts.Num()) { SettingsPage = 0; return; }   // "Orqaga"
+		bCapturing = true;                                       // keyingi bosilgan tugma
+		return;
+	}
+	if (SettingsRow == 3) { SettingsPage = 1; KeyRow = 0; return; }
 	if (SettingsRow == 0) { Language = (Language + Delta + 3) % 3; FErtLoc::Get().SetLanguage(Language); }
 	else if (SettingsRow == 1) { MouseSens = FMath::Clamp(MouseSens + Delta * 0.1f, 0.2f, 3.f); GErtMouseSens = MouseSens; }
 	else { bInvertY = !bInvertY; GErtInvertY = bInvertY; }
@@ -356,7 +398,7 @@ void AErtGameMode::MenuToggle()
 	case EErtMenu::Main: break;
 	case EErtMenu::Pause: OpenMenu(EErtMenu::None); break;
 	case EErtMenu::Map: case EErtMenu::Inventory: OpenMenu(EErtMenu::None); break;
-	case EErtMenu::Settings: SaveGame(); OpenMenu(Prev == EErtMenu::None ? EErtMenu::Pause : Prev); break;
+	case EErtMenu::Settings: if (bCapturing) { bCapturing = false; break; } if (SettingsPage == 1) { SettingsPage = 0; break; } SaveGame(); OpenMenu(Prev == EErtMenu::None ? EErtMenu::Pause : Prev); break;
 	case EErtMenu::Episodes: OpenMenu(Prev == EErtMenu::None ? (bEpisodeStarted ? EErtMenu::Pause : EErtMenu::Main) : Prev); break;
 	}
 }

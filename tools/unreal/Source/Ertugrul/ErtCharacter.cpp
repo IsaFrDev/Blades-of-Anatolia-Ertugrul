@@ -639,6 +639,54 @@ void AErtCharacter::BuildInput()
 	Map(IA_Kick, EKeys::V); Map(IA_Kick, EKeys::Gamepad_RightTrigger);
 }
 
+const TArray<FString>& AErtCharacter::BindableActions()
+{
+	static const TArray<FString> A = { TEXT("Jump"), TEXT("Sprint"), TEXT("Crouch"), TEXT("Walk"), TEXT("Attack"), TEXT("Block"), TEXT("Shoot"), TEXT("Interact"), TEXT("Dodge"), TEXT("Lock"), TEXT("Kick"), TEXT("Inventory"), TEXT("Potion"), TEXT("Map"), TEXT("Settings") };
+	return A;
+}
+
+UInputAction* AErtCharacter::ActionByName(const FString& N) const
+{
+	if (N == TEXT("Jump")) return IA_Jump; if (N == TEXT("Sprint")) return IA_Sprint; if (N == TEXT("Crouch")) return IA_Crouch; if (N == TEXT("Walk")) return IA_Walk;
+	if (N == TEXT("Attack")) return IA_Attack; if (N == TEXT("Block")) return IA_Block; if (N == TEXT("Shoot")) return IA_Shoot; if (N == TEXT("Interact")) return IA_Interact;
+	if (N == TEXT("Dodge")) return IA_Dodge; if (N == TEXT("Lock")) return IA_Lock; if (N == TEXT("Kick")) return IA_Kick; if (N == TEXT("Inventory")) return IA_Inventory;
+	if (N == TEXT("Potion")) return IA_Potion; if (N == TEXT("Map")) return IA_Map; if (N == TEXT("Settings")) return IA_Settings;
+	return nullptr;
+}
+
+FString AErtCharacter::GetBindingName(const FString& Action) const
+{
+	if (const FKey* K = Bindings.Find(Action)) return K->GetDisplayName().ToString();
+	UInputAction* A = ActionByName(Action);
+	if (!A || !IMC) return TEXT("-");
+	for (const FEnhancedActionKeyMapping& M : IMC->GetMappings()) if (M.Action == A && !M.Key.IsGamepadKey()) return M.Key.GetDisplayName().ToString();
+	return TEXT("-");
+}
+
+void AErtCharacter::SetBinding(const FString& Action, const FKey& Key)
+{
+	if (Key.IsGamepadKey() || !Key.IsValid()) return;
+	Bindings.Add(Action, Key);
+	ApplyBindings();
+}
+
+void AErtCharacter::ApplyBindings()
+{
+	if (!IMC) return;
+	for (const auto& P : Bindings)
+	{
+		UInputAction* A = ActionByName(P.Key);
+		if (!A) continue;
+		// Klaviatura/sichqoncha xaritalarini olib tashlab, yangisini qo'yamiz (gamepad qoladi)
+		TArray<FKey> Old;
+		for (const FEnhancedActionKeyMapping& M : IMC->GetMappings()) if (M.Action == A && !M.Key.IsGamepadKey()) Old.Add(M.Key);
+		for (const FKey& K : Old) IMC->UnmapKey(A, K);
+		IMC->MapKey(A, P.Value);
+	}
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		if (UEnhancedInputLocalPlayerSubsystem* Sub = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer())) Sub->RequestRebuildControlMappings();
+}
+
 void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); } }
 void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); } }
 void AErtCharacter::OnInventory() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleInventory(); }
@@ -787,6 +835,7 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_MenuRight, ETriggerEvent::Started, this, &AErtCharacter::OnMenuRight);
 	EIC->BindAction(IA_Settings, ETriggerEvent::Started, this, &AErtCharacter::OnSettings);
 	EIC->BindAction(IA_Map, ETriggerEvent::Started, this, &AErtCharacter::OnMap);
+	ApplyBindings();
 	EIC->BindAction(IA_Lock, ETriggerEvent::Started, this, &AErtCharacter::OnLock);
 	EIC->BindAction(IA_Dodge, ETriggerEvent::Started, this, &AErtCharacter::OnDodge);
 	EIC->BindAction(IA_Inventory, ETriggerEvent::Started, this, &AErtCharacter::OnInventory);
