@@ -30,6 +30,7 @@ namespace ErtMap
 	constexpr float HalabE = 800.f, HalabN = 120.f, HalabR = 130.f, HalabZ = 14.f, HalabMoundR = 42.f, HalabMoundH = 24.f;   // Halab
 	constexpr float KonE = 120.f, KonN = 480.f, KonR = 150.f, KonZ = 12.f, KonHillR = 55.f, KonHillH = 9.f;   // Konya
 	constexpr float KayE = 450.f, KayN = 100.f, KayR = 125.f, KayZ = 13.f, ErcE = 470.f, ErcN = -150.f, ErcR = 130.f, ErcH = 120.f;   // Qayseri va Erciyes
+	constexpr float SivE = -180.f, SivN = 400.f, SivR = 120.f, SivZ = 13.f, SivHillR = 40.f, SivHillH = 8.f;   // Sivas (qal'a tepaligi shimolda)
 }
 
 UCLASS()
@@ -82,6 +83,7 @@ private:
 	void BuildHalab();
 	void BuildKonya();
 	void BuildKayseri();
+	void BuildSivas();
 	void AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S);
 	void BuildForest();
 	void BuildRocks();

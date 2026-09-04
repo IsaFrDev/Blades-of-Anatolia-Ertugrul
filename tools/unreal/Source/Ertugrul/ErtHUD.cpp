@@ -482,6 +482,7 @@ void AErtHUD::DrawMapArea(float X0, float Y0, float S, float CE, float CN, float
 	Mark(HalabE, HalabN, HalabR, TEXT("Halab"), Ink);
 	Mark(KonE, KonN, KonR, TEXT("Konya"), Ink);
 	Mark(KayE, KayN, KayR, TEXT("Qayseri"), Ink);
+	Mark(SivE, SivN, SivR, TEXT("Sivas"), Ink);
 	Mark(ErcE, ErcN, 40.f, TEXT("Erciyes"), Ink);
 	// Maqsad markerlari
 	if (D)

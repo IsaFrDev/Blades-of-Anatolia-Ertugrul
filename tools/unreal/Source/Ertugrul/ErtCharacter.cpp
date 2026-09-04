@@ -513,13 +513,15 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(25.0f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
 	if (At(26.6f)) TakeShot(TEXT("oasis"));
 	if (At(26.62f)) Teleport(720.f, -1000.f, 11.f + 45.f, -18.f, 0.f);
-	if (At(27.2f)) TakeShot(TEXT("damascus"));
-	if (At(27.22f)) Teleport(965.f, 120.f, 14.f + 60.f, -20.f, -90.f);
-	if (At(27.8f)) TakeShot(TEXT("halab"));
-	if (At(27.82f)) Teleport(310.f, 480.f, 12.f + 55.f, -18.f, -90.f);
-	if (At(28.4f)) TakeShot(TEXT("konya"));
-	if (At(28.42f)) Teleport(260.f, 100.f, 13.f + 55.f, -18.f, 90.f);
-	if (At(28.98f)) TakeShot(TEXT("kayseri"));
+	if (At(27.1f)) TakeShot(TEXT("damascus"));
+	if (At(27.12f)) Teleport(965.f, 120.f, 14.f + 60.f, -20.f, -90.f);
+	if (At(27.6f)) TakeShot(TEXT("halab"));
+	if (At(27.62f)) Teleport(310.f, 480.f, 12.f + 55.f, -18.f, -90.f);
+	if (At(28.1f)) TakeShot(TEXT("konya"));
+	if (At(28.12f)) Teleport(260.f, 100.f, 13.f + 55.f, -18.f, 90.f);
+	if (At(28.55f)) TakeShot(TEXT("kayseri"));
+	if (At(28.57f)) Teleport(-180.f, 220.f, 13.f + 55.f, -18.f, 0.f);
+	if (At(28.98f)) TakeShot(TEXT("sivas"));
 	if (At(29.0f))
 	{
 		// Suzish sinovi: ko'lga tushiriladi

@@ -249,3 +249,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Erciyes: relyefda vulqon konusi (E=470, N=-150, R=130 m, 120 m baland), bazalt qoya rangi, cho'qqisi qorli; daraxt/qoya qo'yilmaydi.
 - Xarita: `Qayseri`, `Erciyes` belgilari; NPC joyi `kayseri` (Qayseri savdogari, subashi); `Kayseri` epizodlari g'arbiy darvoza oldidan boshlanadi. Yo'l (300,300) dan g'arbiy darvozaga.
 - Sinov skrinshoti: `19_kayseri`.
+
+## Sivas shahri
+
+- `BuildSivas()` (ErtWorldBuilder): shimoli-g'arbda (E=-180, N=400, R=120 m) Saljuq madrasalar shahri: 14 burchakli tosh devor, burjlar, janubiy va sharqiy darvozalar; shimolda past qal'a tepaligi (devor halqasi, burj, saroy); Go'k Madrasa (feruza koshinli portal, qo'sh minora), Chifte Minorali madrasa (baland fasad, qo'sh minora), Burujiya madrasasi, Ulu Jome' (keng past bino, qiyshaygan g'isht minora); yog'och soyabonli bozor, g'isht-tosh uylar, tollar. Yo'l (-300,250) dan janubiy darvozaga.
+- Xarita: `Sivas` belgisi; NPC joyi `sivas` (Sivas savdogari, Go'k Madrasa mudarrisi); `Sivas` epizodlari janubiy darvoza oldidan boshlanadi.
+- Sinov skrinshoti: `20_sivas`.

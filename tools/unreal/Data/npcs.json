@@ -374,6 +374,36 @@
     0.1
    ],
    "dialog": "ep013_talk"
+  },
+  {
+   "id": "sivas_savdogar",
+   "name": "chr.sivas_savdogar.name",
+   "place": "sivas",
+   "u": 9,
+   "v": -60,
+   "yaw": 90,
+   "woman": false,
+   "kaftan": [
+    0.45,
+    0.25,
+    0.15
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "sivas_mudarris",
+   "name": "chr.sivas_mudarris.name",
+   "place": "sivas",
+   "u": -36,
+   "v": 10,
+   "yaw": 0,
+   "woman": false,
+   "kaftan": [
+    0.85,
+    0.82,
+    0.75
+   ],
+   "dialog": "ep014_talk"
   }
  ]
 }
