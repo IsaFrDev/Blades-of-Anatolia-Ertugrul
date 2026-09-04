@@ -344,6 +344,36 @@
     0.2
    ],
    "dialog": "ep011_kopek"
+  },
+  {
+   "id": "kayseri_savdogar",
+   "name": "chr.kayseri_savdogar.name",
+   "place": "kayseri",
+   "u": -30,
+   "v": 9,
+   "yaw": 270,
+   "woman": false,
+   "kaftan": [
+    0.35,
+    0.2,
+    0.15
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "kayseri_hokimi",
+   "name": "chr.kayseri_hokimi.name",
+   "place": "kayseri",
+   "u": 20,
+   "v": -6,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.5,
+    0.1,
+    0.1
+   ],
+   "dialog": "ep013_talk"
   }
  ]
 }

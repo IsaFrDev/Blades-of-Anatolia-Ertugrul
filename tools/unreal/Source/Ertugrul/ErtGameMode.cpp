@@ -129,6 +129,7 @@ void AErtGameMode::SpawnNpcs()
 		else if (Place == TEXT("damascus")) { E = ErtMap::DamE; Nn = ErtMap::DamN; }
 		else if (Place == TEXT("halab")) { E = ErtMap::HalabE; Nn = ErtMap::HalabN; }
 		else if (Place == TEXT("konya")) { E = ErtMap::KonE; Nn = ErtMap::KonN; }
+		else if (Place == TEXT("kayseri")) { E = ErtMap::KayE; Nn = ErtMap::KayN; }
 		E += U; Nn += Vv;
 		const float X = Nn * 100.f, Y = E * 100.f;
 		FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtNpcGround), true);

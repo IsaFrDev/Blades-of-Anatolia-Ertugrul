@@ -242,3 +242,10 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `BuildKonya()` (ErtWorldBuilder): shimoliy-markazda (E=120, N=480, R=150 m) Saljuqiylar poytaxti: 24 burchakli devor, har burchakda kvadrat burj, sharqiy va g'arbiy darvozalar; markazda 9 m Aloiddin tepaligi (masjid, feruza gumbaz, kvadrat minora, chodir tomli saroy ko'shki, ichki devor); konus tomli kumbetlar, madrasa (portal, naqshli baland minora), karvonsaroy, bozor, sopol tomli ayvonli uylar, chinor xiyoboni. Yo'l (300,300) dan sharqiy darvozaga.
 - Xarita: `Konya` belgisi; NPC joyi `konya` (Konya savdogari, Sa'duddin Ko'pek); Konya/Kubadabad/Kayseri epizodlari sharqiy darvoza oldidan boshlanadi.
 - Sinov skrinshoti: `18_konya`.
+
+## Qayseri shahri va Erciyes
+
+- `BuildKayseri()` (ErtWorldBuilder): markaz-sharqda (E=450, N=100, R=125 m) qora bazalt shahar: 20 burchakli devor (oq choklar, kungura, yarim dumaloq burjlar), g'arbiy va shimoliy darvozalar; to'rtburchak ichki qo'rg'on (8 burj, saroy, qo'rg'oshin gumbaz); Hunat Xotun majmuasi (masjid, minora, madrasa, sakkiz qirrali kumbet); gumbazli yopiq bozor (bedesten); tekis tomli mo'rili uylar; teraklar.
+- Erciyes: relyefda vulqon konusi (E=470, N=-150, R=130 m, 120 m baland), bazalt qoya rangi, cho'qqisi qorli; daraxt/qoya qo'yilmaydi.
+- Xarita: `Qayseri`, `Erciyes` belgilari; NPC joyi `kayseri` (Qayseri savdogari, subashi); `Kayseri` epizodlari g'arbiy darvoza oldidan boshlanadi. Yo'l (300,300) dan g'arbiy darvozaga.
+- Sinov skrinshoti: `19_kayseri`.
