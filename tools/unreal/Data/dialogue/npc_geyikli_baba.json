@@ -1,0 +1,42 @@
+{
+ "id": "npc_geyikli_baba",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Geyikli Bobo hikmati",
+   "text_key": "DLG_SQ_GEYIKLI_WISDOM_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_GEYIKLI_WISDOM_OPT",
+     "next": "sq_sq_geyikli_wisdom",
+     "requires_evidence": "sq_avail_sq_geyikli_wisdom"
+    }
+   ]
+  },
+  "sq_sq_geyikli_wisdom": {
+   "speaker": "chr.geyikli_baba.name",
+   "text_key": "DLG_SQ_GEYIKLI_WISDOM_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_geyikli_wisdom",
+     "set_flag": "sq_start_sq_geyikli_wisdom"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_geyikli_wisdom"
+    }
+   ]
+  },
+  "sq_go_sq_geyikli_wisdom": {
+   "speaker": "chr.geyikli_baba.name",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_geyikli_wisdom": {
+   "speaker": "chr.geyikli_baba.name",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}

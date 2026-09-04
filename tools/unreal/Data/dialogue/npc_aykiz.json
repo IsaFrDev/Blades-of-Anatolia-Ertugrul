@@ -1,0 +1,42 @@
+{
+ "id": "npc_aykiz",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Oyqizning ko'z yoshi",
+   "text_key": "DLG_SQ_AYKIZ_TEARS_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_AYKIZ_TEARS_OPT",
+     "next": "sq_sq_aykiz_tears",
+     "requires_evidence": "sq_avail_sq_aykiz_tears"
+    }
+   ]
+  },
+  "sq_sq_aykiz_tears": {
+   "speaker": "chr.aykiz.name",
+   "text_key": "DLG_SQ_AYKIZ_TEARS_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_aykiz_tears",
+     "set_flag": "sq_start_sq_aykiz_tears"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_aykiz_tears"
+    }
+   ]
+  },
+  "sq_go_sq_aykiz_tears": {
+   "speaker": "chr.aykiz.name",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_aykiz_tears": {
+   "speaker": "chr.aykiz.name",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}

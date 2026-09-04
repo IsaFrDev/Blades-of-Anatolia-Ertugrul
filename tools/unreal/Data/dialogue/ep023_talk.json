@@ -1,0 +1,34 @@
+{
+ "id": "ep023_talk",
+ "start": "a",
+ "duel_threshold": 0,
+ "nodes": {
+  "a": {
+   "speaker": "Dundor",
+   "text_key": "DLG_T_CHASE_01",
+   "options": [
+    {
+     "text_key": "DLG_T_CHASE_GO",
+     "next": "b",
+     "honor": -1
+    },
+    {
+     "text_key": "DLG_T_CHASE_STAY",
+     "next": "c",
+     "honor": 4
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Dundor",
+   "text_key": "DLG_T_CHASE_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Dundor",
+   "text_key": "DLG_T_CHASE_03",
+   "next": "end",
+   "set_flag": "ep023_ally_saved"
+  }
+ }
+}

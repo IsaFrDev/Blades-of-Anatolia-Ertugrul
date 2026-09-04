@@ -1,0 +1,42 @@
+{
+ "id": "ep007_aziz",
+ "start": "a",
+ "duel_threshold": 2,
+ "nodes": {
+  "a": {
+   "speaker": "Al-Aziz Muhammad",
+   "text_key": "DLG_EP007_AZIZ_01",
+   "options": [
+    {
+     "text_key": "DLG_EP007_OPT_PROOF",
+     "next": "a",
+     "requires_evidence": "vizier_letter",
+     "duel_points": 1,
+     "honor": 2
+    },
+    {
+     "text_key": "DLG_EP007_OPT_WITNESS",
+     "next": "b",
+     "requires_evidence": "guard_witness",
+     "duel_points": 1,
+     "honor": 2
+    },
+    {
+     "text_key": "DLG_EP007_OPT_NONE",
+     "next": "c"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Al-Aziz Muhammad",
+   "text_key": "DLG_EP007_AZIZ_02",
+   "next": "end",
+   "set_flag": "aziz_ally"
+  },
+  "c": {
+   "speaker": "Al-Aziz Muhammad",
+   "text_key": "DLG_EP007_AZIZ_03",
+   "next": "end"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "id": "ep005_bamsi",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_EP005_BAMSI_01",
+   "options": [
+    {
+     "text_key": "DLG_EP005_OPT_GO",
+     "next": "b",
+     "honor": 2
+    },
+    {
+     "text_key": "DLG_EP005_OPT_REST",
+     "next": "c",
+     "honor": 1,
+     "set_flag": "camp_fire"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_EP005_BAMSI_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_EP005_BAMSI_03",
+   "next": "end"
+  }
+ }
+}

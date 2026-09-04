@@ -1,0 +1,33 @@
+{
+ "id": "ep010_turgut",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_EP010_TURGUT_01",
+   "options": [
+    {
+     "text_key": "DLG_EP010_OPT_CHASE",
+     "next": "b",
+     "honor": -1
+    },
+    {
+     "text_key": "DLG_EP010_OPT_STAY",
+     "next": "c",
+     "honor": 4,
+     "set_flag": "turgut_saved"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_EP010_TURGUT_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_EP010_TURGUT_03",
+   "next": "end"
+  }
+ }
+}

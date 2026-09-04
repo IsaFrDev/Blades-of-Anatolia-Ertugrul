@@ -1,0 +1,43 @@
+{
+ "id": "ep027_talk",
+ "start": "a",
+ "duel_threshold": 2,
+ "nodes": {
+  "a": {
+   "speaker": "Sulton Alauddin Kayqubod",
+   "text_key": "DLG_T_COURT_01",
+   "options": [
+    {
+     "text_key": "DLG_T_COURT_A",
+     "next": "a",
+     "honor": 2,
+     "requires_evidence": "ep027_clue_a",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_T_COURT_B",
+     "next": "w",
+     "honor": 2,
+     "requires_evidence": "ep027_clue_b",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_T_COURT_NONE",
+     "next": "l",
+     "honor": 0
+    }
+   ]
+  },
+  "w": {
+   "speaker": "Sulton Alauddin Kayqubod",
+   "text_key": "DLG_T_COURT_WIN",
+   "next": "end",
+   "set_flag": "ep027_court_won"
+  },
+  "l": {
+   "speaker": "Sulton Alauddin Kayqubod",
+   "text_key": "DLG_T_COURT_LOSE",
+   "next": "end"
+  }
+ }
+}

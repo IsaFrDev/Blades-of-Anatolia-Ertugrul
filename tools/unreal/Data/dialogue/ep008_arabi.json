@@ -1,0 +1,33 @@
+{
+ "id": "ep008_arabi",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Ibn Arabiy",
+   "text_key": "DLG_EP008_ARABI_01",
+   "options": [
+    {
+     "text_key": "DLG_EP008_OPT_JUSTICE",
+     "next": "b",
+     "honor": 6,
+     "set_flag": "arabi_blessing"
+    },
+    {
+     "text_key": "DLG_EP008_OPT_GLORY",
+     "next": "c",
+     "honor": -2
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Ibn Arabiy",
+   "text_key": "DLG_EP008_ARABI_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Ibn Arabiy",
+   "text_key": "DLG_EP008_ARABI_03",
+   "next": "end"
+  }
+ }
+}

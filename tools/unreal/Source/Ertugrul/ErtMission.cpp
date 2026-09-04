@@ -176,9 +176,56 @@ bool AErtMissionDirector::StartEpisode(const FString& Id)
 {
 	const FErtEpisode* E = UErtEpisodeDb::Get()->ById(Id);
 	if (!E) { UE_LOG(LogErtugrul, Warning, TEXT("Epizod topilmadi: %s"), *Id); return false; }
+	return StartEpisodeData(*E, AnchorFor(*E), nullptr);
+}
+
+TArray<AErtMissionDirector::FSideInfo> AErtMissionDirector::LoadSideQuests()
+{
+	TArray<FSideInfo> Out;
+	FString Text; TSharedPtr<FJsonObject> R;
+	if (!FFileHelper::LoadFileToString(Text, *(FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/sidequests.json"))) || !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), R) || !R.IsValid()) return Out;
+	const TArray<TSharedPtr<FJsonValue>>* Arr = nullptr;
+	if (!R->TryGetArrayField(TEXT("quests"), Arr)) return Out;
+	for (const auto& V : *Arr)
+	{
+		const TSharedPtr<FJsonObject> O = V->AsObject(); if (!O.IsValid()) continue;
+		FSideInfo S;
+		O->TryGetStringField(TEXT("id"), S.Id); O->TryGetStringField(TEXT("giver"), S.Giver); O->TryGetStringField(TEXT("title"), S.TitleKey); O->TryGetStringField(TEXT("done_key"), S.DoneKey);
+		O->TryGetNumberField(TEXT("xp"), S.XP); O->TryGetNumberField(TEXT("gold"), S.Gold); O->TryGetNumberField(TEXT("honor"), S.Honor);
+		Out.Add(S);
+	}
+	return Out;
+}
+
+bool AErtMissionDirector::StartSideQuest(const FString& QuestId)
+{
+	FString Text; TSharedPtr<FJsonObject> R;
+	if (!FFileHelper::LoadFileToString(Text, *(FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/sidequests.json"))) || !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), R) || !R.IsValid()) return false;
+	const TArray<TSharedPtr<FJsonValue>>* Arr = nullptr;
+	if (!R->TryGetArrayField(TEXT("quests"), Arr)) return false;
+	TSharedPtr<FJsonObject> Found;
+	for (const auto& V : *Arr) { const TSharedPtr<FJsonObject> O = V->AsObject(); FString Id; if (O.IsValid() && O->TryGetStringField(TEXT("id"), Id) && Id == QuestId) { Found = O; break; } }
+	if (!Found.IsValid()) return false;
+	AErtCharacter* H = Hero(); if (!H) return false;
+	FErtEpisode E; E.Id = QuestId; E.Archetype = TEXT("SIDE"); E.DifficultyTier = 2; E.MaxSimultaneous = 3;
+	Found->TryGetStringField(TEXT("title"), E.LocTitle);
+	Side = FSideInfo(); Side.Id = QuestId;
+	Found->TryGetStringField(TEXT("giver"), Side.Giver); Found->TryGetStringField(TEXT("done_key"), Side.DoneKey); Side.TitleKey = E.LocTitle;
+	Found->TryGetNumberField(TEXT("xp"), Side.XP); Found->TryGetNumberField(TEXT("gold"), Side.Gold); Found->TryGetNumberField(TEXT("honor"), Side.Honor);
+	const bool bOk = StartEpisodeData(E, GroundAt(H->GetActorLocation().X, H->GetActorLocation().Y), Found);
+	bSideQuest = bOk;
+	if (bOk) EpisodeTitle = FErtLoc::Get().Tr(TEXT("ui.hud.sidequest")) + TEXT(": ") + FErtLoc::Get().TrOr(E.LocTitle, QuestId);
+	return bOk;
+}
+
+bool AErtMissionDirector::StartEpisodeData(const FErtEpisode& EData, const FVector& Start, const TSharedPtr<FJsonObject>& PhaseOverride)
+{
+	const FErtEpisode* E = &EData;
 	AErtCharacter* H = Hero();
 	if (!H) return false;
 	StopEpisode();
+	bSideQuest = false;
+	PhaseOverrideObj = PhaseOverride;
 	EpisodeId = E->Id;
 	EpisodeTitle = UErtEpisodeDb::Get()->Title(*E);
 	EpisodeDate = E->Gregorian;
@@ -189,8 +236,7 @@ bool AErtMissionDirector::StartEpisode(const FString& Id)
 	Kills = 0; Deaths = 0;
 	Rng.Initialize(GetTypeHash(E->Id));
 
-	const FVector Start = AnchorFor(*E);
-	H->ResetAt(Start + FVector(0, 0, 100.f), 0.f);
+	if (!PhaseOverride.IsValid()) H->ResetAt(Start + FVector(0, 0, 100.f), 0.f);
 	Cursor = Start;
 	if (E->bHorse)
 	{
@@ -360,7 +406,7 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 		{
 			const TSharedPtr<FJsonObject>* EpO = nullptr;
 			const TArray<TSharedPtr<FJsonValue>>* Ph = nullptr;
-			if (R->TryGetObjectField(E.Id, EpO) && (*EpO)->TryGetArrayField(TEXT("phases"), Ph))
+			if ((PhaseOverrideObj.IsValid() && PhaseOverrideObj->TryGetArrayField(TEXT("phases"), Ph)) || (R->TryGetObjectField(E.Id, EpO) && (*EpO)->TryGetArrayField(TEXT("phases"), Ph)))
 				for (const auto& PV : *Ph)
 				{
 					const TSharedPtr<FJsonObject> O = PV->AsObject(); if (!O.IsValid()) continue;
@@ -671,6 +717,7 @@ void AErtMissionDirector::Tick(float Dt)
 			H->AddArrows(4);
 			H->Heal(25.f);
 			if (PhaseIdx + 1 < Phases.Num()) { StartPhase(PhaseIdx + 1); State = EErtMissionState::Fighting; StateT = 0.f; }
+			else if (bSideQuest) { State = EErtMissionState::Cleared; StateT = 0.f; H->AddXP(Side.XP); H->AddGold(Side.Gold); Cliffhanger = FErtLoc::Get().TrOr(Side.DoneKey, TEXT("")); if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->AddFlag(TEXT("sq_done_") + Side.Id); GM->RemoveFlag(TEXT("sq_avail_") + Side.Id); GM->AddHonor(Side.Honor); GM->SaveGame(); } NextEpisodeId.Reset(); }
 			else { State = EErtMissionState::Cleared; StateT = 0.f; H->AddXP(150); H->AddGold(40); SaveProgress(); UE_LOG(LogErtugrul, Log, TEXT("[Missiya] %s bajarildi: %d o'ldirildi, %d o'lim"), *EpisodeId, Kills, Deaths); }
 		}
 		break;
@@ -687,7 +734,7 @@ void AErtMissionDirector::Tick(float Dt)
 		if (StateT >= 3.5f) RestartFromCheckpoint();
 		break;
 	case EErtMissionState::Cleared:
-		if (StateT >= 16.f)
+		if (StateT >= (bSideQuest ? 6.f : 16.f))
 		{
 			if (!NextEpisodeId.IsEmpty()) StartEpisode(NextEpisodeId);
 			else StopEpisode();

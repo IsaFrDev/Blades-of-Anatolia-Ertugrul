@@ -1,0 +1,35 @@
+{
+ "id": "ep030_talk",
+ "start": "a",
+ "duel_threshold": 0,
+ "nodes": {
+  "a": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_T_DEF_01",
+   "options": [
+    {
+     "text_key": "DLG_T_DEF_GATE",
+     "next": "b",
+     "honor": 1
+    },
+    {
+     "text_key": "DLG_T_DEF_SPREAD",
+     "next": "c",
+     "honor": 2
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_T_DEF_02",
+   "next": "end",
+   "set_flag": "ep030_defend_gate"
+  },
+  "c": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_T_DEF_03",
+   "next": "end",
+   "set_flag": "ep030_defend_spread"
+  }
+ }
+}

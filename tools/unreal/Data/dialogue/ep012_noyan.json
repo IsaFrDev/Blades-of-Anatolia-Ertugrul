@@ -1,0 +1,34 @@
+{
+ "id": "ep012_noyan",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "No'yon",
+   "text_key": "DLG_EP012_NOYAN_01",
+   "options": [
+    {
+     "text_key": "DLG_EP012_OPT_REFUSE",
+     "next": "b",
+     "honor": 5,
+     "set_flag": "siege_defied"
+    },
+    {
+     "text_key": "DLG_EP012_OPT_TIME",
+     "next": "c",
+     "honor": 0,
+     "set_flag": "siege_delay"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "No'yon",
+   "text_key": "DLG_EP012_NOYAN_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "No'yon",
+   "text_key": "DLG_EP012_NOYAN_03",
+   "next": "end"
+  }
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "id": "ep004_father",
+ "start": "a",
+ "duel_threshold": 1,
+ "nodes": {
+  "a": {
+   "speaker": "Sulaymon Shoh",
+   "text_key": "DLG_EP004_SHAH_01",
+   "options": [
+    {
+     "text_key": "DLG_EP004_OPT_LETTER",
+     "next": "b",
+     "requires_evidence": "father_letter",
+     "duel_points": 1,
+     "honor": 3
+    },
+    {
+     "text_key": "DLG_EP004_OPT_SEAL",
+     "next": "b",
+     "requires_evidence": "tribe_seal",
+     "duel_points": 1,
+     "honor": 3
+    },
+    {
+     "text_key": "DLG_EP004_OPT_NOTHING",
+     "next": "c"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Sulaymon Shoh",
+   "text_key": "DLG_EP004_SHAH_02",
+   "next": "end",
+   "set_flag": "father_convinced"
+  },
+  "c": {
+   "speaker": "Sulaymon Shoh",
+   "text_key": "DLG_EP004_SHAH_03",
+   "next": "end"
+  }
+ }
+}

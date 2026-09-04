@@ -474,6 +474,19 @@ void AErtHUD::DrawMap(float SW, float SH, float Sc)
 		Text(D->GetPhaseTitle(), 24 * Sc, Y, FLinearColor(1.f, 0.85f, 0.35f), 1.1f * Sc, true, true); Y += 26 * Sc;
 		for (const FErtObjective& O : D->GetObjectives()) { Text(O.Text(), 24 * Sc, Y, O.bDone ? FLinearColor(0.5f, 0.9f, 0.4f) : FLinearColor(0.95f, 0.95f, 0.9f), 0.95f * Sc); Y += 20 * Sc; }
 	}
+	{
+		// Yon kvestlar jurnali (o'ng ustun)
+		float QY = 44 * Sc; const float QX = SW - 300 * Sc;
+		Text(FErtLoc::Get().Tr(TEXT("ui.hud.quests")), QX, QY, FLinearColor(1.f, 0.85f, 0.35f), 1.1f * Sc, true, true); QY += 26 * Sc;
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+			for (const AErtMissionDirector::FSideInfo& Sq : AErtMissionDirector::LoadSideQuests())
+			{
+				const bool bDone = GM->HasFlag(TEXT("sq_done_") + Sq.Id);
+				const bool bActive = D && D->IsSideQuest() && D->GetEpisodeId() == Sq.Id && D->GetState() != EErtMissionState::Inactive;
+				const FString Mark = bDone ? TEXT("[x] ") : (bActive ? TEXT("[>] ") : TEXT("[ ] "));
+				Text(Mark + FErtLoc::Get().TrOr(Sq.TitleKey, Sq.Id), QX, QY, bDone ? FLinearColor(0.5f, 0.9f, 0.4f) : (bActive ? FLinearColor(1.f, 0.85f, 0.35f) : FLinearColor(0.95f, 0.95f, 0.9f)), 0.9f * Sc); QY += 19 * Sc;
+			}
+	}
 	Text(TEXT("XARITA   (M yoki Esc: yopish)   yashil - siz, oltin - maqsad, qizil - dushman, ko'k - odamlar"), 24 * Sc, SH - 28 * Sc, FLinearColor(0.6f, 0.6f, 0.55f), 0.9f * Sc);
 }
 

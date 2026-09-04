@@ -1,0 +1,42 @@
+{
+ "id": "npc_artuk_bey",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Artuq Beyning dorixonasi",
+   "text_key": "DLG_SQ_ARTUK_APOTHECARY_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ARTUK_APOTHECARY_OPT",
+     "next": "sq_sq_artuk_apothecary",
+     "requires_evidence": "sq_avail_sq_artuk_apothecary"
+    }
+   ]
+  },
+  "sq_sq_artuk_apothecary": {
+   "speaker": "chr.artuk_bey.name",
+   "text_key": "DLG_SQ_ARTUK_APOTHECARY_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_artuk_apothecary",
+     "set_flag": "sq_start_sq_artuk_apothecary"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_artuk_apothecary"
+    }
+   ]
+  },
+  "sq_go_sq_artuk_apothecary": {
+   "speaker": "chr.artuk_bey.name",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_artuk_apothecary": {
+   "speaker": "chr.artuk_bey.name",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}

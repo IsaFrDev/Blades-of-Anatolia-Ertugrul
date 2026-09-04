@@ -52,6 +52,9 @@ public:
 	int32 GetHonor() const { return Honor; }
 	const TSet<FString>& GetFlags() const { return Flags; }
 	void AddFlag(const FString& F) { Flags.Add(F); }
+	void RemoveFlag(const FString& F) { Flags.Remove(F); }
+	void AddHonor(int32 N) { Honor += N; }
+	void RefreshSideQuestFlags();
 	bool HasFlag(const FString& F) const { return Flags.Contains(F); }
 	/** Oxirgi tugagan dialog (missiya maqsadlari uchun) */
 	FString ShopMsg; float ShopMsgT = 0.f;

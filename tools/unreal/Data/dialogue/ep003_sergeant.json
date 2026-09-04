@@ -1,0 +1,35 @@
+{
+ "id": "ep003_sergeant",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Templar serjanti",
+   "text_key": "DLG_EP003_SGT_01",
+   "options": [
+    {
+     "text_key": "DLG_EP003_ERT_ASK",
+     "next": "b",
+     "honor": -2
+    },
+    {
+     "text_key": "DLG_EP003_ERT_MERCY",
+     "next": "c",
+     "honor": 5,
+     "set_flag": "sergeant_mercy"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Templar serjanti",
+   "text_key": "DLG_EP003_SGT_02",
+   "next": "end",
+   "set_flag": "titus_named"
+  },
+  "c": {
+   "speaker": "Templar serjanti",
+   "text_key": "DLG_EP003_SGT_03",
+   "next": "end",
+   "set_flag": "titus_named"
+  }
+ }
+}

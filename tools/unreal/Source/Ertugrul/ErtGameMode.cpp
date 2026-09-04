@@ -108,6 +108,7 @@ void AErtGameMode::SpawnNpcs()
 		if (Place == TEXT("city")) { E = ErtMap::CityE; Nn = ErtMap::CityN; }
 		else if (Place == TEXT("caravan")) { E = ErtMap::CaravanE; Nn = ErtMap::CaravanN; }
 		else if (Place == TEXT("camp")) { E = ErtMap::CampE; Nn = ErtMap::CampN; }
+		else if (Place == TEXT("forest")) { E = -330.f; Nn = 700.f; }
 		E += U; Nn += Vv;
 		const float X = Nn * 100.f, Y = E * 100.f;
 		FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtNpcGround), true);
@@ -117,6 +118,15 @@ void AErtGameMode::SpawnNpcs()
 		if (Npc) { Npc->Setup(Id, Name, Dlg, bWoman, Kaftan, Yaw); ++N; }
 	}
 	UE_LOG(LogErtugrul, Log, TEXT("NPC: %d"), N);
+}
+
+void AErtGameMode::RefreshSideQuestFlags()
+{
+	for (const AErtMissionDirector::FSideInfo& S : AErtMissionDirector::LoadSideQuests())
+	{
+		if (Flags.Contains(TEXT("sq_done_") + S.Id)) Flags.Remove(TEXT("sq_avail_") + S.Id);
+		else Flags.Add(TEXT("sq_avail_") + S.Id);
+	}
 }
 
 void AErtGameMode::StartDialog(AErtNpc* Npc)
@@ -153,6 +163,19 @@ void AErtGameMode::EndDialog()
 			else ShopMsg = TEXT("Oltin yetarli emas");
 			ShopMsgT = 3.f;
 		};
+		// Yon kvestni boshlash
+		TArray<FString> ToStart;
+		for (const FString& F : Flags) if (F.StartsWith(TEXT("sq_start_"))) ToStart.Add(F);
+		for (const FString& F : ToStart)
+		{
+			Flags.Remove(F);
+			const FString Qid = F.Mid(9);
+			if (Director && !Director->IsSideQuest() && (Director->GetState() == EErtMissionState::Inactive || Director->GetState() == EErtMissionState::Cleared))
+			{
+				if (Director->StartSideQuest(Qid)) { Flags.Remove(TEXT("sq_avail_") + Qid); bEpisodeStarted = true; }
+			}
+			else { ShopMsg = TEXT("Avval joriy missiyani tugating"); ShopMsgT = 3.f; }
+		}
 		Buy(TEXT("buy_potion"), 15, [&]() { H->Potions += 1; });
 		Buy(TEXT("buy_arrows"), 10, [&]() { H->AddArrows(8); });
 		Buy(TEXT("buy_shield"), 60, [&]() { H->bShield = true; H->ApplyEquipment(); });
@@ -222,6 +245,7 @@ void AErtGameMode::LoadGame()
 	if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectSavedDir() / TEXT("ert_progress.txt")))) { TArray<FString> L; Text.ParseIntoArrayLines(L); for (const FString& S : L) Completed.AddUnique(S); }
 	FErtLoc::Get().SetLanguage(Language);
 	GErtMouseSens = MouseSens; GErtInvertY = bInvertY;
+	RefreshSideQuestFlags();
 }
 
 void AErtGameMode::SetWeather(const FString& Name) { if (Weather) Weather->SetWeather(Name); }

@@ -1,0 +1,35 @@
+{
+ "id": "ep013_talk",
+ "start": "a",
+ "duel_threshold": 0,
+ "nodes": {
+  "a": {
+   "speaker": "Mo'g'ul chavandozi",
+   "text_key": "DLG_T_SIEGE_01",
+   "options": [
+    {
+     "text_key": "DLG_T_SIEGE_REFUSE",
+     "next": "b",
+     "honor": 5
+    },
+    {
+     "text_key": "DLG_T_SIEGE_TIME",
+     "next": "c",
+     "honor": 0
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Mo'g'ul chavandozi",
+   "text_key": "DLG_T_SIEGE_02",
+   "next": "end",
+   "set_flag": "ep013_siege_defied"
+  },
+  "c": {
+   "speaker": "Mo'g'ul chavandozi",
+   "text_key": "DLG_T_SIEGE_03",
+   "next": "end",
+   "set_flag": "ep013_siege_delay"
+  }
+ }
+}

@@ -61,6 +61,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ertugrul") void StopEpisode();
 	/** Epizod boshlanadigan joy (dunyo, sm) - kat-sahna sahnasi uchun ham */
 	FVector GetAnchor(const FString& InEpisodeId) const;
+	/** Yon kvest (sidequests.json): o'yinchi turgan joydan boshlanadi */
+	bool StartSideQuest(const FString& QuestId);
+	bool IsSideQuest() const { return bSideQuest; }
+	struct FSideInfo { FString Id, Giver, TitleKey, DoneKey; int32 XP = 0, Gold = 0, Honor = 0; };
+	static TArray<FSideInfo> LoadSideQuests();
 
 	// HUD uchun
 	EErtMissionState GetState() const { return State; }
@@ -114,6 +119,9 @@ private:
 	EErtMissionState State = EErtMissionState::Inactive;
 	FString EpisodeId, EpisodeTitle, EpisodeDate, IntroText, PhaseTitle, NextEpisodeId, CpName, Cliffhanger;
 	int32 Kills = 0, Deaths = 0;
+	bool bSideQuest = false; FSideInfo Side;
+	bool StartEpisodeData(const FErtEpisode& E, const FVector& Start, const TSharedPtr<class FJsonObject>& PhaseOverride);
+	TSharedPtr<class FJsonObject> PhaseOverrideObj;
 	FRandomStream Rng;
 	FVector Cursor = FVector::ZeroVector;
 

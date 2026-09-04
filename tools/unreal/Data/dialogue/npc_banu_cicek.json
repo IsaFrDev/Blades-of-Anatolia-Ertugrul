@@ -1,0 +1,42 @@
+{
+ "id": "npc_banu_cicek",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Go'nchagulning tuzog'i",
+   "text_key": "DLG_SQ_GONCAGUL_TRAP_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_GONCAGUL_TRAP_OPT",
+     "next": "sq_sq_goncagul_trap",
+     "requires_evidence": "sq_avail_sq_goncagul_trap"
+    }
+   ]
+  },
+  "sq_sq_goncagul_trap": {
+   "speaker": "chr.banu_cicek.name",
+   "text_key": "DLG_SQ_GONCAGUL_TRAP_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_goncagul_trap",
+     "set_flag": "sq_start_sq_goncagul_trap"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_goncagul_trap"
+    }
+   ]
+  },
+  "sq_go_sq_goncagul_trap": {
+   "speaker": "chr.banu_cicek.name",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_goncagul_trap": {
+   "speaker": "chr.banu_cicek.name",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}

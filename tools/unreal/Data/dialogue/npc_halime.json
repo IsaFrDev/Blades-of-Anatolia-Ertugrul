@@ -1,0 +1,16 @@
+{
+ "id": "npc_halime",
+ "start": "n0",
+ "nodes": {
+  "n0": {
+   "speaker": "Halima Sulton",
+   "text_key": "DLG_NPC_HALIME_01",
+   "next": "n1"
+  },
+  "n1": {
+   "speaker": "Halima Sulton",
+   "text_key": "DLG_NPC_HALIME_02",
+   "next": "end"
+  }
+ }
+}

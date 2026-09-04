@@ -1,0 +1,34 @@
+{
+ "id": "ep034_talk",
+ "start": "a",
+ "duel_threshold": 0,
+ "nodes": {
+  "a": {
+   "speaker": "Hoji Bektosh",
+   "text_key": "DLG_T_RIT_01",
+   "options": [
+    {
+     "text_key": "DLG_T_RIT_SWORD",
+     "next": "b",
+     "honor": 1
+    },
+    {
+     "text_key": "DLG_T_RIT_PATIENCE",
+     "next": "c",
+     "honor": 5
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Hoji Bektosh",
+   "text_key": "DLG_T_RIT_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Hoji Bektosh",
+   "text_key": "DLG_T_RIT_03",
+   "next": "end",
+   "set_flag": "ep034_blessing"
+  }
+ }
+}

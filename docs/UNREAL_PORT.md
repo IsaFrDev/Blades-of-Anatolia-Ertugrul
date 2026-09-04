@@ -144,6 +144,15 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
   og'ir zarba oldidan "OG'IR ZARBA - DODGE (X)!".
 - Patch skriptlarida qo'shish-turidagi almashtirishlar takrorlanib qolmasligi uchun `rep` avval `b in s` ni tekshirsin (bir marta duplikatlar chiqdi, mirror'dan tiklandi).
 
+## Yon kvestlar
+- `sidequests.json`: `episodes.json` dagi 11 yon kvest (Oyqiz, Ibn Arabiy, Deli Demir, Gundo'g'di, Afshin Bey, Selchan, Banu Chichek,
+  Geyikli Bobo, Artuq Bey, Dundor, Hamza) - har biri beruvchi NPC, bosqichlar (missions.json formati), mukofot (XP, oltin, or/iymon).
+- Beruvchi NPC dialogida "Kvest: ..." varianti (`requires_evidence: sq_avail_<id>` - bajarilmagan bo'lsa ko'rinadi), qabul qilinsa
+  `sq_start_<id>` bayrog'i -> EndDialog -> `StartSideQuest` (o'yinchi turgan joydan, teleportsiz; faqat epizod faol bo'lmaganda).
+  Tugagach: mukofot, `sq_done_<id>`, beruvchining yakuniy so'zi cliffhanger o'rnida (6 s), keyingi epizod yo'q.
+- 9 yangi NPC (jami 17), yangi joy: forest (-330, 700). Xarita (M) o'ng ustunida kvest jurnali: [ ] mavjud, [>] faol, [x] bajarilgan.
+- `StartEpisode` -> `StartEpisodeData(E, Start, PhaseOverride)` ga ajratildi; override JSON obyekti bo'lsa missions.json o'rniga u ishlatiladi.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

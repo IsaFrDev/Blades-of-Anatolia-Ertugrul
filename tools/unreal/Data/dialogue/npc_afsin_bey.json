@@ -1,0 +1,42 @@
+{
+ "id": "npc_afsin_bey",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Eftelyaning izi",
+   "text_key": "DLG_SQ_TRAIL_OF_EFTELYA_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_TRAIL_OF_EFTELYA_OPT",
+     "next": "sq_sq_trail_of_eftelya",
+     "requires_evidence": "sq_avail_sq_trail_of_eftelya"
+    }
+   ]
+  },
+  "sq_sq_trail_of_eftelya": {
+   "speaker": "chr.afsin_bey.name",
+   "text_key": "DLG_SQ_TRAIL_OF_EFTELYA_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_trail_of_eftelya",
+     "set_flag": "sq_start_sq_trail_of_eftelya"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_trail_of_eftelya"
+    }
+   ]
+  },
+  "sq_go_sq_trail_of_eftelya": {
+   "speaker": "chr.afsin_bey.name",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_trail_of_eftelya": {
+   "speaker": "chr.afsin_bey.name",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}

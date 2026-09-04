@@ -1,0 +1,46 @@
+{
+ "id": "ep006_turgut",
+ "start": "a",
+ "duel_threshold": 2,
+ "nodes": {
+  "a": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_EP006_TURGUT_01",
+   "options": [
+    {
+     "text_key": "DLG_EP006_OPT_TRACKS",
+     "next": "a",
+     "requires_evidence": "tracks",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_EP006_OPT_CLOTH",
+     "next": "a",
+     "requires_evidence": "torn_cloth",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_EP006_OPT_DAGGER",
+     "next": "b",
+     "requires_evidence": "dagger",
+     "duel_points": 2,
+     "set_flag": "kopek_suspected"
+    },
+    {
+     "text_key": "DLG_EP006_OPT_NONE",
+     "next": "c"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_EP006_TURGUT_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_EP006_TURGUT_03",
+   "next": "end"
+  }
+ }
+}

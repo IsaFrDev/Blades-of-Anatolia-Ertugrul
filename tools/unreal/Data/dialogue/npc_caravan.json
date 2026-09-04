@@ -1,0 +1,16 @@
+{
+ "id": "npc_caravan",
+ "start": "n0",
+ "nodes": {
+  "n0": {
+   "speaker": "Karvonboshi Umar",
+   "text_key": "DLG_NPC_CARAVAN_01",
+   "next": "n1"
+  },
+  "n1": {
+   "speaker": "Karvonboshi Umar",
+   "text_key": "DLG_NPC_CARAVAN_02",
+   "next": "end"
+  }
+ }
+}

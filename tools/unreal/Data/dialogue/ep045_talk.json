@@ -1,0 +1,43 @@
+{
+ "id": "ep045_talk",
+ "start": "a",
+ "duel_threshold": 2,
+ "nodes": {
+  "a": {
+   "speaker": "Dog'on Alp",
+   "text_key": "DLG_T_INV_01",
+   "options": [
+    {
+     "text_key": "DLG_T_INV_A",
+     "next": "a",
+     "honor": 0,
+     "requires_evidence": "ep045_clue_a",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_T_INV_B",
+     "next": "w",
+     "honor": 0,
+     "requires_evidence": "ep045_clue_b",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_T_COURT_NONE",
+     "next": "l",
+     "honor": 0
+    }
+   ]
+  },
+  "w": {
+   "speaker": "Dog'on Alp",
+   "text_key": "DLG_T_INV_WIN",
+   "next": "end",
+   "set_flag": "ep045_case_solved"
+  },
+  "l": {
+   "speaker": "Dog'on Alp",
+   "text_key": "DLG_T_INV_LOSE",
+   "next": "end"
+  }
+ }
+}

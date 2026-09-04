@@ -1,0 +1,16 @@
+{
+ "id": "npc_bamsi",
+ "start": "n0",
+ "nodes": {
+  "n0": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_NPC_BAMSI_01",
+   "next": "n1"
+  },
+  "n1": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_NPC_BAMSI_02",
+   "next": "end"
+  }
+ }
+}

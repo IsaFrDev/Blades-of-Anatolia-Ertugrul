@@ -1,0 +1,34 @@
+{
+ "id": "ep018_talk",
+ "start": "a",
+ "duel_threshold": 0,
+ "nodes": {
+  "a": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_T_SURV_01",
+   "options": [
+    {
+     "text_key": "DLG_T_SURV_PUSH",
+     "next": "b",
+     "honor": 2
+    },
+    {
+     "text_key": "DLG_T_SURV_REST",
+     "next": "c",
+     "honor": 1
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_T_SURV_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Bamsi Bayrak",
+   "text_key": "DLG_T_SURV_03",
+   "next": "end",
+   "set_flag": "ep018_camp_fire"
+  }
+ }
+}

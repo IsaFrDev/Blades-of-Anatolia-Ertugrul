@@ -1,0 +1,35 @@
+{
+ "id": "ep016_talk",
+ "start": "a",
+ "duel_threshold": 0,
+ "nodes": {
+  "a": {
+   "speaker": "Axi Evren",
+   "text_key": "DLG_T_ESC_01",
+   "options": [
+    {
+     "text_key": "DLG_T_ESC_ROAD",
+     "next": "b",
+     "honor": 0
+    },
+    {
+     "text_key": "DLG_T_ESC_HILLS",
+     "next": "c",
+     "honor": 2
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Axi Evren",
+   "text_key": "DLG_T_ESC_02",
+   "next": "end",
+   "set_flag": "ep016_route_road"
+  },
+  "c": {
+   "speaker": "Axi Evren",
+   "text_key": "DLG_T_ESC_03",
+   "next": "end",
+   "set_flag": "ep016_route_hills"
+  }
+ }
+}

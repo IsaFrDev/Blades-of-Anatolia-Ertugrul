@@ -1,0 +1,31 @@
+{
+ "id": "npc_turgut",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_NPC_TURGUT_01",
+   "options": [
+    {
+     "text_key": "DLG_NPC_TURGUT_OPT_TRAIN",
+     "next": "b",
+     "set_flag": "give_arrows"
+    },
+    {
+     "text_key": "DLG_NPC_TURGUT_OPT_LATER",
+     "next": "c"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_NPC_TURGUT_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_NPC_TURGUT_03",
+   "next": "end"
+  }
+ }
+}

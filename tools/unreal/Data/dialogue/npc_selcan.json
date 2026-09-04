@@ -1,0 +1,42 @@
+{
+ "id": "npc_selcan",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Selchanning sirlari",
+   "text_key": "DLG_SQ_SELCAN_SECRETS_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_SELCAN_SECRETS_OPT",
+     "next": "sq_sq_selcan_secrets",
+     "requires_evidence": "sq_avail_sq_selcan_secrets"
+    }
+   ]
+  },
+  "sq_sq_selcan_secrets": {
+   "speaker": "chr.selcan.name",
+   "text_key": "DLG_SQ_SELCAN_SECRETS_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_selcan_secrets",
+     "set_flag": "sq_start_sq_selcan_secrets"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_selcan_secrets"
+    }
+   ]
+  },
+  "sq_go_sq_selcan_secrets": {
+   "speaker": "chr.selcan.name",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_selcan_secrets": {
+   "speaker": "chr.selcan.name",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}

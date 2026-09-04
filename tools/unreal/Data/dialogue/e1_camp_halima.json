@@ -1,0 +1,22 @@
+{
+  "id": "e1_camp_halima",
+  "gdd_ref": "Epizod 1 / Kvest 1.3 - lagerda Halima bilan birinchi haqiqiy dialog",
+  "start": "intro",
+  "nodes": {
+    "intro": {"speaker": "Halima Sulton", "text_key": "DLG_E1_HALIMA_1", "next": "ask"},
+    "ask": {
+      "speaker": "Ertugrul",
+      "text_key": "DLG_E1_ERTUGRUL_ASK",
+      "options": [
+        {"text_key": "DLG_E1_OPT_RESPECT", "honor": 4, "choice_id": "e1_halima_tone", "option_id": "respect", "next": "respect_reply"},
+        {"text_key": "DLG_E1_OPT_CURIOUS", "choice_id": "e1_halima_tone", "option_id": "curious", "next": "curious_reply"},
+        {"text_key": "DLG_E1_OPT_CAUTIOUS", "honor": -2, "choice_id": "e1_halima_tone", "option_id": "cautious", "next": "cautious_reply"}
+      ]
+    },
+    "respect_reply": {"speaker": "Halima Sulton", "text_key": "DLG_E1_HALIMA_RESPECT", "next": "guest_line"},
+    "curious_reply": {"speaker": "Halima Sulton", "text_key": "DLG_E1_HALIMA_CURIOUS", "next": "guest_line"},
+    "cautious_reply": {"speaker": "Halima Sulton", "text_key": "DLG_E1_HALIMA_CAUTIOUS", "next": "guest_line"},
+    "guest_line": {"speaker": "Ertugrul", "text_key": "DLG_E1_GUEST_OF_GOD", "set_flag": "met_halima", "next": "bamsi_joke"},
+    "bamsi_joke": {"speaker": "Bamsi Beyrak", "text_key": "DLG_E1_BAMSI_SOUP", "next": "end"}
+  }
+}

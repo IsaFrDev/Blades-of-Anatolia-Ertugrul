@@ -1,0 +1,34 @@
+{
+ "id": "ep011_kopek",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Sa'd al-Din Ko'pek",
+   "text_key": "DLG_EP011_KOPEK_01",
+   "options": [
+    {
+     "text_key": "DLG_EP011_OPT_LIE",
+     "next": "b",
+     "honor": -2,
+     "set_flag": "kopek_fooled"
+    },
+    {
+     "text_key": "DLG_EP011_OPT_TRUTH",
+     "next": "c",
+     "honor": 3,
+     "set_flag": "kopek_alarm"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Sa'd al-Din Ko'pek",
+   "text_key": "DLG_EP011_KOPEK_02",
+   "next": "end"
+  },
+  "c": {
+   "speaker": "Sa'd al-Din Ko'pek",
+   "text_key": "DLG_EP011_KOPEK_03",
+   "next": "end"
+  }
+ }
+}

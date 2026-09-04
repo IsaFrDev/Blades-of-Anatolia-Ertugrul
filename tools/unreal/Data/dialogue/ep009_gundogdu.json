@@ -1,0 +1,40 @@
+{
+ "id": "ep009_gundogdu",
+ "start": "a",
+ "duel_threshold": 2,
+ "nodes": {
+  "a": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_EP009_GUND_01",
+   "options": [
+    {
+     "text_key": "DLG_EP009_OPT_A",
+     "next": "a",
+     "requires_evidence": "sheep_sale",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_EP009_OPT_B",
+     "next": "b",
+     "requires_evidence": "enemy_arrows",
+     "duel_points": 1
+    },
+    {
+     "text_key": "DLG_EP009_OPT_C",
+     "next": "c"
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_EP009_GUND_02",
+   "next": "end",
+   "set_flag": "spies_named"
+  },
+  "c": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_EP009_GUND_03",
+   "next": "end"
+  }
+ }
+}

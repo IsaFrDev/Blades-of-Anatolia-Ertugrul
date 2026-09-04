@@ -1,0 +1,35 @@
+{
+ "id": "ep036_talk",
+ "start": "a",
+ "duel_threshold": 0,
+ "nodes": {
+  "a": {
+   "speaker": "Mo'g'ul kotibi",
+   "text_key": "DLG_T_INF_01",
+   "options": [
+    {
+     "text_key": "DLG_T_INF_ASK",
+     "next": "b",
+     "honor": 3
+    },
+    {
+     "text_key": "DLG_T_INF_KILL",
+     "next": "c",
+     "honor": -3
+    }
+   ]
+  },
+  "b": {
+   "speaker": "Mo'g'ul kotibi",
+   "text_key": "DLG_T_INF_02",
+   "next": "end",
+   "set_flag": "ep036_scribe_spared"
+  },
+  "c": {
+   "speaker": "Mo'g'ul kotibi",
+   "text_key": "DLG_T_INF_03",
+   "next": "end",
+   "set_flag": "ep036_scribe_threatened"
+  }
+ }
+}

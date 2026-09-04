@@ -1,0 +1,223 @@
+{
+ "quests": [
+  {
+   "id": "sq_aykiz_tears",
+   "giver": "aykiz",
+   "title": "sq.sq_aykiz_tears.title",
+   "phases": [
+    {
+     "type": "collect",
+     "n": 3,
+     "flags": [
+      "sq_ay_a",
+      "sq_ay_b",
+      "sq_ay_c"
+     ],
+     "loc": "ui.obj.collect_evidence"
+    },
+    {
+     "type": "stealth",
+     "guards": 2
+    }
+   ],
+   "xp": 120,
+   "gold": 40,
+   "honor": 4,
+   "done_key": "DLG_SQ_AYKIZ_TEARS_DONE"
+  },
+  {
+   "id": "sq_claudius_to_omar",
+   "giver": "ibn_arabi_np",
+   "title": "sq.sq_claudius_to_omar.title",
+   "phases": [
+    {
+     "type": "travel",
+     "n": 2
+    },
+    {
+     "type": "stealth",
+     "guards": 3
+    },
+    {
+     "type": "travel",
+     "n": 2,
+     "timed": true
+    }
+   ],
+   "xp": 150,
+   "gold": 30,
+   "honor": 8,
+   "done_key": "DLG_SQ_CLAUDIUS_TO_OMAR_DONE"
+  },
+  {
+   "id": "sq_wolf_hunt",
+   "giver": "deli_demir",
+   "title": "sq.sq_wolf_hunt.title",
+   "phases": [
+    {
+     "type": "defend",
+     "waves": 2
+    },
+    {
+     "type": "hunt",
+     "n": 2
+    }
+   ],
+   "xp": 130,
+   "gold": 50,
+   "honor": 2,
+   "done_key": "DLG_SQ_WOLF_HUNT_DONE"
+  },
+  {
+   "id": "sq_aleppo_caravan",
+   "giver": "gundogdu",
+   "title": "sq.sq_aleppo_caravan.title",
+   "phases": [
+    {
+     "type": "travel",
+     "n": 2
+    },
+    {
+     "type": "defend",
+     "waves": 2
+    },
+    {
+     "type": "travel",
+     "n": 2
+    }
+   ],
+   "xp": 140,
+   "gold": 90,
+   "honor": 3,
+   "done_key": "DLG_SQ_ALEPPO_CARAVAN_DONE"
+  },
+  {
+   "id": "sq_trail_of_eftelya",
+   "giver": "afsin_bey",
+   "title": "sq.sq_trail_of_eftelya.title",
+   "phases": [
+    {
+     "type": "stealth",
+     "guards": 2
+    },
+    {
+     "type": "collect",
+     "n": 2
+    },
+    {
+     "type": "stealth",
+     "guards": 2
+    }
+   ],
+   "xp": 150,
+   "gold": 40,
+   "honor": 3,
+   "done_key": "DLG_SQ_TRAIL_OF_EFTELYA_DONE"
+  },
+  {
+   "id": "sq_selcan_secrets",
+   "giver": "selcan",
+   "title": "sq.sq_selcan_secrets.title",
+   "phases": [
+    {
+     "type": "collect",
+     "n": 3
+    },
+    {
+     "type": "travel",
+     "n": 2
+    }
+   ],
+   "xp": 100,
+   "gold": 20,
+   "honor": 6,
+   "done_key": "DLG_SQ_SELCAN_SECRETS_DONE"
+  },
+  {
+   "id": "sq_goncagul_trap",
+   "giver": "banu_cicek",
+   "title": "sq.sq_goncagul_trap.title",
+   "phases": [
+    {
+     "type": "collect",
+     "n": 3
+    },
+    {
+     "type": "fight",
+     "waves": 1
+    }
+   ],
+   "xp": 160,
+   "gold": 60,
+   "honor": 4,
+   "done_key": "DLG_SQ_GONCAGUL_TRAP_DONE"
+  },
+  {
+   "id": "sq_geyikli_wisdom",
+   "giver": "geyikli_baba",
+   "title": "sq.sq_geyikli_wisdom.title",
+   "phases": [
+    {
+     "type": "travel",
+     "n": 3
+    }
+   ],
+   "xp": 80,
+   "gold": 0,
+   "honor": 12,
+   "done_key": "DLG_SQ_GEYIKLI_WISDOM_DONE"
+  },
+  {
+   "id": "sq_artuk_apothecary",
+   "giver": "artuk_bey",
+   "title": "sq.sq_artuk_apothecary.title",
+   "phases": [
+    {
+     "type": "collect",
+     "n": 4
+    }
+   ],
+   "xp": 90,
+   "gold": 0,
+   "honor": 1,
+   "done_key": "DLG_SQ_ARTUK_APOTHECARY_DONE"
+  },
+  {
+   "id": "sq_dundar_first_sword",
+   "giver": "dundar_np",
+   "title": "sq.sq_dundar_first_sword.title",
+   "phases": [
+    {
+     "type": "duel"
+    }
+   ],
+   "xp": 70,
+   "gold": 0,
+   "honor": 3,
+   "done_key": "DLG_SQ_DUNDAR_FIRST_SWORD_DONE"
+  },
+  {
+   "id": "sq_hamza_conscience",
+   "giver": "hamza",
+   "title": "sq.sq_hamza_conscience.title",
+   "phases": [
+    {
+     "type": "travel",
+     "n": 2
+    },
+    {
+     "type": "stealth",
+     "guards": 3
+    },
+    {
+     "type": "fight",
+     "waves": 1
+    }
+   ],
+   "xp": 140,
+   "gold": 30,
+   "honor": 5,
+   "done_key": "DLG_SQ_HAMZA_CONSCIENCE_DONE"
+  }
+ ]
+}

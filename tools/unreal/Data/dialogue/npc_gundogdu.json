@@ -1,0 +1,48 @@
+{
+ "id": "npc_gundogdu",
+ "start": "n0",
+ "nodes": {
+  "n0": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_NPC_GUNDOGDU_01",
+   "next": "n1",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ALEPPO_CARAVAN_OPT",
+     "next": "sq_sq_aleppo_caravan",
+     "requires_evidence": "sq_avail_sq_aleppo_caravan"
+    }
+   ]
+  },
+  "n1": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_NPC_GUNDOGDU_02",
+   "next": "end"
+  },
+  "sq_sq_aleppo_caravan": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_SQ_ALEPPO_CARAVAN_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_aleppo_caravan",
+     "set_flag": "sq_start_sq_aleppo_caravan"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_aleppo_caravan"
+    }
+   ]
+  },
+  "sq_go_sq_aleppo_caravan": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_aleppo_caravan": {
+   "speaker": "Gundo'g'di",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}

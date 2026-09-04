@@ -1,0 +1,42 @@
+{
+ "id": "npc_ibn_arabi_np",
+ "start": "a",
+ "nodes": {
+  "a": {
+   "speaker": "Klavdiydan Umargacha",
+   "text_key": "DLG_SQ_CLAUDIUS_TO_OMAR_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_CLAUDIUS_TO_OMAR_OPT",
+     "next": "sq_sq_claudius_to_omar",
+     "requires_evidence": "sq_avail_sq_claudius_to_omar"
+    }
+   ]
+  },
+  "sq_sq_claudius_to_omar": {
+   "speaker": "chr.ibn_arabi.name",
+   "text_key": "DLG_SQ_CLAUDIUS_TO_OMAR_ASK",
+   "options": [
+    {
+     "text_key": "DLG_SQ_ACCEPT",
+     "next": "sq_go_sq_claudius_to_omar",
+     "set_flag": "sq_start_sq_claudius_to_omar"
+    },
+    {
+     "text_key": "DLG_SQ_LATER",
+     "next": "sq_no_sq_claudius_to_omar"
+    }
+   ]
+  },
+  "sq_go_sq_claudius_to_omar": {
+   "speaker": "chr.ibn_arabi.name",
+   "text_key": "DLG_SQ_GO",
+   "next": "end"
+  },
+  "sq_no_sq_claudius_to_omar": {
+   "speaker": "chr.ibn_arabi.name",
+   "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  }
+ }
+}
