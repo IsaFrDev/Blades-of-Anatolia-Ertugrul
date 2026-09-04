@@ -1,5 +1,5 @@
 // Ertug'rul tanasi: tashqi resurssiz, 0 dan protsedural qurilgan bo'g'imli figura.
-// Har bir bo'g'im - o'z pivotida joylashgan ProceduralMesh; yurish/yugurish/sakrash/cho'kish pozalari kodda.
+// Har bir bo'g'im - o'z pivotida joylashgan ProceduralMesh; yurish/yugurish/sakrash/cho'kish/zarba pozalari kodda.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -25,6 +25,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") FLinearColor Beard = FLinearColor(0.20f, 0.13f, 0.08f);
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") FLinearColor Trim = FLinearColor(0.85f, 0.70f, 0.25f);
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") FLinearColor Steel = FLinearColor(0.75f, 0.77f, 0.80f);
+	/** Bo'rk o'rniga dubulg'a (dushman askarlari) */
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") bool bHelmet = false;
+	/** Qo'lida qilich (zarba pozasi uchun) */
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") bool bSwordInHand = false;
 
 	/** Tanani quradi (bo'g'imlar + geometriya). Parent - kapsula yoki ildiz komponent. */
 	void Build(USceneComponent* Parent, float CapsuleHalfHeight);
@@ -32,7 +36,14 @@ public:
 	/** Protsedural poza. Speed sm/s (gorizontal), Lean - yon egilish (-1..1). */
 	void Animate(float Dt, float Speed, bool bInAir, bool bCrouched, float Lean, float SlopeDeg);
 
+	/** Qilich zarbasi (0.45 s) */
+	void TriggerAttack();
+	/** Zarba yedi - qisqa titrash */
+	void TriggerHurt();
+	/** Yiqilgan holat (o'lim) */
+	void SetDead(float CapsuleHalfHeight);
 	bool IsBuilt() const { return Pelvis != nullptr; }
+	float AttackPhase() const { return AttackT; }
 
 private:
 	UPROPERTY(Transient) TObjectPtr<USceneComponent> Root;
@@ -51,11 +62,14 @@ private:
 
 	float Phase = 0.f;
 	float IdleT = 0.f;
+	float AttackT = 0.f;
+	float HurtT = 0.f;
+	bool bDead = false;
 	FVector PelvisBase = FVector::ZeroVector;
 
 	struct FPose
 	{
-		float PelvisZ = 0.f, TorsoPitch = 0.f, TorsoRoll = 0.f, HeadPitch = 0.f;
+		float PelvisZ = 0.f, TorsoPitch = 0.f, TorsoRoll = 0.f, TorsoYaw = 0.f, HeadPitch = 0.f;
 		float ThighL = 0.f, ThighR = 0.f, KneeL = 0.f, KneeR = 0.f;
 		float ArmL = 0.f, ArmR = 0.f, ElbowL = 0.f, ElbowR = 0.f, ArmSpread = 0.f;
 	} Cur;

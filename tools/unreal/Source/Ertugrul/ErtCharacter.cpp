@@ -16,6 +16,8 @@
 #include "Engine/World.h"
 #include "CollisionShape.h"
 #include "UnrealClient.h"
+#include "ErtEnemy.h"
+#include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
 
@@ -67,6 +69,103 @@ AErtCharacter::AErtCharacter()
 	Cam->FieldOfView = 78.f;
 
 	Body = CreateDefaultSubobject<UErtHeroBody>(TEXT("Body"));
+	Body->bSwordInHand = true;
+}
+
+// ---------------- Jang ----------------
+
+void AErtCharacter::OnAttack()
+{
+	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f) return;
+	AttackCD = 0.62f;
+	Stamina = FMath::Max(0.f, Stamina - 6.f);
+	if (Body) Body->TriggerAttack();
+	// Oldindagi sohada dushmanlarni qidiramiz (0.2 s dan keyin tegadi deb hisoblaymiz - soddalashtirilgan: darhol)
+	const FVector C = GetActorLocation() + GetActorForwardVector() * 120.f;
+	TArray<FOverlapResult> Hits;
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtAttack), false, this);
+	if (GetWorld()->OverlapMultiByChannel(Hits, C, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(115.f), Q))
+	{
+		TSet<AActor*> Done;
+		for (const FOverlapResult& R : Hits)
+		{
+			AErtEnemy* E = Cast<AErtEnemy>(R.GetActor());
+			if (!E || Done.Contains(E)) continue;
+			Done.Add(E);
+			E->ApplyHit(AttackDamage, this);
+		}
+	}
+}
+
+void AErtCharacter::OnBlockOn() { if (!bDead) bBlocking = true; }
+void AErtCharacter::OnBlockOff() { bBlocking = false; }
+
+void AErtCharacter::OnShoot()
+{
+	if (!bInputEnabled || bMantling || bDead || ShootCD > 0.f || Arrows <= 0) return;
+	ShootCD = 0.9f;
+	--Arrows;
+	if (Body) Body->TriggerAttack();
+	const FVector A = Cam->GetComponentLocation();
+	const FVector Dir = Cam->GetForwardVector();
+	FHitResult H;
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtArrow), false, this);
+	if (GetWorld()->LineTraceSingleByChannel(H, A, A + Dir * 5000.f, ECC_Pawn, Q))
+		if (AErtEnemy* E = Cast<AErtEnemy>(H.GetActor())) E->ApplyHit(ArrowDamage, this);
+}
+
+void AErtCharacter::ReceiveHit(float Damage, const FVector& From)
+{
+	if (bDead) return;
+	const FVector To = (From - GetActorLocation()).GetSafeNormal2D();
+	const bool bFacing = FVector::DotProduct(GetActorForwardVector(), To) > 0.2f;
+	if (bBlocking && bFacing && Stamina > 5.f) { Damage *= 0.2f; Stamina = FMath::Max(0.f, Stamina - 12.f); }
+	Health -= Damage;
+	HurtFlash = 1.f;
+	NoDamageT = 0.f;
+	if (Body) Body->TriggerHurt();
+	if (Health <= 0.f)
+	{
+		Health = 0.f; bDead = true;
+		GetCharacterMovement()->DisableMovement();
+		if (Body) Body->SetDead(GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight());
+	}
+}
+
+void AErtCharacter::ResetAt(const FVector& Pos, float Yaw)
+{
+	bDead = false; bMantling = false; bBlocking = false;
+	Health = MaxHealth; Stamina = StaminaMax; HurtFlash = 0.f;
+	Arrows = FMath::Max(Arrows, 8);
+	SetActorHiddenInGame(false);
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	GetCharacterMovement()->Velocity = FVector::ZeroVector;
+	SetActorLocation(Pos, false, nullptr, ETeleportType::TeleportPhysics);
+	SetActorRotation(FRotator(0, Yaw, 0));
+	if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-12.f, Yaw, 0.f));
+	Boom->bDoCollisionTest = true;
+	Boom->bEnableCameraLag = true;
+	// Yiqilgan tana pozasi qayta tiklanmaydi - komponentni qayta quramiz
+	if (Body && Body->IsBuilt())
+	{
+		TArray<USceneComponent*> Kids;
+		GetCapsuleComponent()->GetChildrenComponents(true, Kids);
+		for (USceneComponent* K : Kids) if (K && K != Boom && K != Cam && !K->IsA<USpringArmComponent>() && !K->IsA<UCameraComponent>()) K->DestroyComponent();
+		Body->DestroyComponent();
+		Body = NewObject<UErtHeroBody>(this, TEXT("BodyR"));
+		Body->bSwordInHand = true;
+		Body->RegisterComponent();
+		Body->Build(GetCapsuleComponent(), GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight());
+	}
+}
+
+void AErtCharacter::UpdateCombat(float Dt)
+{
+	AttackCD = FMath::Max(0.f, AttackCD - Dt);
+	ShootCD = FMath::Max(0.f, ShootCD - Dt);
+	HurtFlash = FMath::Max(0.f, HurtFlash - Dt * 2.f);
+	NoDamageT += Dt;
+	if (!bDead && NoDamageT > 5.f) Health = FMath::Min(MaxHealth, Health + 4.f * Dt);
 }
 
 void AErtCharacter::BeginPlay()
@@ -120,6 +219,8 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (ShotT > 9.4f && ShotT < 10.4f) DebugMove = FVector2D(1, 0);
 	if (At(10.6f)) UnCrouch();
 	if (At(1.4f)) TakeShot(TEXT("idle"));
+	if (At(2.2f)) OnAttack();
+	if (At(2.42f)) TakeShot(TEXT("attack"));
 	if (At(4.0f)) TakeShot(TEXT("jog"));
 	if (At(7.0f)) TakeShot(TEXT("sprint"));
 	if (At(7.95f)) TakeShot(TEXT("jump"));
@@ -166,6 +267,9 @@ void AErtCharacter::BuildInput()
 	IA_Crouch = MakeAction(TEXT("IA_ErtCrouch"), EInputActionValueType::Boolean);
 	IA_Walk = MakeAction(TEXT("IA_ErtWalk"), EInputActionValueType::Boolean);
 	IA_Zoom = MakeAction(TEXT("IA_ErtZoom"), EInputActionValueType::Axis1D);
+	IA_Attack = MakeAction(TEXT("IA_ErtAttack"), EInputActionValueType::Boolean);
+	IA_Block = MakeAction(TEXT("IA_ErtBlock"), EInputActionValueType::Boolean);
+	IA_Shoot = MakeAction(TEXT("IA_ErtShoot"), EInputActionValueType::Boolean);
 
 	IMC = NewObject<UInputMappingContext>(this, TEXT("IMC_Ertugrul"));
 	auto Map = [this](UInputAction* A, const FKey& K) -> FEnhancedActionKeyMapping& { return IMC->MapKey(A, K); };
@@ -201,6 +305,12 @@ void AErtCharacter::BuildInput()
 	Map(IA_Walk, EKeys::LeftAlt);
 	Map(IA_Walk, EKeys::CapsLock);
 	Map(IA_Zoom, EKeys::MouseWheelAxis);
+	Map(IA_Attack, EKeys::LeftMouseButton);
+	Map(IA_Attack, EKeys::Gamepad_FaceButton_Left);
+	Map(IA_Block, EKeys::RightMouseButton);
+	Map(IA_Block, EKeys::Gamepad_LeftShoulder);
+	Map(IA_Shoot, EKeys::F);
+	Map(IA_Shoot, EKeys::Gamepad_RightShoulder);
 }
 
 void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
@@ -224,6 +334,10 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_Crouch, ETriggerEvent::Started, this, &AErtCharacter::OnCrouchToggle);
 	EIC->BindAction(IA_Walk, ETriggerEvent::Started, this, &AErtCharacter::OnWalkToggle);
 	EIC->BindAction(IA_Zoom, ETriggerEvent::Triggered, this, &AErtCharacter::OnZoom);
+	EIC->BindAction(IA_Attack, ETriggerEvent::Started, this, &AErtCharacter::OnAttack);
+	EIC->BindAction(IA_Block, ETriggerEvent::Started, this, &AErtCharacter::OnBlockOn);
+	EIC->BindAction(IA_Block, ETriggerEvent::Completed, this, &AErtCharacter::OnBlockOff);
+	EIC->BindAction(IA_Shoot, ETriggerEvent::Started, this, &AErtCharacter::OnShoot);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)
@@ -390,9 +504,12 @@ void AErtCharacter::Landed(const FHitResult& Hit)
 void AErtCharacter::Tick(float Dt)
 {
 	Super::Tick(Dt);
+	UpdateCombat(Dt);
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
+	if (bDead) { MoveInput = FVector2D::ZeroVector; if (bShowDebug) DrawDebug(); return; }
 	if (bMantling) UpdateMantle(Dt);
 	else { UpdateSlope(Dt); UpdateGait(Dt); }
+	if (bBlocking) GetCharacterMovement()->MaxWalkSpeed = FMath::Min(GetCharacterMovement()->MaxWalkSpeed, WalkSpeed);
 
 	Boom->TargetArmLength = FMath::FInterpTo(Boom->TargetArmLength, TargetArm, Dt, 10.f);
 	LandSquash = FMath::FInterpTo(LandSquash, 0.f, Dt, 6.f);

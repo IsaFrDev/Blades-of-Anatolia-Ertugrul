@@ -37,10 +37,27 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Mantle") float MantleDuration = 0.55f;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kamera") float CamMin = 180.f;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kamera") float CamMax = 700.f;
-	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kamera") bool bShowDebug = true;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kamera") bool bShowDebug = false;
+
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Jang") float MaxHealth = 100.f;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Jang") float AttackDamage = 30.f;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Jang") float ArrowDamage = 45.f;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Jang") int32 MaxArrows = 16;
 
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") EErtGait GetGait() const { return Gait; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetStamina() const { return Stamina; }
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetHealth() const { return Health; }
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetMaxHealth() const { return MaxHealth; }
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") int32 GetArrows() const { return Arrows; }
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsDead() const { return bDead; }
+	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsBlocking() const { return bBlocking; }
+	float GetHurtFlash() const { return HurtFlash; }
+	/** Dushman zarbasi (blok bo'lsa kamayadi) */
+	void ReceiveHit(float Damage, const FVector& From);
+	void AddArrows(int32 N) { Arrows = FMath::Clamp(Arrows + N, 0, MaxArrows); }
+	void Heal(float V) { Health = FMath::Min(MaxHealth, Health + V); }
+	/** Nazorat nuqtasi / epizod boshi: joyga qo'yish, sog'liqni tiklash */
+	void ResetAt(const FVector& Pos, float Yaw);
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsMantling() const { return bMantling; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetGroundSlopeDeg() const { return SlopeDeg; }
 
@@ -65,8 +82,22 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Crouch;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Walk;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Zoom;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Attack;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Block;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Shoot;
 
 private:
+	void OnAttack();
+	void OnBlockOn();
+	void OnBlockOff();
+	void OnShoot();
+	void UpdateCombat(float Dt);
+
+	float Health = 100.f;
+	int32 Arrows = 12;
+	float AttackCD = 0.f, HurtFlash = 0.f, NoDamageT = 0.f, ShootCD = 0.f;
+	bool bBlocking = false, bDead = false;
+
 	void BuildInput();
 	void OnMove(const FInputActionValue& V);
 	void OnLook(const FInputActionValue& V);
