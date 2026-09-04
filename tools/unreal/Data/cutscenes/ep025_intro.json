@@ -1,0 +1,381 @@
+{
+  "id": "ep025_intro",
+  "episode": "EP025",
+  "level": "forest_pass",
+  "music": "MUS_EP025",
+  "ambience": "Ambience.Winter.Snow",
+  "letterbox": true,
+  "fade_in": 1.2,
+  "fade_out": 1.0,
+  "time_of_day": "dawn",
+  "weather": "snow",
+  "duration": 0,
+  "actors": [
+    {
+      "id": "ertugrul",
+      "char": "ertugrul",
+      "model": "assets/models/ottoman/ottoman.obj",
+      "loc_name": "chr.ertugrul.name",
+      "scale": 1.82,
+      "tint": [
+        1.0,
+        0.95,
+        0.85
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            0.4,
+            0.0,
+            38.4
+          ],
+          "yaw": 180.0,
+          "clip": "Sit"
+        },
+        {
+          "t": 5.0,
+          "pos": [
+            0.6,
+            0.0,
+            36.6
+          ],
+          "yaw": 180.0,
+          "clip": "Sit"
+        },
+        {
+          "t": 9.0,
+          "pos": [
+            0.8,
+            0.0,
+            34.6
+          ],
+          "yaw": 180.0,
+          "clip": "Idle"
+        },
+        {
+          "t": 14.0,
+          "pos": [
+            1.0,
+            0.0,
+            32.0
+          ],
+          "yaw": 171.3,
+          "clip": "Walk"
+        },
+        {
+          "t": 19.0,
+          "pos": [
+            1.4,
+            0.0,
+            29.4
+          ],
+          "yaw": 173.7,
+          "clip": "Sit"
+        },
+        {
+          "t": 24.0,
+          "pos": [
+            1.8,
+            0.0,
+            28.0
+          ],
+          "yaw": 169.7,
+          "clip": "Walk"
+        },
+        {
+          "t": 30.0,
+          "pos": [
+            2.2,
+            0.0,
+            25.8
+          ],
+          "yaw": 172.9,
+          "clip": "Walk"
+        },
+        {
+          "t": 35.0,
+          "pos": [
+            2.4,
+            0.0,
+            24.2
+          ],
+          "yaw": 177.3,
+          "clip": "Idle"
+        },
+        {
+          "t": 40.0,
+          "pos": [
+            2.4,
+            0.0,
+            24.2
+          ],
+          "yaw": 177.3,
+          "clip": "Point"
+        }
+      ]
+    },
+    {
+      "id": "suleyman_shah",
+      "char": "suleyman_shah",
+      "model": "assets/models/turbaned+elder+3d+model.obj",
+      "loc_name": "chr.suleyman_shah.name",
+      "scale": 1.84,
+      "tint": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            3.2,
+            0.0,
+            33.0
+          ],
+          "yaw": -27.4,
+          "clip": "Idle"
+        },
+        {
+          "t": 6.0,
+          "pos": [
+            3.0,
+            0.0,
+            31.4
+          ],
+          "yaw": -24.8,
+          "clip": "Idle"
+        },
+        {
+          "t": 11.0,
+          "pos": [
+            2.6,
+            0.0,
+            29.4
+          ],
+          "yaw": -170.5,
+          "clip": "Walk"
+        },
+        {
+          "t": 16.0,
+          "pos": [
+            2.2,
+            0.0,
+            27.0
+          ],
+          "yaw": 166.0,
+          "clip": "Walk"
+        },
+        {
+          "t": 21.0,
+          "pos": [
+            2.6,
+            0.0,
+            25.4
+          ],
+          "yaw": -16.7,
+          "clip": "Idle"
+        },
+        {
+          "t": 27.0,
+          "pos": [
+            2.6,
+            0.0,
+            25.4
+          ],
+          "yaw": -17.1,
+          "clip": "Talk"
+        },
+        {
+          "t": 32.0,
+          "pos": [
+            3.4,
+            0.0,
+            23.2
+          ],
+          "yaw": 158.2,
+          "clip": "Walk"
+        },
+        {
+          "t": 37.0,
+          "pos": [
+            4.2,
+            0.0,
+            21.2
+          ],
+          "yaw": 158.2,
+          "clip": "Walk"
+        },
+        {
+          "t": 40.0,
+          "pos": [
+            4.6,
+            0.0,
+            20.2
+          ],
+          "yaw": -28.8,
+          "clip": "Idle"
+        }
+      ]
+    }
+  ],
+  "camera": [
+    {
+      "t": 0.0,
+      "pos": [
+        0.0,
+        1.7,
+        43.0
+      ],
+      "look": [
+        0.4,
+        1.3,
+        38.0
+      ],
+      "fov": 40
+    },
+    {
+      "t": 6.0,
+      "pos": [
+        -3.5,
+        1.8,
+        40.5
+      ],
+      "look": [
+        0.5,
+        1.35,
+        36.6
+      ],
+      "fov": 38
+    },
+    {
+      "t": 12.0,
+      "pos": [
+        4.5,
+        2.0,
+        36.0
+      ],
+      "look": [
+        1.0,
+        1.4,
+        33.0
+      ],
+      "fov": 42
+    },
+    {
+      "t": 18.0,
+      "pos": [
+        -2.5,
+        1.9,
+        33.5
+      ],
+      "look": [
+        1.6,
+        1.45,
+        29.5
+      ],
+      "fov": 40
+    },
+    {
+      "t": 24.0,
+      "pos": [
+        5.5,
+        1.8,
+        30.5
+      ],
+      "look": [
+        2.0,
+        1.5,
+        27.0
+      ],
+      "fov": 36
+    },
+    {
+      "t": 31.0,
+      "pos": [
+        -3.0,
+        2.2,
+        29.0
+      ],
+      "look": [
+        2.4,
+        1.5,
+        25.4
+      ],
+      "fov": 42
+    },
+    {
+      "t": 36.0,
+      "pos": [
+        0.5,
+        2.6,
+        30.0
+      ],
+      "look": [
+        2.8,
+        1.45,
+        23.5
+      ],
+      "fov": 46
+    },
+    {
+      "t": 40.5,
+      "pos": [
+        -1.0,
+        4.4,
+        32.5
+      ],
+      "look": [
+        3.0,
+        1.4,
+        22.5
+      ],
+      "fov": 54
+    }
+  ],
+  "lines": [
+    {
+      "t": 2.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep025_intro.01",
+      "vo": "ep025_intro_01",
+      "dur": 0
+    },
+    {
+      "t": 8.0,
+      "actor": "suleyman_shah",
+      "loc": "cut.ep025_intro.02",
+      "vo": "ep025_intro_02",
+      "dur": 0
+    },
+    {
+      "t": 14.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep025_intro.03",
+      "vo": "ep025_intro_03",
+      "dur": 0
+    },
+    {
+      "t": 20.0,
+      "actor": "suleyman_shah",
+      "loc": "cut.ep025_intro.04",
+      "vo": "ep025_intro_04",
+      "dur": 0
+    },
+    {
+      "t": 26.5,
+      "actor": "ertugrul",
+      "loc": "cut.ep025_intro.05",
+      "vo": "ep025_intro_05",
+      "dur": 0
+    },
+    {
+      "t": 33.0,
+      "actor": "suleyman_shah",
+      "loc": "cut.ep025_intro.06",
+      "vo": "ep025_intro_06",
+      "dur": 0
+    }
+  ]
+}

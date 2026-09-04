@@ -1,0 +1,5352 @@
+{
+  "schema_version": 2,
+  "game_id": "dirilis_last_march",
+  "generated_at": "2026-08-28T06:14:02.778346+00:00",
+  "timeline": {
+    "start_year_gregorian": 1227,
+    "end_year_gregorian": 1261,
+    "note": "v2"
+  },
+  "seasons": [
+    {
+      "id": "S1",
+      "index": 1,
+      "codename": "SARHAD",
+      "loc": "season.s1.title",
+      "y0": 1227,
+      "y1": 1230,
+      "setting": "autumn",
+      "tiers": [
+        1,
+        2
+      ],
+      "boss": "CHR_TITUS",
+      "region": "Amanos / Halab / Sham",
+      "new_enemy": "Templar sержant + arbaletchi",
+      "world": "Janub yopiladi, Konya mintaqasi ochiladi",
+      "episode_ids": [
+        "EP001",
+        "EP002",
+        "EP003",
+        "EP004",
+        "EP005",
+        "EP006",
+        "EP007",
+        "EP008",
+        "EP009",
+        "EP010",
+        "EP011",
+        "EP012"
+      ]
+    },
+    {
+      "id": "S2",
+      "index": 2,
+      "codename": "SULTON_SOYASI",
+      "loc": "season.s2.title",
+      "y0": 1230,
+      "y1": 1238,
+      "setting": "summer",
+      "tiers": [
+        3,
+        4
+      ],
+      "boss": "CHR_KOPEK",
+      "region": "Konya / Kubadabad / Erzincan",
+      "new_enemy": "Xorazmiy nayzachi + saroy qotili",
+      "world": "Jang tizimi qayta yoziladi (chap qo'l). Mo'g'ul mintaqasi ochiladi",
+      "episode_ids": [
+        "EP013",
+        "EP014",
+        "EP015",
+        "EP016",
+        "EP017",
+        "EP018",
+        "EP019",
+        "EP020",
+        "EP021",
+        "EP022",
+        "EP023",
+        "EP024"
+      ]
+    },
+    {
+      "id": "S3",
+      "index": 3,
+      "codename": "QORA_BULUT",
+      "loc": "season.s3.title",
+      "y0": 1238,
+      "y1": 1243,
+      "setting": "winter",
+      "tiers": [
+        4,
+        5
+      ],
+      "boss": "CHR_BAIJU",
+      "region": "Sharqiy Anadolu / Erzurum / Köse Dağ",
+      "new_enemy": "Mo'g'ul otliq kamonchi + nerge",
+      "world": "Saljuqiy vassal. Sharq yopiladi, G'arb (Söğüt) ochiladi",
+      "episode_ids": [
+        "EP025",
+        "EP026",
+        "EP027",
+        "EP028",
+        "EP029",
+        "EP030",
+        "EP031",
+        "EP032",
+        "EP033",
+        "EP034",
+        "EP035",
+        "EP036"
+      ]
+    },
+    {
+      "id": "S4",
+      "index": 4,
+      "codename": "SONGGI_YURISH",
+      "loc": "season.s4.title",
+      "y0": 1243,
+      "y1": 1261,
+      "setting": "full_cycle",
+      "tiers": [
+        4,
+        5
+      ],
+      "boss": "CHR_BAIJU",
+      "region": "Söğüt / Domaniç / Vizantiya chegarasi",
+      "new_enemy": "Keshikten + qamal mashinasi",
+      "world": "O'yin tugaydi. NG+ (Xronika rejimi) ochiladi",
+      "episode_ids": [
+        "EP037",
+        "EP038",
+        "EP039",
+        "EP040",
+        "EP041",
+        "EP042",
+        "EP043",
+        "EP044",
+        "EP045",
+        "EP046",
+        "EP047",
+        "EP048"
+      ]
+    }
+  ],
+  "episodes": [
+    {
+      "id": "EP001",
+      "season_id": "S1",
+      "global_index": 0,
+      "season_index": 0,
+      "loc_key_title": "ep.ep001.title",
+      "loc_key_synopsis": "ep.ep001.synopsis",
+      "loc_key_cliffhanger": "ep.ep001.cliffhanger",
+      "anchor": {
+        "hijri": "624 Ramazon",
+        "gregorian": "1227 Avgust",
+        "year_gregorian": 1227,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep001.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep001.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 1,
+      "estimated_minutes": 50,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "HORSE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "OBJECT",
+        "loc_key": "ep.ep001.mih",
+        "tag": "Mih.Beat.Object",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_TOPAK_EV",
+        "CDX_YAYLAK_KISLAK",
+        "CDX_KAYI_TRIBE"
+      ],
+      "prerequisites": [],
+      "unlocks": [
+        "EP002"
+      ],
+      "checkpoints": [
+        "CP_EP001_INTRO_END",
+        "CP_EP001_MID",
+        "CP_EP001_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP001.Completed"
+      ],
+      "levels": [
+        "LVL_OCH_QARGALAR"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Anadolu chegarasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP001",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep001",
+        "target_completion_pct": 96.0,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep001.teaser"
+    },
+    {
+      "id": "EP002",
+      "season_id": "S1",
+      "global_index": 1,
+      "season_index": 1,
+      "loc_key_title": "ep.ep002.title",
+      "loc_key_synopsis": "ep.ep002.synopsis",
+      "loc_key_cliffhanger": "ep.ep002.cliffhanger",
+      "anchor": {
+        "hijri": "624 Shavvol",
+        "gregorian": "1227 Sentabr",
+        "year_gregorian": 1227,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep002.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 120,
+        "date_display": "DIEGETIC",
+        "loc_key_description": "ep.ep002.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "ESCORT",
+      "difficulty_tier": 1,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Crusader.Scout": 4
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "HORSE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "ON_OTHER",
+        "loc_key": "ep.ep002.mih",
+        "tag": "Mih.Beat.OnOther",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_COMPOSITE_BOW",
+        "CDX_JALALADDIN",
+        "CDX_REFUGEE_CRISIS"
+      ],
+      "prerequisites": [
+        "EP001"
+      ],
+      "unlocks": [
+        "EP003"
+      ],
+      "checkpoints": [
+        "CP_EP002_INTRO_END",
+        "CP_EP002_MID",
+        "CP_EP002_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP002.Completed"
+      ],
+      "levels": [
+        "LVL_IKKI_ASIR"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "O'rmon"
+      },
+      "audio": {
+        "music_cue": "MUS_EP002",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep002",
+        "target_completion_pct": 94.5,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep002.teaser"
+    },
+    {
+      "id": "EP003",
+      "season_id": "S1",
+      "global_index": 2,
+      "season_index": 2,
+      "loc_key_title": "ep.ep003.title",
+      "loc_key_synopsis": "ep.ep003.synopsis",
+      "loc_key_cliffhanger": "ep.ep003.cliffhanger",
+      "anchor": {
+        "hijri": "624 Zulqada",
+        "gregorian": "1227 Oktabr",
+        "year_gregorian": 1227,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep003.history_note"
+      },
+      "intro": {
+        "archetype": "PLUNGE",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep003.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "DEFENSE",
+      "difficulty_tier": 1,
+      "estimated_minutes": 50,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Mercenary": 12,
+          "Enemy.Templar.Sergeant": 2
+        },
+        "max_simultaneous": 5,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "CORPSE",
+        "loc_key": "ep.ep003.mih",
+        "tag": "Mih.Beat.Corpse",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_SALB_TASMIR",
+        "CDX_TEMPLAR_AMANUS",
+        "CDX_LAMELLAR"
+      ],
+      "prerequisites": [
+        "EP002"
+      ],
+      "unlocks": [
+        "EP004"
+      ],
+      "checkpoints": [
+        "CP_EP003_INTRO_END",
+        "CP_EP003_MID",
+        "CP_EP003_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP003.Completed"
+      ],
+      "levels": [
+        "LVL_OQ_PLASH"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "night",
+        "weather": "clear",
+        "region": "Qayi obasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP003",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep003",
+        "target_completion_pct": 92.9,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic",
+          "execution"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep003.teaser"
+    },
+    {
+      "id": "EP004",
+      "season_id": "S1",
+      "global_index": 3,
+      "season_index": 3,
+      "loc_key_title": "ep.ep004.title",
+      "loc_key_synopsis": "ep.ep004.synopsis",
+      "loc_key_cliffhanger": "ep.ep004.cliffhanger",
+      "anchor": {
+        "hijri": "624 Zulhijja",
+        "gregorian": "1227 Noyabr",
+        "year_gregorian": 1227,
+        "confidence": "DISPUTED",
+        "loc_key_note": "ep.ep004.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 240,
+        "date_display": "SPOKEN",
+        "loc_key_description": "ep.ep004.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 1,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "CAMERA",
+        "loc_key": "ep.ep004.mih",
+        "tag": "Mih.Beat.Camera",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_SULEYMAN_SHAH",
+        "CDX_GUNDUZ_ALP",
+        "CDX_OSMAN_COINS",
+        "CDX_ASIKPASAZADE"
+      ],
+      "prerequisites": [
+        "EP003"
+      ],
+      "unlocks": [
+        "EP005"
+      ],
+      "checkpoints": [
+        "CP_EP004_INTRO_END",
+        "CP_EP004_MID",
+        "CP_EP004_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP004.Completed"
+      ],
+      "levels": [
+        "LVL_OTANING_ISMI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "dusk",
+        "weather": "clear",
+        "region": "Qayi obasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP004",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep004",
+        "target_completion_pct": 91.3,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep004.teaser"
+    },
+    {
+      "id": "EP005",
+      "season_id": "S1",
+      "global_index": 4,
+      "season_index": 4,
+      "loc_key_title": "ep.ep005.title",
+      "loc_key_synopsis": "ep.ep005.synopsis",
+      "loc_key_cliffhanger": "ep.ep005.cliffhanger",
+      "anchor": {
+        "hijri": "625 Muharram",
+        "gregorian": "1227 Dekabr",
+        "year_gregorian": 1227,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep005.history_note"
+      },
+      "intro": {
+        "archetype": "HANDS",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep005.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SURVIVAL",
+      "difficulty_tier": 1,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Wolf": 6
+        },
+        "max_simultaneous": 6,
+        "background_agents": 0
+      },
+      "traversal": [
+        "SNOW_ICE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep005.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.2,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_KARA_CADIR",
+        "CDX_FELT_MAKING",
+        "CDX_NOMAD_ECONOMY"
+      ],
+      "prerequisites": [
+        "EP004"
+      ],
+      "unlocks": [
+        "EP006"
+      ],
+      "checkpoints": [
+        "CP_EP005_INTRO_END",
+        "CP_EP005_MID",
+        "CP_EP005_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP005.Completed"
+      ],
+      "levels": [
+        "LVL_QORLI_DOVON"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "varies",
+        "weather": "snow",
+        "region": "Torus dovoni"
+      },
+      "audio": {
+        "music_cue": "MUS_EP005",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep005",
+        "target_completion_pct": 89.8,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "animal.harm"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep005.teaser"
+    },
+    {
+      "id": "EP006",
+      "season_id": "S1",
+      "global_index": 5,
+      "season_index": 5,
+      "loc_key_title": "ep.ep006.title",
+      "loc_key_synopsis": "ep.ep006.synopsis",
+      "loc_key_cliffhanger": "ep.ep006.cliffhanger",
+      "anchor": {
+        "hijri": "625 Safar",
+        "gregorian": "1228 Yanvar",
+        "year_gregorian": 1228,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep006.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 180,
+        "date_display": "DIEGETIC",
+        "loc_key_description": "ep.ep006.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 2,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Spy": 1
+        },
+        "max_simultaneous": 2,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "OBJECT",
+        "loc_key": "ep.ep006.mih",
+        "tag": "Mih.Beat.Object",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_CARAVANSERAI",
+        "CDX_DIRHAM",
+        "CDX_SILK_ROAD_ANATOLIA",
+        "CDX_AHI_FUTUWWA"
+      ],
+      "prerequisites": [
+        "EP005"
+      ],
+      "unlocks": [
+        "EP007"
+      ],
+      "checkpoints": [
+        "CP_EP006_INTRO_END",
+        "CP_EP006_MID",
+        "CP_EP006_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP006.Completed"
+      ],
+      "levels": [
+        "LVL_SULTAN_HAN"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "varies",
+        "weather": "clear",
+        "region": "Sultan Han"
+      },
+      "audio": {
+        "music_cue": "MUS_EP006",
+        "ambience_tag": "Ambience.Winter.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep006",
+        "target_completion_pct": 88.2,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep006.teaser"
+    },
+    {
+      "id": "EP007",
+      "season_id": "S1",
+      "global_index": 6,
+      "season_index": 6,
+      "loc_key_title": "ep.ep007.title",
+      "loc_key_synopsis": "ep.ep007.synopsis",
+      "loc_key_cliffhanger": "ep.ep007.cliffhanger",
+      "anchor": {
+        "hijri": "625 Rabiul-avval",
+        "gregorian": "1228 Fevral",
+        "year_gregorian": 1228,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep007.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep007.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 2,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.PalaceGuard": 6
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "OBJECT",
+        "loc_key": "ep.ep007.mih",
+        "tag": "Mih.Beat.Object",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_AL_AZIZ",
+        "CDX_ATABEG_TOGHRIL",
+        "CDX_ALEPPO_CITADEL",
+        "CDX_AYYUBID"
+      ],
+      "prerequisites": [
+        "EP006"
+      ],
+      "unlocks": [
+        "EP008"
+      ],
+      "checkpoints": [
+        "CP_EP007_INTRO_END",
+        "CP_EP007_MID",
+        "CP_EP007_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP007.Completed"
+      ],
+      "levels": [
+        "LVL_HALAB_BOLA_AMIR"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Halab"
+      },
+      "audio": {
+        "music_cue": "MUS_EP007",
+        "ambience_tag": "Ambience.Winter.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep007",
+        "target_completion_pct": 86.7,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep007.teaser"
+    },
+    {
+      "id": "EP008",
+      "season_id": "S1",
+      "global_index": 7,
+      "season_index": 7,
+      "loc_key_title": "ep.ep008.title",
+      "loc_key_synopsis": "ep.ep008.synopsis",
+      "loc_key_cliffhanger": "ep.ep008.cliffhanger",
+      "anchor": {
+        "hijri": "625 Jumadal-avval",
+        "gregorian": "1228 Aprel",
+        "year_gregorian": 1228,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep008.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep008.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "ESCORT",
+      "difficulty_tier": 2,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.DesertBandit": 8
+        },
+        "max_simultaneous": 5,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMEL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "EVENT",
+        "loc_key": "ep.ep008.mih",
+        "tag": "Mih.Beat.Event",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_SALB_TASMIR",
+        "CDX_IBN_ARABI",
+        "CDX_DAMASCUS_1228",
+        "CDX_FUSUS"
+      ],
+      "prerequisites": [
+        "EP007"
+      ],
+      "unlocks": [
+        "EP009"
+      ],
+      "checkpoints": [
+        "CP_EP008_INTRO_END",
+        "CP_EP008_MID",
+        "CP_EP008_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP008.Completed"
+      ],
+      "levels": [
+        "LVL_SHAM_YOLI_IBN_ARABIY"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "day",
+        "weather": "dust",
+        "region": "Sham yo'li / Damashq"
+      },
+      "audio": {
+        "music_cue": "MUS_EP008",
+        "ambience_tag": "Ambience.Spring.Dust",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep008",
+        "target_completion_pct": 85.2,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "torture.witnessed",
+          "execution"
+        ],
+        "has_torture_scene": true
+      },
+      "retention_hook": "ep.ep008.teaser"
+    },
+    {
+      "id": "EP009",
+      "season_id": "S1",
+      "global_index": 8,
+      "season_index": 8,
+      "loc_key_title": "ep.ep009.title",
+      "loc_key_synopsis": "ep.ep009.synopsis",
+      "loc_key_cliffhanger": "ep.ep009.cliffhanger",
+      "anchor": {
+        "hijri": "625 Rajab",
+        "gregorian": "1228 Iyun",
+        "year_gregorian": 1228,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep009.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 120,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep009.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 2,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Traitor": 5
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "OBJECT",
+        "loc_key": "ep.ep009.mih",
+        "tag": "Mih.Beat.Object",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_TRIBAL_ELECTION",
+        "CDX_UC_BEY",
+        "CDX_ALP_RANK"
+      ],
+      "prerequisites": [
+        "EP008"
+      ],
+      "unlocks": [
+        "EP010"
+      ],
+      "checkpoints": [
+        "CP_EP009_INTRO_END",
+        "CP_EP009_MID",
+        "CP_EP009_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP009.Completed"
+      ],
+      "levels": [
+        "LVL_KURDOGLU_IPLARI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "night",
+        "weather": "clear",
+        "region": "Qayi obasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP009",
+        "ambience_tag": "Ambience.Summer.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep009",
+        "target_completion_pct": 83.6,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep009.teaser"
+    },
+    {
+      "id": "EP010",
+      "season_id": "S1",
+      "global_index": 9,
+      "season_index": 9,
+      "loc_key_title": "ep.ep010.title",
+      "loc_key_synopsis": "ep.ep010.synopsis",
+      "loc_key_cliffhanger": "ep.ep010.cliffhanger",
+      "anchor": {
+        "hijri": "625 Ramazon",
+        "gregorian": "1228 Avgust",
+        "year_gregorian": 1228,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep010.history_note"
+      },
+      "intro": {
+        "archetype": "OTHER_EYES",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep010.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "CHASE",
+      "difficulty_tier": 2,
+      "estimated_minutes": 50,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Templar.Sergeant": 10,
+          "Enemy.Crossbowman": 4
+        },
+        "max_simultaneous": 6,
+        "background_agents": 0
+      },
+      "traversal": [
+        "HORSE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "CAMERA",
+        "loc_key": "ep.ep010.mih",
+        "tag": "Mih.Beat.Camera",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_CROSSBOW",
+        "CDX_TEMPLAR_TACTICS",
+        "CDX_AMANUS_GEOGRAPHY"
+      ],
+      "prerequisites": [
+        "EP009"
+      ],
+      "unlocks": [
+        "EP011"
+      ],
+      "checkpoints": [
+        "CP_EP010_INTRO_END",
+        "CP_EP010_MID",
+        "CP_EP010_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP010.Completed"
+      ],
+      "levels": [
+        "LVL_ORMONDAGI_QON"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Qarag'ay o'rmoni"
+      },
+      "audio": {
+        "music_cue": "MUS_EP010",
+        "ambience_tag": "Ambience.Summer.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep010",
+        "target_completion_pct": 82.0,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep010.teaser"
+    },
+    {
+      "id": "EP011",
+      "season_id": "S1",
+      "global_index": 10,
+      "season_index": 10,
+      "loc_key_title": "ep.ep011.title",
+      "loc_key_synopsis": "ep.ep011.synopsis",
+      "loc_key_cliffhanger": "ep.ep011.cliffhanger",
+      "anchor": {
+        "hijri": "625 Zulqada",
+        "gregorian": "1228 Oktabr",
+        "year_gregorian": 1228,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep011.history_note"
+      },
+      "intro": {
+        "archetype": "PLUNGE",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep011.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INFILTRATION",
+      "difficulty_tier": 2,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Templar.Sergeant": 16,
+          "Enemy.Templar.Knight": 6
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "SWIM",
+        "SEWER_CAVE",
+        "FOOT_PARKOUR",
+        "ROPE_GRAPPLE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "ON_OTHER",
+        "loc_key": "ep.ep011.mih",
+        "tag": "Mih.Beat.OnOther",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_BAGRAS_CASTLE",
+        "CDX_MEDIEVAL_WATER",
+        "CDX_TEMPLAR_RULE"
+      ],
+      "prerequisites": [
+        "EP010"
+      ],
+      "unlocks": [
+        "EP012"
+      ],
+      "checkpoints": [
+        "CP_EP011_INTRO_END",
+        "CP_EP011_MID",
+        "CP_EP011_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP011.Completed"
+      ],
+      "levels": [
+        "LVL_SUV_YOLI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "night",
+        "weather": "clear",
+        "region": "Bagras qal'asi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP011",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep011",
+        "target_completion_pct": 80.5,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "torture.aftermath"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep011.teaser"
+    },
+    {
+      "id": "EP012",
+      "season_id": "S1",
+      "global_index": 11,
+      "season_index": 11,
+      "loc_key_title": "ep.ep012.title",
+      "loc_key_synopsis": "ep.ep012.synopsis",
+      "loc_key_cliffhanger": "ep.ep012.cliffhanger",
+      "anchor": {
+        "hijri": "627 Safar",
+        "gregorian": "1229 Dekabr",
+        "year_gregorian": 1229,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep012.history_note"
+      },
+      "intro": {
+        "archetype": "LABOUR",
+        "duration_sec": 300,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep012.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SIEGE",
+      "difficulty_tier": 2,
+      "estimated_minutes": 80,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Templar.Knight": 20,
+          "Enemy.Templar.Sergeant": 40,
+          "Boss.Titus": 1
+        },
+        "max_simultaneous": 6,
+        "background_agents": 400
+      },
+      "traversal": [
+        "VERTICAL_SIEGE",
+        "ROPE_GRAPPLE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep012.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_SIEGE_1229_BAGRAS",
+        "CDX_TREBUCHET",
+        "CDX_TEMPLAR_DEFEAT"
+      ],
+      "prerequisites": [
+        "EP011"
+      ],
+      "unlocks": [
+        "EP013"
+      ],
+      "checkpoints": [
+        "CP_EP012_INTRO_END",
+        "CP_EP012_MID",
+        "CP_EP012_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP012.Completed"
+      ],
+      "levels": [
+        "LVL_BAGRAS"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "fog",
+        "region": "Bagras qal'asi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP012",
+        "ambience_tag": "Ambience.Winter.Fog",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep012",
+        "target_completion_pct": 79.0,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep012.teaser"
+    },
+    {
+      "id": "EP013",
+      "season_id": "S2",
+      "global_index": 12,
+      "season_index": 0,
+      "loc_key_title": "ep.ep013.title",
+      "loc_key_synopsis": "ep.ep013.synopsis",
+      "loc_key_cliffhanger": "ep.ep013.cliffhanger",
+      "anchor": {
+        "hijri": "627 Ramazon",
+        "gregorian": "10 Avgust 1230",
+        "year_gregorian": 1230,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep013.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep013.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SIEGE",
+      "difficulty_tier": 3,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Khwarezmian.Spearman": 60,
+          "Enemy.Khwarezmian.Cavalry": 30
+        },
+        "max_simultaneous": 7,
+        "background_agents": 3000
+      },
+      "traversal": [
+        "HORSE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep013.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.1,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_YASSICEMEN",
+        "CDX_JALALADDIN",
+        "CDX_KAYQUBAD_I",
+        "CDX_KHWAREZMIAN_ARMY"
+      ],
+      "prerequisites": [
+        "EP012"
+      ],
+      "unlocks": [
+        "EP014"
+      ],
+      "checkpoints": [
+        "CP_EP013_INTRO_END",
+        "CP_EP013_MID",
+        "CP_EP013_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP013.Completed"
+      ],
+      "levels": [
+        "LVL_YASSICEMEN"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Yassıçemen (Erzincan)"
+      },
+      "audio": {
+        "music_cue": "MUS_EP013",
+        "ambience_tag": "Ambience.Summer.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep013",
+        "target_completion_pct": 77.4,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic",
+          "war.mass"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep013.teaser"
+    },
+    {
+      "id": "EP014",
+      "season_id": "S2",
+      "global_index": 13,
+      "season_index": 1,
+      "loc_key_title": "ep.ep014.title",
+      "loc_key_synopsis": "ep.ep014.synopsis",
+      "loc_key_cliffhanger": "ep.ep014.cliffhanger",
+      "anchor": {
+        "hijri": "628 Muharram",
+        "gregorian": "1230 Noyabr",
+        "year_gregorian": 1230,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep014.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep014.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 3,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Assassin.Court": 4
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "HORSE",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "OBJECT",
+        "loc_key": "ep.ep014.mih",
+        "tag": "Mih.Beat.Object",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_KOPEK",
+        "CDX_KUBADABAD",
+        "CDX_EMIR_I_SIKAR",
+        "CDX_SELJUK_COURT"
+      ],
+      "prerequisites": [
+        "EP013"
+      ],
+      "unlocks": [
+        "EP015"
+      ],
+      "checkpoints": [
+        "CP_EP014_INTRO_END",
+        "CP_EP014_MID",
+        "CP_EP014_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP014.Completed"
+      ],
+      "levels": [
+        "LVL_OV_BOSHLIGI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Kubadabad"
+      },
+      "audio": {
+        "music_cue": "MUS_EP014",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep014",
+        "target_completion_pct": 75.8,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep014.teaser"
+    },
+    {
+      "id": "EP015",
+      "season_id": "S2",
+      "global_index": 14,
+      "season_index": 2,
+      "loc_key_title": "ep.ep015.title",
+      "loc_key_synopsis": "ep.ep015.synopsis",
+      "loc_key_cliffhanger": "ep.ep015.cliffhanger",
+      "anchor": {
+        "hijri": "629 Rabiul-oxir",
+        "gregorian": "1232 Fevral",
+        "year_gregorian": 1232,
+        "confidence": "LEGEND",
+        "loc_key_note": "ep.ep015.history_note"
+      },
+      "intro": {
+        "archetype": "HANDS",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep015.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "RITUAL",
+      "difficulty_tier": 3,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep015.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_SOGUT_DOMANIC",
+        "CDX_BLACKSMITHING",
+        "CDX_CRAFTING_TRADITION"
+      ],
+      "prerequisites": [
+        "EP014"
+      ],
+      "unlocks": [
+        "EP016"
+      ],
+      "checkpoints": [
+        "CP_EP015_INTRO_END",
+        "CP_EP015_MID",
+        "CP_EP015_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP015.Completed"
+      ],
+      "levels": [
+        "LVL_KARACADAG_BIRINCHI_TOSH"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Karacadağ"
+      },
+      "audio": {
+        "music_cue": "MUS_EP015",
+        "ambience_tag": "Ambience.Winter.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep015",
+        "target_completion_pct": 74.3,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep015.teaser"
+    },
+    {
+      "id": "EP016",
+      "season_id": "S2",
+      "global_index": 15,
+      "season_index": 3,
+      "loc_key_title": "ep.ep016.title",
+      "loc_key_synopsis": "ep.ep016.synopsis",
+      "loc_key_cliffhanger": "ep.ep016.cliffhanger",
+      "anchor": {
+        "hijri": "630 Shaban",
+        "gregorian": "1233 May",
+        "year_gregorian": 1233,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep016.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep016.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "ESCORT",
+      "difficulty_tier": 3,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Bandit": 25
+        },
+        "max_simultaneous": 6,
+        "background_agents": 120
+      },
+      "traversal": [
+        "MOVING_PLATFORM",
+        "HORSE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "ON_OTHER",
+        "loc_key": "ep.ep016.mih",
+        "tag": "Mih.Beat.OnOther",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_KHWAREZMIAN_REMNANT",
+        "CDX_IQTA",
+        "CDX_KIR_KHAN"
+      ],
+      "prerequisites": [
+        "EP015"
+      ],
+      "unlocks": [
+        "EP017"
+      ],
+      "checkpoints": [
+        "CP_EP016_INTRO_END",
+        "CP_EP016_MID",
+        "CP_EP016_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP016.Completed"
+      ],
+      "levels": [
+        "LVL_YETIM_QOSHIN"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Larande yo'li"
+      },
+      "audio": {
+        "music_cue": "MUS_EP016",
+        "ambience_tag": "Ambience.Spring.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep016",
+        "target_completion_pct": 72.8,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "famine"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep016.teaser"
+    },
+    {
+      "id": "EP017",
+      "season_id": "S2",
+      "global_index": 16,
+      "season_index": 4,
+      "loc_key_title": "ep.ep017.title",
+      "loc_key_synopsis": "ep.ep017.synopsis",
+      "loc_key_cliffhanger": "ep.ep017.cliffhanger",
+      "anchor": {
+        "hijri": "631 Muharram",
+        "gregorian": "1233 Oktabr",
+        "year_gregorian": 1233,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep017.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "DIEGETIC",
+        "loc_key_description": "ep.ep017.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 3,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.PalaceGuard": 3
+        },
+        "max_simultaneous": 3,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "OBJECT",
+        "loc_key": "ep.ep017.mih",
+        "tag": "Mih.Beat.Object",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_KONYA",
+        "CDX_RUMI_ARRIVAL",
+        "CDX_QUNAWI",
+        "CDX_SELJUK_LITERACY",
+        "CDX_MEDIEVAL_SURGERY"
+      ],
+      "prerequisites": [
+        "EP016"
+      ],
+      "unlocks": [
+        "EP018"
+      ],
+      "checkpoints": [
+        "CP_EP017_INTRO_END",
+        "CP_EP017_MID",
+        "CP_EP017_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP017.Completed"
+      ],
+      "levels": [
+        "LVL_KONYA_KUTUBXONA"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "day",
+        "weather": "rain",
+        "region": "Konya"
+      },
+      "audio": {
+        "music_cue": "MUS_EP017",
+        "ambience_tag": "Ambience.Autumn.Rain",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep017",
+        "target_completion_pct": 71.2,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep017.teaser"
+    },
+    {
+      "id": "EP018",
+      "season_id": "S2",
+      "global_index": 17,
+      "season_index": 5,
+      "loc_key_title": "ep.ep018.title",
+      "loc_key_synopsis": "ep.ep018.synopsis",
+      "loc_key_cliffhanger": "ep.ep018.cliffhanger",
+      "anchor": {
+        "hijri": "632 Rajab",
+        "gregorian": "1235 Aprel",
+        "year_gregorian": 1235,
+        "confidence": "LEGEND",
+        "loc_key_note": "ep.ep018.history_note"
+      },
+      "intro": {
+        "archetype": "BREATH",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep018.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SURVIVAL",
+      "difficulty_tier": 3,
+      "estimated_minutes": 50,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Wolf.Rabid": 6
+        },
+        "max_simultaneous": 5,
+        "background_agents": 0
+      },
+      "traversal": [
+        "HORSE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "CAMERA",
+        "loc_key": "ep.ep018.mih",
+        "tag": "Mih.Beat.Camera",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_TRANSHUMANCE",
+        "CDX_HORSE_BREEDING",
+        "CDX_STEPPE_MEDICINE"
+      ],
+      "prerequisites": [
+        "EP017"
+      ],
+      "unlocks": [
+        "EP019"
+      ],
+      "checkpoints": [
+        "CP_EP018_INTRO_END",
+        "CP_EP018_MID",
+        "CP_EP018_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP018.Completed"
+      ],
+      "levels": [
+        "LVL_DOMANIC_YOZI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Domaniç yaylovi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP018",
+        "ambience_tag": "Ambience.Spring.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep018",
+        "target_completion_pct": 69.7,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "animal.harm"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep018.teaser"
+    },
+    {
+      "id": "EP019",
+      "season_id": "S2",
+      "global_index": 18,
+      "season_index": 6,
+      "loc_key_title": "ep.ep019.title",
+      "loc_key_synopsis": "ep.ep019.synopsis",
+      "loc_key_cliffhanger": "ep.ep019.cliffhanger",
+      "anchor": {
+        "hijri": "634 Zulhijja",
+        "gregorian": "31 May 1237",
+        "year_gregorian": 1237,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep019.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 300,
+        "date_display": "SPOKEN",
+        "loc_key_description": "ep.ep019.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 3,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Assassin.Court": 2
+        },
+        "max_simultaneous": 2,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "THREAT",
+        "loc_key": "ep.ep019.mih",
+        "tag": "Mih.Beat.Threat",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_KAYQUBAD_DEATH",
+        "CDX_KAYKHUSRAW_II",
+        "CDX_MEDIEVAL_POISONS"
+      ],
+      "prerequisites": [
+        "EP018"
+      ],
+      "unlocks": [
+        "EP020"
+      ],
+      "checkpoints": [
+        "CP_EP019_INTRO_END",
+        "CP_EP019_MID",
+        "CP_EP019_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP019.Completed"
+      ],
+      "levels": [
+        "LVL_ZAHARLANGAN_TAOM"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "dusk",
+        "weather": "clear",
+        "region": "Kayseri saroyi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP019",
+        "ambience_tag": "Ambience.Spring.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep019",
+        "target_completion_pct": 68.1,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "poisoning"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep019.teaser"
+    },
+    {
+      "id": "EP020",
+      "season_id": "S2",
+      "global_index": 19,
+      "season_index": 7,
+      "loc_key_title": "ep.ep020.title",
+      "loc_key_synopsis": "ep.ep020.synopsis",
+      "loc_key_cliffhanger": "ep.ep020.cliffhanger",
+      "anchor": {
+        "hijri": "635 Muharram",
+        "gregorian": "1237 Avgust",
+        "year_gregorian": 1237,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep020.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep020.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 4,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Assassin.Court": 8,
+          "Enemy.PalaceGuard": 10
+        },
+        "max_simultaneous": 5,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "SEWER_CAVE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "CORPSE",
+        "loc_key": "ep.ep020.mih",
+        "tag": "Mih.Beat.Corpse",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_KOPEK_TERROR",
+        "CDX_SELJUK_EXECUTIONS",
+        "CDX_IBN_BIBI"
+      ],
+      "prerequisites": [
+        "EP019"
+      ],
+      "unlocks": [
+        "EP021"
+      ],
+      "checkpoints": [
+        "CP_EP020_INTRO_END",
+        "CP_EP020_MID",
+        "CP_EP020_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP020.Completed"
+      ],
+      "levels": [
+        "LVL_KOPEK_HUKMRONLIGI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "dawn",
+        "weather": "clear",
+        "region": "Konya"
+      },
+      "audio": {
+        "music_cue": "MUS_EP020",
+        "ambience_tag": "Ambience.Summer.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep020",
+        "target_completion_pct": 66.5,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "execution",
+          "torture.aftermath"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep020.teaser"
+    },
+    {
+      "id": "EP021",
+      "season_id": "S2",
+      "global_index": 20,
+      "season_index": 8,
+      "loc_key_title": "ep.ep021.title",
+      "loc_key_synopsis": "ep.ep021.synopsis",
+      "loc_key_cliffhanger": "ep.ep021.cliffhanger",
+      "anchor": {
+        "hijri": "635 Rabiul-avval",
+        "gregorian": "1237 Oktabr",
+        "year_gregorian": 1237,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep021.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "DIEGETIC",
+        "loc_key_description": "ep.ep021.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INFILTRATION",
+      "difficulty_tier": 4,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Assassin.Court": 30
+        },
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "THREAT",
+        "loc_key": "ep.ep021.mih",
+        "tag": "Mih.Beat.Threat",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_ZAZADIN_HAN",
+        "CDX_KOPEK_PATRONAGE"
+      ],
+      "prerequisites": [
+        "EP020"
+      ],
+      "unlocks": [
+        "EP022"
+      ],
+      "checkpoints": [
+        "CP_EP021_INTRO_END",
+        "CP_EP021_MID",
+        "CP_EP021_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP021.Completed"
+      ],
+      "levels": [
+        "LVL_YOLGIZ_KELASAN"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "dusk",
+        "weather": "clear",
+        "region": "Zazadin Han"
+      },
+      "audio": {
+        "music_cue": "MUS_EP021",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep021",
+        "target_completion_pct": 65.0,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "threat.mutilation"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep021.teaser"
+    },
+    {
+      "id": "EP022",
+      "season_id": "S2",
+      "global_index": 21,
+      "season_index": 9,
+      "loc_key_title": "ep.ep022.title",
+      "loc_key_synopsis": "ep.ep022.synopsis",
+      "loc_key_cliffhanger": "ep.ep022.cliffhanger",
+      "anchor": {
+        "hijri": "635 Jumadal-oxir",
+        "gregorian": "1238 Yanvar",
+        "year_gregorian": 1238,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep022.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep022.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "DEFENSE",
+      "difficulty_tier": 4,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Raider": 40,
+          "Enemy.Mongol.Scout": 3
+        },
+        "max_simultaneous": 6,
+        "background_agents": 150
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "SNOW_ICE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep022.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.3,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_CHORMAQAN",
+        "CDX_MONGOL_SCOUTS",
+        "CDX_NERGE"
+      ],
+      "prerequisites": [
+        "EP021"
+      ],
+      "unlocks": [
+        "EP023"
+      ],
+      "checkpoints": [
+        "CP_EP022_INTRO_END",
+        "CP_EP022_MID",
+        "CP_EP022_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP022.Completed"
+      ],
+      "levels": [
+        "LVL_CHEGARA_YONMOQDA"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "night",
+        "weather": "snow",
+        "region": "Chegara"
+      },
+      "audio": {
+        "music_cue": "MUS_EP022",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep022",
+        "target_completion_pct": 63.4,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep022.teaser"
+    },
+    {
+      "id": "EP023",
+      "season_id": "S2",
+      "global_index": 22,
+      "season_index": 10,
+      "loc_key_title": "ep.ep023.title",
+      "loc_key_synopsis": "ep.ep023.synopsis",
+      "loc_key_cliffhanger": "ep.ep023.cliffhanger",
+      "anchor": {
+        "hijri": "636 Rabiul-avval",
+        "gregorian": "1238 Sentabr",
+        "year_gregorian": 1238,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep023.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep023.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "CHASE",
+      "difficulty_tier": 4,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.PalaceGuard": 12,
+          "Enemy.Assassin.Court": 8
+        },
+        "max_simultaneous": 6,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "VERTICAL_SIEGE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "OBJECT",
+        "loc_key": "ep.ep023.mih",
+        "tag": "Mih.Beat.Object",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "INTACT",
+        "expected_integrity_at_start": 100.0,
+        "max_integrity": 100.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 180.0
+      },
+      "codex_unlocks": [
+        "CDX_KOPEK_DEATH",
+        "CDX_HUSAM_AL_DIN"
+      ],
+      "prerequisites": [
+        "EP022"
+      ],
+      "unlocks": [
+        "EP024"
+      ],
+      "checkpoints": [
+        "CP_EP023_INTRO_END",
+        "CP_EP023_MID",
+        "CP_EP023_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP023.Completed"
+      ],
+      "levels": [
+        "LVL_KOPEKNING_OXIRI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "night",
+        "weather": "clear",
+        "region": "Konya saroyi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP023",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep023",
+        "target_completion_pct": 61.9,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "execution",
+          "fire"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep023.teaser"
+    },
+    {
+      "id": "EP024",
+      "season_id": "S2",
+      "global_index": 23,
+      "season_index": 11,
+      "loc_key_title": "ep.ep024.title",
+      "loc_key_synopsis": "ep.ep024.synopsis",
+      "loc_key_cliffhanger": "ep.ep024.cliffhanger",
+      "anchor": {
+        "hijri": "636 Jumadal-avval",
+        "gregorian": "1238 Dekabr",
+        "year_gregorian": 1238,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep024.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 360,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep024.intro",
+        "allow_movement": false,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INFILTRATION",
+      "difficulty_tier": 4,
+      "estimated_minutes": 75,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Assassin.Court": 6
+        },
+        "max_simultaneous": 6,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "SNOW_ICE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "EVENT",
+        "loc_key": "ep.ep024.mih",
+        "tag": "Mih.Beat.Event",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "FRESH",
+        "expected_integrity_at_start": 0.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 2.0,
+        "parry_window_ms": 110.0
+      },
+      "codex_unlocks": [
+        "CDX_SALB_TASMIR",
+        "CDX_HAND_ANATOMY",
+        "CDX_MEDIEVAL_PAIN"
+      ],
+      "prerequisites": [
+        "EP023"
+      ],
+      "unlocks": [
+        "EP025"
+      ],
+      "checkpoints": [
+        "CP_EP024_INTRO_END",
+        "CP_EP024_MID",
+        "CP_EP024_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP024.Completed"
+      ],
+      "levels": [
+        "LVL_MIX"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "night",
+        "weather": "snow",
+        "region": "Karvonsaroy xarobasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP024",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": true
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep024",
+        "target_completion_pct": 60.4,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "torture.graphic",
+          "mutilation",
+          "restraint"
+        ],
+        "has_torture_scene": true
+      },
+      "retention_hook": "ep.ep024.teaser"
+    },
+    {
+      "id": "EP025",
+      "season_id": "S3",
+      "global_index": 24,
+      "season_index": 0,
+      "loc_key_title": "ep.ep025.title",
+      "loc_key_synopsis": "ep.ep025.synopsis",
+      "loc_key_cliffhanger": "ep.ep025.cliffhanger",
+      "anchor": {
+        "hijri": "636 Jumadal-oxir",
+        "gregorian": "1238 Dekabr",
+        "year_gregorian": 1238,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep025.history_note"
+      },
+      "intro": {
+        "archetype": "PLUNGE",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep025.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SURVIVAL",
+      "difficulty_tier": 4,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Wolf": 3
+        },
+        "max_simultaneous": 3,
+        "background_agents": 0
+      },
+      "traversal": [
+        "SNOW_ICE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep025.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "FRESH",
+        "expected_integrity_at_start": 0.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 2.0,
+        "parry_window_ms": 110.0
+      },
+      "codex_unlocks": [
+        "CDX_CAUTERIZATION",
+        "CDX_STEPPE_MEDICINE",
+        "CDX_HYPOTHERMIA",
+        "CDX_WOLF_BEHAVIOR"
+      ],
+      "prerequisites": [
+        "EP024"
+      ],
+      "unlocks": [
+        "EP026"
+      ],
+      "checkpoints": [
+        "CP_EP025_INTRO_END",
+        "CP_EP025_MID",
+        "CP_EP025_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP025.Completed"
+      ],
+      "levels": [
+        "LVL_QORDA_UCH_KUN"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "varies",
+        "weather": "snow",
+        "region": "Qorli o'rmon"
+      },
+      "audio": {
+        "music_cue": "MUS_EP025",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep025",
+        "target_completion_pct": 58.8,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "self.surgery",
+          "gore"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep025.teaser"
+    },
+    {
+      "id": "EP026",
+      "season_id": "S3",
+      "global_index": 25,
+      "season_index": 1,
+      "loc_key_title": "ep.ep026.title",
+      "loc_key_synopsis": "ep.ep026.synopsis",
+      "loc_key_cliffhanger": "ep.ep026.cliffhanger",
+      "anchor": {
+        "hijri": "636 Rajab",
+        "gregorian": "1239 Fevral",
+        "year_gregorian": 1239,
+        "confidence": "DISPUTED",
+        "loc_key_note": "ep.ep026.history_note"
+      },
+      "intro": {
+        "archetype": "HANDS",
+        "duration_sec": 300,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep026.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "RITUAL",
+      "difficulty_tier": 4,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "SEWER_CAVE",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep026.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "FRESH",
+        "expected_integrity_at_start": 25.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.4,
+        "parry_window_ms": 130.8
+      },
+      "codex_unlocks": [
+        "CDX_HACI_BEKTAS",
+        "CDX_KHORASAN_MIGRATION",
+        "CDX_DERVISH_LODGES",
+        "CDX_SWORD_FORGING"
+      ],
+      "prerequisites": [
+        "EP025"
+      ],
+      "unlocks": [
+        "EP027"
+      ],
+      "checkpoints": [
+        "CP_EP026_INTRO_END",
+        "CP_EP026_MID",
+        "CP_EP026_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP026.Completed"
+      ],
+      "levels": [
+        "LVL_CHAP_QOL_YOLI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "varies",
+        "weather": "snow",
+        "region": "G'or"
+      },
+      "audio": {
+        "music_cue": "MUS_EP026",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep026",
+        "target_completion_pct": 57.2,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep026.teaser"
+    },
+    {
+      "id": "EP027",
+      "season_id": "S3",
+      "global_index": 26,
+      "season_index": 2,
+      "loc_key_title": "ep.ep027.title",
+      "loc_key_synopsis": "ep.ep027.synopsis",
+      "loc_key_cliffhanger": "ep.ep027.cliffhanger",
+      "anchor": {
+        "hijri": "637 Ramazon",
+        "gregorian": "1240 Aprel",
+        "year_gregorian": 1240,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep027.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep027.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 4,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Rival.Bey": 1
+        },
+        "max_simultaneous": 1,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep027.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 40.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.2,
+        "parry_window_ms": 139.0
+      },
+      "codex_unlocks": [
+        "CDX_TRIBAL_SUCCESSION",
+        "CDX_OATH_BINDING",
+        "CDX_KURULTAY"
+      ],
+      "prerequisites": [
+        "EP026"
+      ],
+      "unlocks": [
+        "EP028"
+      ],
+      "checkpoints": [
+        "CP_EP027_INTRO_END",
+        "CP_EP027_MID",
+        "CP_EP027_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP027.Completed"
+      ],
+      "levels": [
+        "LVL_OZ_QABRINGNI_KORISH"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Qayi obasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP027",
+        "ambience_tag": "Ambience.Spring.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep027",
+        "target_completion_pct": 55.7,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep027.teaser"
+    },
+    {
+      "id": "EP028",
+      "season_id": "S3",
+      "global_index": 27,
+      "season_index": 3,
+      "loc_key_title": "ep.ep028.title",
+      "loc_key_synopsis": "ep.ep028.synopsis",
+      "loc_key_cliffhanger": "ep.ep028.cliffhanger",
+      "anchor": {
+        "hijri": "638 Safar",
+        "gregorian": "1240 Sentabr",
+        "year_gregorian": 1240,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep028.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep028.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 4,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Spy": 9,
+          "Enemy.PalaceGuard": 21
+        },
+        "max_simultaneous": 5,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "HORSE",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "ADVANTAGE",
+        "loc_key": "ep.ep028.mih",
+        "tag": "Mih.Beat.Advantage",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.1,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_PAIZA",
+        "CDX_YAM_POSTAL",
+        "CDX_MONGOL_INTELLIGENCE"
+      ],
+      "prerequisites": [
+        "EP027"
+      ],
+      "unlocks": [
+        "EP029"
+      ],
+      "checkpoints": [
+        "CP_EP028_INTRO_END",
+        "CP_EP028_MID",
+        "CP_EP028_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP028.Completed"
+      ],
+      "levels": [
+        "LVL_PAIZA"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Konya / Kayseri / Sivas"
+      },
+      "audio": {
+        "music_cue": "MUS_EP028",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep028",
+        "target_completion_pct": 54.1,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep028.teaser"
+    },
+    {
+      "id": "EP029",
+      "season_id": "S3",
+      "global_index": 28,
+      "season_index": 4,
+      "loc_key_title": "ep.ep029.title",
+      "loc_key_synopsis": "ep.ep029.synopsis",
+      "loc_key_cliffhanger": "ep.ep029.cliffhanger",
+      "anchor": {
+        "hijri": "638 Jumadal-avval",
+        "gregorian": "1240 Dekabr",
+        "year_gregorian": 1240,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep029.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep029.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "CHASE",
+      "difficulty_tier": 4,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Mongol.HorseArcher": 60
+        },
+        "max_simultaneous": 8,
+        "background_agents": 0
+      },
+      "traversal": [
+        "HORSE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep029.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.6,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_NERGE",
+        "CDX_MONGOL_BOW",
+        "CDX_PARTHIAN_SHOT",
+        "CDX_MONGOL_HORSES",
+        "CDX_ARBAN_JAGUN"
+      ],
+      "prerequisites": [
+        "EP028"
+      ],
+      "unlocks": [
+        "EP030"
+      ],
+      "checkpoints": [
+        "CP_EP029_INTRO_END",
+        "CP_EP029_MID",
+        "CP_EP029_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP029.Completed"
+      ],
+      "levels": [
+        "LVL_NERGE"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "snow",
+        "region": "Dasht"
+      },
+      "audio": {
+        "music_cue": "MUS_EP029",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep029",
+        "target_completion_pct": 52.6,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep029.teaser"
+    },
+    {
+      "id": "EP030",
+      "season_id": "S3",
+      "global_index": 29,
+      "season_index": 5,
+      "loc_key_title": "ep.ep030.title",
+      "loc_key_synopsis": "ep.ep030.synopsis",
+      "loc_key_cliffhanger": "ep.ep030.cliffhanger",
+      "anchor": {
+        "hijri": "639 Muharram",
+        "gregorian": "1241 Iyul",
+        "year_gregorian": 1241,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep030.history_note"
+      },
+      "intro": {
+        "archetype": "LABOUR",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep030.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "DEFENSE",
+      "difficulty_tier": 5,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Mongol.HorseArcher": 80,
+          "Enemy.Mongol.Sapper": 20,
+          "Enemy.SiegeEngine": 4
+        },
+        "max_simultaneous": 8,
+        "background_agents": 300
+      },
+      "traversal": [
+        "VERTICAL_SIEGE",
+        "ROPE_GRAPPLE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep030.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 40.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.5,
+        "parry_window_ms": 139.0
+      },
+      "codex_unlocks": [
+        "CDX_BAIJU_APPOINTED",
+        "CDX_MONGOL_SIEGE_ENGINES",
+        "CDX_ERZURUM",
+        "CDX_OGEDEI_DEATH"
+      ],
+      "prerequisites": [
+        "EP029"
+      ],
+      "unlocks": [
+        "EP031"
+      ],
+      "checkpoints": [
+        "CP_EP030_INTRO_END",
+        "CP_EP030_MID",
+        "CP_EP030_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP030.Completed"
+      ],
+      "levels": [
+        "LVL_ERZURUM_DEVORLARI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Erzurum"
+      },
+      "audio": {
+        "music_cue": "MUS_EP030",
+        "ambience_tag": "Ambience.Summer.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep030",
+        "target_completion_pct": 51.0,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic",
+          "war.mass"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep030.teaser"
+    },
+    {
+      "id": "EP031",
+      "season_id": "S3",
+      "global_index": 30,
+      "season_index": 6,
+      "loc_key_title": "ep.ep031.title",
+      "loc_key_synopsis": "ep.ep031.synopsis",
+      "loc_key_cliffhanger": "ep.ep031.cliffhanger",
+      "anchor": {
+        "hijri": "639 Rajab",
+        "gregorian": "1242 Yanvar",
+        "year_gregorian": 1242,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep031.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep031.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 5,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep031.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.2,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_TEMPLAR_MONGOL_RELATIONS",
+        "CDX_ANTIOCH_1242"
+      ],
+      "prerequisites": [
+        "EP030"
+      ],
+      "unlocks": [
+        "EP032"
+      ],
+      "checkpoints": [
+        "CP_EP031_INTRO_END",
+        "CP_EP031_MID",
+        "CP_EP031_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP031.Completed"
+      ],
+      "levels": [
+        "LVL_OQ_PLASH_QORA_BULUT"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "fog",
+        "region": "Bagras qal'asi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP031",
+        "ambience_tag": "Ambience.Winter.Fog",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep031",
+        "target_completion_pct": 49.5,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep031.teaser"
+    },
+    {
+      "id": "EP032",
+      "season_id": "S3",
+      "global_index": 31,
+      "season_index": 7,
+      "loc_key_title": "ep.ep032.title",
+      "loc_key_synopsis": "ep.ep032.synopsis",
+      "loc_key_cliffhanger": "ep.ep032.cliffhanger",
+      "anchor": {
+        "hijri": "640 Safar",
+        "gregorian": "1242 Avgust",
+        "year_gregorian": 1242,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep032.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 360,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep032.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INFILTRATION",
+      "difficulty_tier": 5,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Keshig": 40
+        },
+        "max_simultaneous": 0,
+        "background_agents": 600
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "THREAT",
+        "loc_key": "ep.ep032.mih",
+        "tag": "Mih.Beat.Threat",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 42.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.2,
+        "parry_window_ms": 140.0
+      },
+      "codex_unlocks": [
+        "CDX_BAIJU_NOYAN",
+        "CDX_MONGOL_ADMINISTRATION",
+        "CDX_YASSA_LAW",
+        "CDX_MONGOL_TOLERANCE"
+      ],
+      "prerequisites": [
+        "EP031"
+      ],
+      "unlocks": [
+        "EP033"
+      ],
+      "checkpoints": [
+        "CP_EP032_INTRO_END",
+        "CP_EP032_MID",
+        "CP_EP032_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP032.Completed"
+      ],
+      "levels": [
+        "LVL_NOYAN"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "day",
+        "weather": "dust",
+        "region": "Mo'g'ul lageri"
+      },
+      "audio": {
+        "music_cue": "MUS_EP032",
+        "ambience_tag": "Ambience.Summer.Dust",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep032",
+        "target_completion_pct": 47.9,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "threat.mutilation"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep032.teaser"
+    },
+    {
+      "id": "EP033",
+      "season_id": "S3",
+      "global_index": 32,
+      "season_index": 8,
+      "loc_key_title": "ep.ep033.title",
+      "loc_key_synopsis": "ep.ep033.synopsis",
+      "loc_key_cliffhanger": "ep.ep033.cliffhanger",
+      "anchor": {
+        "hijri": "640 Shaban",
+        "gregorian": "1243 Fevral",
+        "year_gregorian": 1243,
+        "confidence": "DISPUTED",
+        "loc_key_note": "ep.ep033.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep033.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 5,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep033.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.1,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_KOSE_DAG_ARMIES",
+        "CDX_SELJUK_MILITARY",
+        "CDX_CHRONICLE_EXAGGERATION"
+      ],
+      "prerequisites": [
+        "EP032"
+      ],
+      "unlocks": [
+        "EP034"
+      ],
+      "checkpoints": [
+        "CP_EP033_INTRO_END",
+        "CP_EP033_MID",
+        "CP_EP033_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP033.Completed"
+      ],
+      "levels": [
+        "LVL_SIVAS_KENGASHI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Sivas"
+      },
+      "audio": {
+        "music_cue": "MUS_EP033",
+        "ambience_tag": "Ambience.Winter.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep033",
+        "target_completion_pct": 46.4,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep033.teaser"
+    },
+    {
+      "id": "EP034",
+      "season_id": "S3",
+      "global_index": 33,
+      "season_index": 9,
+      "loc_key_title": "ep.ep034.title",
+      "loc_key_synopsis": "ep.ep034.synopsis",
+      "loc_key_cliffhanger": "ep.ep034.cliffhanger",
+      "anchor": {
+        "hijri": "640 Zulhijja",
+        "gregorian": "1243 May",
+        "year_gregorian": 1243,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep034.history_note"
+      },
+      "intro": {
+        "archetype": "BREATH",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep034.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "RITUAL",
+      "difficulty_tier": 5,
+      "estimated_minutes": 45,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "RITUAL_ACT",
+        "loc_key": "ep.ep034.mih",
+        "tag": "Mih.Beat.RitualAct",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_PRE_BATTLE_RITUAL",
+        "CDX_WILL_INHERITANCE",
+        "CDX_HELAL"
+      ],
+      "prerequisites": [
+        "EP033"
+      ],
+      "unlocks": [
+        "EP035"
+      ],
+      "checkpoints": [
+        "CP_EP034_INTRO_END",
+        "CP_EP034_MID",
+        "CP_EP034_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP034.Completed"
+      ],
+      "levels": [
+        "LVL_OXIRGI_TINCH_KUN"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "dusk",
+        "weather": "clear",
+        "region": "Köse Dağ lageri"
+      },
+      "audio": {
+        "music_cue": "MUS_EP034",
+        "ambience_tag": "Ambience.Spring.Clear",
+        "silence_scene": true
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep034",
+        "target_completion_pct": 44.9,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep034.teaser"
+    },
+    {
+      "id": "EP035",
+      "season_id": "S3",
+      "global_index": 34,
+      "season_index": 10,
+      "loc_key_title": "ep.ep035.title",
+      "loc_key_synopsis": "ep.ep035.synopsis",
+      "loc_key_cliffhanger": "ep.ep035.cliffhanger",
+      "anchor": {
+        "hijri": "641 Muharram",
+        "gregorian": "26 Iyun 1243",
+        "year_gregorian": 1243,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep035.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 300,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep035.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SIEGE",
+      "difficulty_tier": 5,
+      "estimated_minutes": 85,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Mongol.HorseArcher": 200,
+          "Enemy.Keshig": 40,
+          "Enemy.Mongol.Heavy": 60
+        },
+        "max_simultaneous": 8,
+        "background_agents": 3000
+      },
+      "traversal": [
+        "HORSE",
+        "FOOT_PARKOUR",
+        "SNOW_ICE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep035.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 2.2,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_KOSE_DAG",
+        "CDX_FEIGNED_RETREAT",
+        "CDX_MONGOL_TRIBUTE",
+        "CDX_SELJUK_COLLAPSE"
+      ],
+      "prerequisites": [
+        "EP034"
+      ],
+      "unlocks": [
+        "EP036"
+      ],
+      "checkpoints": [
+        "CP_EP035_INTRO_END",
+        "CP_EP035_MID",
+        "CP_EP035_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP035.Completed"
+      ],
+      "levels": [
+        "LVL_KOSE_DAG"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "dawn",
+        "weather": "fog",
+        "region": "Köse Dağ"
+      },
+      "audio": {
+        "music_cue": "MUS_EP035",
+        "ambience_tag": "Ambience.Summer.Fog",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep035",
+        "target_completion_pct": 43.3,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic",
+          "war.mass"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep035.teaser"
+    },
+    {
+      "id": "EP036",
+      "season_id": "S3",
+      "global_index": 35,
+      "season_index": 11,
+      "loc_key_title": "ep.ep036.title",
+      "loc_key_synopsis": "ep.ep036.synopsis",
+      "loc_key_cliffhanger": "ep.ep036.cliffhanger",
+      "anchor": {
+        "hijri": "641 Safar",
+        "gregorian": "1243 Iyul",
+        "year_gregorian": 1243,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep036.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 300,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep036.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INFILTRATION",
+      "difficulty_tier": 5,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Keshig": 24
+        },
+        "max_simultaneous": 4,
+        "background_agents": 800
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR",
+        "SNOW_ICE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "THREAT",
+        "loc_key": "ep.ep036.mih",
+        "tag": "Mih.Beat.Threat",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 20.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.6,
+        "parry_window_ms": 127.8
+      },
+      "codex_unlocks": [
+        "CDX_MONGOL_CENSUS",
+        "CDX_CRAFTSMEN_DEPORTATION",
+        "CDX_KESHIG"
+      ],
+      "prerequisites": [
+        "EP035"
+      ],
+      "unlocks": [
+        "EP037"
+      ],
+      "checkpoints": [
+        "CP_EP036_INTRO_END",
+        "CP_EP036_MID",
+        "CP_EP036_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP036.Completed"
+      ],
+      "levels": [
+        "LVL_SANOQ"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "night",
+        "weather": "clear",
+        "region": "Asirlar lageri"
+      },
+      "audio": {
+        "music_cue": "MUS_EP036",
+        "ambience_tag": "Ambience.Summer.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep036",
+        "target_completion_pct": 41.8,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "threat.mutilation",
+          "captivity"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep036.teaser"
+    },
+    {
+      "id": "EP037",
+      "season_id": "S4",
+      "global_index": 36,
+      "season_index": 0,
+      "loc_key_title": "ep.ep037.title",
+      "loc_key_synopsis": "ep.ep037.synopsis",
+      "loc_key_cliffhanger": "ep.ep037.cliffhanger",
+      "anchor": {
+        "hijri": "641 Rajab",
+        "gregorian": "1243 Dekabr",
+        "year_gregorian": 1243,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep037.history_note"
+      },
+      "intro": {
+        "archetype": "HANDS",
+        "duration_sec": 240,
+        "date_display": "DIEGETIC",
+        "loc_key_description": "ep.ep037.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 5,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Mongol.TaxGuard": 8
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "ADVANTAGE",
+        "loc_key": "ep.ep037.mih",
+        "tag": "Mih.Beat.Advantage",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.1,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_MONGOL_TRIBUTE",
+        "CDX_DARUGACHI",
+        "CDX_VASSALAGE"
+      ],
+      "prerequisites": [
+        "EP036"
+      ],
+      "unlocks": [
+        "EP038"
+      ],
+      "checkpoints": [
+        "CP_EP037_INTRO_END",
+        "CP_EP037_MID",
+        "CP_EP037_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP037.Completed"
+      ],
+      "levels": [
+        "LVL_ON_IKKI_MILLION"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Qayi obasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP037",
+        "ambience_tag": "Ambience.Winter.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep037",
+        "target_completion_pct": 40.2,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep037.teaser"
+    },
+    {
+      "id": "EP038",
+      "season_id": "S4",
+      "global_index": 37,
+      "season_index": 1,
+      "loc_key_title": "ep.ep038.title",
+      "loc_key_synopsis": "ep.ep038.synopsis",
+      "loc_key_cliffhanger": "ep.ep038.cliffhanger",
+      "anchor": {
+        "hijri": "642 Muharram",
+        "gregorian": "1244 Iyun",
+        "year_gregorian": 1244,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep038.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep038.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "ESCORT",
+      "difficulty_tier": 4,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Bandit": 30,
+          "Enemy.Byzantine.Akritai": 12
+        },
+        "max_simultaneous": 6,
+        "background_agents": 400
+      },
+      "traversal": [
+        "MOVING_PLATFORM",
+        "BOAT",
+        "FOOT_PARKOUR",
+        "HORSE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "RITUAL_ACT",
+        "loc_key": "ep.ep038.mih",
+        "tag": "Mih.Beat.RitualAct",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.2,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_TURKMEN_MIGRATION",
+        "CDX_UC_FRONTIER",
+        "CDX_SAKARYA"
+      ],
+      "prerequisites": [
+        "EP037"
+      ],
+      "unlocks": [
+        "EP039"
+      ],
+      "checkpoints": [
+        "CP_EP038_INTRO_END",
+        "CP_EP038_MID",
+        "CP_EP038_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP038.Completed"
+      ],
+      "levels": [
+        "LVL_GARBGA"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "varies",
+        "weather": "varies",
+        "region": "G'arbga yo'l"
+      },
+      "audio": {
+        "music_cue": "MUS_EP038",
+        "ambience_tag": "Ambience.Summer.Varies",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep038",
+        "target_completion_pct": 38.6,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "famine",
+          "child.risk"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep038.teaser"
+    },
+    {
+      "id": "EP039",
+      "season_id": "S4",
+      "global_index": 38,
+      "season_index": 2,
+      "loc_key_title": "ep.ep039.title",
+      "loc_key_synopsis": "ep.ep039.synopsis",
+      "loc_key_cliffhanger": "ep.ep039.cliffhanger",
+      "anchor": {
+        "hijri": "642 Ramazon",
+        "gregorian": "1245 Fevral",
+        "year_gregorian": 1245,
+        "confidence": "DISPUTED",
+        "loc_key_note": "ep.ep039.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep039.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 4,
+      "estimated_minutes": 60,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Byzantine.Akritai": 8
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "RITUAL_ACT",
+        "loc_key": "ep.ep039.mih",
+        "tag": "Mih.Beat.RitualAct",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.2,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_SOGUT_HISTORY",
+        "CDX_BYZANTINE_VILLAGERS",
+        "CDX_TAHRIR_DEFTERI"
+      ],
+      "prerequisites": [
+        "EP038"
+      ],
+      "unlocks": [
+        "EP040"
+      ],
+      "checkpoints": [
+        "CP_EP039_INTRO_END",
+        "CP_EP039_MID",
+        "CP_EP039_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP039.Completed"
+      ],
+      "levels": [
+        "LVL_SOGUT"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "day",
+        "weather": "fog",
+        "region": "Söğüt"
+      },
+      "audio": {
+        "music_cue": "MUS_EP039",
+        "ambience_tag": "Ambience.Winter.Fog",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep039",
+        "target_completion_pct": 37.1,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep039.teaser"
+    },
+    {
+      "id": "EP040",
+      "season_id": "S4",
+      "global_index": 39,
+      "season_index": 3,
+      "loc_key_title": "ep.ep040.title",
+      "loc_key_synopsis": "ep.ep040.synopsis",
+      "loc_key_cliffhanger": "ep.ep040.cliffhanger",
+      "anchor": {
+        "hijri": "643 Rabiul-avval",
+        "gregorian": "1245 Avgust",
+        "year_gregorian": 1245,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep040.history_note"
+      },
+      "intro": {
+        "archetype": "HANDS",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep040.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "RITUAL",
+      "difficulty_tier": 4,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "ADVANTAGE",
+        "loc_key": "ep.ep040.mih",
+        "tag": "Mih.Beat.Advantage",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 48.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 142.9
+      },
+      "codex_unlocks": [
+        "CDX_AHI_BROTHERHOOD",
+        "CDX_FUTUWWA",
+        "CDX_AN_NASIR",
+        "CDX_GUILD_ECONOMY"
+      ],
+      "prerequisites": [
+        "EP039"
+      ],
+      "unlocks": [
+        "EP041"
+      ],
+      "checkpoints": [
+        "CP_EP040_INTRO_END",
+        "CP_EP040_MID",
+        "CP_EP040_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP040.Completed"
+      ],
+      "levels": [
+        "LVL_AXIY_OCHOGI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "summer",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Axiy lodjasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP040",
+        "ambience_tag": "Ambience.Summer.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep040",
+        "target_completion_pct": 35.5,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep040.teaser"
+    },
+    {
+      "id": "EP041",
+      "season_id": "S4",
+      "global_index": 40,
+      "season_index": 4,
+      "loc_key_title": "ep.ep041.title",
+      "loc_key_synopsis": "ep.ep041.synopsis",
+      "loc_key_cliffhanger": "ep.ep041.cliffhanger",
+      "anchor": {
+        "hijri": "645 Shaban",
+        "gregorian": "1247 Dekabr",
+        "year_gregorian": 1247,
+        "confidence": "DISPUTED",
+        "loc_key_note": "ep.ep041.history_note"
+      },
+      "intro": {
+        "archetype": "HANDS",
+        "duration_sec": 300,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep041.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SIEGE",
+      "difficulty_tier": 5,
+      "estimated_minutes": 75,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Byzantine.Garrison": 50,
+          "Enemy.Germiyan.Warrior": 30
+        },
+        "max_simultaneous": 7,
+        "background_agents": 300
+      },
+      "traversal": [
+        "VERTICAL_SIEGE",
+        "ROPE_GRAPPLE",
+        "SEWER_CAVE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep041.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 42.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.7,
+        "parry_window_ms": 140.0
+      },
+      "codex_unlocks": [
+        "CDX_KARACAHISAR",
+        "CDX_WITTEK_THESIS",
+        "CDX_GERMIYAN"
+      ],
+      "prerequisites": [
+        "EP040"
+      ],
+      "unlocks": [
+        "EP042"
+      ],
+      "checkpoints": [
+        "CP_EP041_INTRO_END",
+        "CP_EP041_MID",
+        "CP_EP041_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP041.Completed"
+      ],
+      "levels": [
+        "LVL_KARACAHISAR"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "dawn",
+        "weather": "snow",
+        "region": "Karacahisar"
+      },
+      "audio": {
+        "music_cue": "MUS_EP041",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep041",
+        "target_completion_pct": 34.0,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep041.teaser"
+    },
+    {
+      "id": "EP042",
+      "season_id": "S4",
+      "global_index": 41,
+      "season_index": 5,
+      "loc_key_title": "ep.ep042.title",
+      "loc_key_synopsis": "ep.ep042.synopsis",
+      "loc_key_cliffhanger": "ep.ep042.cliffhanger",
+      "anchor": {
+        "hijri": "648 Rajab",
+        "gregorian": "1250 Oktabr",
+        "year_gregorian": 1250,
+        "confidence": "DISPUTED",
+        "loc_key_note": "ep.ep042.history_note"
+      },
+      "intro": {
+        "archetype": "BREATH",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep042.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "RITUAL",
+      "difficulty_tier": 4,
+      "estimated_minutes": 50,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "HORSE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep042.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": false
+      },
+      "wound_state": {
+        "phase": "CHRONIC",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 55.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_OSMAN_BIRTH",
+        "CDX_SUCCESSION_CUSTOM"
+      ],
+      "prerequisites": [
+        "EP041"
+      ],
+      "unlocks": [
+        "EP043"
+      ],
+      "checkpoints": [
+        "CP_EP042_INTRO_END",
+        "CP_EP042_MID",
+        "CP_EP042_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP042.Completed"
+      ],
+      "levels": [
+        "LVL_OGIL"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Söğüt"
+      },
+      "audio": {
+        "music_cue": "MUS_EP042",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep042",
+        "target_completion_pct": 32.4,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep042.teaser"
+    },
+    {
+      "id": "EP043",
+      "season_id": "S4",
+      "global_index": 42,
+      "season_index": 6,
+      "loc_key_title": "ep.ep043.title",
+      "loc_key_synopsis": "ep.ep043.synopsis",
+      "loc_key_cliffhanger": "ep.ep043.cliffhanger",
+      "anchor": {
+        "hijri": "650 Muharram",
+        "gregorian": "1252 Mart",
+        "year_gregorian": 1252,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep043.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep043.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INFILTRATION",
+      "difficulty_tier": 5,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Byzantine.Akritai": 14
+        },
+        "max_simultaneous": 5,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "CAMP_SOCIAL",
+        "BOAT"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "ADVANTAGE",
+        "loc_key": "ep.ep043.mih",
+        "tag": "Mih.Beat.Advantage",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "ADAPTED",
+        "expected_integrity_at_start": 45.0,
+        "max_integrity": 70.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 141.4
+      },
+      "codex_unlocks": [
+        "CDX_NICAEA",
+        "CDX_AKRITAI",
+        "CDX_BYZANTINE_MEDICINE",
+        "CDX_FRONTIER_INTERMARRIAGE"
+      ],
+      "prerequisites": [
+        "EP042"
+      ],
+      "unlocks": [
+        "EP044"
+      ],
+      "checkpoints": [
+        "CP_EP043_INTRO_END",
+        "CP_EP043_MID",
+        "CP_EP043_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP043.Completed"
+      ],
+      "levels": [
+        "LVL_VIZANTIYA_CHEGARASI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "day",
+        "weather": "rain",
+        "region": "Nikeya chegarasi"
+      },
+      "audio": {
+        "music_cue": "MUS_EP043",
+        "ambience_tag": "Ambience.Spring.Rain",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep043",
+        "target_completion_pct": 30.9,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep043.teaser"
+    },
+    {
+      "id": "EP044",
+      "season_id": "S4",
+      "global_index": 43,
+      "season_index": 7,
+      "loc_key_title": "ep.ep044.title",
+      "loc_key_synopsis": "ep.ep044.synopsis",
+      "loc_key_cliffhanger": "ep.ep044.cliffhanger",
+      "anchor": {
+        "hijri": "653 Ramazon",
+        "gregorian": "1255 Oktabr",
+        "year_gregorian": 1255,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep044.history_note"
+      },
+      "intro": {
+        "archetype": "BREATH",
+        "duration_sec": 300,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep044.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "DEFENSE",
+      "difficulty_tier": 5,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Mongol.HorseArcher": 250,
+          "Enemy.Keshig": 60,
+          "Enemy.SiegeEngine": 6
+        },
+        "max_simultaneous": 8,
+        "background_agents": 600
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "VERTICAL_SIEGE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "THREAT",
+        "loc_key": "ep.ep044.mih",
+        "tag": "Mih.Beat.Threat",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "ADAPTED",
+        "expected_integrity_at_start": 55.0,
+        "max_integrity": 70.0,
+        "drain_multiplier": 1.6,
+        "parry_window_ms": 146.2
+      },
+      "codex_unlocks": [
+        "CDX_MONGOL_ANATOLIA_1255",
+        "CDX_ILKHANATE"
+      ],
+      "prerequisites": [
+        "EP043"
+      ],
+      "unlocks": [
+        "EP045"
+      ],
+      "checkpoints": [
+        "CP_EP044_INTRO_END",
+        "CP_EP044_MID",
+        "CP_EP044_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP044.Completed"
+      ],
+      "levels": [
+        "LVL_IKKINCHI_MIX"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "autumn",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Söğüt"
+      },
+      "audio": {
+        "music_cue": "MUS_EP044",
+        "ambience_tag": "Ambience.Autumn.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep044",
+        "target_completion_pct": 29.3,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "threat.mutilation",
+          "violence.graphic"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep044.teaser"
+    },
+    {
+      "id": "EP045",
+      "season_id": "S4",
+      "global_index": 44,
+      "season_index": 8,
+      "loc_key_title": "ep.ep045.title",
+      "loc_key_synopsis": "ep.ep045.synopsis",
+      "loc_key_cliffhanger": "ep.ep045.cliffhanger",
+      "anchor": {
+        "hijri": "654 Safar",
+        "gregorian": "1256 Mart",
+        "year_gregorian": 1256,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep045.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 180,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep045.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INVESTIGATION",
+      "difficulty_tier": 5,
+      "estimated_minutes": 55,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Mongol.Deserter": 6
+        },
+        "max_simultaneous": 4,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR",
+        "HORSE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "DIALOGUE",
+        "loc_key": "ep.ep045.mih",
+        "tag": "Mih.Beat.Dialogue",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "ADAPTED",
+        "expected_integrity_at_start": 55.0,
+        "max_integrity": 70.0,
+        "drain_multiplier": 1.1,
+        "parry_window_ms": 146.2
+      },
+      "codex_unlocks": [
+        "CDX_FRONTIER_DEFECTION",
+        "CDX_FORGIVENESS_CUSTOM"
+      ],
+      "prerequisites": [
+        "EP044"
+      ],
+      "unlocks": [
+        "EP046"
+      ],
+      "checkpoints": [
+        "CP_EP045_INTRO_END",
+        "CP_EP045_MID",
+        "CP_EP045_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP045.Completed"
+      ],
+      "levels": [
+        "LVL_HAMZANING_KECHIRIMI"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "day",
+        "weather": "rain",
+        "region": "Xaroba"
+      },
+      "audio": {
+        "music_cue": "MUS_EP045",
+        "ambience_tag": "Ambience.Spring.Rain",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep045",
+        "target_completion_pct": 27.8,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep045.teaser"
+    },
+    {
+      "id": "EP046",
+      "season_id": "S4",
+      "global_index": 45,
+      "season_index": 9,
+      "loc_key_title": "ep.ep046.title",
+      "loc_key_synopsis": "ep.ep046.synopsis",
+      "loc_key_cliffhanger": "ep.ep046.cliffhanger",
+      "anchor": {
+        "hijri": "656 Zulhijja",
+        "gregorian": "1258 Dekabr",
+        "year_gregorian": 1258,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep046.history_note"
+      },
+      "intro": {
+        "archetype": "PLUNGE",
+        "duration_sec": 300,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep046.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "INFILTRATION",
+      "difficulty_tier": 5,
+      "estimated_minutes": 75,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Enemy.Keshig": 80,
+          "Enemy.Mongol.HorseArcher": 300,
+          "Enemy.Shaman": 1
+        },
+        "max_simultaneous": 6,
+        "background_agents": 600
+      },
+      "traversal": [
+        "SNOW_ICE",
+        "FOOT_PARKOUR",
+        "ROPE_GRAPPLE"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "MECHANICAL",
+        "loc_key": "ep.ep046.mih",
+        "tag": "Mih.Beat.Mechanical",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "ADAPTED",
+        "expected_integrity_at_start": 30.0,
+        "max_integrity": 70.0,
+        "drain_multiplier": 2.0,
+        "parry_window_ms": 133.7
+      },
+      "codex_unlocks": [
+        "CDX_BAGHDAD_1258",
+        "CDX_MONGOL_WINTER_CAMP",
+        "CDX_HULEGU"
+      ],
+      "prerequisites": [
+        "EP045"
+      ],
+      "unlocks": [
+        "EP047"
+      ],
+      "checkpoints": [
+        "CP_EP046_INTRO_END",
+        "CP_EP046_MID",
+        "CP_EP046_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP046.Completed"
+      ],
+      "levels": [
+        "LVL_TUNGI_OLOV"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "night",
+        "weather": "snow",
+        "region": "Mo'g'ul qishki lageri"
+      },
+      "audio": {
+        "music_cue": "MUS_EP046",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": true
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep046",
+        "target_completion_pct": 26.2,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "fire",
+          "violence.graphic"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep046.teaser"
+    },
+    {
+      "id": "EP047",
+      "season_id": "S4",
+      "global_index": 46,
+      "season_index": 10,
+      "loc_key_title": "ep.ep047.title",
+      "loc_key_synopsis": "ep.ep047.synopsis",
+      "loc_key_cliffhanger": "ep.ep047.cliffhanger",
+      "anchor": {
+        "hijri": "657 Muharram",
+        "gregorian": "1259 Yanvar",
+        "year_gregorian": 1259,
+        "confidence": "DISPUTED",
+        "loc_key_note": "ep.ep047.history_note"
+      },
+      "intro": {
+        "archetype": "WATCH",
+        "duration_sec": 240,
+        "date_display": "OVERLAY",
+        "loc_key_description": "ep.ep047.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "SIEGE",
+      "difficulty_tier": 5,
+      "estimated_minutes": 65,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {
+          "Boss.Baiju": 1
+        },
+        "max_simultaneous": 1,
+        "background_agents": 0
+      },
+      "traversal": [
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "EVENT",
+        "loc_key": "ep.ep047.mih",
+        "tag": "Mih.Beat.Event",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "ADAPTED",
+        "expected_integrity_at_start": 40.0,
+        "max_integrity": 70.0,
+        "drain_multiplier": 2.4,
+        "parry_window_ms": 139.0
+      },
+      "codex_unlocks": [
+        "CDX_BAIJU_DEATH",
+        "CDX_MONGOL_SUCCESSION"
+      ],
+      "prerequisites": [
+        "EP046"
+      ],
+      "unlocks": [
+        "EP048"
+      ],
+      "checkpoints": [
+        "CP_EP047_INTRO_END",
+        "CP_EP047_MID",
+        "CP_EP047_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP047.Completed"
+      ],
+      "levels": [
+        "LVL_UCHINCHI_MIX"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "winter",
+        "time_of_day": "night",
+        "weather": "snow",
+        "region": "Yonayotgan lager"
+      },
+      "audio": {
+        "music_cue": "MUS_EP047",
+        "ambience_tag": "Ambience.Winter.Snow",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep047",
+        "target_completion_pct": 24.7,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [
+          "violence.graphic",
+          "mutilation"
+        ],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep047.teaser"
+    },
+    {
+      "id": "EP048",
+      "season_id": "S4",
+      "global_index": 47,
+      "season_index": 11,
+      "loc_key_title": "ep.ep048.title",
+      "loc_key_synopsis": "ep.ep048.synopsis",
+      "loc_key_cliffhanger": "ep.ep048.cliffhanger",
+      "anchor": {
+        "hijri": "659 Rabiul-avval",
+        "gregorian": "1261 Fevral",
+        "year_gregorian": 1261,
+        "confidence": "DOCUMENTED",
+        "loc_key_note": "ep.ep048.history_note"
+      },
+      "intro": {
+        "archetype": "WALK",
+        "duration_sec": 300,
+        "date_display": "DIEGETIC",
+        "loc_key_description": "ep.ep048.intro",
+        "allow_movement": true,
+        "allow_combat": false,
+        "director_camera_weight_max": 0.35
+      },
+      "archetype": "COURT",
+      "difficulty_tier": 4,
+      "estimated_minutes": 70,
+      "objectives": [],
+      "enemy_composition": {
+        "archetypes": {},
+        "max_simultaneous": 0,
+        "background_agents": 0
+      },
+      "traversal": [
+        "CAMP_SOCIAL",
+        "FOOT_PARKOUR"
+      ],
+      "mechanics_introduced": [],
+      "mih_beat": {
+        "kind": "RITUAL_ACT",
+        "loc_key": "ep.ep048.mih",
+        "tag": "Mih.Beat.RitualAct",
+        "is_major": true
+      },
+      "wound_state": {
+        "phase": "ADAPTED",
+        "expected_integrity_at_start": 50.0,
+        "max_integrity": 70.0,
+        "drain_multiplier": 1.0,
+        "parry_window_ms": 143.9
+      },
+      "codex_unlocks": [
+        "CDX_OSMAN_COINS",
+        "CDX_BYZANTINE_SILENCE",
+        "CDX_HISTORICAL_METHOD"
+      ],
+      "prerequisites": [
+        "EP047"
+      ],
+      "unlocks": [],
+      "checkpoints": [
+        "CP_EP048_INTRO_END",
+        "CP_EP048_MID",
+        "CP_EP048_FINALE"
+      ],
+      "fail_conditions": [
+        "Fail.PlayerDeath"
+      ],
+      "world_state_deltas": [
+        "Episode.EP048.Completed"
+      ],
+      "levels": [
+        "LVL_TANGA"
+      ],
+      "characters": [
+        "CHR_ERTUGRUL"
+      ],
+      "environment": {
+        "season": "spring",
+        "time_of_day": "day",
+        "weather": "clear",
+        "region": "Söğüt"
+      },
+      "audio": {
+        "music_cue": "MUS_EP048",
+        "ambience_tag": "Ambience.Spring.Clear",
+        "silence_scene": false
+      },
+      "telemetry": {
+        "funnel_id": "funnel_ep048",
+        "target_completion_pct": 23.1,
+        "watch_metrics": [
+          "deaths",
+          "duration",
+          "abandon_point"
+        ]
+      },
+      "content": {
+        "warnings": [],
+        "has_torture_scene": false
+      },
+      "retention_hook": "ep.ep048.teaser"
+    }
+  ]
+}

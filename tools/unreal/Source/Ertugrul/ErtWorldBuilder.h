@@ -26,6 +26,7 @@ namespace ErtMap
 	constexpr float OasisE = 150.f, OasisN = -880.f, OasisR = 55.f, OasisZ = 6.f;
 	constexpr float CaravanE = 300.f, CaravanN = -900.f;
 	constexpr float DesertN = -700.f;   // shundan janubda cho'l
+	constexpr float DamE = 720.f, DamN = -850.f, DamHalfE = 140.f, DamHalfN = 110.f, DamZ = 11.f;   // Damashq
 }
 
 UCLASS()
@@ -74,6 +75,7 @@ private:
 	void BuildCity();
 	void BuildCamp();
 	void BuildDesert();
+	void BuildDamascus();
 	void AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S);
 	void BuildForest();
 	void BuildRocks();

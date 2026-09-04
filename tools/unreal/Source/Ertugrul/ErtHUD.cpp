@@ -478,6 +478,7 @@ void AErtHUD::DrawMapArea(float X0, float Y0, float S, float CE, float CN, float
 	Mark(CaravanE, CaravanN, 22.f, TEXT("Karvonsaroy"), Ink);
 	Mark(LakeE, LakeN, LakeR, TEXT("Ko'l"), FLinearColor(0.2f, 0.4f, 0.7f));
 	Mark(-120.f, -860.f, 20.f, TEXT("Xarobalar"), Ink);
+	Mark(DamE, DamN, 130.f, TEXT("Damashq"), Ink);
 	// Maqsad markerlari
 	if (D)
 	{

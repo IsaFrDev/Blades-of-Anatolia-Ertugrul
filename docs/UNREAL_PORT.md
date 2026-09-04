@@ -224,3 +224,9 @@ Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulu
 
 ## Keyingi qadamlar
 Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz.
+
+## Damashq shahri
+
+- `BuildDamascus()` (ErtWorldBuilder): cho'lning janubi-sharqida (E=720, N=-850, 280x220 m) devorli shahar: kungurali devor, 4 burj, 2 darvoza (janub/g'arb), Umaviylar masjidi (marmar hovli, gumbaz, 34 m kvadrat minora), saroy, bozor arkadasi, ~100 uy, palmalar. Relyef `HeightAt` da tekislanadi, `IsBuildable` chiqarib tashlaydi.
+- Xarita: `Damashq` belgisi; NPC joyi `damascus` (Damashq savdogari, Ibn Arabiy); Sham/Halab/Damashq epizodlari (EP007, EP008) shimoliy darvoza oldidan boshlanadi.
+- Sinov skrinshoti: `16_damascus`.

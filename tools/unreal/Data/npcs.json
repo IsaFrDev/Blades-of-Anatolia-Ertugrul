@@ -254,6 +254,36 @@
     0.15
    ],
    "dialog": "npc_hamza"
+  },
+  {
+   "id": "sham_savdogar",
+   "name": "chr.sham_savdogar.name",
+   "place": "damascus",
+   "u": -9,
+   "v": -60,
+   "yaw": 90,
+   "woman": false,
+   "kaftan": [
+    0.5,
+    0.35,
+    0.15
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "ibn_arabi_dam",
+   "name": "chr.ibn_arabi.name",
+   "place": "damascus",
+   "u": 20,
+   "v": 31,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.85,
+    0.82,
+    0.75
+   ],
+   "dialog": "ep008_arabi"
   }
  ]
 }

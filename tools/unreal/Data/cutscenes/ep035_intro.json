@@ -1,0 +1,471 @@
+{
+  "id": "ep035_intro",
+  "episode": "EP035",
+  "level": "forest_pass",
+  "music": "MUS_EP035",
+  "ambience": "Ambience.Summer.Fog",
+  "letterbox": true,
+  "fade_in": 1.2,
+  "fade_out": 1.0,
+  "time_of_day": "dawn",
+  "weather": "fog",
+  "duration": 0,
+  "actors": [
+    {
+      "id": "ertugrul",
+      "char": "ertugrul",
+      "model": "assets/models/ottoman/ottoman.obj",
+      "loc_name": "chr.ertugrul.name",
+      "scale": 1.82,
+      "tint": [
+        1.0,
+        0.95,
+        0.85
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            7.6,
+            0.0,
+            24.6
+          ],
+          "yaw": -100,
+          "clip": "Idle"
+        },
+        {
+          "t": 3.0,
+          "pos": [
+            6.0,
+            0.0,
+            25.4
+          ],
+          "yaw": -105,
+          "clip": "Walk"
+        },
+        {
+          "t": 8.0,
+          "pos": [
+            2.4,
+            0.0,
+            27.2
+          ],
+          "yaw": -110,
+          "clip": "Walk"
+        },
+        {
+          "t": 13.0,
+          "pos": [
+            -1.2,
+            0.0,
+            28.6
+          ],
+          "yaw": -108,
+          "clip": "Walk"
+        },
+        {
+          "t": 18.0,
+          "pos": [
+            -4.6,
+            0.0,
+            29.6
+          ],
+          "yaw": -100,
+          "clip": "Walk"
+        },
+        {
+          "t": 22.0,
+          "pos": [
+            -6.2,
+            0.0,
+            30.2
+          ],
+          "yaw": -20,
+          "clip": "Point"
+        },
+        {
+          "t": 28.0,
+          "pos": [
+            -6.2,
+            0.0,
+            30.2
+          ],
+          "yaw": 15,
+          "clip": "Talk"
+        },
+        {
+          "t": 33.0,
+          "pos": [
+            -5.0,
+            0.0,
+            28.0
+          ],
+          "yaw": 5,
+          "clip": "Walk"
+        },
+        {
+          "t": 38.0,
+          "pos": [
+            -4.2,
+            0.0,
+            26.6
+          ],
+          "yaw": 0,
+          "clip": "Draw"
+        }
+      ]
+    },
+    {
+      "id": "turgut",
+      "char": "turgut",
+      "model": "assets/models/fantasy+warrior+3d+model.obj",
+      "loc_name": "chr.turgut.name",
+      "scale": 1.92,
+      "tint": [
+        0.86,
+        0.8,
+        0.74
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            9.2,
+            0.0,
+            26.0
+          ],
+          "yaw": -100,
+          "clip": "Idle"
+        },
+        {
+          "t": 3.5,
+          "pos": [
+            7.8,
+            0.0,
+            26.6
+          ],
+          "yaw": -105,
+          "clip": "Walk"
+        },
+        {
+          "t": 9.0,
+          "pos": [
+            4.0,
+            0.0,
+            28.4
+          ],
+          "yaw": -110,
+          "clip": "Walk"
+        },
+        {
+          "t": 14.0,
+          "pos": [
+            0.4,
+            0.0,
+            29.8
+          ],
+          "yaw": -108,
+          "clip": "Walk"
+        },
+        {
+          "t": 19.0,
+          "pos": [
+            -3.0,
+            0.0,
+            31.0
+          ],
+          "yaw": -100,
+          "clip": "Walk"
+        },
+        {
+          "t": 23.0,
+          "pos": [
+            -4.6,
+            0.0,
+            31.6
+          ],
+          "yaw": -30,
+          "clip": "Listen"
+        },
+        {
+          "t": 29.0,
+          "pos": [
+            -4.6,
+            0.0,
+            31.6
+          ],
+          "yaw": 10,
+          "clip": "Talk"
+        },
+        {
+          "t": 34.0,
+          "pos": [
+            -3.4,
+            0.0,
+            29.4
+          ],
+          "yaw": 5,
+          "clip": "Walk"
+        },
+        {
+          "t": 38.0,
+          "pos": [
+            -2.6,
+            0.0,
+            28.0
+          ],
+          "yaw": 0,
+          "clip": "Salute"
+        }
+      ]
+    },
+    {
+      "id": "emir_sharaf",
+      "char": "emir_sharaf",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
+      "loc_name": "chr.emir_sharaf.name",
+      "scale": 1.84,
+      "tint": [
+        0.95,
+        0.9,
+        0.75
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            -8.6,
+            0.0,
+            22.4
+          ],
+          "yaw": 70,
+          "clip": "Idle"
+        },
+        {
+          "t": 4.0,
+          "pos": [
+            -7.4,
+            0.0,
+            23.6
+          ],
+          "yaw": 60,
+          "clip": "Walk"
+        },
+        {
+          "t": 9.5,
+          "pos": [
+            -5.2,
+            0.0,
+            26.0
+          ],
+          "yaw": 55,
+          "clip": "Walk"
+        },
+        {
+          "t": 14.0,
+          "pos": [
+            -3.4,
+            0.0,
+            27.8
+          ],
+          "yaw": 50,
+          "clip": "Walk"
+        },
+        {
+          "t": 18.0,
+          "pos": [
+            -2.0,
+            0.0,
+            29.0
+          ],
+          "yaw": 120,
+          "clip": "Talk"
+        },
+        {
+          "t": 24.0,
+          "pos": [
+            -3.6,
+            0.0,
+            30.6
+          ],
+          "yaw": 130,
+          "clip": "Walk"
+        },
+        {
+          "t": 30.0,
+          "pos": [
+            -5.4,
+            0.0,
+            31.4
+          ],
+          "yaw": 150,
+          "clip": "Point"
+        },
+        {
+          "t": 36.0,
+          "pos": [
+            -7.6,
+            0.0,
+            30.0
+          ],
+          "yaw": 200,
+          "clip": "Walk"
+        },
+        {
+          "t": 40.0,
+          "pos": [
+            -8.8,
+            0.0,
+            28.6
+          ],
+          "yaw": 210,
+          "clip": "Idle"
+        }
+      ]
+    }
+  ],
+  "camera": [
+    {
+      "t": 0.0,
+      "pos": [
+        11.5,
+        3.6,
+        34.0
+      ],
+      "look": [
+        5.0,
+        1.6,
+        26.0
+      ],
+      "fov": 52
+    },
+    {
+      "t": 7.0,
+      "pos": [
+        4.0,
+        2.4,
+        32.0
+      ],
+      "look": [
+        3.5,
+        1.5,
+        27.5
+      ],
+      "fov": 44
+    },
+    {
+      "t": 14.0,
+      "pos": [
+        -1.0,
+        2.0,
+        32.4
+      ],
+      "look": [
+        -1.2,
+        1.5,
+        28.6
+      ],
+      "fov": 40
+    },
+    {
+      "t": 21.0,
+      "pos": [
+        -8.0,
+        1.9,
+        33.2
+      ],
+      "look": [
+        -6.0,
+        1.5,
+        30.0
+      ],
+      "fov": 36
+    },
+    {
+      "t": 27.0,
+      "pos": [
+        -4.2,
+        1.8,
+        32.8
+      ],
+      "look": [
+        -6.2,
+        1.6,
+        30.2
+      ],
+      "fov": 30
+    },
+    {
+      "t": 33.0,
+      "pos": [
+        -2.0,
+        2.6,
+        33.6
+      ],
+      "look": [
+        -5.2,
+        1.5,
+        28.6
+      ],
+      "fov": 42
+    },
+    {
+      "t": 39.0,
+      "pos": [
+        2.0,
+        4.4,
+        38.0
+      ],
+      "look": [
+        -4.2,
+        1.4,
+        27.0
+      ],
+      "fov": 55
+    }
+  ],
+  "lines": [
+    {
+      "t": 1.6,
+      "actor": "ertugrul",
+      "loc": "cut.ep035_intro.01",
+      "vo": "ep035_intro_01",
+      "dur": 0
+    },
+    {
+      "t": 7.4,
+      "actor": "emir_sharaf",
+      "loc": "cut.ep035_intro.02",
+      "vo": "ep035_intro_02",
+      "dur": 0
+    },
+    {
+      "t": 13.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep035_intro.03",
+      "vo": "ep035_intro_03",
+      "dur": 0
+    },
+    {
+      "t": 19.2,
+      "actor": "turgut",
+      "loc": "cut.ep035_intro.04",
+      "vo": "ep035_intro_04",
+      "dur": 0
+    },
+    {
+      "t": 25.0,
+      "actor": "emir_sharaf",
+      "loc": "cut.ep035_intro.05",
+      "vo": "ep035_intro_05",
+      "dur": 0
+    },
+    {
+      "t": 31.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep035_intro.06",
+      "vo": "ep035_intro_06",
+      "dur": 0
+    }
+  ]
+}

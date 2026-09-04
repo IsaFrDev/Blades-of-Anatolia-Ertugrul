@@ -512,8 +512,8 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(24.95f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
 	if (At(25.0f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
 	if (At(26.6f)) TakeShot(TEXT("oasis"));
-	if (At(27.0f)) Teleport(300.f, -975.f, 12.f + 18.f, -14.f, 0.f);
-	if (At(28.6f)) TakeShot(TEXT("caravan"));
+	if (At(27.0f)) Teleport(720.f, -1000.f, 11.f + 45.f, -18.f, 0.f);
+	if (At(28.6f)) TakeShot(TEXT("damascus"));
 	if (At(29.0f))
 	{
 		// Suzish sinovi: ko'lga tushiriladi

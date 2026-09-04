@@ -1,0 +1,475 @@
+{
+  "id": "ep040_intro",
+  "episode": "EP040",
+  "level": "aleppo_road",
+  "music": "MUS_EP040",
+  "ambience": "Ambience.Summer.Clear",
+  "letterbox": true,
+  "fade_in": 1.2,
+  "fade_out": 1.0,
+  "time_of_day": "dusk",
+  "weather": "clear",
+  "duration": 0,
+  "actors": [
+    {
+      "id": "ertugrul",
+      "char": "ertugrul",
+      "model": "assets/models/ottoman/ottoman.obj",
+      "loc_name": "chr.ertugrul.name",
+      "scale": 1.82,
+      "tint": [
+        1.0,
+        0.95,
+        0.85
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            5.6,
+            0.0,
+            35.36
+          ],
+          "yaw": 220,
+          "clip": "Idle"
+        },
+        {
+          "t": 4.0,
+          "pos": [
+            2.87,
+            0.0,
+            29.48
+          ],
+          "yaw": 215,
+          "clip": "Walk"
+        },
+        {
+          "t": 9.0,
+          "pos": [
+            2.4,
+            0.0,
+            28.4
+          ],
+          "yaw": 210,
+          "clip": "Walk"
+        },
+        {
+          "t": 14.0,
+          "pos": [
+            0.75,
+            0.0,
+            26.78
+          ],
+          "yaw": 205,
+          "clip": "Walk"
+        },
+        {
+          "t": 18.0,
+          "pos": [
+            0.25,
+            0.0,
+            27.04
+          ],
+          "yaw": 200,
+          "clip": "Sit"
+        },
+        {
+          "t": 24.0,
+          "pos": [
+            0.25,
+            0.0,
+            27.04
+          ],
+          "yaw": 190,
+          "clip": "Listen"
+        },
+        {
+          "t": 29.0,
+          "pos": [
+            1.16,
+            0.0,
+            26.49
+          ],
+          "yaw": 30,
+          "clip": "Walk"
+        },
+        {
+          "t": 34.0,
+          "pos": [
+            1.72,
+            0.0,
+            27.25
+          ],
+          "yaw": 45,
+          "clip": "Walk"
+        },
+        {
+          "t": 39.0,
+          "pos": [
+            4.0,
+            0.0,
+            30.57
+          ],
+          "yaw": 55,
+          "clip": "Idle"
+        }
+      ]
+    },
+    {
+      "id": "ahi_evren",
+      "char": "ahi_evren",
+      "model": "assets/models/turbaned+elder+3d+model.obj",
+      "loc_name": "chr.ahi_evren.name",
+      "scale": 1.8,
+      "tint": [
+        1.0,
+        0.9,
+        0.8
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            -6.65,
+            0.0,
+            22.27
+          ],
+          "yaw": 60,
+          "clip": "Idle"
+        },
+        {
+          "t": 5.0,
+          "pos": [
+            -4.38,
+            0.0,
+            22.38
+          ],
+          "yaw": 55,
+          "clip": "Walk"
+        },
+        {
+          "t": 10.0,
+          "pos": [
+            -4.67,
+            0.0,
+            25.68
+          ],
+          "yaw": 50,
+          "clip": "Walk"
+        },
+        {
+          "t": 15.0,
+          "pos": [
+            -3.36,
+            0.0,
+            27.06
+          ],
+          "yaw": 60,
+          "clip": "Talk"
+        },
+        {
+          "t": 21.0,
+          "pos": [
+            -3.57,
+            0.0,
+            26.65
+          ],
+          "yaw": 110,
+          "clip": "Walk"
+        },
+        {
+          "t": 26.0,
+          "pos": [
+            -5.0,
+            0.0,
+            27.2
+          ],
+          "yaw": 130,
+          "clip": "Point"
+        },
+        {
+          "t": 31.0,
+          "pos": [
+            -4.12,
+            0.0,
+            26.34
+          ],
+          "yaw": -60,
+          "clip": "Walk"
+        },
+        {
+          "t": 36.0,
+          "pos": [
+            -2.3,
+            0.0,
+            28.11
+          ],
+          "yaw": -50,
+          "clip": "Walk"
+        },
+        {
+          "t": 40.0,
+          "pos": [
+            2.51,
+            0.0,
+            26.12
+          ],
+          "yaw": -40,
+          "clip": "Talk"
+        }
+      ]
+    },
+    {
+      "id": "dundar",
+      "char": "dundar",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
+      "loc_name": "chr.dundar.name",
+      "scale": 1.78,
+      "tint": [
+        0.95,
+        0.9,
+        0.85
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            8.4,
+            0.0,
+            29.0
+          ],
+          "yaw": 240,
+          "clip": "Idle"
+        },
+        {
+          "t": 5.5,
+          "pos": [
+            7.2,
+            0.0,
+            28.0
+          ],
+          "yaw": 235,
+          "clip": "Walk"
+        },
+        {
+          "t": 11.0,
+          "pos": [
+            5.0,
+            0.0,
+            26.4
+          ],
+          "yaw": 230,
+          "clip": "Walk"
+        },
+        {
+          "t": 16.0,
+          "pos": [
+            3.2,
+            0.0,
+            25.2
+          ],
+          "yaw": 225,
+          "clip": "Walk"
+        },
+        {
+          "t": 21.0,
+          "pos": [
+            2.45,
+            0.0,
+            24.6
+          ],
+          "yaw": 215,
+          "clip": "Listen"
+        },
+        {
+          "t": 27.0,
+          "pos": [
+            2.45,
+            0.0,
+            24.6
+          ],
+          "yaw": 200,
+          "clip": "Talk"
+        },
+        {
+          "t": 33.0,
+          "pos": [
+            2.88,
+            0.0,
+            25.53
+          ],
+          "yaw": 40,
+          "clip": "Walk"
+        },
+        {
+          "t": 38.0,
+          "pos": [
+            5.66,
+            0.0,
+            27.33
+          ],
+          "yaw": 45,
+          "clip": "Idle"
+        }
+      ]
+    }
+  ],
+  "camera": [
+    {
+      "t": 0.0,
+      "pos": [
+        9.6,
+        3.6,
+        38.5
+      ],
+      "look": [
+        5.0,
+        1.6,
+        31.0
+      ],
+      "fov": 50
+    },
+    {
+      "t": 6.0,
+      "pos": [
+        6.0,
+        2.3,
+        38.41
+      ],
+      "look": [
+        3.4,
+        1.5,
+        29.6
+      ],
+      "fov": 42
+    },
+    {
+      "t": 12.0,
+      "pos": [
+        -16.89,
+        2.0,
+        31.47
+      ],
+      "look": [
+        1.2,
+        1.5,
+        26.6
+      ],
+      "fov": 38
+    },
+    {
+      "t": 17.5,
+      "pos": [
+        36.66,
+        1.8,
+        21.74
+      ],
+      "look": [
+        -1.0,
+        1.6,
+        24.8
+      ],
+      "fov": 32
+    },
+    {
+      "t": 23.0,
+      "pos": [
+        -22.45,
+        1.75,
+        25.94
+      ],
+      "look": [
+        -1.6,
+        1.6,
+        24.8
+      ],
+      "fov": 30
+    },
+    {
+      "t": 29.0,
+      "pos": [
+        1.29,
+        2.2,
+        30.82
+      ],
+      "look": [
+        -2.6,
+        1.5,
+        26.0
+      ],
+      "fov": 40
+    },
+    {
+      "t": 35.5,
+      "pos": [
+        7.49,
+        3.2,
+        38.81
+      ],
+      "look": [
+        0.4,
+        1.45,
+        26.0
+      ],
+      "fov": 48
+    },
+    {
+      "t": 40.5,
+      "pos": [
+        10.0,
+        4.3,
+        37.0
+      ],
+      "look": [
+        1.0,
+        1.4,
+        25.6
+      ],
+      "fov": 55
+    }
+  ],
+  "lines": [
+    {
+      "t": 1.8,
+      "actor": "dundar",
+      "loc": "cut.ep040_intro.01",
+      "vo": "ep040_intro_01",
+      "dur": 0
+    },
+    {
+      "t": 7.6,
+      "actor": "ahi_evren",
+      "loc": "cut.ep040_intro.02",
+      "vo": "ep040_intro_02",
+      "dur": 0
+    },
+    {
+      "t": 13.8,
+      "actor": "ertugrul",
+      "loc": "cut.ep040_intro.03",
+      "vo": "ep040_intro_03",
+      "dur": 0
+    },
+    {
+      "t": 19.8,
+      "actor": "ahi_evren",
+      "loc": "cut.ep040_intro.04",
+      "vo": "ep040_intro_04",
+      "dur": 0
+    },
+    {
+      "t": 26.0,
+      "actor": "ertugrul",
+      "loc": "cut.ep040_intro.05",
+      "vo": "ep040_intro_05",
+      "dur": 0
+    },
+    {
+      "t": 32.4,
+      "actor": "ahi_evren",
+      "loc": "cut.ep040_intro.06",
+      "vo": "ep040_intro_06",
+      "dur": 0
+    }
+  ]
+}

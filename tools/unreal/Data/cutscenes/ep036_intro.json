@@ -1,0 +1,461 @@
+{
+  "id": "ep036_intro",
+  "episode": "EP036",
+  "level": "oba_camp",
+  "music": "MUS_EP036",
+  "ambience": "Ambience.Summer.Cloudy",
+  "letterbox": true,
+  "fade_in": 1.2,
+  "fade_out": 1.0,
+  "time_of_day": "night",
+  "weather": "cloudy",
+  "duration": 0,
+  "actors": [
+    {
+      "id": "ertugrul",
+      "char": "ertugrul",
+      "model": "assets/models/ottoman/ottoman.obj",
+      "loc_name": "chr.ertugrul.name",
+      "scale": 1.82,
+      "tint": [
+        1.0,
+        0.95,
+        0.85
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            -1.4,
+            0.0,
+            38.4
+          ],
+          "yaw": 178,
+          "clip": "Idle"
+        },
+        {
+          "t": 4.0,
+          "pos": [
+            -1.2,
+            0.0,
+            36.4
+          ],
+          "yaw": 178,
+          "clip": "Walk"
+        },
+        {
+          "t": 8.5,
+          "pos": [
+            -0.8,
+            0.0,
+            33.0
+          ],
+          "yaw": 176,
+          "clip": "Walk"
+        },
+        {
+          "t": 13.0,
+          "pos": [
+            -0.2,
+            0.0,
+            30.0
+          ],
+          "yaw": 176,
+          "clip": "Walk"
+        },
+        {
+          "t": 18.0,
+          "pos": [
+            0.45,
+            0.0,
+            27.3
+          ],
+          "yaw": 174,
+          "clip": "Walk"
+        },
+        {
+          "t": 23.0,
+          "pos": [
+            2.12,
+            0.0,
+            25.76
+          ],
+          "yaw": 172,
+          "clip": "Idle"
+        },
+        {
+          "t": 28.0,
+          "pos": [
+            2.73,
+            0.0,
+            23.39
+          ],
+          "yaw": 170,
+          "clip": "Walk"
+        },
+        {
+          "t": 33.0,
+          "pos": [
+            2.5,
+            0.0,
+            22.42
+          ],
+          "yaw": 150,
+          "clip": "Talk"
+        },
+        {
+          "t": 39.0,
+          "pos": [
+            2.5,
+            0.0,
+            22.42
+          ],
+          "yaw": 120,
+          "clip": "Listen"
+        }
+      ]
+    },
+    {
+      "id": "noyan",
+      "char": "noyan",
+      "model": "assets/models/barbarian+warrior+3d+model.obj",
+      "loc_name": "chr.noyan.name",
+      "scale": 1.94,
+      "tint": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            -8.4,
+            0.0,
+            27.0
+          ],
+          "yaw": 100,
+          "clip": "Idle"
+        },
+        {
+          "t": 5.0,
+          "pos": [
+            -7.0,
+            0.0,
+            26.2
+          ],
+          "yaw": 105,
+          "clip": "Walk"
+        },
+        {
+          "t": 11.0,
+          "pos": [
+            -4.86,
+            0.0,
+            25.13
+          ],
+          "yaw": 110,
+          "clip": "Walk"
+        },
+        {
+          "t": 16.0,
+          "pos": [
+            -5.67,
+            0.0,
+            26.54
+          ],
+          "yaw": 120,
+          "clip": "Walk"
+        },
+        {
+          "t": 21.0,
+          "pos": [
+            1.46,
+            0.0,
+            28.03
+          ],
+          "yaw": 150,
+          "clip": "Walk"
+        },
+        {
+          "t": 26.0,
+          "pos": [
+            1.43,
+            0.0,
+            26.26
+          ],
+          "yaw": 168,
+          "clip": "Talk"
+        },
+        {
+          "t": 32.0,
+          "pos": [
+            1.43,
+            0.0,
+            26.25
+          ],
+          "yaw": 170,
+          "clip": "Point"
+        },
+        {
+          "t": 38.0,
+          "pos": [
+            0.2,
+            0.0,
+            27.4
+          ],
+          "yaw": 185,
+          "clip": "Walk"
+        },
+        {
+          "t": 41.0,
+          "pos": [
+            -0.4,
+            0.0,
+            28.6
+          ],
+          "yaw": 190,
+          "clip": "Idle"
+        }
+      ]
+    },
+    {
+      "id": "mongol_katib",
+      "char": "mongol_katib",
+      "model": "assets/models/ottoman+warrior+3d+model.obj",
+      "loc_name": "chr.mongol_katib.name",
+      "scale": 1.76,
+      "tint": [
+        0.6,
+        0.6,
+        0.68
+      ],
+      "keys": [
+        {
+          "t": 0.0,
+          "pos": [
+            4.2,
+            0.0,
+            21.6
+          ],
+          "yaw": -80,
+          "clip": "Sit"
+        },
+        {
+          "t": 6.0,
+          "pos": [
+            4.2,
+            0.0,
+            21.6
+          ],
+          "yaw": -80,
+          "clip": "Talk"
+        },
+        {
+          "t": 12.0,
+          "pos": [
+            3.0,
+            0.0,
+            22.4
+          ],
+          "yaw": -100,
+          "clip": "Walk"
+        },
+        {
+          "t": 17.0,
+          "pos": [
+            3.03,
+            0.0,
+            25.19
+          ],
+          "yaw": -110,
+          "clip": "Walk"
+        },
+        {
+          "t": 22.0,
+          "pos": [
+            -2.06,
+            0.0,
+            29.03
+          ],
+          "yaw": -120,
+          "clip": "Point"
+        },
+        {
+          "t": 27.0,
+          "pos": [
+            3.42,
+            0.0,
+            24.71
+          ],
+          "yaw": 70,
+          "clip": "Walk"
+        },
+        {
+          "t": 32.0,
+          "pos": [
+            3.2,
+            0.0,
+            22.2
+          ],
+          "yaw": 80,
+          "clip": "Walk"
+        },
+        {
+          "t": 38.0,
+          "pos": [
+            4.4,
+            0.0,
+            21.4
+          ],
+          "yaw": -70,
+          "clip": "Sit"
+        }
+      ]
+    }
+  ],
+  "camera": [
+    {
+      "t": 0.0,
+      "pos": [
+        -5.93,
+        3.4,
+        49.11
+      ],
+      "look": [
+        -1.4,
+        1.6,
+        36.0
+      ],
+      "fov": 50
+    },
+    {
+      "t": 7.0,
+      "pos": [
+        5.02,
+        2.2,
+        36.69
+      ],
+      "look": [
+        -0.9,
+        1.5,
+        34.0
+      ],
+      "fov": 42
+    },
+    {
+      "t": 13.0,
+      "pos": [
+        0.45,
+        2.0,
+        28.25
+      ],
+      "look": [
+        -0.2,
+        1.5,
+        30.0
+      ],
+      "fov": 38
+    },
+    {
+      "t": 19.0,
+      "pos": [
+        -0.84,
+        1.9,
+        28.99
+      ],
+      "look": [
+        0.4,
+        1.55,
+        27.0
+      ],
+      "fov": 34
+    },
+    {
+      "t": 25.0,
+      "pos": [
+        6.88,
+        1.8,
+        27.16
+      ],
+      "look": [
+        0.6,
+        1.6,
+        25.2
+      ],
+      "fov": 30
+    },
+    {
+      "t": 32.0,
+      "pos": [
+        -7.39,
+        1.8,
+        26.68
+      ],
+      "look": [
+        1.4,
+        1.6,
+        23.6
+      ],
+      "fov": 32
+    },
+    {
+      "t": 39.0,
+      "pos": [
+        -9.2,
+        4.2,
+        29.63
+      ],
+      "look": [
+        1.2,
+        1.4,
+        24.0
+      ],
+      "fov": 52
+    }
+  ],
+  "lines": [
+    {
+      "t": 1.8,
+      "actor": "mongol_katib",
+      "loc": "cut.ep036_intro.01",
+      "vo": "ep036_intro_01",
+      "dur": 0
+    },
+    {
+      "t": 7.2,
+      "actor": "ertugrul",
+      "loc": "cut.ep036_intro.02",
+      "vo": "ep036_intro_02",
+      "dur": 0
+    },
+    {
+      "t": 13.4,
+      "actor": "mongol_katib",
+      "loc": "cut.ep036_intro.03",
+      "vo": "ep036_intro_03",
+      "dur": 0
+    },
+    {
+      "t": 19.6,
+      "actor": "noyan",
+      "loc": "cut.ep036_intro.04",
+      "vo": "ep036_intro_04",
+      "dur": 0
+    },
+    {
+      "t": 26.4,
+      "actor": "ertugrul",
+      "loc": "cut.ep036_intro.05",
+      "vo": "ep036_intro_05",
+      "dur": 0
+    },
+    {
+      "t": 33.0,
+      "actor": "noyan",
+      "loc": "cut.ep036_intro.06",
+      "vo": "ep036_intro_06",
+      "dur": 0
+    }
+  ]
+}
