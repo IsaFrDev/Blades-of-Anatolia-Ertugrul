@@ -230,3 +230,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `BuildDamascus()` (ErtWorldBuilder): cho'lning janubi-sharqida (E=720, N=-850, 280x220 m) devorli shahar: kungurali devor, 4 burj, 2 darvoza (janub/g'arb), Umaviylar masjidi (marmar hovli, gumbaz, 34 m kvadrat minora), saroy, bozor arkadasi, ~100 uy, palmalar. Relyef `HeightAt` da tekislanadi, `IsBuildable` chiqarib tashlaydi.
 - Xarita: `Damashq` belgisi; NPC joyi `damascus` (Damashq savdogari, Ibn Arabiy); Sham/Halab/Damashq epizodlari (EP007, EP008) shimoliy darvoza oldidan boshlanadi.
 - Sinov skrinshoti: `16_damascus`.
+
+## Halab shahri
+
+- `BuildHalab()` (ErtWorldBuilder): sharqda (E=800, N=120, R=130 m) aylana shahar: 16 burchakli kungurali devor, 8 burj, sharqiy darvoza; markazda 24 m glasis tepaligida qal'a (halqa devor, burjlar, saroy, hammom gumbazlari, minora) va tepalikdan tushuvchi arkali ko'prik; yopiq gumbazli bozor ko'chasi, halqa-halqa uylar, katta masjid (dumaloq minora), sarvlar. Tepalik `HeightAt` da yasaladi (yurish mumkin).
+- Xarita: `Halab` belgisi; NPC joyi `halab` (Halab savdogari, Al-Aziz); `Halab` epizodlari (EP007) sharqiy darvoza oldidan boshlanadi, Sham/Damashq esa Damashqdan.
+- Sinov skrinshoti: `17_halab`.

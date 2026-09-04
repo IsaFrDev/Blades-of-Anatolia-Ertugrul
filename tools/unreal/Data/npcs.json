@@ -284,6 +284,36 @@
     0.75
    ],
    "dialog": "ep008_arabi"
+  },
+  {
+   "id": "halab_savdogar",
+   "name": "chr.halab_savdogar.name",
+   "place": "halab",
+   "u": 95,
+   "v": 7,
+   "yaw": 180,
+   "woman": false,
+   "kaftan": [
+    0.3,
+    0.3,
+    0.55
+   ],
+   "dialog": "npc_merchant"
+  },
+  {
+   "id": "halab_hokimi",
+   "name": "chr.halab_hokimi.name",
+   "place": "halab",
+   "u": -8,
+   "v": -4,
+   "yaw": 270,
+   "woman": false,
+   "kaftan": [
+    0.6,
+    0.1,
+    0.1
+   ],
+   "dialog": "ep007_aziz"
   }
  ]
 }

@@ -127,6 +127,7 @@ void AErtGameMode::SpawnNpcs()
 		else if (Place == TEXT("camp")) { E = ErtMap::CampE; Nn = ErtMap::CampN; }
 		else if (Place == TEXT("forest")) { E = -330.f; Nn = 700.f; }
 		else if (Place == TEXT("damascus")) { E = ErtMap::DamE; Nn = ErtMap::DamN; }
+		else if (Place == TEXT("halab")) { E = ErtMap::HalabE; Nn = ErtMap::HalabN; }
 		E += U; Nn += Vv;
 		const float X = Nn * 100.f, Y = E * 100.f;
 		FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtNpcGround), true);
