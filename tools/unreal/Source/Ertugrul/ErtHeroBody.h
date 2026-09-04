@@ -38,8 +38,8 @@ public:
 	/** Protsedural poza. Speed sm/s (gorizontal), Lean - yon egilish (-1..1). */
 	void Animate(float Dt, float Speed, bool bInAir, bool bCrouched, float Lean, float SlopeDeg);
 
-	/** Qilich zarbasi (0.45 s) */
-	void TriggerAttack();
+	/** Qilich zarbasi: 0 o'ngdan, 1 chapdan, 2 tepadan og'ir, 3 tepki */
+	void TriggerAttack(int32 Kind = 0);
 	/** Zarba yedi - qisqa titrash */
 	void TriggerHurt();
 	/** Suzish pozasi (gorizontal, qo'l-oyoq harakati) */
@@ -76,6 +76,7 @@ private:
 	float Phase = 0.f;
 	float IdleT = 0.f;
 	float AttackT = 0.f;
+	int32 AttackKind = 0;
 	float HurtT = 0.f;
 	bool bDead = false;
 	bool bSwim = false;

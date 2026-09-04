@@ -72,10 +72,11 @@ void AErtHUD::DrawHUD()
 		Text(FString::Printf(TEXT("%s %d   %s %d   Dori %d   Oltin %d   Daraja %d"), *L.Tr(TEXT("ui.hud.health")), (int32)H->GetHealth(), *L.Tr(TEXT("ui.hud.arrows")), H->GetArrows(), H->Potions, H->Gold, H->Level), X, Y + 40 * Sc, White, Sc);
 		if (H->LevelFlash > 0.f) Text(FString::Printf(TEXT("DARAJA %d!"), H->Level), SW * 0.5f - TextWidth(FString::Printf(TEXT("DARAJA %d!"), H->Level), 1.6f * Sc, true) * 0.5f, SH * 0.30f, FLinearColor(0.5f, 0.85f, 1.f, H->LevelFlash), 1.6f * Sc, true, true);
 		if (GM && GM->ShopMsgT > 0.f) Text(GM->ShopMsg, SW * 0.5f - TextWidth(GM->ShopMsg, Sc, false) * 0.5f, SH * 0.36f, FLinearColor(1.f, 0.85f, 0.35f), Sc);
+		if (H->GetComboWindow() > 0.f && H->GetComboStep() > 0) Text(FString::Printf(TEXT("x%d"), H->GetComboStep() + 1), SW * 0.5f + 120 * Sc, SH * 0.5f - 40 * Sc, FLinearColor(1.f, 0.7f, 0.3f, FMath::Min(1.f, H->GetComboWindow() * 2.f)), 1.3f * Sc, true, true);
 		if (H->GetExecuteFlash() > 0.f) Text(TEXT("IJRO!"), SW * 0.5f - TextWidth(TEXT("IJRO!"), 1.8f * Sc, true) * 0.5f, SH * 0.40f, FLinearColor(0.95f, 0.2f, 0.15f, H->GetExecuteFlash()), 1.8f * Sc, true, true);
 		else if (H->GetParryFlash() > 0.f) Text(TEXT("PARRY!"), SW * 0.5f - TextWidth(TEXT("PARRY!"), 1.6f * Sc, true) * 0.5f, SH * 0.42f, FLinearColor(1.f, 0.85f, 0.3f, H->GetParryFlash()), 1.6f * Sc, true, true);
 		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
-		if (H->GetLockTarget()) Text(TEXT("Q: qulfni ochish   X: dodge"), X + 280 * Sc, Y + 34 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
+		if (H->GetLockTarget()) Text(TEXT("LMB x3 seriya | LMB ushlab: og'ir | V: tepki | X: dodge | Q: qulfni ochish"), X + 280 * Sc, Y + 34 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		else if (AErtNpc* Np = H->NearestNpc(280.f)) Text(FString::Printf(TEXT("[E] %s bilan gaplashish"), *Np->GetDisplayName()), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (H->NearestHorse(320.f)) Text(TEXT("[E] Otga minish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);

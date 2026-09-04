@@ -123,6 +123,7 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Dodge;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Inventory;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Potion;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Kick;
 
 private:
 	void OnMenu();
@@ -133,6 +134,12 @@ private:
 	void OnChoice1(); void OnChoice2(); void OnChoice3(); void OnChoice4();
 	void OnMenuLeft(); void OnMenuRight(); void OnSettings(); void OnMap();
 	void OnLock(); void OnDodge(); void UpdateLock(float Dt); void OnInventory(); void OnPotion();
+	void OnAttackPressed(); void OnAttackReleased(); void OnKick(); void DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, float Stagger, float Knock);
+	float AttackHoldT = -1.f, ComboWindowT = 0.f; int32 ComboStep = 0; bool bHeavyDone = false;
+public:
+	int32 GetComboStep() const { return ComboStep; }
+	float GetComboWindow() const { return ComboWindowT; }
+private:
 	UPROPERTY(Transient) TObjectPtr<AErtEnemy> LockTarget;
 	float DodgeT = 0.f;
 public:

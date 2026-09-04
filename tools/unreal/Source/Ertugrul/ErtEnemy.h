@@ -20,7 +20,9 @@ public:
 	AErtEnemy();
 
 	void Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadius);
-	void ApplyHit(float Damage, AActor* Source);
+	/** bGuardBreak - og'ir zarba/tepki: qalqonni chetlab o'tadi */
+	void ApplyHit(float Damage, AActor* Source, bool bGuardBreak = false);
+	bool IsGuarding() const { return GuardT > 0.f; }
 	/** Parry natijasi: gangib qoladi (harakat/zarba yo'q) */
 	void Stagger(float Seconds);
 	bool IsStaggered() const { return StaggerT > 0.f; }
@@ -52,7 +54,7 @@ private:
 	float Patrol = 0.f;
 	float Health = 60.f, MaxHealth = 60.f;
 	float AttackRange = 200.f, AttackDamage = 10.f, AttackCooldown = 1.5f, MoveSpeed = 380.f;
-	float AttackCD = 0.f, HitPending = -1.f, StaggerT = 0.f;
+	float AttackCD = 0.f, HitPending = -1.f, StaggerT = 0.f, GuardT = 0.f;
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Mount;
 	void TickRider(float Dt, class AErtCharacter* Hero, float DP);
 	float WanderT = 0.f, FleeT = 0.f, DeerPhase = 0.f;

@@ -168,7 +168,7 @@ void UErtHeroBody::SetSwordTier(int32 Tier)
 	M.Commit(LowerArmR, 0, false);
 }
 
-void UErtHeroBody::TriggerAttack() { AttackT = 1.f; }
+void UErtHeroBody::TriggerAttack(int32 Kind) { AttackT = 1.f; AttackKind = Kind; }
 void UErtHeroBody::TriggerHurt() { HurtT = 1.f; }
 
 void UErtHeroBody::SetDead(float HalfH)
@@ -186,7 +186,7 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 {
 	if (!IsBuilt() || bDead) return;
 	IdleT += Dt;
-	AttackT = FMath::Max(0.f, AttackT - Dt / 0.45f);
+	AttackT = FMath::Max(0.f, AttackT - Dt / (AttackKind == 2 ? 0.75f : 0.45f));
 	HurtT = FMath::Max(0.f, HurtT - Dt / 0.35f);
 	ParryT = FMath::Max(0.f, ParryT - Dt / 0.3f);
 	const float S = FMath::Clamp(Speed / 330.f, 0.f, 1.9f);
@@ -267,14 +267,38 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 	}
 	if (AttackT > 0.f)
 	{
-		// Zarba: qo'l orqadan-yuqoridan oldinga siltanadi, tana buriladi
 		const float K = 1.f - AttackT;               // 0 -> 1
 		const float Sweep = FMath::Sin(K * PI * 0.85f);
-		T.ArmR = FMath::Lerp(115.f, -75.f, FMath::Clamp(K * 1.4f, 0.f, 1.f));
-		T.ElbowR = 15.f + 30.f * (1.f - Sweep);
-		T.ArmSpread = 12.f;
-		T.TorsoYaw = FMath::Lerp(-28.f, 32.f, FMath::Clamp(K * 1.3f, 0.f, 1.f));
-		T.TorsoPitch -= 10.f * Sweep;
+		if (AttackKind == 1)
+		{
+			// Chapdan qaytish zarbasi: tana teskari buriladi, qo'l pastdan yuqoriga
+			T.ArmR = FMath::Lerp(-95.f, 60.f, FMath::Clamp(K * 1.4f, 0.f, 1.f));
+			T.ElbowR = 25.f; T.ArmSpread = 40.f * (1.f - K);
+			T.TorsoYaw = FMath::Lerp(32.f, -30.f, FMath::Clamp(K * 1.3f, 0.f, 1.f));
+		}
+		else if (AttackKind == 2)
+		{
+			// Og'ir zarba: ikki qo'l tepaga (kutish), keyin qattiq pastga
+			const float Up = FMath::Clamp(K / 0.45f, 0.f, 1.f), Down = FMath::Clamp((K - 0.45f) / 0.3f, 0.f, 1.f);
+			T.ArmR = FMath::Lerp(-40.f, -175.f, Up) + 200.f * Down; T.ArmL = T.ArmR + 10.f;
+			T.ElbowR = 20.f; T.ElbowL = 20.f; T.ArmSpread = 6.f;
+			T.TorsoPitch += 12.f * Up - 30.f * Down; T.PelvisZ -= 8.f * Down;
+		}
+		else if (AttackKind == 3)
+		{
+			// Tepki: o'ng oyoq oldinga
+			T.ThighR = FMath::Lerp(20.f, -95.f, FMath::Clamp(K * 1.6f, 0.f, 1.f)) * (K < 0.8f ? 1.f : (1.f - K) * 5.f);
+			T.KneeR = 30.f * (1.f - Sweep); T.TorsoPitch += 8.f; T.ArmL = -30.f; T.ArmR = 40.f;
+		}
+		else
+		{
+			// O'ngdan: qo'l orqadan-yuqoridan oldinga siltanadi, tana buriladi
+			T.ArmR = FMath::Lerp(115.f, -75.f, FMath::Clamp(K * 1.4f, 0.f, 1.f));
+			T.ElbowR = 15.f + 30.f * (1.f - Sweep);
+			T.ArmSpread = 12.f;
+			T.TorsoYaw = FMath::Lerp(-28.f, 32.f, FMath::Clamp(K * 1.3f, 0.f, 1.f));
+			T.TorsoPitch -= 10.f * Sweep;
+		}
 	}
 	if (HurtT > 0.f) { T.TorsoPitch += 18.f * HurtT; T.HeadPitch -= 10.f * HurtT; }
 

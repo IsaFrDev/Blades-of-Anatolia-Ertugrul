@@ -142,19 +142,51 @@ void AErtCharacter::UpdateSteps(float Dt)
 
 // ---------------- Jang ----------------
 
+void AErtCharacter::OnAttackPressed()
+{
+	if (!bInputEnabled || bMantling || bDead) return;
+	AttackHoldT = 0.f; bHeavyDone = false;
+}
+
+void AErtCharacter::OnAttackReleased()
+{
+	if (AttackHoldT < 0.f) return;
+	const bool bHeavy = bHeavyDone;
+	AttackHoldT = -1.f;
+	if (bHeavy) return;                       // og'ir zarba ushlab turganda allaqachon berildi
+	OnAttack();
+}
+
+void AErtCharacter::OnKick()
+{
+	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f || Horse) return;
+	AttackCD = 0.9f;
+	Stamina = FMath::Max(0.f, Stamina - 8.f);
+	DoAttack(3, 0.3f, true, 0.9f, 420.f);
+}
+
 void AErtCharacter::OnAttack()
 {
 	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f) return;
-	AttackCD = 0.62f;
+	// Seriya: oyna ichida bosilsa keyingi zarba (0 o'ng, 1 chap, 2 yakunlovchi kuchli)
+	if (ComboWindowT <= 0.f) ComboStep = 0;
+	const int32 Step = ComboStep;
+	ComboStep = (ComboStep + 1) % 3;
+	ComboWindowT = 1.1f;
+	AttackCD = Step == 2 ? 0.75f : 0.5f;
 	Stamina = FMath::Max(0.f, Stamina - 6.f);
+	DoAttack(Step == 1 ? 1 : (Step == 2 ? 2 : 0), Step == 2 ? 1.6f : 1.f, Step == 2, Step == 2 ? 0.6f : 0.f, Step == 2 ? 380.f : 0.f);
+}
+
+void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, float StaggerSec, float Knock)
+{
+	if (Body) Body->TriggerAttack(Kind);
 	if (LockTarget && !LockTarget->IsDead()) SetActorRotation(FRotator(0, (LockTarget->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
-	if (Body) Body->TriggerAttack();
-	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), 0.8f, FMath::FRandRange(0.9f, 1.1f));
-	// Oldindagi sohada dushmanlarni qidiramiz (0.2 s dan keyin tegadi deb hisoblaymiz - soddalashtirilgan: darhol)
+	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), Kind == 2 ? 1.f : 0.8f, Kind == 2 ? 0.8f : FMath::FRandRange(0.9f, 1.1f));
 	const FVector C = GetActorLocation() + GetActorForwardVector() * 130.f + FVector(0, 0, Horse ? 0.f : 45.f);
 	TArray<FOverlapResult> Hits;
 	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtAttack), false, this);
-	if (GetWorld()->OverlapMultiByChannel(Hits, C, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(150.f), Q))
+	if (GetWorld()->OverlapMultiByChannel(Hits, C, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(Kind == 3 ? 130.f : 150.f), Q))
 	{
 		TSet<AActor*> Done;
 		for (const FOverlapResult& R : Hits)
@@ -163,11 +195,17 @@ void AErtCharacter::OnAttack()
 			if (!E || Done.Contains(E)) continue;
 			Done.Add(E);
 			// IJRO: gangigan yoki holdan toygan (<25%) raqib - bir zarbda
-			const bool bExecute = E->IsStaggered() || E->GetHealth() < E->GetMaxHealth() * 0.25f;
+			const bool bExecute = Kind != 3 && (E->IsStaggered() || E->GetHealth() < E->GetMaxHealth() * 0.25f);
 			if (bExecute) { ExecuteFlash = 1.f; if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.9f, 0.25f); }
-			E->ApplyHit(bExecute ? 999.f : AttackDamage * (RiposteT > 0.f ? 2.f : 1.f), this);
-			ShakeT = FMath::Max(ShakeT, bExecute ? 0.3f : 0.12f);
-			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->HitStop(bExecute ? 0.22f : 0.07f);
+			const float Dmg = bExecute ? 999.f : AttackDamage * DamageMul * (RiposteT > 0.f ? 2.f : 1.f);
+			const float HpBefore = E->GetHealth();
+			E->ApplyHit(Dmg, this, bGuardBreak || bExecute);
+			const bool bHit = E->GetHealth() < HpBefore || E->IsDead();
+			if (!bHit) { ShakeT = FMath::Max(ShakeT, 0.08f); continue; }   // to'sildi
+			if (StaggerSec > 0.f && !E->IsDead()) E->Stagger(StaggerSec);
+			if (Knock > 0.f && !E->IsDead()) E->LaunchCharacter((E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D() * Knock + FVector(0, 0, 120.f), true, true);
+			ShakeT = FMath::Max(ShakeT, bExecute ? 0.3f : (Kind == 2 ? 0.2f : 0.12f));
+			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->HitStop(bExecute ? 0.22f : (Kind == 2 ? 0.12f : 0.07f));
 			FErtAudio::PlaySfx(GetWorld(), E->IsDead() ? TEXT("kill") : TEXT("hit"), E->GetActorLocation(), 1.f, FMath::FRandRange(0.9f, 1.1f));
 			if (E->IsDead()) { AddXP(E->XPValue()); AddGold(E->IsAnimal() ? 0 : FMath::RandRange(4, 14)); }
 			RiposteT = 0.f;
@@ -506,6 +544,7 @@ void AErtCharacter::BuildInput()
 	IA_Dodge = MakeAction(TEXT("IA_ErtDodge"), EInputActionValueType::Boolean);
 	IA_Inventory = MakeAction(TEXT("IA_ErtInventory"), EInputActionValueType::Boolean); IA_Inventory->bTriggerWhenPaused = true;
 	IA_Potion = MakeAction(TEXT("IA_ErtPotion"), EInputActionValueType::Boolean);
+	IA_Kick = MakeAction(TEXT("IA_ErtKick"), EInputActionValueType::Boolean);
 	// Menyu harakatlari pauzada ham ishlaydi
 	for (UInputAction* A : { IA_Menu, IA_MenuUp, IA_MenuDown, IA_Confirm, IA_MenuLeft, IA_MenuRight, IA_Settings, IA_Map, IA_Choice1, IA_Choice2, IA_Choice3, IA_Choice4, IA_Jump }) if (A) A->bTriggerWhenPaused = true;
 
@@ -569,6 +608,7 @@ void AErtCharacter::BuildInput()
 	Map(IA_Dodge, EKeys::X); Map(IA_Dodge, EKeys::Gamepad_FaceButton_Right);
 	Map(IA_Inventory, EKeys::I); Map(IA_Inventory, EKeys::Gamepad_DPad_Right);
 	Map(IA_Potion, EKeys::H); Map(IA_Potion, EKeys::Gamepad_DPad_Left);
+	Map(IA_Kick, EKeys::V); Map(IA_Kick, EKeys::Gamepad_RightTrigger);
 }
 
 void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); } }
@@ -697,7 +737,9 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_Crouch, ETriggerEvent::Started, this, &AErtCharacter::OnCrouchToggle);
 	EIC->BindAction(IA_Walk, ETriggerEvent::Started, this, &AErtCharacter::OnWalkToggle);
 	EIC->BindAction(IA_Zoom, ETriggerEvent::Triggered, this, &AErtCharacter::OnZoom);
-	EIC->BindAction(IA_Attack, ETriggerEvent::Started, this, &AErtCharacter::OnAttack);
+	EIC->BindAction(IA_Attack, ETriggerEvent::Started, this, &AErtCharacter::OnAttackPressed);
+	EIC->BindAction(IA_Attack, ETriggerEvent::Completed, this, &AErtCharacter::OnAttackReleased);
+	EIC->BindAction(IA_Kick, ETriggerEvent::Started, this, &AErtCharacter::OnKick);
 	EIC->BindAction(IA_Block, ETriggerEvent::Started, this, &AErtCharacter::OnBlockOn);
 	EIC->BindAction(IA_Block, ETriggerEvent::Completed, this, &AErtCharacter::OnBlockOff);
 	EIC->BindAction(IA_Shoot, ETriggerEvent::Started, this, &AErtCharacter::OnShoot);
@@ -894,6 +936,18 @@ void AErtCharacter::Tick(float Dt)
 	Super::Tick(Dt);
 	UpdateCombat(Dt);
 	DodgeT = FMath::Max(0.f, DodgeT - Dt);
+	ComboWindowT = FMath::Max(0.f, ComboWindowT - Dt);
+	if (AttackHoldT >= 0.f)
+	{
+		AttackHoldT += Dt;
+		if (!bHeavyDone && AttackHoldT >= 0.35f && AttackCD <= 0.f && bInputEnabled && !bDead && !bMantling)
+		{
+			// Og'ir zarba: 2.2x zarar, qalqonni sindiradi, 0.6 s gangitadi
+			bHeavyDone = true; ComboStep = 0; ComboWindowT = 0.f;
+			AttackCD = 1.05f; Stamina = FMath::Max(0.f, Stamina - 14.f);
+			DoAttack(2, 2.2f, true, 0.6f, 300.f);
+		}
+	}
 	UpdateLock(Dt);
 	if (ShakeT > 0.f) { ShakeT = FMath::Max(0.f, ShakeT - Dt); const float A = ShakeT * 40.f; Boom->SocketOffset = BoomBase + FVector(0, FMath::FRandRange(-A, A), FMath::FRandRange(-A, A)); }
 	else if (Boom->SocketOffset != BoomBase) Boom->SocketOffset = BoomBase;

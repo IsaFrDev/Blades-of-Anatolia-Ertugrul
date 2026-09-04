@@ -130,6 +130,12 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - Savdogar Yusuf (shahar bozori) dialogi orqali sotib olish: bayroqlar buy_* -> EndDialog da narx tekshiruvi (dori 15, 8 o'q 10, qalqon 60, kamon 90, qilich 120).
 - Saqlash: gold/potions/arrows/level/xp/sword/bow/shield `ert_save.json` da; o'yinchi paydo bo'lgach 0.5 s da qayta qo'llanadi.
 
+## Jang kombinatsiyalari
+- LMB seriya: o'ngdan -> chapdan -> yakunlovchi (1.6x, gangitadi 0.6 s, uloqtiradi). Oyna 1.1 s, HUD da x2/x3.
+- LMB ushlab turish (0.35 s): og'ir zarba (2.2x, ikki qo'l tepadan, qalqonni sindiradi, 0.6 s gangitadi, stamina -14, cd 1.05 s).
+- V: tepki (0.3x, gangitadi 0.9 s, 4.2 m uloqtiradi, qalqonni chetlab o'tadi).
+- Qalqonli dushmanlar (serjant, elita, otliq): yuzma-yuz yengil zarbani 45% to'sadi (blok tovushi, qisqa kamera silkinishi); og'ir zarba/tepki/gangigan holatda yo'q.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

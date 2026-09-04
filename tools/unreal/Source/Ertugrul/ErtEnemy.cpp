@@ -103,9 +103,21 @@ void AErtEnemy::BuildDeer()
 	}
 }
 
-void AErtEnemy::ApplyHit(float Damage, AActor* Source)
+void AErtEnemy::ApplyHit(float Damage, AActor* Source, bool bGuardBreak)
 {
 	if (bDead) return;
+	// Qalqonli askarlar (serjant, elita, otliq) yengil zarbani 45% to'sadi - og'ir zarba/tepki yoki gangigan holatda yo'q
+	if (!bGuardBreak && StaggerT <= 0.f && HitPending <= 0.f && Source && (Kind == EErtEnemyKind::Sergeant || Kind == EErtEnemyKind::Elite || Kind == EErtEnemyKind::Rider))
+	{
+		const FVector To = (Source->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
+		if (FVector::DotProduct(GetActorForwardVector(), To) > 0.3f && FMath::FRand() < 0.45f)
+		{
+			GuardT = 0.35f; bAlerted = true;
+			if (Body && Body->IsBuilt()) Body->SetBlocking(true);
+			FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f, 0.95f);
+			return;
+		}
+	}
 	Health -= Damage;
 	bAlerted = true;
 	if (Body && Body->IsBuilt()) Body->TriggerHurt();
@@ -253,6 +265,7 @@ void AErtEnemy::TickDeer(float Dt, APawn* Player)
 void AErtEnemy::TickGuard(float Dt, APawn* Player)
 {
 	AttackCD -= Dt;
+	if (GuardT > 0.f) { GuardT -= Dt; if (GuardT <= 0.f && Body) Body->SetBlocking(false); }
 	if (StaggerT > 0.f) { StaggerT -= Dt; return; }
 	AErtCharacter* Hero = Cast<AErtCharacter>(Player);
 	const bool bHeroAlive = Hero && !Hero->IsDead();
