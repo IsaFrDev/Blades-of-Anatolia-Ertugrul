@@ -44,6 +44,9 @@ struct ERTUGRUL_API FErtMeshData
 
 namespace ErtCol
 {
+	// Material uslubi (M_ErtVertexColor): vertex rangining alfa kanali naqshni tanlaydi
+	constexpr float StyleGround = 0.0f, StyleStone = 0.2f, StyleWood = 0.4f, StyleRoof = 0.6f, StyleBrick = 0.8f, StylePlain = 1.0f;
+	inline FLinearColor Sty(const FLinearColor& C, float Style) { return FLinearColor(C.R, C.G, C.B, Style); }
 	inline FLinearColor Vary(const FLinearColor& C, float Amount, int32 Seed)
 	{
 		FRandomStream RS(Seed);
