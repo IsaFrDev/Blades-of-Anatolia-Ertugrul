@@ -292,3 +292,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `BuildSogut()` (ErtWorldBuilder): Karacahisar janubi-g'arbida (E=-220, N=600, R=70 m) yashil vodiy qishlog'i: egri ariq (ko'k tasma, loy qirg'oq), ikki yog'och ko'prik, suv tegirmoni (charx); tosh poydevorli masjid (yog'och minora, qo'rg'oshin gumbaz), sakkiz qirrali yashil gumbazli Ertug'rul turbasi; bozor maydoni (soyabonli rastalar, quduq, gulxan); yog'och/oq suvoqli uylar (AddHouse) va bog'cha panjaralari; qo'ylar qo'rasi va pichan g'aramlari; mevazor qatorlari, bug'doy dalasi; osilgan shoxli tollar; kuzatuv minorasi va Qayi tug'i. Yo'l Karacahisar yo'lidan qishloqqa.
 - Xarita: `So'g'ut` belgisi; NPC joyi `sogut` (tegirmonchi, bozorchi, imom); `So'g'ut`/`Domaniç` epizodlari sharqiy kirishdan boshlanadi.
 - Sinov skrinshoti: `32_sogut`.
+
+## Domaniç yaylovi
+
+- `BuildDomanic()` (ErtWorldBuilder): Bursa va Sivas orasida, oba yo'li yonida (E=-440, N=270, R=90 m) 18 m ko'tarilgan yassi baland o'tloq: yam-yashil rang va gul dog'lari (shovqinli rang), 260 ta rangli yovvoyi gul; 8 kichik yozgi o'tov halqasi, gulxan, tug', kigiz, o'tin; tosh cho'pon kulbasi va qurut/pishloq tokchalari; qo'y qo'rasi (40 qo'y, 2 it, cho'pon); 9 statik yilqi (`AddHorse`); tosh o'ralgan buloq havzasi va jilg'a; chetda qarag'ay to'plari; kuzatuv posti; yo'l boshida tosh belgi. Yaylov ichida daraxt/qoya qo'yilmaydi.
+- Xarita: `Domaniç yaylovi` (yashil) belgisi; NPC joyi `domanic` (cho'pon, kampir); `Domaniç` epizodlari yo'l boshidan boshlanadi.
+- Sinov skrinshoti: `33_domanic`.

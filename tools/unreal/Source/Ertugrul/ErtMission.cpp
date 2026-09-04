@@ -170,7 +170,8 @@ FVector AErtMissionDirector::AnchorFor(const FErtEpisode& E) const
 	else if (E.Region.Contains(TEXT("Bursa"))) { PE = BurE + BurR + 45.f; PN = BurN; }   // Bursa sharqiy kirishi
 	else if (E.Region.Contains(TEXT("Nikeya"))) { PE = NikE + NikR + 55.f; PN = NikN; }   // Nikeya sharqiy darvozasi oldi
 	else if (E.Region.Contains(TEXT("Karacahisar"))) { PE = KarE; PN = KarN - KarR - 60.f; }   // Karacahisar etagi (janub)
-	else if (E.Region.Contains(TEXT("So'g'ut")) || E.Region.Contains(TEXT("Sogut")) || E.Region.Contains(TEXT("Domani"))) { PE = SogE + SogR + 20.f; PN = SogN; }   // So'g'ut sharqiy kirishi
+	else if (E.Region.Contains(TEXT("So'g'ut")) || E.Region.Contains(TEXT("Sogut"))) { PE = SogE + SogR + 20.f; PN = SogN; }   // So'g'ut sharqiy kirishi
+	else if (E.Region.Contains(TEXT("Domani"))) { PE = DomE + 40.f; PN = DomN + 50.f; }   // Domaniç yaylovi (yo'l boshi)
 	// Epizod indeksiga qarab biroz siljitamiz - har epizod boshqa joyda
 	const float Off = (E.GlobalIndex % 5) * 35.f;
 	return GroundAt(PN * 100.f + Off * 100.f, PE * 100.f - Off * 60.f);

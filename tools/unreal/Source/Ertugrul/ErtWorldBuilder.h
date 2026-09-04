@@ -36,6 +36,7 @@ namespace ErtMap
 	constexpr float NikE = -300.f, NikN = -60.f, NikR = 110.f, NikZ = 5.5f, AskE = -300.f, AskN = 95.f, AskR = 65.f, AskZ = 4.5f;   // Nikeya va Askaniya ko'li
 	constexpr float KarE = -60.f, KarN = 760.f, KarR = 62.f, KarH = 45.f, KarBaseZ = 18.f;   // Karacahisar qoyasi
 	constexpr float SogE = -220.f, SogN = 600.f, SogR = 70.f, SogZ = 16.f;   // So'g'ut qishlog'i
+	constexpr float DomE = -440.f, DomN = 270.f, DomR = 90.f, DomH = 18.f;   // Domaniç yaylovi (baland o'tloq)
 }
 
 UCLASS()
@@ -94,6 +95,7 @@ private:
 	void BuildNikeya();
 	void BuildKaracahisar();
 	void BuildSogut();
+	void BuildDomanic();
 	void AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S);
 	void BuildForest();
 	void BuildRocks();

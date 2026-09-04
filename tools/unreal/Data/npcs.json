@@ -569,6 +569,36 @@
     0.8
    ],
    "dialog": "npc_geyikli_baba"
+  },
+  {
+   "id": "domanic_chopon",
+   "name": "chr.domanic_chopon.name",
+   "place": "domanic",
+   "u": 10,
+   "v": -10,
+   "yaw": 90,
+   "woman": false,
+   "kaftan": [
+    0.45,
+    0.38,
+    0.28
+   ],
+   "dialog": "npc_caravan"
+  },
+  {
+   "id": "domanic_kampir",
+   "name": "chr.domanic_kampir.name",
+   "place": "domanic",
+   "u": -6,
+   "v": 6,
+   "yaw": 180,
+   "woman": true,
+   "kaftan": [
+    0.5,
+    0.2,
+    0.2
+   ],
+   "dialog": "npc_hayme_ana"
   }
  ]
 }
