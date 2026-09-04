@@ -1,6 +1,7 @@
 #include "ErtHorse.h"
 #include "Ertugrul.h"
 #include "ErtCharacter.h"
+#include "ErtEnemy.h"
 #include "ErtProcMesh.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -99,9 +100,31 @@ void AErtHorse::Build()
 	}
 }
 
+void AErtHorse::ApplyDamage(float D)
+{
+	if (bDead) return;
+	Health -= D;
+	if (Health > 0.f) return;
+	Health = 0.f; bDead = true;
+	// Ot yiqiladi: chavandoz uloqtiriladi
+	if (AErtCharacter* R = Cast<AErtCharacter>(Rider))
+	{
+		R->DismountHorse();
+		R->LaunchCharacter(GetActorForwardVector() * 450.f + FVector(0, 0, 320.f), true, true);
+		R->ReceiveHit(15.f, GetActorLocation(), nullptr, true);
+	}
+	else if (Rider) { if (AErtEnemy* En = Cast<AErtEnemy>(Rider)) En->ApplyHit(30.f, nullptr, true); }
+	Rider = nullptr;
+	GetCharacterMovement()->DisableMovement();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (BodyMesh) { BodyMesh->SetRelativeRotation(FRotator(0, 0, 75.f)); BodyMesh->SetRelativeLocation(FVector(0, 0, -40.f)); }
+	for (UProceduralMeshComponent* L : Legs) if (L) { L->SetRelativeRotation(FRotator(0, 0, 75.f)); L->AddRelativeLocation(FVector(0, 0, -60.f)); }
+	SetLifeSpan(25.f);
+}
+
 void AErtHorse::Mount(AActor* InRider)
 {
-	if (!InRider || Rider) return;
+	if (!InRider || Rider || bDead) return;
 	Rider = InRider;
 	Input = FVector2D::ZeroVector;
 	UE_LOG(LogErtugrul, Log, TEXT("Otga minildi"));
@@ -124,6 +147,8 @@ void AErtHorse::RiderJump()
 void AErtHorse::Tick(float Dt)
 {
 	Super::Tick(Dt);
+	if (bDead) return;
+	if (!Rider && Health < MaxHealth) Health = FMath::Min(MaxHealth, Health + 3.f * Dt);
 	UCharacterMovementComponent* CM = GetCharacterMovement();
 	if (Rider)
 	{

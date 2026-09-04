@@ -264,7 +264,7 @@ AErtHorse* AErtCharacter::NearestHorse(float MaxDist) const
 	for (AActor* A : All)
 	{
 		AErtHorse* H = Cast<AErtHorse>(A);
-		if (!H || H->IsMounted()) continue;
+		if (!H || H->IsMounted() || H->IsDead()) continue;
 		const float D = FVector::Dist2D(H->GetActorLocation(), GetActorLocation());
 		if (D < BestD) { BestD = D; Best = H; }
 	}
@@ -339,6 +339,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	}
 	if (bBlocking && bFacing && Stamina > 5.f && !bUnblockable) { Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
+	if (Horse) { Horse->ApplyDamage(Damage * 0.4f); Damage *= 0.6f; }
 	Health -= Damage;
 	HurtFlash = 1.f;
 	ShakeT = FMath::Min(0.35f, 0.15f + Damage * 0.01f);
@@ -395,7 +396,9 @@ void AErtCharacter::UpdateCombat(float Dt)
 	RiposteT = FMath::Max(0.f, RiposteT - Dt);
 	BlockT += Dt;
 	NoDamageT += Dt;
-	if (!bDead && NoDamageT > 5.f) Health = FMath::Min(MaxHealth, Health + 4.f * Dt);
+	float RegenMul = 1.f;
+	if (AErtGameMode* GMh = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) RegenMul = GMh->GetHonor() >= 10 ? 1.6f : (GMh->GetHonor() <= -10 ? 0.6f : 1.f);
+	if (!bDead && NoDamageT > 5.f) Health = FMath::Min(MaxHealth, Health + 4.f * RegenMul * Dt);
 }
 
 void AErtCharacter::BeginPlay()

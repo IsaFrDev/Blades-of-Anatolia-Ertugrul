@@ -203,3 +203,7 @@ keys,uz,tr,en
 "DLG_SQ_HAMZA_CONSCIENCE_ASK","Bey... men xoin edim. Menga ikkinchi imkon ber - mo'g'ul lagerini ko'rsataman.","Bey... ben haindim. Bana ikinci bir şans ver - Moğol kampını gösteririm.","Bey... I was a traitor. Give me a second chance - I will show you the Mongol camp."
 "DLG_SQ_HAMZA_CONSCIENCE_DONE","Rahmat, bey. Endi qonim bilan to'layman.","Sağ ol bey. Artık kanımla öderim.","Thank you, bey. Now I pay with my blood."
 "DLG_SQ_HAMZA_CONSCIENCE_OPT","Kvest: Hamzaning vijdoni","Görev: Hamza'nın vicdanı","Quest: Hamza's conscience"
+"DLG_HAYME_HONOR_HIGH","Ona, duo qiling.","Ana, dua edin.","Mother, give me your blessing."
+"DLG_HAYME_HONOR_HIGH_R","Butun oba sen bilan faxrlanadi, o'g'lim. Allohning panohida bo'l.","Bütün oba seninle gurur duyuyor evladım. Allah'a emanet ol.","The whole tribe is proud of you, my son. Go with God."
+"DLG_MERCHANT_HONOR_LOW","Nega narxlar bunday qimmat?","Fiyatlar neden bu kadar pahalı?","Why are the prices so high?"
+"DLG_MERCHANT_HONOR_LOW_R","Alp, sizning nomingiz bozorda yaxshi emas. Xavf - narx.","Alp, adınız pazarda iyi değil. Risk - fiyat.","Alp, your name is not good in the bazaar. Risk means price."

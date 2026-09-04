@@ -31,6 +31,10 @@ public:
 	void RiderJump();
 	USceneComponent* GetSaddle() const { return Saddle; }
 	float GetSpeed() const { return CurSpeed; }
+	float Health = 200.f, MaxHealth = 200.f;
+	bool bDead = false;
+	void ApplyDamage(float D);
+	bool IsDead() const { return bDead; }
 
 protected:
 	virtual void BeginPlay() override;

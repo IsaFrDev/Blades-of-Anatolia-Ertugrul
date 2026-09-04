@@ -5,6 +5,7 @@
 #include "ErtProcMesh.h"
 #include "ErtHorse.h"
 #include "ErtAudio.h"
+#include "ErtGameMode.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -120,6 +121,7 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source, bool bGuardBreak)
 			return;
 		}
 	}
+	if (Mount) Mount->ApplyDamage(Damage * 0.3f);
 	Health -= Damage;
 	bAlerted = true;
 	if (Body && Body->IsBuilt()) Body->TriggerHurt();
@@ -287,6 +289,12 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 		const float Facing = FVector::DotProduct(GetActorForwardVector(), To);
 		const float SeeRange = Mount ? 2600.f : (Hero->bIsCrouched ? 900.f : 1400.f);
 		if ((DP < SeeRange && Facing > 0.35f && CanSee(Hero)) || DP < 320.f) bAlerted = true;
+	}
+	if (bAlerted && bHeroAlive && Kind == EErtEnemyKind::Footman && Health < MaxHealth * 0.3f)
+	{
+		// Or/iymon yuqori bo'lsa oddiy askarlar qo'rqib qochadi
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
+			if (GM->GetHonor() >= 15) { MoveToward(GetActorLocation() + (GetActorLocation() - Hero->GetActorLocation()).GetSafeNormal2D() * 600.f, MoveSpeed); return; }
 	}
 	if (bAlerted && bHeroAlive)
 	{

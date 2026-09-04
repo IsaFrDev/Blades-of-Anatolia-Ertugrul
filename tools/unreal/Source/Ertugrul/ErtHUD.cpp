@@ -77,6 +77,7 @@ void AErtHUD::DrawHUD()
 		else if (H->GetParryFlash() > 0.f) Text(TEXT("PARRY!"), SW * 0.5f - TextWidth(TEXT("PARRY!"), 1.6f * Sc, true) * 0.5f, SH * 0.42f, FLinearColor(1.f, 0.85f, 0.3f, H->GetParryFlash()), 1.6f * Sc, true, true);
 		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
 		if (H->GetLockTarget()) Text(TEXT("LMB x3 seriya | LMB ushlab: og'ir | V: tepki | X: dodge | Q: qulfni ochish"), X + 280 * Sc, Y + 34 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
+		if (H->IsRiding() && H->GetHorse()) { Bar(X, Y - 40 * Sc, 160 * Sc, 8 * Sc, H->GetHorse()->Health / H->GetHorse()->MaxHealth, FLinearColor(0.55f, 0.35f, 0.15f)); Text(FString::Printf(TEXT("Ot %d"), (int32)H->GetHorse()->Health), X + 166 * Sc, Y - 44 * Sc, White, 0.85f * Sc); }
 		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		else if (H->NearestCarcass(260.f)) Text(TEXT("[E] Go'sht olish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (AErtNpc* Np = H->NearestNpc(280.f)) Text(FString::Printf(TEXT("[E] %s bilan gaplashish"), *Np->GetDisplayName()), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
@@ -310,7 +311,7 @@ void AErtHUD::DrawDialog(float SW, float SH, float Sc)
 		Text(TEXT("1-4 yoki Yuqori/Pastga + Enter: tanlash   Esc: chiqish"), PX + 18 * Sc, PY + PanelH - 22 * Sc, Grey, 0.85f * Sc);
 	}
 	else Text(TEXT("Space/Enter: davom   Esc: chiqish"), PX + 18 * Sc, PY + PanelH - 22 * Sc, Grey, 0.85f * Sc);
-	Text(FString::Printf(TEXT("Or/iymon: %d"), GM->GetHonor()), SW - 150 * Sc, 24 * Sc, Grey, 0.9f * Sc);
+	Text(FString::Printf(TEXT("Or/iymon: %d (%s)"), GM->GetHonor(), *GM->HonorTitle()), SW - 220 * Sc, 24 * Sc, Grey, 0.9f * Sc);
 }
 
 // ---------------- Sozlamalar ----------------
@@ -505,6 +506,7 @@ void AErtHUD::DrawInventory(float SW, float SH, float Sc)
 	Row(TEXT("Sog'liq"), FString::Printf(TEXT("%d / %d"), (int32)H->GetHealth(), (int32)H->GetMaxHealth()));
 	Row(TEXT("Stamina"), FString::Printf(TEXT("%d / %d"), (int32)H->GetStamina(), (int32)H->StaminaMax));
 	Row(TEXT("Oltin"), FString::Printf(TEXT("%d"), H->Gold));
+	if (AErtGameMode* GMi = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()))) Row(TEXT("Or/iymon"), FString::Printf(TEXT("%d  (%s)  - narxlar, kvestlar, shifo, dushman qo'rquvi"), GMi->GetHonor(), *GMi->HonorTitle()));
 	Row(TEXT("Dori (H)"), FString::Printf(TEXT("%d   (+45 sog'liq)"), H->Potions));
 	Row(TEXT("Kiyik go'shti"), FString::Printf(TEXT("%d   (+25, dori bo'lmasa H bilan)"), H->Meat));
 	Row(TEXT("O'qlar"), FString::Printf(TEXT("%d / %d"), H->GetArrows(), H->MaxArrows));

@@ -21,6 +21,12 @@
      "text_key": "DLG_NPC_HAYME_OPT_ANGRY",
      "next": "d",
      "honor": -3
+    },
+    {
+     "text_key": "DLG_HAYME_HONOR_HIGH",
+     "next": "h",
+     "requires_evidence": "honor_high",
+     "set_flag": "hayme_blessing"
     }
    ]
   },
@@ -32,6 +38,11 @@
   "d": {
    "speaker": "Hayma Ona",
    "text_key": "DLG_NPC_HAYME_04",
+   "next": "end"
+  },
+  "h": {
+   "speaker": "Hayma Ona",
+   "text_key": "DLG_HAYME_HONOR_HIGH_R",
    "next": "end"
   }
  }

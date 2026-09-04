@@ -124,14 +124,18 @@ void AErtGameMode::RefreshSideQuestFlags()
 {
 	for (const AErtMissionDirector::FSideInfo& S : AErtMissionDirector::LoadSideQuests())
 	{
-		if (Flags.Contains(TEXT("sq_done_") + S.Id)) Flags.Remove(TEXT("sq_avail_") + S.Id);
+		if (Flags.Contains(TEXT("sq_done_") + S.Id) || Honor <= -10) Flags.Remove(TEXT("sq_avail_") + S.Id);   // or/iymon past bo'lsa hech kim kvest bermaydi
 		else Flags.Add(TEXT("sq_avail_") + S.Id);
+	// Dialog bayroqlari: honor_high / honor_low (graflarda requires_evidence sifatida)
+	Flags.Remove(TEXT("honor_high")); Flags.Remove(TEXT("honor_low"));
+	if (Honor >= 10) Flags.Add(TEXT("honor_high")); else if (Honor <= -5) Flags.Add(TEXT("honor_low"));
 	}
 }
 
 void AErtGameMode::StartDialog(AErtNpc* Npc)
 {
 	if (!Npc || Dialog.IsActive() || (Cutscene && Cutscene->IsPlaying())) return;
+	RefreshSideQuestFlags();
 	if (!Dialog.Start(Npc->GetDialogId(), &Flags, &Honor)) return;
 	Npc->SetTalking(true); TalkingNpc = Npc;
 	SetPlayerInput(false, false);
@@ -159,6 +163,7 @@ void AErtGameMode::EndDialog()
 		{
 			if (!Flags.Contains(Flag)) return;
 			Flags.Remove(Flag);
+			Price = FMath::RoundToInt(Price * (Honor >= 10 ? 0.85f : (Honor <= -5 ? 1.3f : 1.f)));   // or/iymon narxga ta'sir qiladi
 			if (H->Gold >= Price) { H->AddGold(-Price); Give(); ShopMsg = FString::Printf(TEXT("Sotib olindi (-%d oltin)"), Price); }
 			else ShopMsg = TEXT("Oltin yetarli emas");
 			ShopMsgT = 3.f;
@@ -176,6 +181,7 @@ void AErtGameMode::EndDialog()
 			}
 			else { ShopMsg = TEXT("Avval joriy missiyani tugating"); ShopMsgT = 3.f; }
 		}
+		if (Flags.Contains(TEXT("hayme_blessing"))) { Flags.Remove(TEXT("hayme_blessing")); H->Potions += 2; H->Heal(100.f); ShopMsg = TEXT("Onaning duosi: +2 dori, to'liq shifo"); ShopMsgT = 3.f; }
 		Buy(TEXT("buy_potion"), 15, [&]() { H->Potions += 1; });
 		Buy(TEXT("buy_arrows"), 10, [&]() { H->AddArrows(8); });
 		Buy(TEXT("buy_shield"), 60, [&]() { H->bShield = true; H->ApplyEquipment(); });

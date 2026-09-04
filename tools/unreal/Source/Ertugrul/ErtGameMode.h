@@ -50,6 +50,7 @@ public:
 	const FErtDialog& GetDialog() const { return Dialog; }
 	bool IsDialogActive() const { return Dialog.IsActive(); }
 	int32 GetHonor() const { return Honor; }
+	FString HonorTitle() const { return Honor >= 20 ? TEXT("Sharafli Bey") : (Honor >= 10 ? TEXT("Mo'tabar") : (Honor <= -10 ? TEXT("Badnom") : (Honor <= -5 ? TEXT("Shubhali") : TEXT("Oddiy")))); }
 	const TSet<FString>& GetFlags() const { return Flags; }
 	void AddFlag(const FString& F) { Flags.Add(F); }
 	void RemoveFlag(const FString& F) { Flags.Remove(F); }

@@ -153,6 +153,13 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - 9 yangi NPC (jami 17), yangi joy: forest (-330, 700). Xarita (M) o'ng ustunida kvest jurnali: [ ] mavjud, [>] faol, [x] bajarilgan.
 - `StartEpisode` -> `StartEpisodeData(E, Start, PhaseOverride)` ga ajratildi; override JSON obyekti bo'lsa missions.json o'rniga u ishlatiladi.
 
+## Ot sog'lig'i va or/iymon ta'siri
+- Ot: 200 sog'liq; chavandozga kelgan zararning 40% otga (chavandoz 60%), dushman otliqlarida 30%. Sog'liq 0 -> ot yiqiladi,
+  chavandoz uloqtiriladi (+15 to'sib bo'lmas zarar), 25 s dan keyin yo'qoladi. Minilmaganda 3/s tiklanadi. HUD: minganda "Ot N" chizig'i.
+- Or/iymon: >= 10 shifo x1.6 va narxlar -15%; <= -5 narxlar +30% va savdogar "nomingiz yaxshi emas" deydi; <= -10 shifo x0.6 va hech kim
+  yon kvest bermaydi; >= 15 oddiy askarlar sog'lig'i 30% dan tushganda qochadi. Unvon: Sharafli Bey / Mo'tabar / Oddiy / Shubhali / Badnom.
+- Dialog bayroqlari `honor_high` / `honor_low` (`requires_evidence`): Hayma Ona duosi (+2 dori, to'liq shifo), savdogarning shikoyati.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

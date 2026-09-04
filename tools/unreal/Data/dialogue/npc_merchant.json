@@ -23,6 +23,11 @@
     {
      "text_key": "DLG_SHOP_MORE",
      "next": "s"
+    },
+    {
+     "text_key": "DLG_MERCHANT_HONOR_LOW",
+     "next": "lo",
+     "requires_evidence": "honor_low"
     }
    ]
   },
@@ -64,6 +69,11 @@
   "d": {
    "speaker": "Savdogar Yusuf",
    "text_key": "DLG_SHOP_DONE",
+   "next": "end"
+  },
+  "lo": {
+   "speaker": "Savdogar Yusuf",
+   "text_key": "DLG_MERCHANT_HONOR_LOW_R",
    "next": "end"
   }
  }
