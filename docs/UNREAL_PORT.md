@@ -185,6 +185,11 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - Placeholder ovozlar `tools/unreal/Scripts/gen_tts.ps1` bilan Windows SAPI (Zira, en-US) dan yaratildi: 552 fayl (DLG_* va greet.* x 3 til,
   ~180 kalit). Haqiqiy diktor yozuvlari shu nomlar bilan almashtiriladi. Fayllar repoga qo'shilmaydi (Content/Ertugrul/Data/audio).
 
+## Ekran sozlamalari
+- Sozlamalar qatorlari 5-8: Ekran rejimi (to'liq / oynali to'liq / oyna), O'lcham (1280x720, 1600x900, 1920x1080, 2560x1440),
+  Grafika sifati (Past/O'rta/Yuqori/Epik - `SetOverallScalabilityLevel`), VSync. `UGameUserSettings::ApplySettings` + `SaveSettings`
+  (GameUserSettings.ini). Chap/O'ng yoki Enter bilan o'zgartiriladi. Intel GPU uchun tavsiya: Past/O'rta, VSync yoqilgan.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

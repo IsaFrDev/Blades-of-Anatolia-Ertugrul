@@ -103,6 +103,9 @@ public:
 	int32 SettingsPage = 0, KeyRow = 0; bool bCapturing = false;   // 0 umumiy, 1 tugmalar
 	TMap<FString, FString> SavedKeys;
 	void ApplySavedKeys();
+	int32 ResIndex = 1;   // 0 1280x720, 1 1600x900, 2 1920x1080, 3 2560x1440
+	void ApplyDisplay();
+	FString DisplayRow(int32 Row) const;
 	void SettingsMove(int32 Delta);
 	void SettingsAdjust(int32 Delta);
 	int32 Language = 0; float MouseSens = 1.f; bool bInvertY = false;

@@ -19,6 +19,8 @@
 #include "Engine/PostProcessVolume.h"
 #include "ErtWeather.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "GameFramework/GameUserSettings.h"
+#include "Engine/Engine.h"
 #include "ErtMission.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -317,6 +319,26 @@ void AErtGameMode::Tick(float Dt)
 	}
 }
 
+void AErtGameMode::ApplyDisplay()
+{
+	if (UGameUserSettings* GS = GEngine ? GEngine->GetGameUserSettings() : nullptr) { GS->ApplySettings(false); GS->SaveSettings(); }
+}
+
+FString AErtGameMode::DisplayRow(int32 Row) const
+{
+	UGameUserSettings* GS = GEngine ? GEngine->GetGameUserSettings() : nullptr;
+	if (!GS) return TEXT("-");
+	if (Row == 4)
+	{
+		const EWindowMode::Type M = GS->GetFullscreenMode();
+		return M == EWindowMode::Fullscreen ? TEXT("To'liq ekran") : (M == EWindowMode::WindowedFullscreen ? TEXT("Oynali to'liq ekran") : TEXT("Oyna"));
+	}
+	if (Row == 5) { const FIntPoint R = GS->GetScreenResolution(); return FString::Printf(TEXT("%d x %d"), R.X, R.Y); }
+	if (Row == 6) { static const TCHAR* Q[] = { TEXT("Past"), TEXT("O'rta"), TEXT("Yuqori"), TEXT("Epik") }; const int32 L = GS->GetOverallScalabilityLevel(); return L < 0 ? TEXT("Maxsus") : Q[FMath::Clamp(L, 0, 3)]; }
+	if (Row == 7) return GS->IsVSyncEnabled() ? TEXT("Yoqilgan") : TEXT("O'chirilgan");
+	return TEXT("-");
+}
+
 void AErtGameMode::SettingsToggle()
 {
 	if (Menu == EErtMenu::Settings) { SaveGame(); OpenMenu(Prev); }
@@ -361,7 +383,7 @@ void AErtGameMode::SettingsMove(int32 Delta)
 {
 	if (bCapturing) return;
 	if (SettingsPage == 1) { const int32 N = AErtCharacter::BindableActions().Num() + 1; KeyRow = (KeyRow + Delta + N) % N; return; }
-	SettingsRow = (SettingsRow + Delta + 4) % 4;
+	SettingsRow = (SettingsRow + Delta + 8) % 8;
 }
 
 void AErtGameMode::ApplySavedKeys()
@@ -383,6 +405,31 @@ void AErtGameMode::SettingsAdjust(int32 Delta)
 		return;
 	}
 	if (SettingsRow == 3) { SettingsPage = 1; KeyRow = 0; return; }
+	UGameUserSettings* GS = GEngine ? GEngine->GetGameUserSettings() : nullptr;
+	if (SettingsRow >= 4 && GS)
+	{
+		if (SettingsRow == 4)
+		{
+			const EWindowMode::Type M = GS->GetFullscreenMode();
+			const int32 Cur = M == EWindowMode::Fullscreen ? 0 : (M == EWindowMode::WindowedFullscreen ? 1 : 2);
+			const int32 N = (Cur + Delta + 3) % 3;
+			GS->SetFullscreenMode(N == 0 ? EWindowMode::Fullscreen : (N == 1 ? EWindowMode::WindowedFullscreen : EWindowMode::Windowed));
+		}
+		else if (SettingsRow == 5)
+		{
+			ResIndex = (ResIndex + Delta + 4) % 4;
+			static const FIntPoint Res[] = { FIntPoint(1280, 720), FIntPoint(1600, 900), FIntPoint(1920, 1080), FIntPoint(2560, 1440) };
+			GS->SetScreenResolution(Res[ResIndex]);
+		}
+		else if (SettingsRow == 6)
+		{
+			const int32 Q = FMath::Clamp(GS->GetOverallScalabilityLevel(), 0, 3);
+			GS->SetOverallScalabilityLevel((Q + Delta + 4) % 4);
+		}
+		else if (SettingsRow == 7) GS->SetVSyncEnabled(!GS->IsVSyncEnabled());
+		ApplyDisplay();
+		return;
+	}
 	if (SettingsRow == 0) { Language = (Language + Delta + 3) % 3; FErtLoc::Get().SetLanguage(Language); }
 	else if (SettingsRow == 1) { MouseSens = FMath::Clamp(MouseSens + Delta * 0.1f, 0.2f, 3.f); GErtMouseSens = MouseSens; }
 	else { bInvertY = !bInvertY; GErtInvertY = bInvertY; }

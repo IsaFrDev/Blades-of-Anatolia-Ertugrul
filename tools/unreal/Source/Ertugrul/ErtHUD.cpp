@@ -356,18 +356,23 @@ void AErtHUD::DrawSettings(float SW, float SH, float Sc)
 		return;
 	}
 	static const TCHAR* LangNames[] = { TEXT("O'zbek"), TEXT("Türkçe"), TEXT("English") };
-	const FString Rows[4] = {
+	const FString Rows[8] = {
 		FString::Printf(TEXT("Til / Dil / Language:   < %s >"), LangNames[FMath::Clamp(GM->Language, 0, 2)]),
 		FString::Printf(TEXT("Sichqoncha sezgirligi / Mouse:   < %.1f >"), GM->MouseSens),
 		FString::Printf(TEXT("Y o'qini teskari / Invert Y:   < %s >"), GM->bInvertY ? TEXT("Ha / Yes") : TEXT("Yo'q / No")),
-		TEXT("Tugmalar / Keys   >") };
-	for (int32 i = 0; i < 4; ++i)
+		TEXT("Tugmalar / Keys   >"),
+		FString::Printf(TEXT("Ekran rejimi / Window:   < %s >"), *GM->DisplayRow(4)),
+		FString::Printf(TEXT("O'lcham / Resolution:   < %s >"), *GM->DisplayRow(5)),
+		FString::Printf(TEXT("Grafika sifati / Quality:   < %s >"), *GM->DisplayRow(6)),
+		FString::Printf(TEXT("VSync:   < %s >"), *GM->DisplayRow(7)) };
+	for (int32 i = 0; i < 8; ++i)
 	{
 		const float Y = 110 * Sc + i * 34 * Sc;
 		if (i == GM->GetSettingsRow()) { FCanvasTileItem S(FVector2D(32 * Sc, Y - 4 * Sc), FVector2D(SW * 0.6f, 30 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.8f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }
 		Text(Rows[i], 44 * Sc, Y, i == GM->GetSettingsRow() ? Gold : White, 1.1f * Sc);
 	}
-	Text(FString::Printf(TEXT("Or/iymon: %d    Bajarilgan epizodlar: saqlangan (Saved/ert_save.json)"), GM->GetHonor()), 44 * Sc, 240 * Sc, Grey, Sc);
+	Text(FString::Printf(TEXT("Or/iymon: %d    Bajarilgan epizodlar: saqlangan (Saved/ert_save.json)"), GM->GetHonor()), 44 * Sc, 400 * Sc, Grey, Sc);
+	Text(TEXT("Intel GPU uchun tavsiya: Grafika sifati Past yoki O'rta, VSync yoqilgan."), 44 * Sc, 424 * Sc, Grey, 0.9f * Sc);
 	Text(TEXT("Yuqori/Pastga: qator   Chap/O'ng yoki Enter: o'zgartirish   O yoki Esc: yopish"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
 }
 
