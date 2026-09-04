@@ -122,6 +122,8 @@ void AErtGameMode::DialogChoose(int32 Index)
 
 void AErtGameMode::EndDialog()
 {
+	LastDialogId = Dialog.GetId(); LastDuelPoints = Dialog.GetDuelPoints(); LastDuelThreshold = Dialog.GetDuelThreshold();
+	LastDialogEndTime = GetWorld()->GetTimeSeconds();
 	Dialog.End();
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{

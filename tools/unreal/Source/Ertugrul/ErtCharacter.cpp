@@ -418,11 +418,12 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(38.6f))
 	{
 		// NPC dialog sinovi: Hayma Ona (oba u=4, v=-9)
-		SetActorLocation(FVector(54900.f, -55600.f, 2200.f), false, nullptr, ETeleportType::TeleportPhysics);
+		SetActorLocation(FVector(55250.f, -56500.f, 2200.f), false, nullptr, ETeleportType::TeleportPhysics);
 		SetActorRotation(FRotator(0, 0, 0));
 		if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-10.f, 20.f, 0.f));
 		TargetArm = 320.f;
 	}
+	if (At(39.0f)) { if (AErtNpc* Np = NearestNpc(2500.f)) SetActorLocation(Np->GetActorLocation() + Np->GetActorForwardVector() * 160.f, false, nullptr, ETeleportType::TeleportPhysics); }
 	if (At(39.6f)) OnInteract();
 	if (At(40.6f)) TakeShot(TEXT("npc"));
 	if (At(41.0f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnAdvance(); }

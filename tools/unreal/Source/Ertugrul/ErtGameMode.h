@@ -41,6 +41,10 @@ public:
 	bool IsDialogActive() const { return Dialog.IsActive(); }
 	int32 GetHonor() const { return Honor; }
 	const TSet<FString>& GetFlags() const { return Flags; }
+	void AddFlag(const FString& F) { Flags.Add(F); }
+	bool HasFlag(const FString& F) const { return Flags.Contains(F); }
+	/** Oxirgi tugagan dialog (missiya maqsadlari uchun) */
+	FString LastDialogId; int32 LastDuelPoints = 0, LastDuelThreshold = 0; float LastDialogEndTime = -1.f;
 
 	/** Epizodni boshlaydi: kat-sahna (bo'lsa) -> missiya */
 	void BeginEpisode(const FString& Id, bool bWithCutscene);

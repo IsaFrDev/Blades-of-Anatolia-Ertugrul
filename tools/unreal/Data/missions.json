@@ -1,0 +1,30 @@
+{
+  "_doc": "Epizod bosqichlarini qo'lda belgilash (arxetip ssenariysi o'rniga). type: travel|collect|council|stealth|defend|hunt|duel|fight",
+  "EP002": {
+    "phases": [
+      {"type": "travel", "n": 2},
+      {"type": "collect", "n": 4, "flags": ["letter", "seal", "selcan_talk", "aykiz_witness"], "loc": "ui.obj.collect_evidence"},
+      {"type": "council", "dialog": "council_kurdoglu", "threshold": 3,
+       "npcs": [
+         {"id": "suleyman_shah", "name": "chr.suleyman_shah.name", "u": -6, "v": -7, "yaw": 180, "kaftan": [0.32, 0.10, 0.10]},
+         {"id": "kurdoglu", "name": "chr.kurdoglu.name", "u": -10, "v": -4, "yaw": 150, "kaftan": [0.12, 0.12, 0.14]},
+         {"id": "selcan", "name": "chr.selcan.name", "u": -2, "v": -4, "yaw": 210, "woman": true, "kaftan": [0.36, 0.20, 0.30]}
+       ]},
+      {"type": "travel", "n": 2, "timed": true},
+      {"type": "fight", "waves": 1}
+    ]
+  },
+  "EP001": {
+    "phases": [
+      {"type": "travel", "n": 2},
+      {"type": "collect", "n": 3, "flags": ["crow_feather", "dry_well", "poison_grain"]},
+      {"type": "council", "dialog": "e1_camp_halima", "threshold": 0,
+       "npcs": [
+         {"id": "halime_cut", "name": "chr.halime.name", "u": -6, "v": -7, "yaw": 180, "woman": true, "kaftan": [0.16, 0.30, 0.40]},
+         {"id": "bamsi_cut", "name": "chr.bamsi.name", "u": -2, "v": -4, "yaw": 210, "kaftan": [0.36, 0.26, 0.10]}
+       ]},
+      {"type": "stealth", "guards": 2},
+      {"type": "fight", "waves": 1}
+    ]
+  }
+}

@@ -10,12 +10,13 @@
 
 class AErtCharacter;
 class AErtHorse;
+class AErtNpc;
 class AErtWorldBuilder;
 class UProceduralMeshComponent;
 struct FErtEpisode;
 
 UENUM(BlueprintType)
-enum class EErtObjKind : uint8 { DefeatAll, SurviveTime, StayUndetected, Route, Hunt, Collect, HoldPoint, Timer };
+enum class EErtObjKind : uint8 { DefeatAll, SurviveTime, StayUndetected, Route, Hunt, Collect, HoldPoint, Timer, Council };
 
 UENUM(BlueprintType)
 enum class EErtMissionState : uint8 { Inactive, Briefing, Fighting, WaveCleared, Cleared, Failed };
@@ -36,13 +37,17 @@ struct FErtObjective
 	UPROPERTY(BlueprintReadOnly) TArray<FVector> Points;
 	UPROPERTY(BlueprintReadOnly) TArray<bool> Collected;
 	UPROPERTY(BlueprintReadOnly) bool bNeedZ = false;
+	UPROPERTY(BlueprintReadOnly) TArray<FString> PointFlags;   // Collect: har nuqta uchun dalil bayrog'i
+	UPROPERTY(BlueprintReadOnly) FString DialogId;              // Council: dialog grafi
+	UPROPERTY(BlueprintReadOnly) int32 Threshold = 0;           // Council: duel ballari chegarasi
 	float Hold = 0.f;
 	FString Text() const;
 };
 
 struct FErtSpawn { EErtEnemyKind Kind = EErtEnemyKind::Footman; FVector Pos = FVector::ZeroVector; float Yaw = 0.f; float Patrol = 0.f; };
 struct FErtWave { TArray<FErtSpawn> Spawns; float Delay = 0.f; };
-struct FErtPhase { FString TitleKey; TArray<FErtObjective> Objectives; TArray<FErtWave> Waves; FErtWave Reinforce; bool bReinforced = false; };
+struct FErtCouncilNpc { FString Id, NameKey; float U = 0, V = 0, Yaw = 0; bool bWoman = false; FLinearColor Kaftan = FLinearColor(0.3f, 0.2f, 0.1f); };
+struct FErtPhase { FString TitleKey; TArray<FErtObjective> Objectives; TArray<FErtWave> Waves; FErtWave Reinforce; bool bReinforced = false; TArray<FErtCouncilNpc> Npcs; };
 
 UCLASS()
 class ERTUGRUL_API AErtMissionDirector : public AActor
@@ -78,6 +83,8 @@ public:
 	/** Faol maqsad nuqtalari (HUD markerlari): nuqta + tugallanganmi */
 	void GetMarkers(TArray<FVector>& Out) const;
 	const TArray<TObjectPtr<AErtEnemy>>& GetEnemies() const { return Enemies; }
+	const FString& GetCouncilResult() const { return CouncilResult; }
+	float GetCouncilResultT() const { return CouncilResultT; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -86,6 +93,11 @@ protected:
 private:
 	UPROPERTY(Transient) TArray<TObjectPtr<AErtEnemy>> Enemies;
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
+	UPROPERTY(Transient) TArray<TObjectPtr<AErtNpc>> PhaseNpcs;
+	FString CouncilResult;   // HUD: duel natijasi
+	float CouncilResultT = 0.f;
+	bool ApplyOverride(const FErtEpisode& E);
+	void ClearPhaseNpcs();
 	UPROPERTY(Transient) TObjectPtr<AErtWorldBuilder> World;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> MarkerMesh;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> MarkerMat;

@@ -142,6 +142,7 @@ void AErtHUD::DrawHUD()
 		if (T > 2.f) Center(L.Tr(TEXT("ui.episodes.next")), SH * 0.30f + 70 * Sc, Grey, Sc);
 		break;
 	default:
+		if (D->GetCouncilResultT() > 0.f) Center(D->GetCouncilResult(), SH * 0.22f, FLinearColor(1.f, 0.85f, 0.35f, FMath::Min(1.f, D->GetCouncilResultT())), 1.1f * Sc);
 		if (D->GetCheckpointFlash() > 0.f && T > 0.2f)
 			Center(L.Tr(TEXT("ui.hud.checkpoint")), SH * 0.16f, FLinearColor(1, 0.85f, 0.35f, D->GetCheckpointFlash()), 1.1f * Sc);
 		break;

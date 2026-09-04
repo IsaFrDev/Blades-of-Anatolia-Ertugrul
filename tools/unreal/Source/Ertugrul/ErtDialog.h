@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-struct FErtDlgOption { FString TextKey, Next, SetFlag, OptionId, RequiresEvidence; int32 Honor = 0; };
+struct FErtDlgOption { FString TextKey, Next, SetFlag, OptionId, RequiresEvidence; int32 Honor = 0; int32 DuelPoints = 0; };
 struct FErtDlgNode { FString Speaker, TextKey, Next, SetFlag; TArray<FErtDlgOption> Options; };
 
 class ERTUGRUL_API FErtDialog
@@ -24,6 +24,8 @@ public:
 	const TArray<FString>& OptionTexts() const { return OptTexts; }
 	int32 Selection() const { return Sel; }
 	bool HasOptions() const { return OptTexts.Num() > 0; }
+	int32 GetDuelPoints() const { return DuelPoints; }
+	int32 GetDuelThreshold() const { return DuelThreshold; }
 
 private:
 	void Enter(const FString& NodeId);
@@ -33,6 +35,7 @@ private:
 	TArray<int32> VisibleOpts;
 	TArray<FString> OptTexts;
 	int32 Sel = 0;
+	int32 DuelPoints = 0, DuelThreshold = 0;
 	TSet<FString>* Flags = nullptr;
 	int32* Honor = nullptr;
 };

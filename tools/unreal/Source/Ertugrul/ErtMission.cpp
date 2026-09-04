@@ -6,6 +6,11 @@
 #include "ErtProcMesh.h"
 #include "ErtWorldBuilder.h"
 #include "ErtHorse.h"
+#include "ErtNpc.h"
+#include "ErtGameMode.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProceduralMeshComponent.h"
 #include "Materials/MaterialInterface.h"
@@ -29,6 +34,7 @@ FString FErtObjective::Text() const
 		Base += FString::Printf(TEXT("  %d s"), FMath::Max(0, Target - Progress)); break;
 	case EErtObjKind::Route: Base += FString::Printf(TEXT("  %d/%d"), Progress, Points.Num()); break;
 	case EErtObjKind::Hunt: case EErtObjKind::Collect: Base += FString::Printf(TEXT("  %d/%d"), Progress, Target); break;
+	case EErtObjKind::Council: break;
 	default: break;
 	}
 	if (bFailed) Base += TEXT("  (") + FErtLoc::Get().Tr(TEXT("ui.obj.failed")) + TEXT(")");
@@ -79,7 +85,7 @@ void AErtMissionDirector::GetMarkers(TArray<FVector>& Out) const
 		{
 		case EErtObjKind::Route: if (O.Progress < O.Points.Num()) Out.Add(O.Points[O.Progress]); break;
 		case EErtObjKind::Collect: for (int32 i = 0; i < O.Points.Num(); ++i) if (!O.Collected[i]) Out.Add(O.Points[i]); break;
-		case EErtObjKind::HoldPoint: Out.Add(O.Point); break;
+		case EErtObjKind::HoldPoint: case EErtObjKind::Council: Out.Add(O.Point); break;
 		default: break;
 		}
 	}
@@ -206,10 +212,17 @@ bool AErtMissionDirector::StartEpisode(const FString& Id)
 void AErtMissionDirector::StopEpisode()
 {
 	ClearEnemies();
+	ClearPhaseNpcs();
 	Phases.Reset(); Objectives.Reset(); Waves.Reset();
 	State = EErtMissionState::Inactive;
 	Cp.bValid = false;
 	RebuildMarkers();
+}
+
+void AErtMissionDirector::ClearPhaseNpcs()
+{
+	for (AErtNpc* N : PhaseNpcs) if (N) N->Destroy();
+	PhaseNpcs.Reset();
 }
 
 void AErtMissionDirector::ClearEnemies()
@@ -333,6 +346,75 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 		Phases.Add(P);
 	};
 
+	// Qo'lda belgilangan ssenariy (missions.json) bo'lsa - shu
+	struct FOv { FString Type, Dialog, Loc; int32 N = 2, Waves = 1, Guards = 2, Threshold = 0; bool bTimed = false; TArray<FString> Flags; TArray<FErtCouncilNpc> Npcs; };
+	TArray<FOv> Ov;
+	{
+		FString Text;
+		TSharedPtr<FJsonObject> R;
+		if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/missions.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), R) && R.IsValid())
+		{
+			const TSharedPtr<FJsonObject>* EpO = nullptr;
+			const TArray<TSharedPtr<FJsonValue>>* Ph = nullptr;
+			if (R->TryGetObjectField(E.Id, EpO) && (*EpO)->TryGetArrayField(TEXT("phases"), Ph))
+				for (const auto& PV : *Ph)
+				{
+					const TSharedPtr<FJsonObject> O = PV->AsObject(); if (!O.IsValid()) continue;
+					FOv P;
+					O->TryGetStringField(TEXT("type"), P.Type); O->TryGetStringField(TEXT("dialog"), P.Dialog); O->TryGetStringField(TEXT("loc"), P.Loc);
+					O->TryGetNumberField(TEXT("n"), P.N); O->TryGetNumberField(TEXT("waves"), P.Waves); O->TryGetNumberField(TEXT("guards"), P.Guards); O->TryGetNumberField(TEXT("threshold"), P.Threshold);
+					O->TryGetBoolField(TEXT("timed"), P.bTimed);
+					const TArray<TSharedPtr<FJsonValue>>* Fl = nullptr;
+					if (O->TryGetArrayField(TEXT("flags"), Fl)) for (const auto& F : *Fl) P.Flags.Add(F->AsString());
+					const TArray<TSharedPtr<FJsonValue>>* Np = nullptr;
+					if (O->TryGetArrayField(TEXT("npcs"), Np))
+						for (const auto& NV : *Np)
+						{
+							const TSharedPtr<FJsonObject> NO = NV->AsObject(); if (!NO.IsValid()) continue;
+							FErtCouncilNpc C;
+							NO->TryGetStringField(TEXT("id"), C.Id); NO->TryGetStringField(TEXT("name"), C.NameKey);
+							double D = 0; if (NO->TryGetNumberField(TEXT("u"), D)) C.U = D; if (NO->TryGetNumberField(TEXT("v"), D)) C.V = D; if (NO->TryGetNumberField(TEXT("yaw"), D)) C.Yaw = D;
+							NO->TryGetBoolField(TEXT("woman"), C.bWoman);
+							const TArray<TSharedPtr<FJsonValue>>* K = nullptr;
+							if (NO->TryGetArrayField(TEXT("kaftan"), K) && K->Num() >= 3) C.Kaftan = FLinearColor((*K)[0]->AsNumber(), (*K)[1]->AsNumber(), (*K)[2]->AsNumber());
+							P.Npcs.Add(C);
+						}
+					Ov.Add(P);
+				}
+		}
+	}
+	if (Ov.Num() > 0)
+	{
+		for (const FOv& P : Ov)
+		{
+			if (P.Type == TEXT("travel")) AddTravel(P.N, P.bTimed);
+			else if (P.Type == TEXT("hunt")) AddHunt(P.N);
+			else if (P.Type == TEXT("stealth")) AddStealth(P.Guards);
+			else if (P.Type == TEXT("defend")) AddDefend(30 + Tier * 6, P.Waves);
+			else if (P.Type == TEXT("duel")) AddDuel();
+			else if (P.Type == TEXT("fight")) AddFight(P.Waves, false);
+			else if (P.Type == TEXT("collect"))
+			{
+				AddCollect(P.N);
+				FErtObjective& O = Phases.Last().Objectives[0];
+				O.PointFlags = P.Flags;
+				if (!P.Loc.IsEmpty()) O.LocKey = P.Loc;
+			}
+			else if (P.Type == TEXT("council"))
+			{
+				// Kengash: Bey chodiri oldida NPClar, dialog tugashi = maqsad
+				FErtPhase Ph; Ph.TitleKey = TEXT("ui.phase.council");
+				FErtObjective O; O.Kind = EErtObjKind::Council; O.LocKey = TEXT("ui.obj.council"); O.DialogId = P.Dialog; O.Threshold = P.Threshold;
+				const FErtCouncilNpc* First = P.Npcs.Num() ? &P.Npcs[0] : nullptr;
+				O.Point = GroundAt((ObaN + (First ? First->V : -7.f)) * 100.f, (ObaE + (First ? First->U : -6.f)) * 100.f);
+				Ph.Objectives.Add(O);
+				Ph.Npcs = P.Npcs;
+				Phases.Add(Ph);
+				Cursor = O.Point;
+			}
+		}
+		return;
+	}
 	const FString& A = E.Archetype;
 	const int32 FightWaves = (Tier <= 1) ? 1 : (Tier >= 4 ? 3 : 2);
 	if (A == TEXT("SIEGE") || A == TEXT("DEFENSE")) { AddTravel(2, true); AddDefend(36 + Tier * 8, 2); AddTravel(2, false); AddFight(FightWaves, true); }
@@ -354,6 +436,16 @@ void AErtMissionDirector::StartPhase(int32 Idx)
 	Waves = P.Waves;
 	WaveIdx = 0;
 	SpawnWave(0);
+	ClearPhaseNpcs();
+	for (const FErtCouncilNpc& C : P.Npcs)
+	{
+		const FVector G = GroundAt((ObaN + C.V) * 100.f, (ObaE + C.U) * 100.f);
+		AErtNpc* Npc = GetWorld()->SpawnActor<AErtNpc>(AErtNpc::StaticClass(), G + FVector(0, 0, 92.f), FRotator(0, C.Yaw, 0));
+		if (!Npc) continue;
+		const FString Dlg = (P.Objectives.Num() && &C == &P.Npcs[0]) ? P.Objectives[0].DialogId : FString();
+		Npc->Setup(C.Id, C.NameKey, Dlg, C.bWoman, C.Kaftan, C.Yaw);
+		PhaseNpcs.Add(Npc);
+	}
 	PhaseTitle = FErtLoc::Get().Tr(P.TitleKey);
 	SaveCheckpoint();
 	RebuildMarkers();
@@ -482,7 +574,11 @@ void AErtMissionDirector::UpdateObjectives(float Dt)
 			break;
 		case EErtObjKind::Collect:
 			for (int32 i = 0; i < O.Points.Num(); ++i)
-				if (!O.Collected[i] && FVector::Dist(PL, O.Points[i] + FVector(0, 0, 90)) < O.Radius) { O.Collected[i] = true; ++O.Progress; bMarkersDirty = true; }
+				if (!O.Collected[i] && FVector::Dist(PL, O.Points[i] + FVector(0, 0, 90)) < O.Radius)
+				{
+					O.Collected[i] = true; ++O.Progress; bMarkersDirty = true;
+					if (O.PointFlags.IsValidIndex(i)) if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->AddFlag(O.PointFlags[i]); CouncilResult = FErtLoc::Get().Tr(TEXT("ui.hud.evidence")) + TEXT(": ") + O.PointFlags[i]; CouncilResultT = 3.f; }
+				}
 			if (O.Progress >= O.Target) O.bDone = true;
 			break;
 		case EErtObjKind::Hunt:
@@ -498,6 +594,18 @@ void AErtMissionDirector::UpdateObjectives(float Dt)
 			O.Progress = (int32)PhaseT;
 			if (O.Progress > O.Target) O.bFailed = true;
 			break;
+		case EErtObjKind::Council:
+			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
+				if (GM->LastDialogId == O.DialogId && GM->LastDialogEndTime > GetWorld()->GetTimeSeconds() - PhaseT - 1.f)
+				{
+					O.bDone = true;
+					const bool bWon = O.Threshold <= 0 || GM->LastDuelPoints >= O.Threshold;
+					CouncilResult = FErtLoc::Get().Tr(bWon ? TEXT("ui.hud.duel_won") : TEXT("ui.hud.duel_lost")) + FString::Printf(TEXT("  (%d/%d)"), GM->LastDuelPoints, O.Threshold);
+					CouncilResultT = 5.f;
+					if (bWon) GM->AddFlag(O.DialogId + TEXT("_won"));
+					UE_LOG(LogErtugrul, Log, TEXT("[Missiya] kengash: %d/%d ball, %s"), GM->LastDuelPoints, O.Threshold, bWon ? TEXT("yutdi") : TEXT("yutqazdi"));
+				}
+			break;
 		}
 	}
 	if (bMarkersDirty) RebuildMarkers();
@@ -509,6 +617,7 @@ void AErtMissionDirector::Tick(float Dt)
 	if (State == EErtMissionState::Inactive) return;
 	StateT += Dt;
 	CpFlash = FMath::Max(0.f, CpFlash - Dt * 0.5f);
+	CouncilResultT = FMath::Max(0.f, CouncilResultT - Dt);
 	AErtCharacter* H = Hero();
 	if (!H) return;
 

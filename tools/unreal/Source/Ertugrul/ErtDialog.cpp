@@ -40,11 +40,14 @@ bool FErtDialog::Start(const FString& Id, TSet<FString>* InFlags, int32* InHonor
 				OO->TryGetStringField(TEXT("option_id"), Op.OptionId);
 				OO->TryGetStringField(TEXT("requires_evidence"), Op.RequiresEvidence);
 				OO->TryGetNumberField(TEXT("honor"), Op.Honor);
+				OO->TryGetNumberField(TEXT("duel_points"), Op.DuelPoints);
 				N.Options.Add(Op);
 			}
 		const FString NodeKey(Pair.Key.ToView());
 		Nodes.FindOrAdd(NodeKey) = N;
 	}
+	DuelPoints = 0; DuelThreshold = 0;
+	R->TryGetNumberField(TEXT("duel_threshold"), DuelThreshold);
 	FString StartId;
 	R->TryGetStringField(TEXT("start"), StartId);
 	R->TryGetStringField(TEXT("id"), DialogId);
@@ -85,6 +88,9 @@ void FErtDialog::Choose(int32 Index)
 	const FErtDlgOption O = Nodes[Cur].Options[VisibleOpts[Index]];
 	if (!O.SetFlag.IsEmpty() && Flags) Flags->Add(O.SetFlag);
 	if (Honor) *Honor += O.Honor;
+	DuelPoints += O.DuelPoints;
+	// Dalil ishlatilgach, u qayta ko'rsatilmaydi
+	if (!O.RequiresEvidence.IsEmpty() && Flags) Flags->Remove(O.RequiresEvidence);
 	Enter(O.Next.IsEmpty() ? TEXT("end") : O.Next);
 }
 
