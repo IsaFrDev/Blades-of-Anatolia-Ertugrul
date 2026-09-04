@@ -184,7 +184,7 @@ bool AErtMissionDirector::StartEpisode(const FString& Id)
 	EpisodeDate = E->Gregorian;
 	IntroText = FErtLoc::Get().TrOr(E->LocIntro, TEXT(""));
 	Cliffhanger = FErtLoc::Get().TrOr(E->LocCliffhanger, TEXT(""));
-	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SetTimeOfDay(E->TimeOfDay);
+	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->SetTimeOfDay(E->TimeOfDay); GM->SetWeather(E->Weather); }
 	NextEpisodeId = E->NextId;
 	Kills = 0; Deaths = 0;
 	Rng.Initialize(GetTypeHash(E->Id));

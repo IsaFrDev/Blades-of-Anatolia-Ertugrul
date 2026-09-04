@@ -59,6 +59,8 @@ private:
 	bool bUnlockAll = false;
 	int32 MenuIndex = 0;
 	TArray<FString> Completed;
+	UPROPERTY(Transient) TObjectPtr<AErtNpc> TalkingNpc;
+	UPROPERTY(Transient) TObjectPtr<class AErtWeather> Weather;
 	FErtDialog Dialog;
 	TSet<FString> Flags;
 	int32 Honor = 0;
@@ -71,6 +73,8 @@ private:
 	virtual void Tick(float Dt) override;
 public:
 	void SetTimeOfDay(const FString& Name);
+	void SetWeather(const FString& Name);
+	void Rumble(float Intensity, float Seconds);
 	float GetDayT() const { return DayT; }
 	void SaveGame();
 	void LoadGame();

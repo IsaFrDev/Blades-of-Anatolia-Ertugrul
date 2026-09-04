@@ -101,6 +101,13 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - INFILTRATION yashirin bosqichi: qorovullar mo'g'ul lageri ichida (CampE/CampN +-60 m) - o'yinchi lagerga kirib boradi.
 - Ot ustida kamon: F tugmasi minib turganda ham ishlaydi (kamera nuri).
 
+## Oba hayoti, ijro, ob-havo, vibratsiya
+- NPClar kunduzi uyi atrofida 1.5-6 m yuradi (yer trace, to'siq tekshiruvi), tunda uyida turadi, o'yinchi yaqinlashsa to'xtab qaraydi, suhbatda qimirlamaydi.
+- Ijro (execute): gangigan (parry) yoki sog'lig'i 25% dan kam raqibga qilich zarbasi - bir zarbda o'ldiradi, "IJRO!" chaqnashi, kuchli vibratsiya.
+- `AErtWeather`: epizod `weather` (clear/rain/snow/dust/fog) - kamera atrofida 3000 sm qutida protsedural zarralar (yomg'ir chiziqlari, qor parchalari,
+  chang), pastga siljish va shamol drifti, tuman zichligi. Bitta mesh, kameraga ergashadi.
+- Gamepad vibratsiyasi: zarar olganda (kuchi zararga bog'liq), parry, ijro.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

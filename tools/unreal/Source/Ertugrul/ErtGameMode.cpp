@@ -17,6 +17,7 @@
 #include "Components/DirectionalLightComponent.h"
 #include "Components/SkyLightComponent.h"
 #include "Engine/PostProcessVolume.h"
+#include "ErtWeather.h"
 #include "ErtMission.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -48,6 +49,7 @@ void AErtGameMode::BeginPlay()
 		}
 	}
 	Cutscene = GetWorld()->SpawnActor<AErtCutsceneDirector>();
+	Weather = GetWorld()->SpawnActor<AErtWeather>();
 	bUnlockAll = FParse::Param(FCommandLine::Get(), TEXT("ErtUnlockAll"));
 	SpawnNpcs();
 	LoadGame();
@@ -119,6 +121,7 @@ void AErtGameMode::StartDialog(AErtNpc* Npc)
 {
 	if (!Npc || Dialog.IsActive() || (Cutscene && Cutscene->IsPlaying())) return;
 	if (!Dialog.Start(Npc->GetDialogId(), &Flags, &Honor)) return;
+	Npc->SetTalking(true); TalkingNpc = Npc;
 	SetPlayerInput(false, false);
 }
 
@@ -134,6 +137,7 @@ void AErtGameMode::EndDialog()
 	LastDialogId = Dialog.GetId(); LastDuelPoints = Dialog.GetDuelPoints(); LastDuelThreshold = Dialog.GetDuelThreshold();
 	LastDialogEndTime = GetWorld()->GetTimeSeconds();
 	Dialog.End();
+	if (TalkingNpc) { TalkingNpc->SetTalking(false); TalkingNpc = nullptr; }
 	SaveGame();
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
@@ -182,6 +186,13 @@ void AErtGameMode::LoadGame()
 	if (FFileHelper::LoadFileToString(Text, *(FPaths::ProjectSavedDir() / TEXT("ert_progress.txt")))) { TArray<FString> L; Text.ParseIntoArrayLines(L); for (const FString& S : L) Completed.AddUnique(S); }
 	FErtLoc::Get().SetLanguage(Language);
 	GErtMouseSens = MouseSens; GErtInvertY = bInvertY;
+}
+
+void AErtGameMode::SetWeather(const FString& Name) { if (Weather) Weather->SetWeather(Name); }
+
+void AErtGameMode::Rumble(float Intensity, float Seconds)
+{
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0)) PC->PlayDynamicForceFeedback(Intensity, Seconds, true, true, true, true);
 }
 
 void AErtGameMode::SetTimeOfDay(const FString& Name)

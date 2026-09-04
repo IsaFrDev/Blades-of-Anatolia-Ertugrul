@@ -25,4 +25,9 @@ private:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UErtHeroBody> Body;
 	FString Id, LocName, DialogId;
 	float HomeYaw = 0.f;
+	FVector HomePos = FVector::ZeroVector, Target = FVector::ZeroVector;
+	float WanderT = 3.f;
+	bool bTalking = false;
+public:
+	void SetTalking(bool b) { bTalking = b; }
 };

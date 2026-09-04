@@ -161,7 +161,10 @@ void AErtCharacter::OnAttack()
 			AErtEnemy* E = Cast<AErtEnemy>(R.GetActor());
 			if (!E || Done.Contains(E)) continue;
 			Done.Add(E);
-			E->ApplyHit(AttackDamage * (RiposteT > 0.f ? 2.f : 1.f), this);
+			// IJRO: gangigan yoki holdan toygan (<25%) raqib - bir zarbda
+			const bool bExecute = E->IsStaggered() || E->GetHealth() < E->GetMaxHealth() * 0.25f;
+			if (bExecute) { ExecuteFlash = 1.f; if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.9f, 0.25f); }
+			E->ApplyHit(bExecute ? 999.f : AttackDamage * (RiposteT > 0.f ? 2.f : 1.f), this);
 			FErtAudio::PlaySfx(GetWorld(), E->IsDead() ? TEXT("kill") : TEXT("hit"), E->GetActorLocation(), 1.f, FMath::FRandRange(0.9f, 1.1f));
 			RiposteT = 0.f;
 		}
@@ -262,6 +265,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	{
 		// PARRY: zarar yo'q, raqib gangiydi, keyingi zarba ikki baravar
 		ParryFlash = 1.f; RiposteT = 1.6f;
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.5f, 0.15f);
 		FErtAudio::PlaySfx(GetWorld(), TEXT("parry"), GetActorLocation(), 1.f);
 		Stamina = FMath::Min(StaminaMax, Stamina + 6.f);
 		if (Attacker) Attacker->Stagger(1.3f);
@@ -273,6 +277,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
 	Health -= Damage;
 	HurtFlash = 1.f;
+	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(FMath::Clamp(Damage / 20.f, 0.3f, 1.f), 0.3f);
 	NoDamageT = 0.f;
 	if (Body) Body->TriggerHurt();
 	if (Health <= 0.f)
@@ -318,6 +323,7 @@ void AErtCharacter::UpdateCombat(float Dt)
 	ShootCD = FMath::Max(0.f, ShootCD - Dt);
 	HurtFlash = FMath::Max(0.f, HurtFlash - Dt * 2.f);
 	ParryFlash = FMath::Max(0.f, ParryFlash - Dt * 1.6f);
+	ExecuteFlash = FMath::Max(0.f, ExecuteFlash - Dt * 1.4f);
 	RiposteT = FMath::Max(0.f, RiposteT - Dt);
 	BlockT += Dt;
 	NoDamageT += Dt;

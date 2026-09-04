@@ -60,6 +60,7 @@ public:
 	AErtHorse* NearestHorse(float MaxDist) const;
 	AErtNpc* NearestNpc(float MaxDist) const;
 	float GetParryFlash() const { return ParryFlash; }
+	float GetExecuteFlash() const { return ExecuteFlash; }
 	float GetRiposteT() const { return RiposteT; }
 	void MountHorse(AErtHorse* H);
 	void DismountHorse();
@@ -119,7 +120,7 @@ private:
 	void OnChoice1(); void OnChoice2(); void OnChoice3(); void OnChoice4();
 	void OnMenuLeft(); void OnMenuRight(); void OnSettings();
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
-	float BlockT = 99.f, ParryFlash = 0.f, RiposteT = 0.f;
+	float BlockT = 99.f, ParryFlash = 0.f, RiposteT = 0.f, ExecuteFlash = 0.f;
 	void OnAttack();
 	void OnBlockOn();
 	void OnBlockOff();
