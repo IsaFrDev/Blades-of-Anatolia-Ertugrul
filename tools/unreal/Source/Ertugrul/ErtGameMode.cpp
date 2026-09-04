@@ -18,6 +18,7 @@
 #include "Components/SkyLightComponent.h"
 #include "Engine/PostProcessVolume.h"
 #include "ErtWeather.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "ErtMission.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -63,7 +64,7 @@ void AErtGameMode::BeginPlay()
 	if (bFree) return;
 	FTimerHandle Th;
 	if (bDirect) GetWorldTimerManager().SetTimer(Th, [this, Ep, bCut]() { BeginEpisode(Ep, bCut); }, 0.6f, false);
-	else GetWorldTimerManager().SetTimer(Th, [this]() { bMenuOpen = true; SetPlayerInput(false, false); }, 0.3f, false);
+	else GetWorldTimerManager().SetTimer(Th, [this]() { OpenMenu(EErtMenu::Main); }, 0.3f, false);
 }
 
 void AErtGameMode::SetPlayerInput(bool bEnabled, bool bHide)
@@ -144,7 +145,7 @@ void AErtGameMode::EndDialog()
 		if (Flags.Contains(TEXT("give_arrows"))) { Flags.Remove(TEXT("give_arrows")); H->AddArrows(8); }
 		if (Flags.Contains(TEXT("sword_sharpened"))) { Flags.Remove(TEXT("sword_sharpened")); H->AttackDamage = 36.f; }
 	}
-	if (!bMenuOpen) SetPlayerInput(true, false);
+	if (Menu == EErtMenu::None) SetPlayerInput(true, false);
 	UE_LOG(LogErtugrul, Log, TEXT("Dialog tugadi, or/iymon: %d, bayroqlar: %d"), Honor, Flags.Num());
 }
 
@@ -231,8 +232,35 @@ void AErtGameMode::Tick(float Dt)
 
 void AErtGameMode::SettingsToggle()
 {
-	bSettingsOpen = !bSettingsOpen;
-	if (!bSettingsOpen) SaveGame();
+	if (Menu == EErtMenu::Settings) { SaveGame(); OpenMenu(Prev); }
+	else if (Menu == EErtMenu::None || Menu == EErtMenu::Pause || Menu == EErtMenu::Main) { Prev = Menu == EErtMenu::None ? EErtMenu::Pause : Menu; OpenMenu(EErtMenu::Settings); }
+}
+
+void AErtGameMode::OpenMenu(EErtMenu M)
+{
+	Menu = M;
+	const bool bPause = M != EErtMenu::None;
+	UGameplayStatics::SetGamePaused(this, bPause);
+	SetPlayerInput(!bPause, false);
+	if (M == EErtMenu::Episodes)
+	{
+		const TArray<FErtEpisode>& All = UErtEpisodeDb::Get()->All();
+		for (int32 i = 0; i < All.Num(); ++i) if (IsUnlocked(All[i]) && !IsCompleted(All[i].Id)) { MenuIndex = i; break; }
+	}
+}
+
+void AErtGameMode::ToggleMap()
+{
+	if (Dialog.IsActive() || (Cutscene && Cutscene->IsPlaying())) return;
+	if (Menu == EErtMenu::Map) OpenMenu(EErtMenu::None);
+	else if (Menu == EErtMenu::None || Menu == EErtMenu::Pause) OpenMenu(EErtMenu::Map);
+}
+
+void AErtGameMode::HitStop(float Seconds, float Dilation)
+{
+	UGameplayStatics::SetGlobalTimeDilation(this, Dilation);
+	FTimerHandle Th;
+	GetWorldTimerManager().SetTimer(Th, [this]() { UGameplayStatics::SetGlobalTimeDilation(this, 1.f); }, Seconds * Dilation, false);
 }
 
 void AErtGameMode::SettingsMove(int32 Delta) { SettingsRow = (SettingsRow + Delta + 3) % 3; }
@@ -248,22 +276,24 @@ void AErtGameMode::MenuToggle()
 {
 	if (Cutscene && Cutscene->IsPlaying()) return;
 	if (Dialog.IsActive()) { EndDialog(); return; }
-	if (bSettingsOpen) { SettingsToggle(); return; }
-	bMenuOpen = !bMenuOpen;
-	if (bMenuOpen)
+	switch (Menu)
 	{
-		// Kursor: birinchi ochilmagan-bajarilmagan epizod
-		const TArray<FErtEpisode>& All = UErtEpisodeDb::Get()->All();
-		for (int32 i = 0; i < All.Num(); ++i) if (IsUnlocked(All[i]) && !IsCompleted(All[i].Id)) { MenuIndex = i; break; }
+	case EErtMenu::None: OpenMenu(bEpisodeStarted ? EErtMenu::Pause : EErtMenu::Main); break;
+	case EErtMenu::Main: break;
+	case EErtMenu::Pause: OpenMenu(EErtMenu::None); break;
+	case EErtMenu::Map: OpenMenu(EErtMenu::None); break;
+	case EErtMenu::Settings: SaveGame(); OpenMenu(Prev == EErtMenu::None ? EErtMenu::Pause : Prev); break;
+	case EErtMenu::Episodes: OpenMenu(Prev == EErtMenu::None ? (bEpisodeStarted ? EErtMenu::Pause : EErtMenu::Main) : Prev); break;
 	}
-	SetPlayerInput(!bMenuOpen, false);
 }
 
 void AErtGameMode::MenuMove(int32 Delta)
 {
 	if (Dialog.IsActive()) { Dialog.MoveSelection(Delta); return; }
-	if (bSettingsOpen) { SettingsMove(Delta); return; }
-	if (!bMenuOpen) return;
+	if (Menu == EErtMenu::Settings) { SettingsMove(Delta); return; }
+	if (Menu == EErtMenu::Main) { RowMain = (RowMain + Delta + 4) % 4; return; }
+	if (Menu == EErtMenu::Pause) { RowPause = (RowPause + Delta + 5) % 5; return; }
+	if (Menu != EErtMenu::Episodes) return;
 	const int32 N = UErtEpisodeDb::Get()->All().Num();
 	if (N == 0) return;
 	MenuIndex = (MenuIndex + Delta + N) % N;
@@ -272,17 +302,43 @@ void AErtGameMode::MenuMove(int32 Delta)
 void AErtGameMode::MenuConfirm()
 {
 	if (Dialog.IsActive()) { OnAdvance(); return; }
-	if (bSettingsOpen) { SettingsAdjust(1); return; }
-	if (!bMenuOpen) return;
+	if (Menu == EErtMenu::Settings) { SettingsAdjust(1); return; }
+	if (Menu == EErtMenu::Map) { OpenMenu(EErtMenu::None); return; }
 	const TArray<FErtEpisode>& All = UErtEpisodeDb::Get()->All();
+	if (Menu == EErtMenu::Main)
+	{
+		switch (RowMain)
+		{
+		case 0: // Boshlash / davom etish: birinchi ochiq va bajarilmagan epizod
+			for (int32 i = 0; i < All.Num(); ++i) if (IsUnlocked(All[i]) && !IsCompleted(All[i].Id)) { OpenMenu(EErtMenu::None); BeginEpisode(All[i].Id, true); return; }
+			if (All.Num()) { OpenMenu(EErtMenu::None); BeginEpisode(All[0].Id, true); }
+			return;
+		case 1: Prev = EErtMenu::Main; OpenMenu(EErtMenu::Episodes); return;
+		case 2: Prev = EErtMenu::Main; OpenMenu(EErtMenu::Settings); return;
+		default: UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, false); return;
+		}
+	}
+	if (Menu == EErtMenu::Pause)
+	{
+		switch (RowPause)
+		{
+		case 0: OpenMenu(EErtMenu::None); return;
+		case 1: OpenMenu(EErtMenu::Map); return;
+		case 2: Prev = EErtMenu::Pause; OpenMenu(EErtMenu::Episodes); return;
+		case 3: Prev = EErtMenu::Pause; OpenMenu(EErtMenu::Settings); return;
+		default: SaveGame(); UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, false); return;
+		}
+	}
+	if (Menu != EErtMenu::Episodes) return;
 	if (!All.IsValidIndex(MenuIndex) || !IsUnlocked(All[MenuIndex])) return;
-	bMenuOpen = false;
+	OpenMenu(EErtMenu::None);
 	BeginEpisode(All[MenuIndex].Id, true);
 }
 
 void AErtGameMode::BeginEpisode(const FString& Id, bool bWithCutscene)
 {
 	if (!Director) return;
+	bEpisodeStarted = true;
 	const FString EpId = Id;
 	if (bWithCutscene && Cutscene)
 	{

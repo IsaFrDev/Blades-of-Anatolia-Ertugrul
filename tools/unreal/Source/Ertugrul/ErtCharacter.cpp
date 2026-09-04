@@ -165,6 +165,8 @@ void AErtCharacter::OnAttack()
 			const bool bExecute = E->IsStaggered() || E->GetHealth() < E->GetMaxHealth() * 0.25f;
 			if (bExecute) { ExecuteFlash = 1.f; if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.9f, 0.25f); }
 			E->ApplyHit(bExecute ? 999.f : AttackDamage * (RiposteT > 0.f ? 2.f : 1.f), this);
+			ShakeT = FMath::Max(ShakeT, bExecute ? 0.3f : 0.12f);
+			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->HitStop(bExecute ? 0.22f : 0.07f);
 			FErtAudio::PlaySfx(GetWorld(), E->IsDead() ? TEXT("kill") : TEXT("hit"), E->GetActorLocation(), 1.f, FMath::FRandRange(0.9f, 1.1f));
 			RiposteT = 0.f;
 		}
@@ -277,6 +279,8 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
 	Health -= Damage;
 	HurtFlash = 1.f;
+	ShakeT = FMath::Min(0.35f, 0.15f + Damage * 0.01f);
+	if (!Horse && !bSwimming && !bMantling) LaunchCharacter(-To * 220.f + FVector(0, 0, 60.f), false, false);
 	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(FMath::Clamp(Damage / 20.f, 0.3f, 1.f), 0.3f);
 	NoDamageT = 0.f;
 	if (Body) Body->TriggerHurt();
@@ -343,6 +347,7 @@ void AErtCharacter::BeginPlay()
 	{
 		ShotDir = ShotDir.TrimQuotes();
 		ShotT = 0.f;
+		SetTickableWhenPaused(true);   // sinov ssenariysi pauzada ham davom etsin
 		UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi: skrinshotlar -> %s"), *ShotDir);
 	}
 }
@@ -401,6 +406,9 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(22.6f)) TakeShot(TEXT("world"));
 	if (At(23.0f)) Teleport(-820.f, 300.f, 6.f + 25.f, -25.f, 0.f);
 	if (At(24.6f)) TakeShot(TEXT("river"));
+	if (At(24.7f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
+	if (At(24.9f)) TakeShot(TEXT("map"));
+	if (At(24.95f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
 	if (At(25.0f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
 	if (At(26.6f)) TakeShot(TEXT("oasis"));
 	if (At(27.0f)) Teleport(300.f, -975.f, 12.f + 18.f, -14.f, 0.f);
@@ -488,6 +496,9 @@ void AErtCharacter::BuildInput()
 	IA_MenuLeft = MakeAction(TEXT("IA_ErtMenuLeft"), EInputActionValueType::Boolean);
 	IA_MenuRight = MakeAction(TEXT("IA_ErtMenuRight"), EInputActionValueType::Boolean);
 	IA_Settings = MakeAction(TEXT("IA_ErtSettings"), EInputActionValueType::Boolean);
+	IA_Map = MakeAction(TEXT("IA_ErtMap"), EInputActionValueType::Boolean);
+	// Menyu harakatlari pauzada ham ishlaydi
+	for (UInputAction* A : { IA_Menu, IA_MenuUp, IA_MenuDown, IA_Confirm, IA_MenuLeft, IA_MenuRight, IA_Settings, IA_Map, IA_Choice1, IA_Choice2, IA_Choice3, IA_Choice4, IA_Jump }) if (A) A->bTriggerWhenPaused = true;
 
 	IMC = NewObject<UInputMappingContext>(this, TEXT("IMC_Ertugrul"));
 	auto Map = [this](UInputAction* A, const FKey& K) -> FEnhancedActionKeyMapping& { return IMC->MapKey(A, K); };
@@ -544,10 +555,12 @@ void AErtCharacter::BuildInput()
 	Map(IA_MenuLeft, EKeys::Left); Map(IA_MenuLeft, EKeys::Gamepad_DPad_Left);
 	Map(IA_MenuRight, EKeys::Right); Map(IA_MenuRight, EKeys::Gamepad_DPad_Right);
 	Map(IA_Settings, EKeys::O); Map(IA_Settings, EKeys::Gamepad_Special_Left);
+	Map(IA_Map, EKeys::M); Map(IA_Map, EKeys::Gamepad_RightThumbstick);
 }
 
 void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); } }
 void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); } }
+void AErtCharacter::OnMap() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
 void AErtCharacter::OnSettings() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (!GM->IsDialogActive()) GM->SettingsToggle(); } }
 
 void AErtCharacter::OnChoice1() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->DialogChoose(0); }
@@ -562,7 +575,7 @@ void AErtCharacter::OnConfirm()
 {
 	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
 	{
-		if (GM->IsMenuOpen()) GM->MenuConfirm(); else GM->OnAdvance();
+		if (GM->IsAnyMenu()) GM->MenuConfirm(); else GM->OnAdvance();
 	}
 }
 
@@ -603,6 +616,7 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_MenuLeft, ETriggerEvent::Started, this, &AErtCharacter::OnMenuLeft);
 	EIC->BindAction(IA_MenuRight, ETriggerEvent::Started, this, &AErtCharacter::OnMenuRight);
 	EIC->BindAction(IA_Settings, ETriggerEvent::Started, this, &AErtCharacter::OnSettings);
+	EIC->BindAction(IA_Map, ETriggerEvent::Started, this, &AErtCharacter::OnMap);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)
@@ -631,7 +645,7 @@ void AErtCharacter::OnJumpPressed()
 {
 	if (!bInputEnabled)
 	{
-		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsMenuOpen()) GM->MenuConfirm(); else GM->OnAdvance(); }
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsAnyMenu()) GM->MenuConfirm(); else GM->OnAdvance(); }
 		return;
 	}
 	if (bMantling) return;
@@ -778,6 +792,8 @@ void AErtCharacter::Tick(float Dt)
 {
 	Super::Tick(Dt);
 	UpdateCombat(Dt);
+	if (ShakeT > 0.f) { ShakeT = FMath::Max(0.f, ShakeT - Dt); const float A = ShakeT * 40.f; Boom->SocketOffset = BoomBase + FVector(0, FMath::FRandRange(-A, A), FMath::FRandRange(-A, A)); }
+	else if (Boom->SocketOffset != BoomBase) Boom->SocketOffset = BoomBase;
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
 	if (bDead) { if (Horse) DismountHorse(); MoveInput = FVector2D::ZeroVector; if (bShowDebug) DrawDebug(); return; }
 	if (Horse)

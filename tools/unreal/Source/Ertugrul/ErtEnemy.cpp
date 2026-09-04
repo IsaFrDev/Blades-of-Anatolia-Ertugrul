@@ -109,6 +109,14 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source)
 	Health -= Damage;
 	bAlerted = true;
 	if (Body && Body->IsBuilt()) Body->TriggerHurt();
+	// Kaltak yeyish: orqaga uchadi, qisqa gangiydi (zarba bera olmaydi)
+	if (!Mount && Kind != EErtEnemyKind::Deer && Source)
+	{
+		const FVector Away = (GetActorLocation() - Source->GetActorLocation()).GetSafeNormal2D();
+		LaunchCharacter(Away * FMath::Clamp(Damage * 9.f, 180.f, 420.f) + FVector(0, 0, 90.f), true, true);
+		StaggerT = FMath::Max(StaggerT, 0.35f);
+		HitPending = -1.f;
+	}
 	if (Kind == EErtEnemyKind::Deer) FleeT = 6.f;
 	if (Health <= 0.f) { Killer = Source; Die(); }
 }

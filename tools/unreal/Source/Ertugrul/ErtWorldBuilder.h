@@ -78,7 +78,9 @@ private:
 	void BuildForest();
 	void BuildRocks();
 
+public:
 	float RiverE(float N) const;
+private:
 	float RoadDist(float E, float N, float* OutWidth = nullptr) const;
 	FVector TerrainNormal(float E, float N) const;
 	FLinearColor TerrainColor(float E, float N, float H, float Slope) const;

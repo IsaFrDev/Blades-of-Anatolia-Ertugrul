@@ -3,6 +3,8 @@
 #include "ErtEnemy.h"
 #include "ErtHorse.h"
 #include "ErtNpc.h"
+#include "ErtWorldBuilder.h"
+#include "CanvasItem.h"
 #include "ErtLoc.h"
 #include "ErtMission.h"
 #include "ErtCutscene.h"
@@ -53,6 +55,9 @@ void AErtHUD::DrawHUD()
 	if (GM && GM->GetCutscene() && GM->GetCutscene()->IsPlaying()) { DrawCutscene(SW, SH, Sc); return; }
 	if (GM && GM->IsSettingsOpen()) { DrawSettings(SW, SH, Sc); return; }
 	if (GM && GM->IsMenuOpen()) { DrawMenu(SW, SH, Sc); return; }
+	if (GM && GM->GetMenu() == EErtMenu::Main) { DrawMainMenu(SW, SH, Sc, false); return; }
+	if (GM && GM->GetMenu() == EErtMenu::Pause) { DrawMainMenu(SW, SH, Sc, true); return; }
+	if (GM && GM->GetMenu() == EErtMenu::Map) { DrawMap(SW, SH, Sc); return; }
 	if (GM && GM->IsDialogActive()) { DrawDialog(SW, SH, Sc); return; }
 	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f), Green(0.5f, 0.9f, 0.4f), Red(0.9f, 0.25f, 0.2f);
 
@@ -74,6 +79,8 @@ void AErtHUD::DrawHUD()
 			FCanvasTileItem V(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.6f, 0.f, 0.f, 0.35f * H->GetHurtFlash())); V.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(V);
 		}
 	}
+	// --- minimap (o'ng yuqori burchak, 250 m radius) ---
+	if (H) DrawMapArea(SW - 210 * Sc, 20 * Sc, 190 * Sc, H->GetActorLocation().Y / 100.f, H->GetActorLocation().X / 100.f, 250.f, false, Sc);
 	if (!D || D->GetState() == EErtMissionState::Inactive)
 	{
 		Text(L.Tr(TEXT("ui.hud.free_roam")), 24 * Sc, 24 * Sc, Grey, Sc);
@@ -309,4 +316,144 @@ void AErtHUD::DrawSettings(float SW, float SH, float Sc)
 	}
 	Text(FString::Printf(TEXT("Or/iymon: %d    Bajarilgan epizodlar: saqlangan (Saved/ert_save.json)"), GM->GetHonor()), 44 * Sc, 240 * Sc, Grey, Sc);
 	Text(TEXT("Yuqori/Pastga: qator   Chap/O'ng yoki Enter: o'zgartirish   O yoki Esc: yopish"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
+}
+
+// ---------------- Bosh menyu / pauza ----------------
+
+void AErtHUD::DrawMainMenu(float SW, float SH, float Sc, bool bPause)
+{
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!GM) return;
+	const FLinearColor Gold(1.f, 0.85f, 0.35f), White(0.95f, 0.95f, 0.9f), Grey(0.6f, 0.6f, 0.55f);
+	FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.02f, 0.02f, 0.03f, bPause ? 0.7f : 0.88f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+	const FString Title = TEXT("BLADES OF ANATOLIA: ERTUG'RUL");
+	Text(Title, (SW - TextWidth(Title, 2.f * Sc, true)) * 0.5f, SH * 0.18f, Gold, 2.f * Sc, true, true);
+	Text(bPause ? TEXT("PAUZA") : TEXT("1227 - Anadolu chegarasi"), (SW - TextWidth(bPause ? TEXT("PAUZA") : TEXT("1227 - Anadolu chegarasi"), Sc, false)) * 0.5f, SH * 0.18f + 50 * Sc, Grey, Sc);
+	const TCHAR* MainRows[] = { TEXT("Boshlash / Davom etish"), TEXT("Epizodlar"), TEXT("Sozlamalar"), TEXT("Chiqish") };
+	const TCHAR* PauseRows[] = { TEXT("Davom etish"), TEXT("Xarita"), TEXT("Epizodlar"), TEXT("Sozlamalar"), TEXT("Saqlab chiqish") };
+	const int32 N = bPause ? 5 : 4;
+	for (int32 i = 0; i < N; ++i)
+	{
+		const FString R = bPause ? PauseRows[i] : MainRows[i];
+		const float Y = SH * 0.42f + i * 40 * Sc;
+		const bool bSel = i == GM->GetMenuRow();
+		if (bSel) { FCanvasTileItem S(FVector2D(SW * 0.5f - 200 * Sc, Y - 6 * Sc), FVector2D(400 * Sc, 34 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.85f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }
+		Text(R, (SW - TextWidth(R, 1.25f * Sc, true)) * 0.5f, Y, bSel ? Gold : White, 1.25f * Sc, true, true);
+	}
+	Text(TEXT("Yuqori/Pastga: tanlash   Enter/Space: tasdiqlash   Esc: orqaga   M: xarita   O: sozlamalar"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
+	if (!bPause) Text(FString::Printf(TEXT("Or/iymon: %d"), GM->GetHonor()), SW - 150 * Sc, 24 * Sc, Grey, 0.9f * Sc);
+}
+
+// ---------------- Xarita ----------------
+
+void AErtHUD::Circle(float CX, float CY, float R, const FLinearColor& C, int32 Segs)
+{
+	for (int32 i = 0; i < Segs; ++i)
+	{
+		const float A0 = 2.f * PI * i / Segs, A1 = 2.f * PI * (i + 1) / Segs;
+		FCanvasLineItem L(FVector2D(CX + FMath::Cos(A0) * R, CY + FMath::Sin(A0) * R), FVector2D(CX + FMath::Cos(A1) * R, CY + FMath::Sin(A1) * R));
+		L.SetColor(C); L.LineThickness = 2.f; Canvas->DrawItem(L);
+	}
+}
+
+void AErtHUD::DrawMapArea(float X0, float Y0, float S, float CE, float CN, float RadiusM, bool bLabels, float Sc)
+{
+	using namespace ErtMap;
+	AErtCharacter* H = Cast<AErtCharacter>(GetOwningPawn());
+	AErtWorldBuilder* W = Cast<AErtWorldBuilder>(UGameplayStatics::GetActorOfClass(GetWorld(), AErtWorldBuilder::StaticClass()));
+	AErtMissionDirector* D = Director();
+	const float K = S / (2.f * RadiusM);                       // px / m
+	auto PX = [&](float E) { return X0 + S * 0.5f + (E - CE) * K; };
+	auto PY = [&](float N) { return Y0 + S * 0.5f - (N - CN) * K; };
+	auto Inside = [&](float X, float Y) { return X >= X0 - 4 && X <= X0 + S + 4 && Y >= Y0 - 4 && Y <= Y0 + S + 4; };
+	// Fon (pergament) va ramka
+	FCanvasTileItem Bg(FVector2D(X0, Y0), FVector2D(S, S), FLinearColor(0.72f, 0.62f, 0.42f, bLabels ? 0.95f : 0.75f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+	// Cho'l (janub) va tog' (shimol) zonalari
+	{
+		const float Yd = PY(-700.f); if (Yd < Y0 + S) { FCanvasTileItem T(FVector2D(X0, FMath::Max(Y0, Yd)), FVector2D(S, Y0 + S - FMath::Max(Y0, Yd)), FLinearColor(0.85f, 0.75f, 0.5f, 0.8f)); T.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(T); }
+		const float Ym = PY(850.f); if (Ym > Y0) { FCanvasTileItem T(FVector2D(X0, Y0), FVector2D(S, FMath::Min(Y0 + S, Ym) - Y0), FLinearColor(0.85f, 0.85f, 0.88f, 0.8f)); T.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(T); }
+	}
+	// Daryo
+	if (W)
+	{
+		for (float N = -1000.f; N < 1000.f; N += 25.f)
+		{
+			const FVector2D A(PX(W->RiverE(N)), PY(N)), B(PX(W->RiverE(N + 25.f)), PY(N + 25.f));
+			if (!Inside(A.X, A.Y) && !Inside(B.X, B.Y)) continue;
+			FCanvasLineItem L(A, B); L.SetColor(FLinearColor(0.25f, 0.45f, 0.75f)); L.LineThickness = FMath::Max(2.f, 26.f * K); Canvas->DrawItem(L);
+		}
+	}
+	const FLinearColor Ink(0.25f, 0.15f, 0.08f);
+	auto Mark = [&](float E, float N, float Rm, const TCHAR* Label, const FLinearColor& C)
+	{
+		const float X = PX(E), Y = PY(N);
+		if (!Inside(X, Y)) return;
+		Circle(X, Y, FMath::Max(3.f, Rm * K), C, 20);
+		if (bLabels) Text(Label, X + 6 * Sc, Y - 8 * Sc, Ink, 0.9f * Sc, false);
+	};
+	Mark(ObaE, ObaN, ObaHalf, TEXT("Qayi obasi"), Ink);
+	Mark(FortE, FortN, FortHalf, TEXT("Qal'a"), Ink);
+	Mark(CityE, CityN, CityR, TEXT("Shahar"), Ink);
+	Mark(CampE, CampN, CampR, TEXT("Mo'g'ul lageri"), FLinearColor(0.6f, 0.1f, 0.1f));
+	Mark(OasisE, OasisN, OasisR, TEXT("Voha"), FLinearColor(0.2f, 0.4f, 0.7f));
+	Mark(CaravanE, CaravanN, 22.f, TEXT("Karvonsaroy"), Ink);
+	Mark(LakeE, LakeN, LakeR, TEXT("Ko'l"), FLinearColor(0.2f, 0.4f, 0.7f));
+	Mark(-120.f, -860.f, 20.f, TEXT("Xarobalar"), Ink);
+	// Maqsad markerlari
+	if (D)
+	{
+		TArray<FVector> Pts; D->GetMarkers(Pts);
+		for (const FVector& P : Pts)
+		{
+			const float X = PX(P.Y / 100.f), Y = PY(P.X / 100.f);
+			if (!Inside(X, Y)) continue;
+			const float Sz = 6 * Sc;
+			FCanvasTileItem T(FVector2D(X - Sz, Y - Sz), FVector2D(Sz * 2, Sz * 2), FLinearColor(1.f, 0.8f, 0.2f)); T.Rotation = FRotator(0, 45.f, 0); T.PivotPoint = FVector2D(0.5f, 0.5f); Canvas->DrawItem(T);
+		}
+		for (const AErtEnemy* E : D->GetEnemies())
+		{
+			if (!E || E->IsDead() || E->IsAnimal()) continue;
+			const float X = PX(E->GetActorLocation().Y / 100.f), Y = PY(E->GetActorLocation().X / 100.f);
+			if (Inside(X, Y)) { FCanvasTileItem T(FVector2D(X - 3 * Sc, Y - 3 * Sc), FVector2D(6 * Sc, 6 * Sc), FLinearColor(0.85f, 0.15f, 0.1f)); Canvas->DrawItem(T); }
+		}
+	}
+	// NPClar
+	{
+		TArray<AActor*> Npcs; UGameplayStatics::GetAllActorsOfClass(GetWorld(), AErtNpc::StaticClass(), Npcs);
+		for (AActor* A : Npcs) { const float X = PX(A->GetActorLocation().Y / 100.f), Y = PY(A->GetActorLocation().X / 100.f); if (Inside(X, Y)) { FCanvasTileItem T(FVector2D(X - 2.5f * Sc, Y - 2.5f * Sc), FVector2D(5 * Sc, 5 * Sc), FLinearColor(0.2f, 0.6f, 0.9f)); Canvas->DrawItem(T); } }
+	}
+	// O'yinchi (yo'nalish uchburchagi)
+	if (H)
+	{
+		const float X = PX(H->GetActorLocation().Y / 100.f), Y = PY(H->GetActorLocation().X / 100.f);
+		const float Yaw = FMath::DegreesToRadians(H->GetActorRotation().Yaw);
+		const float Sz = 7 * Sc;
+		FCanvasTileItem Tp(FVector2D(X - Sz, Y - Sz * 1.6f), FVector2D(Sz * 2, Sz * 3.2f), FLinearColor(0.1f, 0.9f, 0.3f));
+		Tp.Rotation = FRotator(0, FMath::RadiansToDegrees(Yaw), 0); Tp.PivotPoint = FVector2D(0.5f, 0.5f); Canvas->DrawItem(Tp);
+		FCanvasTileItem Tc(FVector2D(X - Sz * 0.5f, Y - Sz * 0.5f), FVector2D(Sz, Sz), FLinearColor(0.02f, 0.3f, 0.1f)); Canvas->DrawItem(Tc);
+	}
+	// Ramka
+	for (int32 i = 0; i < 4; ++i)
+	{
+		const FVector2D A(X0 + (i == 1 ? S : 0), Y0 + (i == 2 ? S : 0)), B(X0 + (i == 3 ? 0 : S), Y0 + (i == 0 ? 0 : S));
+		FCanvasLineItem L(i == 0 ? FVector2D(X0, Y0) : (i == 1 ? FVector2D(X0 + S, Y0) : (i == 2 ? FVector2D(X0 + S, Y0 + S) : FVector2D(X0, Y0 + S))),
+		                  i == 0 ? FVector2D(X0 + S, Y0) : (i == 1 ? FVector2D(X0 + S, Y0 + S) : (i == 2 ? FVector2D(X0, Y0 + S) : FVector2D(X0, Y0))));
+		L.SetColor(Ink); L.LineThickness = 2.f; Canvas->DrawItem(L);
+	}
+	if (!bLabels) Text(TEXT("N"), X0 + S * 0.5f - 4 * Sc, Y0 + 2 * Sc, Ink, 0.8f * Sc, false);
+}
+
+void AErtHUD::DrawMap(float SW, float SH, float Sc)
+{
+	FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.02f, 0.02f, 0.03f, 0.85f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+	const float S = FMath::Min(SW, SH) - 80 * Sc;
+	DrawMapArea((SW - S) * 0.5f, 40 * Sc, S, 0.f, 0.f, 1000.f, true, Sc);
+	AErtMissionDirector* D = Director();
+	if (D && D->GetObjectives().Num())
+	{
+		float Y = 44 * Sc;
+		Text(D->GetPhaseTitle(), 24 * Sc, Y, FLinearColor(1.f, 0.85f, 0.35f), 1.1f * Sc, true, true); Y += 26 * Sc;
+		for (const FErtObjective& O : D->GetObjectives()) { Text(O.Text(), 24 * Sc, Y, O.bDone ? FLinearColor(0.5f, 0.9f, 0.4f) : FLinearColor(0.95f, 0.95f, 0.9f), 0.95f * Sc); Y += 20 * Sc; }
+	}
+	Text(TEXT("XARITA   (M yoki Esc: yopish)   yashil - siz, oltin - maqsad, qizil - dushman, ko'k - odamlar"), 24 * Sc, SH - 28 * Sc, FLinearColor(0.6f, 0.6f, 0.55f), 0.9f * Sc);
 }

@@ -108,6 +108,15 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
   chang), pastga siljish va shamol drifti, tuman zichligi. Bitta mesh, kameraga ergashadi.
 - Gamepad vibratsiyasi: zarar olganda (kuchi zararga bog'liq), parry, ijro.
 
+## Menyular, xarita, zarba reaksiyasi
+- Menyu holati (`EErtMenu`): Main (o'yin boshida: Boshlash/Davom etish, Epizodlar, Sozlamalar, Chiqish), Pause (Esc: Davom etish, Xarita,
+  Epizodlar, Sozlamalar, Saqlab chiqish), Episodes, Settings, Map. Menyu ochiq bo'lsa o'yin pauzada (`SetGamePaused`), menyu kirishlari
+  `bTriggerWhenPaused` bilan ishlaydi. Esc har doim bir qadam orqaga.
+- Xarita (M): pergament fon, cho'l/tog' zonalari, daryo, obyektlar (oba, qal'a, shahar, lager, voha, karvonsaroy, ko'l, xarobalar),
+  maqsad markerlari (oltin), dushmanlar (qizil), NPClar (ko'k), o'yinchi (yashil, yo'nalish). Minimap doim o'ng yuqorida (250 m radius).
+- Zarba reaksiyasi: dushman zarba yeganda orqaga uchadi (kuchi zararga bog'liq) va 0.35 s gangiydi; o'yinchi zarba yeganda orqaga siljiydi,
+  kamera silkinadi; har tegishda hitstop (0.07 s, ijroda 0.22 s).
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

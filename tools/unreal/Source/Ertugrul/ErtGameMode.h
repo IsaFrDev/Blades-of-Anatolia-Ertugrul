@@ -9,6 +9,9 @@
 class AErtMissionDirector;
 class AErtCutsceneDirector;
 class AErtNpc;
+
+UENUM()
+enum class EErtMenu : uint8 { None, Main, Pause, Episodes, Settings, Map };
 struct FErtEpisode;
 
 UCLASS()
@@ -21,7 +24,13 @@ public:
 	AErtCutsceneDirector* GetCutscene() const { return Cutscene; }
 
 	// Menyu
-	bool IsMenuOpen() const { return bMenuOpen; }
+	bool IsMenuOpen() const { return Menu == EErtMenu::Episodes; }
+	EErtMenu GetMenu() const { return Menu; }
+	int32 GetMenuRow() const { return Menu == EErtMenu::Main ? RowMain : RowPause; }
+	bool IsAnyMenu() const { return Menu != EErtMenu::None; }
+	void OpenMenu(EErtMenu M);
+	void ToggleMap();
+	bool HasEpisodeStarted() const { return bEpisodeStarted; }
 	int32 GetMenuIndex() const { return MenuIndex; }
 	void MenuToggle();
 	void MenuMove(int32 Delta);
@@ -55,7 +64,9 @@ protected:
 private:
 	UPROPERTY(Transient) TObjectPtr<AErtMissionDirector> Director;
 	UPROPERTY(Transient) TObjectPtr<AErtCutsceneDirector> Cutscene;
-	bool bMenuOpen = false;
+	EErtMenu Menu = EErtMenu::None, Prev = EErtMenu::None;
+	int32 RowMain = 0, RowPause = 0;
+	bool bEpisodeStarted = false;
 	bool bUnlockAll = false;
 	int32 MenuIndex = 0;
 	TArray<FString> Completed;
@@ -79,13 +90,14 @@ public:
 	void SaveGame();
 	void LoadGame();
 	// Sozlamalar
-	bool IsSettingsOpen() const { return bSettingsOpen; }
+	bool IsSettingsOpen() const { return Menu == EErtMenu::Settings; }
+	void HitStop(float Seconds, float Dilation = 0.12f);
 	int32 GetSettingsRow() const { return SettingsRow; }
 	void SettingsToggle();
 	void SettingsMove(int32 Delta);
 	void SettingsAdjust(int32 Delta);
 	int32 Language = 0; float MouseSens = 1.f; bool bInvertY = false;
 private:
-	bool bSettingsOpen = false; int32 SettingsRow = 0;
+	int32 SettingsRow = 0;
 	void SetPlayerInput(bool bEnabled, bool bHide);
 };
