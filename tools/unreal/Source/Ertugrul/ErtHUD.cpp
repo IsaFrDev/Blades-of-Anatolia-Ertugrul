@@ -137,10 +137,22 @@ void AErtHUD::DrawHUD()
 		Center(L.Tr(TEXT("ui.hud.checkpoint")) + TEXT(": ") + D->GetCheckpointName(), SH * 0.35f + 46 * Sc, White, Sc);
 		break;
 	case EErtMissionState::Cleared:
-		Center(L.Tr(TEXT("ui.episodes.completed")), SH * 0.30f, Gold, 1.7f * Sc);
-		Center(FString::Printf(TEXT("%d  |  %d"), D->GetKills(), D->GetDeaths()), SH * 0.30f + 44 * Sc, White, Sc);
-		if (T > 2.f) Center(L.Tr(TEXT("ui.episodes.next")), SH * 0.30f + 70 * Sc, Grey, Sc);
+	{
+		// Cliffhanger ekrani: qora fon, epizod nomi, cliffhanger matni, statistika
+		FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0, 0, 0, FMath::Min(0.85f, T * 0.6f))); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+		Center(L.Tr(TEXT("ui.episodes.completed")), SH * 0.18f, Gold, 1.7f * Sc);
+		Center(D->GetEpisodeTitle(), SH * 0.18f + 46 * Sc, White, 1.1f * Sc);
+		if (T > 1.5f && !D->GetCliffhanger().IsEmpty())
+		{
+			TArray<FString> Lines; Wrap(D->GetCliffhanger(), SW * 0.6f, 1.15f * Sc, Lines);
+			float CY = SH * 0.42f;
+			const int32 Shown = FMath::Min(Lines.Num(), (int32)((T - 1.5f) * 1.5f) + 1);
+			for (int32 i = 0; i < Shown; ++i) { Text(Lines[i], (SW - TextWidth(Lines[i], 1.15f * Sc, false)) * 0.5f, CY, FLinearColor(0.95f, 0.9f, 0.8f), 1.15f * Sc); CY += 28 * Sc; }
+		}
+		Center(FString::Printf(TEXT("%s %d   |   %s %d"), *L.Tr(TEXT("ui.hud.enemies")), D->GetKills(), TEXT("O'lim"), D->GetDeaths()), SH * 0.78f, Grey, Sc);
+		if (T > 3.f) Center(L.Tr(TEXT("ui.episodes.next")) + TEXT("   [Enter]"), SH * 0.78f + 30 * Sc, Grey, Sc);
 		break;
+	}
 	default:
 		if (D->GetCouncilResultT() > 0.f) Center(D->GetCouncilResult(), SH * 0.22f, FLinearColor(1.f, 0.85f, 0.35f, FMath::Min(1.f, D->GetCouncilResultT())), 1.1f * Sc);
 		if (D->GetCheckpointFlash() > 0.f && T > 0.2f)

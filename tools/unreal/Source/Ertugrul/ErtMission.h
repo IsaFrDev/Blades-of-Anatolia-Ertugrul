@@ -73,6 +73,9 @@ public:
 	const FString& GetEpisodeTitle() const { return EpisodeTitle; }
 	const FString& GetEpisodeDate() const { return EpisodeDate; }
 	const FString& GetIntroText() const { return IntroText; }
+	const FString& GetCliffhanger() const { return Cliffhanger; }
+	/** Cliffhanger ekranini o'tkazib yuborish (Enter/Space) */
+	void SkipCleared() { if (State == EErtMissionState::Cleared) StateT = 99.f; }
 	int32 GetKills() const { return Kills; }
 	int32 GetDeaths() const { return Deaths; }
 	int32 AliveEnemies() const;
@@ -108,7 +111,7 @@ private:
 	int32 PhaseIdx = 0, WaveIdx = 0;
 	float PhaseT = 0.f, StateT = 0.f, CpFlash = 0.f;
 	EErtMissionState State = EErtMissionState::Inactive;
-	FString EpisodeId, EpisodeTitle, EpisodeDate, IntroText, PhaseTitle, NextEpisodeId, CpName;
+	FString EpisodeId, EpisodeTitle, EpisodeDate, IntroText, PhaseTitle, NextEpisodeId, CpName, Cliffhanger;
 	int32 Kills = 0, Deaths = 0;
 	FRandomStream Rng;
 	FVector Cursor = FVector::ZeroVector;

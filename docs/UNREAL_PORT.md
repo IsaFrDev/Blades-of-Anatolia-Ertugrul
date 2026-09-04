@@ -80,6 +80,10 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
   `collect` da har nuqta uchun `flags` (dalil bayroqlari), `council` da dialog grafi, `threshold` (duel ballari) va Bey chodiri oldida NPClar.
 - EP002 "Ikki asir": Yo'l -> 4 dalil (letter, seal, selcan_talk, aykiz_witness) -> Kengash (`council_kurdoglu`: dalillar tanlov sifatida
   faqat bayroq bo'lsa chiqadi, har biri 1 ball, 3 ball = g'alaba, Kurdo'g'li fosh bo'ladi) -> Yo'l -> Jang. EP001: dalillar -> Halima bilan suhbat (`e1_camp_halima`).
+- EP003: Yo'l -> Himoya (2 to'lqin) -> o'layotgan Templar serjanti (`ep003_sergeant`, rahm/so'roq tanlovi, Titus nomi) -> Jang.
+  EP004: dalillar (father_letter, tribe_seal) -> Sulaymon Shoh (`ep004_father`, 1 ball) -> Yashirin. EP005: Ov -> Yo'l -> Bamsi (`ep005_bamsi`) -> Jang.
+  EP006: 3 dalil (tracks, torn_cloth, dagger) -> Turgut (`ep006_turgut`, 2 ball, xanjar = 2) -> Yashirin -> Jang. Generator: `tools/unreal/Scripts/make_ep_dialogs.py`.
+- Cliffhanger ekrani: epizod tugagach qora fon, sarlavha, `ep.epXXX.cliffhanger` matni satrma-satr, statistika; 16 s yoki Enter/Space bilan keyingi epizod.
 - Dialogda ishlatilgan dalil bayroqdan o'chiriladi (qayta ko'rsatib bo'lmaydi). Natija HUD da: "Kengash sizni qo'lladi!" yoki "Dalillar yetarli emas edi".
 
 ## Render sozlamalari (Intel iGPU)

@@ -1,30 +1,288 @@
 {
-  "_doc": "Epizod bosqichlarini qo'lda belgilash (arxetip ssenariysi o'rniga). type: travel|collect|council|stealth|defend|hunt|duel|fight",
-  "EP002": {
-    "phases": [
-      {"type": "travel", "n": 2},
-      {"type": "collect", "n": 4, "flags": ["letter", "seal", "selcan_talk", "aykiz_witness"], "loc": "ui.obj.collect_evidence"},
-      {"type": "council", "dialog": "council_kurdoglu", "threshold": 3,
-       "npcs": [
-         {"id": "suleyman_shah", "name": "chr.suleyman_shah.name", "u": -6, "v": -7, "yaw": 180, "kaftan": [0.32, 0.10, 0.10]},
-         {"id": "kurdoglu", "name": "chr.kurdoglu.name", "u": -10, "v": -4, "yaw": 150, "kaftan": [0.12, 0.12, 0.14]},
-         {"id": "selcan", "name": "chr.selcan.name", "u": -2, "v": -4, "yaw": 210, "woman": true, "kaftan": [0.36, 0.20, 0.30]}
-       ]},
-      {"type": "travel", "n": 2, "timed": true},
-      {"type": "fight", "waves": 1}
+ "_doc": "Epizod bosqichlarini qo'lda belgilash (arxetip ssenariysi o'rniga). type: travel|collect|council|stealth|defend|hunt|duel|fight",
+ "EP002": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 4,
+    "flags": [
+     "letter",
+     "seal",
+     "selcan_talk",
+     "aykiz_witness"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "council_kurdoglu",
+    "threshold": 3,
+    "npcs": [
+     {
+      "id": "suleyman_shah",
+      "name": "chr.suleyman_shah.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "kaftan": [
+       0.32,
+       0.1,
+       0.1
+      ]
+     },
+     {
+      "id": "kurdoglu",
+      "name": "chr.kurdoglu.name",
+      "u": -10,
+      "v": -4,
+      "yaw": 150,
+      "kaftan": [
+       0.12,
+       0.12,
+       0.14
+      ]
+     },
+     {
+      "id": "selcan",
+      "name": "chr.selcan.name",
+      "u": -2,
+      "v": -4,
+      "yaw": 210,
+      "woman": true,
+      "kaftan": [
+       0.36,
+       0.2,
+       0.3
+      ]
+     }
     ]
-  },
-  "EP001": {
-    "phases": [
-      {"type": "travel", "n": 2},
-      {"type": "collect", "n": 3, "flags": ["crow_feather", "dry_well", "poison_grain"]},
-      {"type": "council", "dialog": "e1_camp_halima", "threshold": 0,
-       "npcs": [
-         {"id": "halime_cut", "name": "chr.halime.name", "u": -6, "v": -7, "yaw": 180, "woman": true, "kaftan": [0.16, 0.30, 0.40]},
-         {"id": "bamsi_cut", "name": "chr.bamsi.name", "u": -2, "v": -4, "yaw": 210, "kaftan": [0.36, 0.26, 0.10]}
-       ]},
-      {"type": "stealth", "guards": 2},
-      {"type": "fight", "waves": 1}
+   },
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP001": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 3,
+    "flags": [
+     "crow_feather",
+     "dry_well",
+     "poison_grain"
     ]
-  }
+   },
+   {
+    "type": "council",
+    "dialog": "e1_camp_halima",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "halime_cut",
+      "name": "chr.halime.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "woman": true,
+      "kaftan": [
+       0.16,
+       0.3,
+       0.4
+      ]
+     },
+     {
+      "id": "bamsi_cut",
+      "name": "chr.bamsi.name",
+      "u": -2,
+      "v": -4,
+      "yaw": 210,
+      "kaftan": [
+       0.36,
+       0.26,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP003": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2,
+    "timed": true
+   },
+   {
+    "type": "defend",
+    "waves": 2
+   },
+   {
+    "type": "council",
+    "dialog": "ep003_sergeant",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "templar_sgt",
+      "name": "chr.templar_sgt.name",
+      "u": -8,
+      "v": -30,
+      "yaw": 0,
+      "kaftan": [
+       0.75,
+       0.72,
+       0.68
+      ]
+     }
+    ]
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP004": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 2,
+    "flags": [
+     "father_letter",
+     "tribe_seal"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep004_father",
+    "threshold": 1,
+    "npcs": [
+     {
+      "id": "suleyman_shah",
+      "name": "chr.suleyman_shah.name",
+      "u": -6,
+      "v": -7,
+      "yaw": 180,
+      "kaftan": [
+       0.32,
+       0.1,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 2
+   }
+  ]
+ },
+ "EP005": {
+  "phases": [
+   {
+    "type": "hunt",
+    "n": 2
+   },
+   {
+    "type": "travel",
+    "n": 3
+   },
+   {
+    "type": "council",
+    "dialog": "ep005_bamsi",
+    "threshold": 0,
+    "npcs": [
+     {
+      "id": "bamsi_cut",
+      "name": "chr.bamsi.name",
+      "u": -7,
+      "v": -112,
+      "yaw": 90,
+      "kaftan": [
+       0.36,
+       0.26,
+       0.1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ },
+ "EP006": {
+  "phases": [
+   {
+    "type": "travel",
+    "n": 2
+   },
+   {
+    "type": "collect",
+    "n": 3,
+    "flags": [
+     "tracks",
+     "torn_cloth",
+     "dagger"
+    ],
+    "loc": "ui.obj.collect_evidence"
+   },
+   {
+    "type": "council",
+    "dialog": "ep006_turgut",
+    "threshold": 2,
+    "npcs": [
+     {
+      "id": "turgut_cut",
+      "name": "chr.turgut.name",
+      "u": 34,
+      "v": -24,
+      "yaw": 90,
+      "kaftan": [
+       0.2,
+       0.22,
+       0.12
+      ]
+     }
+    ]
+   },
+   {
+    "type": "stealth",
+    "guards": 2
+   },
+   {
+    "type": "fight",
+    "waves": 1
+   }
+  ]
+ }
 }

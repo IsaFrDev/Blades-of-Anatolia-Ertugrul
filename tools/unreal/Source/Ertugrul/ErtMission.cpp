@@ -183,6 +183,7 @@ bool AErtMissionDirector::StartEpisode(const FString& Id)
 	EpisodeTitle = UErtEpisodeDb::Get()->Title(*E);
 	EpisodeDate = E->Gregorian;
 	IntroText = FErtLoc::Get().TrOr(E->LocIntro, TEXT(""));
+	Cliffhanger = FErtLoc::Get().TrOr(E->LocCliffhanger, TEXT(""));
 	NextEpisodeId = E->NextId;
 	Kills = 0; Deaths = 0;
 	Rng.Initialize(GetTypeHash(E->Id));
@@ -672,7 +673,7 @@ void AErtMissionDirector::Tick(float Dt)
 		if (StateT >= 3.5f) RestartFromCheckpoint();
 		break;
 	case EErtMissionState::Cleared:
-		if (StateT >= 7.f)
+		if (StateT >= 16.f)
 		{
 			if (!NextEpisodeId.IsEmpty()) StartEpisode(NextEpisodeId);
 			else StopEpisode();

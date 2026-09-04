@@ -192,7 +192,8 @@ void AErtGameMode::BeginEpisode(const FString& Id, bool bWithCutscene)
 void AErtGameMode::OnAdvance()
 {
 	if (Dialog.IsActive()) { Dialog.Advance(); if (!Dialog.IsActive()) EndDialog(); return; }
-	if (Cutscene && Cutscene->IsPlaying()) Cutscene->Advance();
+	if (Cutscene && Cutscene->IsPlaying()) { Cutscene->Advance(); return; }
+	if (Director && Director->GetState() == EErtMissionState::Cleared && Director->GetStateTime() > 1.5f) Director->SkipCleared();
 }
 
 void AErtGameMode::OnSkip()
