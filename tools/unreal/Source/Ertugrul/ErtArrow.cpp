@@ -63,7 +63,7 @@ void AErtArrow::Tick(float Dt)
 			{
 				E->ApplyHit(Damage, Owner_, false);
 				FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_hit"), C, 1.f);
-				if (AErtCharacter* H = Cast<AErtCharacter>(Owner_)) if (E->IsDead()) { H->AddXP(E->XPValue()); H->AddGold(E->IsAnimal() ? 0 : FMath::RandRange(4, 14)); }
+				if (AErtCharacter* H = Cast<AErtCharacter>(Owner_)) if (E->IsDead()) H->AddXP(E->XPValue());
 				Destroy(); return;
 			}
 		}

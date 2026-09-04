@@ -24,6 +24,7 @@
 #include "ErtNpc.h"
 #include "ErtAudio.h"
 #include "ErtArrow.h"
+#include "ErtLoot.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
 #include "Misc/CommandLine.h"
@@ -208,7 +209,7 @@ void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, floa
 			ShakeT = FMath::Max(ShakeT, bExecute ? 0.3f : (Kind == 2 ? 0.2f : 0.12f));
 			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->HitStop(bExecute ? 0.22f : (Kind == 2 ? 0.12f : 0.07f));
 			FErtAudio::PlaySfx(GetWorld(), E->IsDead() ? TEXT("kill") : TEXT("hit"), E->GetActorLocation(), 1.f, FMath::FRandRange(0.9f, 1.1f));
-			if (E->IsDead()) { AddXP(E->XPValue()); AddGold(E->IsAnimal() ? 0 : FMath::RandRange(4, 14)); }
+			if (E->IsDead()) { AddXP(E->XPValue()); /* oltin o'ljadan */ }
 			RiposteT = 0.f;
 		}
 	}
@@ -221,6 +222,14 @@ void AErtCharacter::OnInteract()
 {
 	if (!bInputEnabled || bDead) return;
 	if (Horse) { DismountHorse(); return; }
+	if (AErtLoot* Lt = NearestLoot(260.f))
+	{
+		const FString Desc = Lt->Describe();
+		Lt->GiveTo(this);
+		FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.45f, 1.5f);
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = TEXT("O'lja: ") + Desc; GM->ShopMsgT = 3.f; }
+		return;
+	}
 	if (AErtEnemy* Cc = NearestCarcass(260.f))
 	{
 		Cc->bLooted = true; Meat += 2; AddXP(5);
@@ -230,6 +239,14 @@ void AErtCharacter::OnInteract()
 	}
 	if (AErtNpc* N = NearestNpc(280.f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->StartDialog(N); return; }
 	if (AErtHorse* H = NearestHorse(320.f)) MountHorse(H);
+}
+
+AErtLoot* AErtCharacter::NearestLoot(float MaxDist) const
+{
+	AErtLoot* Best = nullptr; float BestD = MaxDist;
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtLoot::StaticClass(), All);
+	for (AActor* A : All) { const float D = FVector::Dist2D(A->GetActorLocation(), GetActorLocation()); if (D < BestD) { BestD = D; Best = Cast<AErtLoot>(A); } }
+	return Best;
 }
 
 AErtEnemy* AErtCharacter::NearestCarcass(float MaxDist) const

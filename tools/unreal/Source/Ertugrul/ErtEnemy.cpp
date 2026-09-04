@@ -7,6 +7,7 @@
 #include "ErtAudio.h"
 #include "ErtGameMode.h"
 #include "ErtArrow.h"
+#include "ErtLoot.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -186,6 +187,22 @@ void AErtEnemy::Stagger(float Seconds)
 void AErtEnemy::Die()
 {
 	bDead = true;
+	// O'lja to'rvasi (kiyikdan emas - go'sht E bilan olinadi)
+	if (Kind != EErtEnemyKind::Deer)
+	{
+		FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		FVector Pos = GetActorLocation() + FVector(FMath::FRandRange(-40.f, 40.f), FMath::FRandRange(-40.f, 40.f), 0);
+		FHitResult Hg; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtLootGround), true, this);
+		if (GetWorld()->LineTraceSingleByChannel(Hg, Pos + FVector(0, 0, 200), Pos - FVector(0, 0, 400), ECC_Visibility, Q)) Pos = Hg.ImpactPoint;
+		if (AErtLoot* L = GetWorld()->SpawnActor<AErtLoot>(AErtLoot::StaticClass(), Pos, FRotator::ZeroRotator, SP))
+		{
+			const bool bRich = Kind == EErtEnemyKind::Elite || Kind == EErtEnemyKind::Rider;
+			L->Gold = Kind == EErtEnemyKind::Boss ? 150 : FMath::RandRange(bRich ? 10 : 4, bRich ? 26 : 14);
+			L->Arrows = (Kind == EErtEnemyKind::Crossbow) ? FMath::RandRange(3, 7) : (FMath::FRand() < 0.35f ? FMath::RandRange(1, 3) : 0);
+			L->Potions = Kind == EErtEnemyKind::Boss ? 3 : (FMath::FRand() < (bRich ? 0.35f : 0.12f) ? 1 : 0);
+			L->bBoss = Kind == EErtEnemyKind::Boss;
+		}
+	}
 	if (Kind != EErtEnemyKind::Deer) FErtAudio::PlaySfx(GetWorld(), TEXT("death"), GetActorLocation(), 0.9f, FMath::FRandRange(0.85f, 1.1f));
 	if (Mount)
 	{

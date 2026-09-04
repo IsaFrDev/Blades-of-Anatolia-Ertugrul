@@ -174,6 +174,11 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
 - `AErtCharacter::SetBinding` IMC dagi klaviatura xaritalarini olib tashlab yangisini qo'yadi va `RequestRebuildControlMappings` chaqiradi.
   `ert_save.json` "keys" obyektida saqlanadi, o'yin boshida qo'llanadi.
 
+## O'lja tushishi
+- `AErtLoot`: dushman (kiyikdan tashqari) o'lganda yerga to'rva tushadi (aylanib tebranadi, 90 s). Tarkibi: oltin 4-14 (elita/otliq 10-26,
+  boss 150), o'q (kamonchi 3-7, boshqalar 35% da 1-3), dori (12%/35%, boss 3). [E] bilan olinadi, HUD "O'lja: ..." ko'rsatadi.
+  Oltin endi faqat o'ljadan (o'ldirganda XP saqlanadi).
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

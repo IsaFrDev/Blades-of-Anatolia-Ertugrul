@@ -3,6 +3,7 @@
 #include "ErtEnemy.h"
 #include "ErtHorse.h"
 #include "ErtNpc.h"
+#include "ErtLoot.h"
 #include "ErtWorldBuilder.h"
 #include "CanvasItem.h"
 #include "ErtLoc.h"
@@ -79,6 +80,7 @@ void AErtHUD::DrawHUD()
 		if (H->GetLockTarget()) Text(TEXT("LMB x3 seriya | LMB ushlab: og'ir | V: tepki | X: dodge | Q: qulfni ochish"), X + 280 * Sc, Y + 34 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		if (H->IsRiding() && H->GetHorse()) { Bar(X, Y - 40 * Sc, 160 * Sc, 8 * Sc, H->GetHorse()->Health / H->GetHorse()->MaxHealth, FLinearColor(0.55f, 0.35f, 0.15f)); Text(FString::Printf(TEXT("Ot %d"), (int32)H->GetHorse()->Health), X + 166 * Sc, Y - 44 * Sc, White, 0.85f * Sc); }
 		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
+		else if (AErtLoot* Lt = H->NearestLoot(260.f)) Text(TEXT("[E] O'lja: ") + Lt->Describe(), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (H->NearestCarcass(260.f)) Text(TEXT("[E] Go'sht olish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (AErtNpc* Np = H->NearestNpc(280.f)) Text(FString::Printf(TEXT("[E] %s bilan gaplashish"), *Np->GetDisplayName()), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (H->NearestHorse(320.f)) Text(TEXT("[E] Otga minish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);

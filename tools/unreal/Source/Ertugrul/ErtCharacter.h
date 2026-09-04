@@ -143,6 +143,7 @@ private:
 	void OnMenuLeft(); void OnMenuRight(); void OnSettings(); void OnMap();
 public:
 	AErtEnemy* NearestCarcass(float MaxDist) const;
+	class AErtLoot* NearestLoot(float MaxDist) const;
 private:
 	void OnLock(); void OnDodge(); void UpdateLock(float Dt); void OnInventory(); void OnPotion();
 	void OnAttackPressed(); void OnAttackReleased(); void OnKick(); void DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, float Stagger, float Knock);
