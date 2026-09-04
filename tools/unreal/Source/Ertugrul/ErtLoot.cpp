@@ -52,3 +52,36 @@ void AErtLoot::GiveTo(AErtCharacter* H)
 	H->AddGold(Gold); H->AddArrows(Arrows); H->Potions += Potions; H->Meat += Meat;
 	Destroy();
 }
+
+// ---------------- Nishon ----------------
+
+AErtTarget::AErtTarget()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+}
+
+void AErtTarget::BeginPlay()
+{
+	Super::BeginPlay();
+	Mesh = NewObject<UProceduralMeshComponent>(this, TEXT("TargetMesh"));
+	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Mesh->SetCollisionObjectType(ECC_WorldDynamic);
+	Mesh->SetCollisionResponseToAllChannels(ECR_Block);
+	Mesh->RegisterComponent();
+	if (UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtVertexColor.M_ErtVertexColor"))) Mesh->SetMaterial(0, M);
+	FErtMeshData D;
+	D.AddBox(FVector(0, 0, 60.f), FVector(4.f, 4.f, 60.f), FLinearColor(0.4f, 0.28f, 0.14f));                        // ustun
+	D.AddCylinder(FVector(0, 0, 130.f), 45.f, 45.f, 10.f, 16, FLinearColor(0.85f, 0.75f, 0.45f), true, FRotator(90.f, 0, 0));  // somon halqa
+	D.AddCylinder(FVector(-6.f, 0, 130.f), 28.f, 28.f, 3.f, 16, FLinearColor(0.9f, 0.9f, 0.85f), true, FRotator(90.f, 0, 0));
+	D.AddCylinder(FVector(-9.5f, 0, 130.f), 12.f, 12.f, 3.f, 12, FLinearColor(0.8f, 0.15f, 0.12f), true, FRotator(90.f, 0, 0)); // qizil markaz
+	D.Commit(Mesh, 0, true);
+}
+
+void AErtTarget::Tick(float Dt)
+{
+	Super::Tick(Dt);
+	HitFlash = FMath::Max(0.f, HitFlash - Dt);
+	if (Mesh) Mesh->SetRelativeRotation(FRotator(0, 0, FMath::Sin(HitFlash * 20.f) * HitFlash * 12.f));
+}

@@ -121,6 +121,24 @@ void AErtHUD::DrawHUD()
 		if (E->IsWindingUp()) Text(TEXT("OG'IR ZARBA - DODGE (X)!"), SW * 0.5f - TextWidth(TEXT("OG'IR ZARBA - DODGE (X)!"), Sc, false) * 0.5f, BY + 18 * Sc, FLinearColor(1.f, 0.5f, 0.2f), Sc);
 		break;
 	}
+	// --- Oba faoliyati paneli ---
+	if (GM && GM->Activity != 0)
+	{
+		const float PX = SW * 0.5f - 200 * Sc, PY = 60 * Sc;
+		FCanvasTileItem Bg(FVector2D(PX, PY), FVector2D(400 * Sc, 70 * Sc), FLinearColor(0.02f, 0.02f, 0.03f, 0.7f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
+		if (GM->Activity == 1)
+		{
+			Text(FString::Printf(TEXT("KAMON MUSOBAQASI   %d / %d   %d s"), GM->ActScore, GM->ActGoal, (int32)GM->ActivityT), PX + 14 * Sc, PY + 10 * Sc, Gold, 1.1f * Sc, true, true);
+			Text(TEXT("F bilan somon nishonlarni uring (qizil markaz)"), PX + 14 * Sc, PY + 40 * Sc, White, 0.9f * Sc);
+		}
+		else
+		{
+			Text(FString::Printf(TEXT("KURASH   %d s   - LMB ni tez bosing!"), (int32)GM->ActivityT), PX + 14 * Sc, PY + 10 * Sc, Gold, 1.1f * Sc, true, true);
+			Bar(PX + 14 * Sc, PY + 42 * Sc, 372 * Sc, 16 * Sc, GM->WrestleP, FLinearColor(0.85f, 0.6f, 0.2f));
+			Text(TEXT("Bamsi"), PX + 14 * Sc, PY + 58 * Sc, Grey, 0.8f * Sc); Text(TEXT("Siz"), PX + 360 * Sc, PY + 58 * Sc, Grey, 0.8f * Sc);
+		}
+	}
+	if (GM && GM->ActResultT > 0.f) Text(GM->ActResult, SW * 0.5f - TextWidth(GM->ActResult, 1.05f * Sc, false) * 0.5f, SH * 0.24f, FLinearColor(1.f, 0.85f, 0.35f, FMath::Min(1.f, GM->ActResultT)), 1.05f * Sc);
 	// --- NPC salomlashuv matni ---
 	{
 		TArray<AActor*> Npcs; UGameplayStatics::GetAllActorsOfClass(GetWorld(), AErtNpc::StaticClass(), Npcs);

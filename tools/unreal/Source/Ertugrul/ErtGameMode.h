@@ -105,6 +105,13 @@ public:
 	void ApplySavedKeys();
 	int32 ResIndex = 1;   // 0 1280x720, 1 1600x900, 2 1920x1080, 3 2560x1440
 	void ApplyDisplay();
+	// Oba faoliyatlari: 0 yo'q, 1 kamon musobaqasi, 2 kurash
+	int32 Activity = 0; float ActivityT = 0.f; int32 ActScore = 0, ActGoal = 5; float WrestleP = 0.5f; FString ActResult; float ActResultT = 0.f;
+	void StartActivity(int32 Kind);
+	void ActivityScore(int32 N) { if (Activity == 1) ActScore += N; }
+	void WrestlePress();
+	UPROPERTY(Transient) TArray<TObjectPtr<AActor>> ActTargets;
+	void EndActivity(bool bWon);
 	FString DisplayRow(int32 Row) const;
 	void SettingsMove(int32 Delta);
 	void SettingsAdjust(int32 Delta);

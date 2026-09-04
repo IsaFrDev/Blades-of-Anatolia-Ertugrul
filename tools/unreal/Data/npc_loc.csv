@@ -215,3 +215,7 @@ keys,uz,tr,en
 "greet.low.1","...Bey.","...Bey.","...Bey."
 "greet.low.2","Obada siz haqingizda gaplar yuribdi.","Obada senin hakkında laflar dolaşıyor.","There is talk about you in the tribe."
 "greet.woman.1","Xush kelibsiz, bey. Choy ichasizmi?","Hoş geldin bey. Çay içer misin?","Welcome, bey. Will you have tea?"
+"DLG_ACT_ARCHERY","Kamon musobaqasi! Nishonlarni sinaymiz.","Ok yarışı! Hedefleri deneyelim.","Archery contest! Let us try the targets."
+"DLG_ACT_ARCHERY_R","Bo'pti! 60 soniya, besh nishon. Mana o'qlar.","Tamam! 60 saniye, beş hedef. İşte oklar.","Good! Sixty seconds, five hits. Here are arrows."
+"DLG_ACT_WRESTLE","Kurashamiz, Bamsi!","Güreşelim Bamsı!","Let us wrestle, Bamsi!"
+"DLG_ACT_WRESTLE_R","Ha-ha! Kel, bey! Belingni ushlayman!","Ha-ha! Gel bey! Belinden tutarım!","Ha-ha! Come, bey! I will grab your belt!"

@@ -6,6 +6,7 @@
 #include "ErtHUD.h"
 #include "ErtHorse.h"
 #include "ErtNpc.h"
+#include "ErtLoot.h"
 #include "ErtWorldBuilder.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
@@ -183,6 +184,8 @@ void AErtGameMode::EndDialog()
 			}
 			else { ShopMsg = TEXT("Avval joriy missiyani tugating"); ShopMsgT = 3.f; }
 		}
+		if (Flags.Contains(TEXT("act_archery"))) { Flags.Remove(TEXT("act_archery")); StartActivity(1); }
+		if (Flags.Contains(TEXT("act_wrestle"))) { Flags.Remove(TEXT("act_wrestle")); StartActivity(2); }
 		if (Flags.Contains(TEXT("hayme_blessing"))) { Flags.Remove(TEXT("hayme_blessing")); H->Potions += 2; H->Heal(100.f); ShopMsg = TEXT("Onaning duosi: +2 dori, to'liq shifo"); ShopMsgT = 3.f; }
 		Buy(TEXT("buy_potion"), 15, [&]() { H->Potions += 1; });
 		Buy(TEXT("buy_arrows"), 10, [&]() { H->AddArrows(8); });
@@ -266,6 +269,49 @@ void AErtGameMode::Rumble(float Intensity, float Seconds)
 	if (APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0)) PC->PlayDynamicForceFeedback(Intensity, Seconds, true, true, true, true);
 }
 
+void AErtGameMode::StartActivity(int32 Kind)
+{
+	if (Activity != 0) return;
+	Activity = Kind; ActScore = 0; WrestleP = 0.5f;
+	AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+	if (Kind == 1)
+	{
+		ActivityT = 60.f; ActGoal = 5;
+		if (H) H->AddArrows(10);
+		// 3 nishon: mashq maydoni (oba u=46, v=-24) yonida, o'yinchidan 15-25 m
+		for (AActor* A : ActTargets) if (A) A->Destroy();
+		ActTargets.Reset();
+		for (int32 i = 0; i < 3; ++i)
+		{
+			const float E = ErtMap::ObaE + 46.f + (i - 1) * 6.f, N = ErtMap::ObaN - 24.f + 18.f + i * 3.f;
+			const float X = N * 100.f, Y = E * 100.f;
+			FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtTargetGround), true);
+			float Z = 2000.f; if (GetWorld()->LineTraceSingleByChannel(Hit, FVector(X, Y, 60000.f), FVector(X, Y, -5000.f), ECC_Visibility, Q)) Z = Hit.ImpactPoint.Z;
+			if (AActor* T = GetWorld()->SpawnActor<AErtTarget>(AErtTarget::StaticClass(), FVector(X, Y, Z), FRotator(0, 180.f, 0))) ActTargets.Add(T);
+		}
+		if (H) H->ResetAt(FVector((ErtMap::ObaN - 24.f) * 100.f, (ErtMap::ObaE + 46.f) * 100.f, 2100.f), 0.f);
+	}
+	else { ActivityT = 12.f; }
+}
+
+void AErtGameMode::WrestlePress()
+{
+	if (Activity != 2) return;
+	WrestleP = FMath::Min(1.f, WrestleP + 0.06f);
+	Rumble(0.3f, 0.08f);
+}
+
+void AErtGameMode::EndActivity(bool bWon)
+{
+	AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+	if (Activity == 1) { ActResult = bWon ? FString::Printf(TEXT("Kamon musobaqasi: %d/%d - g'alaba! +30 oltin, +60 XP, +1 or"), ActScore, ActGoal) : FString::Printf(TEXT("Kamon musobaqasi: %d/%d - keyingi safar"), ActScore, ActGoal); }
+	else { ActResult = bWon ? TEXT("Kurash: Bamsini yiqitdingiz! +50 XP, +2 or") : TEXT("Kurash: Bamsi g'olib. Yana urinib ko'ring"); }
+	if (bWon && H) { if (Activity == 1) { H->AddGold(30); H->AddXP(60); Honor += 1; } else { H->AddXP(50); Honor += 2; } SaveGame(); }
+	ActResultT = 6.f;
+	Activity = 0;
+	FTimerHandle Th; GetWorldTimerManager().SetTimer(Th, [this]() { for (AActor* A : ActTargets) if (A) A->Destroy(); ActTargets.Reset(); }, 20.f, false);
+}
+
 void AErtGameMode::SetTimeOfDay(const FString& Name)
 {
 	if (Name == TEXT("dawn")) DayT = 0.24f;
@@ -294,6 +340,16 @@ void AErtGameMode::Tick(float Dt)
 				break;
 			}
 		}
+	}
+	ActResultT = FMath::Max(0.f, ActResultT - Dt);
+	if (Activity != 0)
+	{
+		ActivityT -= Dt;
+		if (Activity == 2) WrestleP = FMath::Max(0.f, WrestleP - 0.09f * Dt * (1.f + WrestleP));   // Bamsi qarshilik qiladi
+		if (Activity == 1 && ActScore >= ActGoal) EndActivity(true);
+		else if (Activity == 2 && WrestleP >= 1.f) EndActivity(true);
+		else if (Activity == 2 && WrestleP <= 0.f) EndActivity(false);
+		else if (ActivityT <= 0.f) EndActivity(false);
 	}
 	DayT = FMath::Fmod(DayT + Dt / DayLength, 1.f);
 	ShopMsgT = FMath::Max(0.f, ShopMsgT - Dt);

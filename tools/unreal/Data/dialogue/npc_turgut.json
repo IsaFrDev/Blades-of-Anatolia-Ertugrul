@@ -14,6 +14,11 @@
     {
      "text_key": "DLG_NPC_TURGUT_OPT_LATER",
      "next": "c"
+    },
+    {
+     "text_key": "DLG_ACT_ARCHERY",
+     "next": "ar",
+     "set_flag": "act_archery"
     }
    ]
   },
@@ -25,6 +30,11 @@
   "c": {
    "speaker": "Turgut Alp",
    "text_key": "DLG_NPC_TURGUT_03",
+   "next": "end"
+  },
+  "ar": {
+   "speaker": "Turgut Alp",
+   "text_key": "DLG_ACT_ARCHERY_R",
    "next": "end"
   }
  }

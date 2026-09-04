@@ -4,6 +4,8 @@
 #include "ErtCharacter.h"
 #include "ErtEnemy.h"
 #include "ErtAudio.h"
+#include "ErtLoot.h"
+#include "ErtGameMode.h"
 #include "ProceduralMeshComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "Components/CapsuleComponent.h"
@@ -82,6 +84,12 @@ void AErtArrow::Tick(float Dt)
 	if (Owner_) Q.AddIgnoredActor(Owner_);
 	if (GetWorld()->LineTraceSingleByChannel(Hit, From, To, ECC_Visibility, Q))
 	{
+		if (AErtTarget* Tg = Cast<AErtTarget>(Hit.GetActor()))
+		{
+			++Tg->Hits; Tg->HitFlash = 0.6f;
+			if (bPlayer) if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ActivityScore(1);
+			FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_hit"), Hit.ImpactPoint, 1.f, 1.2f);
+		}
 		SetActorLocation(Hit.ImpactPoint - Vel.GetSafeNormal() * 30.f);
 		bStuck = true;
 		FErtAudio::PlaySfx(GetWorld(), TEXT("arrow_wall"), Hit.ImpactPoint, 0.7f);

@@ -190,6 +190,13 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
   Grafika sifati (Past/O'rta/Yuqori/Epik - `SetOverallScalabilityLevel`), VSync. `UGameUserSettings::ApplySettings` + `SaveSettings`
   (GameUserSettings.ini). Chap/O'ng yoki Enter bilan o'zgartiriladi. Intel GPU uchun tavsiya: Past/O'rta, VSync yoqilgan.
 
+## Oba faoliyatlari
+- Kamon musobaqasi (Turgut dialogi): mashq maydonida 3 ta `AErtTarget` (somon halqa, kolliziyali), +10 o'q, 60 s ichida 5 tegish;
+  o'q nishonga tegsa ochko va tebranish. G'alaba: +30 oltin, +60 XP, +1 or.
+- Kurash (Bamsi dialogi): 12 s, LMB tez bosish kuch chizig'ini oshiradi, Bamsi qarshiligi vaqt o'tgan sari kuchayadi; 100% - g'alaba
+  (+50 XP, +2 or), 0% - mag'lubiyat. HUD paneli va natija matni.
+- Dialogdagi `act_archery` / `act_wrestle` bayroqlari -> `StartActivity(1|2)`.
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

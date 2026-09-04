@@ -147,6 +147,7 @@ void AErtCharacter::UpdateSteps(float Dt)
 void AErtCharacter::OnAttackPressed()
 {
 	if (!bInputEnabled || bMantling || bDead) return;
+	if (AErtGameMode* GMw = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) if (GMw->Activity == 2) { GMw->WrestlePress(); return; }
 	AttackHoldT = 0.f; bHeavyDone = false;
 }
 
