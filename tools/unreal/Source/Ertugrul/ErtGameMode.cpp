@@ -204,15 +204,15 @@ void AErtGameMode::Tick(float Dt)
 	const float Day = FMath::Clamp((Elev + 4.f) / 16.f, 0.f, 1.f);
 	if (UDirectionalLightComponent* DL = Sun->GetComponent())
 	{
-		DL->SetIntensity(FMath::Lerp(0.5f, 7.f, Day));
+		DL->SetIntensity(FMath::Lerp(0.9f, 7.f, Day));
 		DL->SetLightColor(FMath::Lerp(FLinearColor(0.45f, 0.55f, 0.9f), FMath::Lerp(FLinearColor(1.f, 0.62f, 0.35f), FLinearColor(1.f, 0.96f, 0.9f), FMath::Clamp(Elev / 25.f, 0.f, 1.f)), Day));
 	}
-	if (Sky && Sky->GetLightComponent()) Sky->GetLightComponent()->SetIntensity(FMath::Lerp(0.25f, 1.f, Day));
+	if (Sky && Sky->GetLightComponent()) Sky->GetLightComponent()->SetIntensity(FMath::Lerp(0.4f, 1.f, Day));
 	if (!PPV) PPV = Cast<APostProcessVolume>(UGameplayStatics::GetActorOfClass(this, APostProcessVolume::StaticClass()));
 	if (PPV)
 	{
 		// Tunda ekspozitsiya pastroq, ranglar so'nik va ko'kimtir
-		PPV->Settings.bOverride_AutoExposureBias = true; PPV->Settings.AutoExposureBias = FMath::Lerp(-2.2f, 0.3f, Day);
+		PPV->Settings.bOverride_AutoExposureBias = true; PPV->Settings.AutoExposureBias = FMath::Lerp(-0.9f, 0.3f, Day);
 		PPV->Settings.bOverride_ColorSaturation = true; const float Sat = FMath::Lerp(0.55f, 1.12f, Day); PPV->Settings.ColorSaturation = FVector4(Sat, Sat, Sat, 1.f);
 		PPV->Settings.bOverride_ColorGain = true; PPV->Settings.ColorGain = FVector4(FMath::Lerp(0.75f, 1.f, Day), FMath::Lerp(0.85f, 1.f, Day), 1.f, 1.f);
 	}
