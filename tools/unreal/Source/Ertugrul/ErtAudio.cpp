@@ -29,7 +29,7 @@ UAudioComponent* FErtAudio::PlayWav(UWorld* World, const FString& Path, const FV
 {
 	if (!World) return nullptr;
 	TArray<uint8> Bytes;
-	if (!FFileHelper::LoadFileToArray(Bytes, *Path) || Bytes.Num() < 44) { UE_LOG(LogErtugrul, Warning, TEXT("WAV topilmadi: %s"), *Path); return nullptr; }
+	if (!FFileHelper::LoadFileToArray(Bytes, *Path) || Bytes.Num() < 44) { UE_LOG(LogErtugrul, Verbose, TEXT("WAV topilmadi: %s"), *Path); return nullptr; }
 	// RIFF: fmt va data bo'laklarini topamiz
 	int32 Ch = 1, Rate = 22050, Bits = 16, DataOff = -1, DataLen = 0;
 	int32 P = 12;

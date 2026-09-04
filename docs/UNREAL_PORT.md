@@ -179,6 +179,12 @@ Loyiha: `D:\Unreal_projects\Ertugrul\Ertugrul.uproject` (manbalar shu repoda `to
   boss 150), o'q (kamonchi 3-7, boshqalar 35% da 1-3), dori (12%/35%, boss 3). [E] bilan olinadi, HUD "O'lja: ..." ko'rsatadi.
   Oltin endi faqat o'ljadan (o'ldirganda XP saqlanadi).
 
+## Ovozli salomlashuv va dialog ovozi
+- NPC 4 m ga yaqinlashganda salomlashadi (20 s da bir): or/iymon >= 10 - hurmatli, <= -5 - sovuq, ayollar - "choy ichasizmi?"; boshi ustida matn 3 s.
+- Dialog tugunlari ochilganda `vo/<til>/<text_key>.wav` o'ynaydi (bo'lsa). Yopilganda to'xtaydi.
+- Placeholder ovozlar `tools/unreal/Scripts/gen_tts.ps1` bilan Windows SAPI (Zira, en-US) dan yaratildi: 552 fayl (DLG_* va greet.* x 3 til,
+  ~180 kalit). Haqiqiy diktor yozuvlari shu nomlar bilan almashtiriladi. Fayllar repoga qo'shilmaydi (Content/Ertugrul/Data/audio).
+
 ## Render sozlamalari (Intel iGPU)
 Lumen/VSM/Nanite/Distance Fields o'chirilgan, FXAA, auto-exposure yoqilgan, bulut (VolumetricCloud) olib tashlangan
 (SM5 da bulut shaderlari har biri ~1 daqiqa kompilyatsiya bo'lardi).

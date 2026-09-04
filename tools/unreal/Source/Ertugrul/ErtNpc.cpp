@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "ErtGameMode.h"
 #include "Engine/World.h"
+#include "ErtAudio.h"
 
 AErtNpc::AErtNpc()
 {
@@ -16,7 +17,7 @@ void AErtNpc::Setup(const FString& InId, const FString& NameKey, const FString& 
 {
 	Id = InId; LocName = NameKey; DialogId = InDialogId; HomeYaw = Yaw;
 	Body->Kaftan = Kaftan;
-	Body->bWoman = bWoman;
+	Body->bWoman = bWoman; bWomanNpc = bWoman;
 	FRandomStream RS(GetTypeHash(InId));
 	Body->Fur = FLinearColor(0.55f + RS.FRand() * 0.35f, 0.5f + RS.FRand() * 0.3f, 0.4f + RS.FRand() * 0.3f);
 	Body->Beard = RS.FRand() < 0.35f ? FLinearColor(0.7f, 0.68f, 0.64f) : FLinearColor(0.16f, 0.11f, 0.06f);
@@ -61,6 +62,20 @@ void AErtNpc::Tick(float Dt)
 			if (GetWorld()->LineTraceSingleByChannel(Hit, GetActorLocation(), GetActorLocation() + To.GetSafeNormal() * 90.f, ECC_Visibility, Q)) { Target = GetActorLocation(); Speed = 0.f; }
 			else SetActorLocation(NewPos);
 		}
+	}
+	// Salomlashuv: o'yinchi 4 m ga yaqinlashsa (20 s da bir), or/iymonga qarab
+	GreetCD = FMath::Max(0.f, GreetCD - Dt); GreetT = FMath::Max(0.f, GreetT - Dt);
+	if (!bTalking && GreetCD <= 0.f && DPl < 400.f && Pl)
+	{
+		GreetCD = 20.f; GreetT = 3.f;
+		const int32 Hn = GM ? GM->GetHonor() : 0;
+		FString Key;
+		if (Hn >= 10) Key = FMath::RandBool() ? TEXT("greet.high.1") : TEXT("greet.high.2");
+		else if (Hn <= -5) Key = FMath::RandBool() ? TEXT("greet.low.1") : TEXT("greet.low.2");
+		else if (bWomanNpc && FMath::FRand() < 0.5f) Key = TEXT("greet.woman.1");
+		else Key = FString::Printf(TEXT("greet.normal.%d"), FMath::RandRange(1, 3));
+		GreetText = FErtLoc::Get().Tr(Key);
+		FErtAudio::PlayVo(GetWorld(), Key, 0.9f);
 	}
 	float TargetYaw = HomeYaw;
 	if (Speed > 0.f) TargetYaw = (Target - GetActorLocation()).Rotation().Yaw;

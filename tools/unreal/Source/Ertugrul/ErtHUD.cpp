@@ -121,6 +121,18 @@ void AErtHUD::DrawHUD()
 		if (E->IsWindingUp()) Text(TEXT("OG'IR ZARBA - DODGE (X)!"), SW * 0.5f - TextWidth(TEXT("OG'IR ZARBA - DODGE (X)!"), Sc, false) * 0.5f, BY + 18 * Sc, FLinearColor(1.f, 0.5f, 0.2f), Sc);
 		break;
 	}
+	// --- NPC salomlashuv matni ---
+	{
+		TArray<AActor*> Npcs; UGameplayStatics::GetAllActorsOfClass(GetWorld(), AErtNpc::StaticClass(), Npcs);
+		for (AActor* A : Npcs)
+		{
+			AErtNpc* Np = Cast<AErtNpc>(A);
+			if (!Np || Np->GetGreetT() <= 0.f) continue;
+			const FVector S = Project(Np->GetActorLocation() + FVector(0, 0, 120.f));
+			if (S.Z <= 0.f) continue;
+			Text(Np->GetGreetText(), S.X - TextWidth(Np->GetGreetText(), 0.95f * Sc, false) * 0.5f, S.Y - 20 * Sc, FLinearColor(0.95f, 0.95f, 0.85f, FMath::Min(1.f, Np->GetGreetT())), 0.95f * Sc);
+		}
+	}
 	// --- markerlar (dunyo -> ekran) ---
 	TArray<FVector> Pts; D->GetMarkers(Pts);
 	if (H)

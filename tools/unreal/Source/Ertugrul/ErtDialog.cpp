@@ -1,6 +1,9 @@
 #include "ErtDialog.h"
 #include "Ertugrul.h"
 #include "ErtLoc.h"
+#include "ErtAudio.h"
+#include "Engine/World.h"
+#include "Engine/Engine.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
 #include "Dom/JsonObject.h"
@@ -64,6 +67,7 @@ void FErtDialog::Enter(const FString& NodeId)
 	if (NodeId == TEXT("end") || !Nodes.Contains(NodeId)) { End(); return; }
 	Cur = NodeId;
 	const FErtDlgNode& N = Nodes[Cur];
+	if (GEngine && GEngine->GetWorldContexts().Num()) FErtAudio::PlayVo(GEngine->GetWorldContexts()[0].World(), N.TextKey, 1.f);
 	if (!N.SetFlag.IsEmpty() && Flags) Flags->Add(N.SetFlag);
 	VisibleOpts.Reset(); OptTexts.Reset(); Sel = 0;
 	for (int32 i = 0; i < N.Options.Num(); ++i)
@@ -102,6 +106,7 @@ void FErtDialog::MoveSelection(int32 Delta)
 
 void FErtDialog::End()
 {
+	if (bActive) FErtAudio::StopVo();
 	bActive = false;
 	Cur.Reset(); OptTexts.Reset(); VisibleOpts.Reset();
 }

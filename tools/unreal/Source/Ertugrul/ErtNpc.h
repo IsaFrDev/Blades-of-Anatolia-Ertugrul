@@ -28,6 +28,13 @@ private:
 	FVector HomePos = FVector::ZeroVector, Target = FVector::ZeroVector;
 	float WanderT = 3.f;
 	bool bTalking = false;
+	float GreetCD = 0.f;
+	FString GreetText; float GreetT = 0.f;
+	bool bWomanNpc = false;
+public:
+	const FString& GetGreetText() const { return GreetText; }
+	float GetGreetT() const { return GreetT; }
+private:
 public:
 	void SetTalking(bool b) { bTalking = b; }
 };
