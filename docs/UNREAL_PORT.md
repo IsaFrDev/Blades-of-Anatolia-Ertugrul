@@ -317,3 +317,8 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Yangi uslublar (`ErtCol::StyleCloth` 0.10, `StyleLeather` 0.32, `StyleMetal` 0.50, `StyleFur` 0.70, `StyleSkin` 0.90): material HLSL 11 diapazonga bo'lindi (0.05 qadam). Mato: mayda to'qima; charm: ikki shovqinli don; metall: halqa (zanjir) naqshi, metallik 0.7, roughness 0.45+; jun: tolali chiziqlar; badan: nozik teri doni. Roughness va metallik alohida Custom tugunlarda (`ErtRough`, `ErtMetal`).
 - `UErtHeroBody`: Build/SetShield/SetSwordTier ichida a'zo ranglari uslubli mahalliy nusxalar (KaftanS, LeatherS, SkinS, SteelS, FurS, BeardS, TrimS, TrousersS) bilan ishlatiladi; qalqon yog'och uslubi. Dushman va NPC ham shu tanadan foydalanadi.
 - `AErtHorse`: yung (CoatF, Dark, Mane, WhiteM) jun uslubi, egar/tasmalar charm, gilam mato, uzangi/suvliq metall; tuya ham. Kiyik (`BuildDeer`) jun.
+
+## Tabiat materiallari
+
+- Yangi uslublar: `StyleFelt` 0.12 (kigiz, o'tovlar), `StyleRock` 0.27 (tabiiy qoya: uch qatlam shovqin + yoriq chiziqlari, kuchli relyef), `StyleBark` 0.64 (po'stloq: vertikal chiziqlar), `StyleLeaf` 0.97 (barg: ikki qatlam shovqin). Diapazonlar: tosh [0.15,0.24), qoya [0.24,0.30), mato [0.05,0.108), kigiz [0.108,0.15), tom [0.56,0.62), po'stloq [0.62,0.66), barg [0.96,0.99), oddiy >= 0.99.
+- `AddTree`/`AddPalm`/shahar daraxtlari (Plane, Cyp, Poplar, Pine, Fruit, Willow, tut) barg+po'stloq; `BuildRocks` qoya uslubi (avval tosh blok bo'lib qolgan edi); `AddYurt` devor/tom kigiz (Felt, Cream, FeltDark, Mo'g'ul o'tovi). Alfani siljituvchi tuslar (`Leaf * 1.1f`, `Trunk * 0.8f`, `FeltDark * 0.85f`, `Basalt * 1.4f`) `Sty` bilan tuzatildi.

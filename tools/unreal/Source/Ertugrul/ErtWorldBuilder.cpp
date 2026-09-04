@@ -24,7 +24,7 @@ namespace
 		{{-470, -280}, {-470, -470}, 8}, {{-470, -470}, {-470, -660}, 8}, {{-660, -470}, {-280, -470}, 8},
 	};
 	const FLinearColor Stone = ErtCol::Sty(FLinearColor(0.46f, 0.44f, 0.41f), ErtCol::StyleStone), Wood = ErtCol::Sty(FLinearColor(0.36f, 0.24f, 0.13f), ErtCol::StyleWood), DarkWood = ErtCol::Sty(FLinearColor(0.24f, 0.16f, 0.09f), ErtCol::StyleWood);
-	const FLinearColor Felt(0.86f, 0.82f, 0.72f), FeltDark(0.24f, 0.22f, 0.20f), Cream(0.90f, 0.86f, 0.74f);
+	const FLinearColor Felt = ErtCol::Sty(FLinearColor(0.86f, 0.82f, 0.72f), ErtCol::StyleFelt), FeltDark = ErtCol::Sty(FLinearColor(0.24f, 0.22f, 0.20f), ErtCol::StyleFelt), Cream = ErtCol::Sty(FLinearColor(0.90f, 0.86f, 0.74f), ErtCol::StyleFelt);
 	const FLinearColor Gold(0.95f, 0.76f, 0.22f), Red(0.55f, 0.10f, 0.08f), Ochre(0.74f, 0.63f, 0.46f);
 	const FLinearColor Flame(1.0f, 0.55f, 0.08f), Ember(0.9f, 0.25f, 0.05f), Straw(0.80f, 0.70f, 0.40f);
 }
@@ -438,10 +438,10 @@ void AErtWorldBuilder::AddYurt(FErtMeshData& M, float E, float N, float Z, float
 
 void AErtWorldBuilder::AddTree(FErtMeshData& M, float E, float N, float Z, float Sc, bool bPine, int32 S)
 {
-	const FLinearColor Trunk = ErtCol::Vary(FLinearColor(0.30f, 0.20f, 0.11f), 0.15f, S);
+	const FLinearColor Trunk = ErtCol::Vary(ErtCol::Sty(FLinearColor(0.30f, 0.20f, 0.11f), ErtCol::StyleBark), 0.15f, S);
 	if (bPine)
 	{
-		const FLinearColor Leaf = ErtCol::Vary(FLinearColor(0.09f, 0.24f, 0.10f), 0.18f, S + 7);
+		const FLinearColor Leaf = ErtCol::Vary(ErtCol::Sty(FLinearColor(0.09f, 0.24f, 0.10f), ErtCol::StyleLeaf), 0.18f, S + 7);
 		M.AddCylinder(W(E, N, Z - 0.3f), 0.32f * Sc, 0.22f * Sc, 4.2f * Sc, 5, Trunk, false);
 		M.AddCone(W(E, N, Z + 2.2f * Sc), 2.6f * Sc, 3.4f * Sc, 7, Leaf);
 		M.AddCone(W(E, N, Z + 4.4f * Sc), 2.1f * Sc, 3.0f * Sc, 7, Leaf * 1.08f);
@@ -449,10 +449,10 @@ void AErtWorldBuilder::AddTree(FErtMeshData& M, float E, float N, float Z, float
 	}
 	else
 	{
-		const FLinearColor Leaf = ErtCol::Vary(FLinearColor(0.20f, 0.38f, 0.12f), 0.2f, S + 7);
+		const FLinearColor Leaf = ErtCol::Vary(ErtCol::Sty(FLinearColor(0.20f, 0.38f, 0.12f), ErtCol::StyleLeaf), 0.2f, S + 7);
 		M.AddCylinder(W(E, N, Z - 0.3f), 0.4f * Sc, 0.28f * Sc, 3.2f * Sc, 6, Trunk, false);
 		M.AddSphere(W(E, N, Z + 4.4f * Sc), 2.6f * Sc, 8, Leaf, FVector(1.f, 1.f, 0.85f), 0.12f, S);
-		M.AddSphere(W(E + 1.2f * Sc, N + 0.6f * Sc, Z + 5.6f * Sc), 1.8f * Sc, 7, Leaf * 1.1f, FVector::OneVector, 0.15f, S + 3);
+		M.AddSphere(W(E + 1.2f * Sc, N + 0.6f * Sc, Z + 5.6f * Sc), 1.8f * Sc, 7, ErtCol::Sty(Leaf * 1.1f, ErtCol::StyleLeaf), FVector::OneVector, 0.15f, S + 3);
 	}
 }
 
@@ -628,7 +628,7 @@ void AErtWorldBuilder::BuildOba()
 				if (u > -84 && u < -54 && v > 38 && v < 66) continue;                // otxona
 				if (FMath::Abs(u) > ObaHalf - 8.f || FMath::Abs(v) > ObaHalf - 8.f) continue;
 				const float DoorYaw = FMath::RadiansToDegrees(FMath::Atan2(-v, -u));
-				AddYurt(M, OE(u), ON(v), Z, 2.5f, 1.8f, 1.7f, Felt, FLinearColor(0.72f, 0.66f, 0.55f), DoorYaw, ++K);
+				AddYurt(M, OE(u), ON(v), Z, 2.5f, 1.8f, 1.7f, Felt, ErtCol::Sty(FLinearColor(0.72f, 0.66f, 0.55f), ErtCol::StyleFelt), DoorYaw, ++K);
 			}
 		M.Commit(NewPart(TEXT("ObaYurts"), true), 0, true);
 	}
@@ -959,7 +959,7 @@ void AErtWorldBuilder::BuildCamp()
 	FErtMeshData M(100.f);
 	int32 K = 500;
 	// Xon chodiri + tug'lar
-	AddYurt(M, KE(0), KN(0), Z, 8.f, 3.f, 4.2f, FLinearColor(0.38f, 0.10f, 0.09f), FLinearColor(0.22f, 0.08f, 0.07f), -90.f, ++K);
+	AddYurt(M, KE(0), KN(0), Z, 8.f, 3.f, 4.2f, ErtCol::Sty(FLinearColor(0.38f, 0.10f, 0.09f), ErtCol::StyleFelt), ErtCol::Sty(FLinearColor(0.22f, 0.08f, 0.07f), ErtCol::StyleFelt), -90.f, ++K);
 	M.AddCylinder(W(KE(0), KN(0), Z + 2.9f), 8.6f, 8.6f, 0.4f, 12, Gold * 0.8f, false);
 	for (int32 i = 0; i < 6; ++i) { const float A = 2.f * PI * i / 6; AddBanner(M, KE(FMath::Cos(A) * 11.f), KN(FMath::Sin(A) * 11.f), Z, 6.5f, Red, true); }
 	// Gerlar halqalarda
@@ -972,7 +972,7 @@ void AErtWorldBuilder::BuildCamp()
 			const float u = FMath::Cos(A) * Rings[r] + RS.FRandRange(-4.f, 4.f), v = FMath::Sin(A) * Rings[r] + RS.FRandRange(-4.f, 4.f);
 			if (u < -CampR + 30.f && FMath::Abs(v) < 12.f) continue; // g'arbiy kirish yo'li
 			if (RS.FRand() < 0.12f) { AddFire(M, KE(u), KN(v), Z, Lights.Num() < 12); continue; }
-			AddYurt(M, KE(u), KN(v), Z, 3.f, 1.7f, 1.5f, FeltDark, FeltDark * 0.85f, FMath::RadiansToDegrees(FMath::Atan2(-v, -u)), ++K);
+			AddYurt(M, KE(u), KN(v), Z, 3.f, 1.7f, 1.5f, FeltDark, ErtCol::Sty(FeltDark * 0.85f, ErtCol::StyleFelt), FMath::RadiansToDegrees(FMath::Atan2(-v, -u)), ++K);
 		}
 	// Tikanli qoziq halqasi (tashqariga qiya)
 	for (int32 i = 0; i < 300; ++i)
@@ -1079,7 +1079,7 @@ void AErtWorldBuilder::BuildRocks()
 		if (FMath::Abs(E - RiverE(N)) < 45.f) P = 0.25f;
 		if (RS.FRand() > P || !IsBuildable(E, N) || DF < FortHalf + 45.f) continue;
 		const float R = RS.FRandRange(1.0f, 4.5f) * (H > 100.f ? 1.6f : 1.f);
-		M.AddSphere(W(E, N, H - R * 0.35f), R, 8, ErtCol::Vary(H > 150.f ? FLinearColor(0.7f, 0.7f, 0.72f) : Stone, 0.12f, Placed), FVector(RS.FRandRange(0.7f, 1.4f), RS.FRandRange(0.7f, 1.4f), RS.FRandRange(0.5f, 0.9f)), 0.18f, Placed);
+		M.AddSphere(W(E, N, H - R * 0.35f), R, 8, ErtCol::Vary(ErtCol::Sty(H > 150.f ? FLinearColor(0.7f, 0.7f, 0.72f) : FLinearColor(0.43f, 0.41f, 0.38f), ErtCol::StyleRock), 0.12f, Placed), FVector(RS.FRandRange(0.7f, 1.4f), RS.FRandRange(0.7f, 1.4f), RS.FRandRange(0.5f, 0.9f)), 0.18f, Placed);
 		++Placed;
 	}
 	if (M.Verts.Num()) M.Commit(NewPart(TEXT("Rocks"), true), 0, true);
@@ -1101,7 +1101,7 @@ void AErtWorldBuilder::AddPalm(FErtMeshData& M, float E, float N, float Z, float
 {
 	FRandomStream RS(S);
 	const float LeanA = RS.FRandRange(0.f, 2.f * PI), Lean = RS.FRandRange(0.6f, 1.8f);
-	const FLinearColor Trunk(0.42f, 0.32f, 0.18f), Leaf(0.16f, 0.40f, 0.14f);
+	const FLinearColor Trunk = ErtCol::Sty(FLinearColor(0.42f, 0.32f, 0.18f), ErtCol::StyleBark), Leaf = ErtCol::Sty(FLinearColor(0.16f, 0.40f, 0.14f), ErtCol::StyleLeaf);
 	FVector Top = W(E, N, Z);
 	const int32 Segs = 6;
 	for (int32 i = 0; i < Segs; ++i)
@@ -1449,7 +1449,7 @@ void AErtWorldBuilder::BuildKonya()
 	const float Z = KonZ, TopZ = KonZ + KonHillH;
 	auto KE = [](float u) { return KonE + u; };
 	auto KN = [](float v) { return KonN + v; };
-	const FLinearColor KStone = ErtCol::Sty(FLinearColor(0.76f, 0.70f, 0.58f), ErtCol::StyleStone), KDark = ErtCol::Sty(FLinearColor(0.50f, 0.45f, 0.38f), ErtCol::StyleStone), KWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Turq(0.12f, 0.58f, 0.62f), Tile = ErtCol::Sty(FLinearColor(0.16f, 0.32f, 0.62f), ErtCol::StyleRoof), KGold(0.9f, 0.75f, 0.25f), Plane(0.22f, 0.45f, 0.18f), Trunk(0.55f, 0.50f, 0.42f);
+	const FLinearColor KStone = ErtCol::Sty(FLinearColor(0.76f, 0.70f, 0.58f), ErtCol::StyleStone), KDark = ErtCol::Sty(FLinearColor(0.50f, 0.45f, 0.38f), ErtCol::StyleStone), KWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Turq(0.12f, 0.58f, 0.62f), Tile = ErtCol::Sty(FLinearColor(0.16f, 0.32f, 0.62f), ErtCol::StyleRoof), KGold(0.9f, 0.75f, 0.25f), Plane = ErtCol::Sty(FLinearColor(0.22f, 0.45f, 0.18f), ErtCol::StyleLeaf), Trunk = ErtCol::Sty(FLinearColor(0.55f, 0.50f, 0.42f), ErtCol::StyleBark);
 	// Devor: 24 burchak, har burchakda burj (Konya "yuz burj" shahri), sharqiy va g'arbiy darvozalar
 	const int32 Sides = 24;
 	for (int32 i = 0; i < Sides; ++i)
@@ -1592,7 +1592,7 @@ void AErtWorldBuilder::BuildKayseri()
 	const float Z = KayZ;
 	auto QE = [](float u) { return KayE + u; };
 	auto QN = [](float v) { return KayN + v; };
-	const FLinearColor Basalt = ErtCol::Sty(FLinearColor(0.26f, 0.25f, 0.26f), ErtCol::StyleStone), BasaltL = ErtCol::Sty(FLinearColor(0.40f, 0.38f, 0.37f), ErtCol::StyleStone), Mortar(0.62f, 0.58f, 0.52f), QWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), QRed(0.55f, 0.10f, 0.08f), Poplar(0.30f, 0.50f, 0.20f);
+	const FLinearColor Basalt = ErtCol::Sty(FLinearColor(0.26f, 0.25f, 0.26f), ErtCol::StyleStone), BasaltL = ErtCol::Sty(FLinearColor(0.40f, 0.38f, 0.37f), ErtCol::StyleStone), Mortar(0.62f, 0.58f, 0.52f), QWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), QRed(0.55f, 0.10f, 0.08f), Poplar = ErtCol::Sty(FLinearColor(0.30f, 0.50f, 0.20f), ErtCol::StyleLeaf);
 	// Tashqi devor: 20 burchak, qora bazalt, kungurali, yarim dumaloq burjlar; g'arbiy va shimoliy darvozalar
 	const int32 Sides = 20;
 	for (int32 i = 0; i < Sides; ++i)
@@ -1634,7 +1634,7 @@ void AErtWorldBuilder::BuildKayseri()
 			M.AddCylinder(W(QE(u), QN(v), Z), 4.5f, 4.f, 14.f, 10, ErtCol::Vary(Basalt, 0.04f, ++S), true);
 			M.AddCylinder(W(QE(u), QN(v), Z + 14.f), 4.9f, 4.9f, 1.f, 10, BasaltL, true);
 		}
-		M.AddBox(W(QE(CU), QN(CV - HD), Z + 5.f), FVector(300, 300, 80), Basalt * 1.4f);   // darvoza yo'lagi usti
+		M.AddBox(W(QE(CU), QN(CV - HD), Z + 5.f), FVector(300, 300, 80), ErtCol::Sty(Basalt * 1.4f, ErtCol::StyleStone));   // darvoza yo'lagi usti
 		M.AddBox(W(QE(CU - 5.f), QN(CV + 5.f), Z + 4.f), FVector(1600, 1000, 400), ErtCol::Vary(BasaltL, 0.03f, ++S));   // saroy
 		M.AddBox(W(QE(CU - 5.f), QN(CV + 5.f), Z + 9.5f), FVector(900, 600, 150), ErtCol::Vary(BasaltL, 0.03f, ++S));
 		M.AddSphere(W(QE(CU - 5.f), QN(CV + 5.f), Z + 11.f), 4.5f, 12, Lead, FVector(1, 1, 0.7f));
@@ -1861,7 +1861,7 @@ void AErtWorldBuilder::BuildErzurum()
 	const float Z = ErzZ, TopZ = ErzZ + ErzHillH;
 	auto XE = [](float u) { return ErzE + u; };
 	auto XN = [](float v) { return ErzN + v; };
-	const FLinearColor Grey = ErtCol::Sty(FLinearColor(0.58f, 0.56f, 0.52f), ErtCol::StyleStone), GreyD = ErtCol::Sty(FLinearColor(0.42f, 0.40f, 0.38f), ErtCol::StyleStone), Brick = ErtCol::Sty(FLinearColor(0.60f, 0.38f, 0.26f), ErtCol::StyleBrick), BrickD = ErtCol::Sty(FLinearColor(0.46f, 0.28f, 0.18f), ErtCol::StyleBrick), Turq(0.12f, 0.58f, 0.62f), XWood = ErtCol::Sty(FLinearColor(0.36f, 0.24f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), XRed(0.55f, 0.10f, 0.08f), Pine(0.10f, 0.32f, 0.16f), Snow(0.95f, 0.96f, 1.0f);
+	const FLinearColor Grey = ErtCol::Sty(FLinearColor(0.58f, 0.56f, 0.52f), ErtCol::StyleStone), GreyD = ErtCol::Sty(FLinearColor(0.42f, 0.40f, 0.38f), ErtCol::StyleStone), Brick = ErtCol::Sty(FLinearColor(0.60f, 0.38f, 0.26f), ErtCol::StyleBrick), BrickD = ErtCol::Sty(FLinearColor(0.46f, 0.28f, 0.18f), ErtCol::StyleBrick), Turq(0.12f, 0.58f, 0.62f), XWood = ErtCol::Sty(FLinearColor(0.36f, 0.24f, 0.12f), ErtCol::StyleWood), Lead(0.45f, 0.47f, 0.52f), XRed(0.55f, 0.10f, 0.08f), Pine = ErtCol::Sty(FLinearColor(0.10f, 0.32f, 0.16f), ErtCol::StyleLeaf), Snow(0.95f, 0.96f, 1.0f);
 	auto Minaret = [&](float u, float v, float Zb, float Hh, float R0)
 	{
 		M.AddBox(W(XE(u), XN(v), Zb + 2.5f), FVector(R0 * 130.f, R0 * 130.f, 250), Grey);
@@ -1998,7 +1998,7 @@ void AErtWorldBuilder::BuildBursa()
 	const float Z = BurZ, TopZ = BurZ + BurHillH;
 	auto BE = [](float u) { return BurE + u; };
 	auto BN = [](float v) { return BurN + v; };
-	const FLinearColor BStone = ErtCol::Sty(FLinearColor(0.80f, 0.74f, 0.62f), ErtCol::StyleStone), BStoneD = ErtCol::Sty(FLinearColor(0.62f, 0.56f, 0.46f), ErtCol::StyleStone), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), TurqD(0.08f, 0.42f, 0.48f), Tile = ErtCol::Sty(FLinearColor(0.62f, 0.30f, 0.18f), ErtCol::StyleRoof), BWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), White(0.92f, 0.90f, 0.85f), Plane(0.22f, 0.45f, 0.18f), Trunk(0.55f, 0.50f, 0.42f), BRed(0.55f, 0.10f, 0.08f), Steam(0.85f, 0.88f, 0.9f);
+	const FLinearColor BStone = ErtCol::Sty(FLinearColor(0.80f, 0.74f, 0.62f), ErtCol::StyleStone), BStoneD = ErtCol::Sty(FLinearColor(0.62f, 0.56f, 0.46f), ErtCol::StyleStone), Lead(0.45f, 0.47f, 0.52f), Turq(0.12f, 0.58f, 0.62f), TurqD(0.08f, 0.42f, 0.48f), Tile = ErtCol::Sty(FLinearColor(0.62f, 0.30f, 0.18f), ErtCol::StyleRoof), BWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), White(0.92f, 0.90f, 0.85f), Plane = ErtCol::Sty(FLinearColor(0.22f, 0.45f, 0.18f), ErtCol::StyleLeaf), Trunk = ErtCol::Sty(FLinearColor(0.55f, 0.50f, 0.42f), ErtCol::StyleBark), BRed(0.55f, 0.10f, 0.08f), Steam(0.85f, 0.88f, 0.9f);
 	auto Minaret = [&](float u, float v, float Zb, float Hh)
 	{
 		M.AddBox(W(BE(u), BN(v), Zb + 2.f), FVector(160, 160, 200), BStone);
@@ -2117,8 +2117,8 @@ void AErtWorldBuilder::BuildBursa()
 		const float u = FMath::Cos(A) * R, v = FMath::Sin(A) * R;
 		if (FMath::Abs(v) < 10.f && u > 0.f) continue;
 		const float ZZ = HeightAt(BE(u), BN(v));
-		M.AddCylinder(W(BE(u), BN(v), ZZ), 0.25f, 0.2f, 1.8f, 5, Trunk * 0.8f, true);
-		M.AddSphere(W(BE(u), BN(v), ZZ + 2.8f), 2.f, 6, ErtCol::Vary(FLinearColor(0.30f, 0.52f, 0.18f), 0.1f, ++S), FVector(1, 1, 0.8f));
+		M.AddCylinder(W(BE(u), BN(v), ZZ), 0.25f, 0.2f, 1.8f, 5, ErtCol::Sty(Trunk * 0.8f, ErtCol::StyleBark), true);
+		M.AddSphere(W(BE(u), BN(v), ZZ + 2.8f), 2.f, 6, ErtCol::Vary(ErtCol::Sty(FLinearColor(0.30f, 0.52f, 0.18f), ErtCol::StyleLeaf), 0.1f, ++S), FVector(1, 1, 0.8f));
 	}
 	AddBanner(M, BE(BurR + 3.f), BN(-9.f), Z, 6.f, BRed, false);
 	AddBanner(M, BE(BurR + 3.f), BN(9.f), Z, 6.f, BRed, false);
@@ -2135,7 +2135,7 @@ void AErtWorldBuilder::BuildNikeya()
 	const float Z = NikZ;
 	auto NE = [](float u) { return NikE + u; };
 	auto NN = [](float v) { return NikN + v; };
-	const FLinearColor NStone = ErtCol::Sty(FLinearColor(0.70f, 0.66f, 0.58f), ErtCol::StyleStone), NStoneD = ErtCol::Sty(FLinearColor(0.55f, 0.52f, 0.46f), ErtCol::StyleStone), Brick = ErtCol::Sty(FLinearColor(0.60f, 0.32f, 0.22f), ErtCol::StyleBrick), Marble(0.90f, 0.88f, 0.84f), Lead(0.45f, 0.47f, 0.52f), Tile = ErtCol::Sty(FLinearColor(0.62f, 0.32f, 0.20f), ErtCol::StyleRoof), NWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Purple(0.35f, 0.10f, 0.35f), GoldC(0.9f, 0.75f, 0.25f), Cyp(0.10f, 0.30f, 0.14f);
+	const FLinearColor NStone = ErtCol::Sty(FLinearColor(0.70f, 0.66f, 0.58f), ErtCol::StyleStone), NStoneD = ErtCol::Sty(FLinearColor(0.55f, 0.52f, 0.46f), ErtCol::StyleStone), Brick = ErtCol::Sty(FLinearColor(0.60f, 0.32f, 0.22f), ErtCol::StyleBrick), Marble(0.90f, 0.88f, 0.84f), Lead(0.45f, 0.47f, 0.52f), Tile = ErtCol::Sty(FLinearColor(0.62f, 0.32f, 0.20f), ErtCol::StyleRoof), NWood = ErtCol::Sty(FLinearColor(0.38f, 0.25f, 0.12f), ErtCol::StyleWood), Purple(0.35f, 0.10f, 0.35f), GoldC(0.9f, 0.75f, 0.25f), Cyp = ErtCol::Sty(FLinearColor(0.10f, 0.30f, 0.14f), ErtCol::StyleLeaf);
 	// Vizantiya devori: g'isht qatorli tosh (band), dumaloq burjlar; qo'sh devor (tashqi past, ichki baland); 4 darvoza (N ko'l, S, E, W)
 	auto Ring = [&](float R, float Hh, float Thick, int32 Sides, bool bTowers, bool bGates)
 	{
@@ -2352,7 +2352,7 @@ void AErtWorldBuilder::BuildSogut()
 	const float Z = SogZ;
 	auto GE = [](float u) { return SogE + u; };
 	auto GN = [](float v) { return SogN + v; };
-	const FLinearColor Timber = ErtCol::Sty(FLinearColor(0.42f, 0.28f, 0.14f), ErtCol::StyleWood), TimberD = ErtCol::Sty(FLinearColor(0.30f, 0.20f, 0.10f), ErtCol::StyleWood), Plaster(0.88f, 0.84f, 0.72f), Shingle = ErtCol::Sty(FLinearColor(0.36f, 0.26f, 0.16f), ErtCol::StyleRoof), WillowL(0.42f, 0.60f, 0.28f), WillowT(0.35f, 0.28f, 0.18f), Water(0.28f, 0.48f, 0.62f), StoneG = ErtCol::Sty(FLinearColor(0.62f, 0.60f, 0.55f), ErtCol::StyleStone), Lead(0.45f, 0.47f, 0.52f), GreenF(0.16f, 0.45f, 0.18f), Fruit(0.30f, 0.52f, 0.20f), Wheat(0.80f, 0.68f, 0.35f), Hay(0.75f, 0.62f, 0.32f);
+	const FLinearColor Timber = ErtCol::Sty(FLinearColor(0.42f, 0.28f, 0.14f), ErtCol::StyleWood), TimberD = ErtCol::Sty(FLinearColor(0.30f, 0.20f, 0.10f), ErtCol::StyleWood), Plaster(0.88f, 0.84f, 0.72f), Shingle = ErtCol::Sty(FLinearColor(0.36f, 0.26f, 0.16f), ErtCol::StyleRoof), WillowL = ErtCol::Sty(FLinearColor(0.42f, 0.60f, 0.28f), ErtCol::StyleLeaf), WillowT = ErtCol::Sty(FLinearColor(0.35f, 0.28f, 0.18f), ErtCol::StyleBark), Water(0.28f, 0.48f, 0.62f), StoneG = ErtCol::Sty(FLinearColor(0.62f, 0.60f, 0.55f), ErtCol::StyleStone), Lead(0.45f, 0.47f, 0.52f), GreenF(0.16f, 0.45f, 0.18f), Fruit = ErtCol::Sty(FLinearColor(0.30f, 0.52f, 0.20f), ErtCol::StyleLeaf), Wheat(0.80f, 0.68f, 0.35f), Hay(0.75f, 0.62f, 0.32f);
 	auto Willow = [&](float u, float v, float Sc, int32 Sd)
 	{
 		const float ZZ = HeightAt(GE(u), GN(v));

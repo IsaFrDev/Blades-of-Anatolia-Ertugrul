@@ -23,7 +23,7 @@ float s = VC.a;
 #define H2(p) frac(sin(dot(floor(p), float2(127.1, 311.7))) * 43758.5453)
 #define SM(x) ((x) * (x) * (3.0 - 2.0 * (x)))
 #define VN(p) lerp(lerp(H2(p), H2((p) + float2(1, 0)), SM(frac((p).x))), lerp(H2((p) + float2(0, 1)), H2((p) + float2(1, 1)), SM(frac((p).x))), SM(frac((p).y)))
-int st = (s < 0.05) ? 0 : (s < 0.15) ? 1 : (s < 0.30) ? 2 : (s < 0.36) ? 3 : (s < 0.46) ? 4 : (s < 0.56) ? 5 : (s < 0.66) ? 6 : (s < 0.76) ? 7 : (s < 0.86) ? 8 : (s < 0.96) ? 9 : 10;   // 0 tuproq,1 mato,2 tosh,3 charm,4 yog'och,5 metall,6 tom,7 jun,8 g'isht,9 badan,10 oddiy
+int st = (s < 0.05) ? 0 : (s < 0.108) ? 1 : (s < 0.15) ? 14 : (s < 0.24) ? 2 : (s < 0.30) ? 11 : (s < 0.36) ? 3 : (s < 0.46) ? 4 : (s < 0.56) ? 5 : (s < 0.62) ? 6 : (s < 0.66) ? 12 : (s < 0.76) ? 7 : (s < 0.86) ? 8 : (s < 0.96) ? 9 : (s < 0.99) ? 13 : 10;   // 0 tuproq,1 mato,2 tosh,3 charm,4 yog'och,5 metall,6 tom,7 jun,8 g'isht,9 badan,10 oddiy,11 qoya,12 po'stloq,13 barg,14 kigiz
 float2 bs = (st == 2) ? float2(1.2, 0.6) : (st == 4) ? float2(3.0, 0.24) : (st == 6) ? float2(0.32, 0.36) : (st == 8) ? float2(0.30, 0.10) : float2(1, 1);
 float2 mw = (st == 2) ? float2(0.06, 0.10) : (st == 4) ? float2(0.01, 0.07) : (st == 6) ? float2(0.08, 0.05) : float2(0.08, 0.18);
 #define CQ(p) float2((p).x + ((frac(floor((p).y / bs.y) * 0.5) > 0.25) ? bs.x * 0.5 : 0.0), (p).y)
@@ -40,7 +40,11 @@ float2 mw = (st == 2) ? float2(0.06, 0.10) : (st == 4) ? float2(0.01, 0.07) : (s
 #define HMETAL(p) (smoothstep(0.16, 0.10, abs(length(frac((p) * 45.0) - 0.5) - 0.32)))
 #define HFUR(p) (VN(float2((p).x * 12.0, (p).y * 90.0)) * 0.5 + VN((p) * 30.0) * 0.5)
 #define HSKIN(p) (VN((p) * 90.0) * 0.5 + VN((p) * 320.0) * 0.5)
-#define HF(p) ((st == 0) ? HGROUND(p) : (st == 1) ? HCLOTH(p) : (st == 2 || st == 8) ? HSTONE(p) : (st == 3) ? HLEATHER(p) : (st == 4) ? HWOOD(p) : (st == 5) ? HMETAL(p) : (st == 6) ? HROOF(p) : (st == 7) ? HFUR(p) : (st == 9) ? HSKIN(p) : HPLAIN(p))
+#define HROCK(p) (VN((p) * 1.5) * 0.45 + VN((p) * 6.0) * 0.3 + VN((p) * 24.0) * 0.25 - 0.5 * (1.0 - smoothstep(0.0, 0.04, abs(VN((p) * 3.0) - 0.5))))
+#define HBARK(p) (VN(float2((p).x * 28.0, (p).y * 2.5)) * 0.65 + VN((p) * 45.0) * 0.35)
+#define HLEAF(p) (VN((p) * 22.0) * 0.5 + VN((p) * 85.0) * 0.5)
+#define HFELT(p) (VN((p) * 35.0) * 0.6 + VN((p) * 140.0) * 0.4)
+#define HF(p) ((st == 0) ? HGROUND(p) : (st == 1) ? HCLOTH(p) : (st == 2 || st == 8) ? HSTONE(p) : (st == 3) ? HLEATHER(p) : (st == 4) ? HWOOD(p) : (st == 5) ? HMETAL(p) : (st == 6) ? HROOF(p) : (st == 7) ? HFUR(p) : (st == 9) ? HSKIN(p) : (st == 11) ? HROCK(p) : (st == 12) ? HBARK(p) : (st == 13) ? HLEAF(p) : (st == 14) ? HFELT(p) : HPLAIN(p))
 """
 
 CODE_COLOR = PRE + r"""
@@ -56,13 +60,17 @@ else if (st == 5) { col *= 0.78 + 0.3 * h + 0.1 * (VN(uv * 30.0) - 0.5); }
 else if (st == 6) { m = MORT(uv); col *= lerp(0.62 + 0.5 * FR(uv).y + 0.15 * CH(uv), 0.5, m); }
 else if (st == 7) { col *= 0.86 + 0.22 * h; }
 else if (st == 9) { col *= 0.94 + 0.12 * h; }
+else if (st == 11) { col *= 0.62 + 0.55 * saturate(h + 0.25) ; }
+else if (st == 12) { col *= 0.68 + 0.5 * h; }
+else if (st == 13) { col *= 0.78 + 0.45 * h; }
+else if (st == 14) { col *= 0.9 + 0.18 * h; }
 else { col *= 0.93 + 0.14 * VN(uv * 30.0); }
 return float4(saturate(col), h);
 """
 
 CODE_NORMAL = PRE + r"""
-float e = (st == 1 || st == 3 || st == 5 || st == 7 || st == 9) ? 0.002 : 0.015;
-float bump = (st == 0) ? 0.06 : (st == 1) ? 0.004 : (st == 2) ? 0.10 : (st == 3) ? 0.012 : (st == 4) ? 0.05 : (st == 5) ? 0.03 : (st == 6) ? 0.12 : (st == 7) ? 0.02 : (st == 8) ? 0.08 : (st == 9) ? 0.004 : 0.02;
+float e = (st == 1 || st == 3 || st == 5 || st == 7 || st == 9 || st == 13 || st == 14) ? 0.002 : (st == 11) ? 0.03 : 0.015;
+float bump = (st == 0) ? 0.06 : (st == 1) ? 0.004 : (st == 2) ? 0.10 : (st == 3) ? 0.012 : (st == 4) ? 0.05 : (st == 5) ? 0.03 : (st == 6) ? 0.12 : (st == 7) ? 0.02 : (st == 8) ? 0.08 : (st == 9) ? 0.004 : (st == 11) ? 0.16 : (st == 12) ? 0.06 : (st == 13) ? 0.03 : (st == 14) ? 0.01 : 0.02;
 float h0 = HF(uv);
 float hx = HF(uv + float2(e, 0));
 float hy = HF(uv + float2(0, e));
@@ -83,6 +91,8 @@ if (s >= 0.05 && s < 0.15) return 0.97;                 // mato
 if (s >= 0.30 && s < 0.36) return 0.55 + 0.25 * H;      // charm
 if (s >= 0.86 && s < 0.96) return 0.55 + 0.15 * H;      // badan
 if (s >= 0.66 && s < 0.76) return 0.92;                 // jun
+if (s >= 0.96 && s < 0.99) return 0.75 + 0.15 * H;      // barg
+if (s >= 0.108 && s < 0.15) return 0.98;                // kigiz
 return 0.95 - 0.25 * H;
 """
 
