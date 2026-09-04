@@ -322,3 +322,8 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 
 - Yangi uslublar: `StyleFelt` 0.12 (kigiz, o'tovlar), `StyleRock` 0.27 (tabiiy qoya: uch qatlam shovqin + yoriq chiziqlari, kuchli relyef), `StyleBark` 0.64 (po'stloq: vertikal chiziqlar), `StyleLeaf` 0.97 (barg: ikki qatlam shovqin). Diapazonlar: tosh [0.15,0.24), qoya [0.24,0.30), mato [0.05,0.108), kigiz [0.108,0.15), tom [0.56,0.62), po'stloq [0.62,0.66), barg [0.96,0.99), oddiy >= 0.99.
 - `AddTree`/`AddPalm`/shahar daraxtlari (Plane, Cyp, Poplar, Pine, Fruit, Willow, tut) barg+po'stloq; `BuildRocks` qoya uslubi (avval tosh blok bo'lib qolgan edi); `AddYurt` devor/tom kigiz (Felt, Cream, FeltDark, Mo'g'ul o'tovi). Alfani siljituvchi tuslar (`Leaf * 1.1f`, `Trunk * 0.8f`, `FeltDark * 0.85f`, `Basalt * 1.4f`) `Sty` bilan tuzatildi.
+
+## Suv materiali
+
+- `tools/unreal/Scripts/ert_make_water.py` (commandlet): `M_ErtWater` qayta yaratiladi. Custom HLSL `ErtWaves` (dunyo koordinatalari + Time): uch sinus to'lqin va ikki qatlam shovqin balandligidan dunyo-fazo normal. Rang: chuqur/sayoz `DepthFade`(350) bo'yicha, Fresnel (daraja 5) bilan osmon tusi; qirg'oq ko'pigi `1 - DepthFade(90)`; shaffoflik chuqurlikka bog'liq (0.35 -> 0.85) + Fresnel; roughness 0.06, specular 1, sindirish 1.2, ekran-fazo aks, ikki tomonlama, yuzaki per-pixel yoritish.
+- Eslatma: translucent shader birinchi marta 3-4 daqiqa kompilyatsiya bo'ladi ("Preparing Shaders"), shundan keyin DDC keshda. Sinovdan oldin o'yinni bir marta 4 daqiqa ishlatib kesh isitildi.
