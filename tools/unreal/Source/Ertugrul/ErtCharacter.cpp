@@ -592,7 +592,21 @@ void AErtCharacter::UpdateShotScript(float Dt)
 		TArray<AActor*> Es; UGameplayStatics::GetAllActorsOfClass(this, AErtEnemy::StaticClass(), Es);
 		AErtEnemy* Best = nullptr;
 		for (AActor* A : Es) { AErtEnemy* En = Cast<AErtEnemy>(A); if (En && !En->IsDead() && En->GetKind() != EErtEnemyKind::Deer) { Best = En; break; } }
-		if (Best) { const FVector L = Best->GetActorLocation(), F = Best->GetActorForwardVector(); SetActorLocation(L + F * 320.f + FVector(0, 0, 10.f), false, nullptr, ETeleportType::TeleportPhysics); if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-6.f, (-F).Rotation().Yaw, 0.f)); TargetArm = 260.f; }
+		if (!Best)
+		{
+			// Erkin yurishda dushman yo'q: ko'rgazma uchun uchtasini yaratamiz (serjant, elita, arbaletchi)
+			const FVector Base = GetActorLocation() + GetActorForwardVector() * 380.f;
+			const EErtEnemyKind Kinds[] = { EErtEnemyKind::Sergeant, EErtEnemyKind::Elite, EErtEnemyKind::Crossbow };
+			FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			for (int32 i = 0; i < 3; ++i)
+			{
+				const FVector P = Base + GetActorRightVector() * ((i - 1) * 110.f);
+				AErtEnemy* En = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), P + FVector(0, 0, 100.f), FRotator(0, GetActorRotation().Yaw + 180.f, 0), SP);
+				if (En) { En->Init(Kinds[i], P, 0.f); En->SetActorTickEnabled(false); if (!Best) Best = En; }
+			}
+			TargetArm = 300.f;
+		}
+		else { const FVector L = Best->GetActorLocation(), F = Best->GetActorForwardVector(); SetActorLocation(L + F * 320.f + FVector(0, 0, 10.f), false, nullptr, ETeleportType::TeleportPhysics); if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-6.f, (-F).Rotation().Yaw, 0.f)); TargetArm = 260.f; }
 	}
 	if (At(54.0f)) TakeShot(TEXT("enemy"));
 	if (At(54.5f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
