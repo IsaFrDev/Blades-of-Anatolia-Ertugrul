@@ -370,3 +370,4 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `AErtGameMode::BeginPlay`: quyoshda ekran-fazo light shaft (bloom 0.35, threshold 0.6, okklyuziya 0.08, 1.2 km) - bulut va tog' orqasidan nur tolalari, Intel GPU uchun arzon.
 - `AErtWeather::BeginPlay`: tuman ikki qatlamli (height falloff 0.12, start 25 m, max opacity 0.92, ikkinchi qatlam zichlik 0.0006, falloff 0.02, offset -400 m) - ufqdagi keskin oq chiziq yumshaydi; yo'naltirilgan inscattering (daraja 12, 80 m dan) kun vaqtiga qarab quyosh rangida (`UpdateSky`).
 - `docs/guides/blender_ue_guide.html`: Blender 4.x -> UE 5.8 yo'riqnomasi (birliklar, model, vertex rang + alfa uslublari, Rigify, FBX eksport katakchalari, UE import, `fab_assets.json`, xatolar jadvali). Artifact sifatida ham chop etilgan.
+- `BuildWater`: dunyo chekkasidan 30 km gacha "uzoq dengiz" halqasi (suv materiali, 48 segment) - ufqda bo'shliq o'rniga dengiz; shom tumani rangi xiralashtirildi.

@@ -97,7 +97,7 @@ void AErtWeather::UpdateSky(float Day, const FLinearColor& SunColor, float ElevD
 	if (Fog && Fog->GetComponent())
 	{
 		FLinearColor FogCol = FMath::Lerp(FLinearColor(0.02f, 0.03f, 0.06f), FLinearColor(0.62f, 0.72f, 0.86f), Day);
-		FogCol = FMath::Lerp(FogCol, FLinearColor(0.95f, 0.55f, 0.32f), Twilight * Day * 0.8f);
+		FogCol = FMath::Lerp(FogCol, FLinearColor(0.62f, 0.38f, 0.24f), Twilight * Day * 0.7f);
 		if (CloudDark > 0.f) FogCol = FMath::Lerp(FogCol, FLinearColor(0.35f, 0.37f, 0.4f), CloudDark * 0.7f);
 		Fog->GetComponent()->SetFogInscatteringColor(FogCol);
 		Fog->GetComponent()->SetDirectionalInscatteringColor(FMath::Lerp(FLinearColor(0.05f, 0.06f, 0.1f), FMath::Lerp(FLinearColor(0.75f, 0.72f, 0.65f), SunColor * 1.1f, Twilight), Day));

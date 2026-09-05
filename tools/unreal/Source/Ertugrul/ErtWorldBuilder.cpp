@@ -442,6 +442,23 @@ void AErtWorldBuilder::BuildWater()
 	Disk(AskE, AskN, AskR + 6.f, AskZ);
 	Disk(OasisE, OasisN, OasisR + 4.f, OasisZ);
 	M.Commit(NewPart(TEXT("Water"), false, WaterMat), 0, false);
+	// Uzoq dengiz: dunyo chekkasidan 30 km gacha suv halqasi - ufqda bo'shliq o'rniga dengiz ko'rinadi
+	{
+		FErtMeshData S(100.f);
+		const float R0 = WorldSizeM * 0.5f - 2.f, R1 = 30000.f, Zs = WaterZ - 0.6f;
+		const int32 Segs = 48;
+		for (int32 i = 0; i < Segs; ++i)
+		{
+			const float A0 = 2.f * PI * i / Segs, A1 = 2.f * PI * (i + 1) / Segs;
+			// Kvadrat dunyo chekkasi: ichki nuqtalar kvadrat perimetrida
+			auto Edge = [&](float A) { const float c = FMath::Cos(A), sn = FMath::Sin(A); const float k = R0 / FMath::Max(FMath::Abs(c), FMath::Abs(sn)); return FVector2D(c * k, sn * k); };
+			const FVector2D I0 = Edge(A0), I1 = Edge(A1);
+			S.AddQuad(W(I0.X, I0.Y, Zs), W(FMath::Cos(A0) * R1, FMath::Sin(A0) * R1, Zs), W(FMath::Cos(A1) * R1, FMath::Sin(A1) * R1, Zs), W(I1.X, I1.Y, Zs), FVector::UpVector, Wc);
+		}
+		UProceduralMeshComponent* Sea = NewPart(TEXT("FarSea"), false, WaterMat);
+		S.Commit(Sea, 0, false);
+		Sea->SetBoundsScale(20.f);
+	}
 }
 
 // ---------------- Elementlar ----------------
