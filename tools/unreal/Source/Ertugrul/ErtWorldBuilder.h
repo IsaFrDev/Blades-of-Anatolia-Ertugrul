@@ -52,6 +52,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") float ChunkM = 200.f;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") float CellM = 10.f;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") bool bBuildForest = true;
+	/** false: protsedural relyef meshi qurilmaydi (haqiqiy Landscape import qilinganda) */
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") bool bBuildTerrainMesh = true;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") bool bBuildSettlements = true;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") int32 TreeCount = 1600;
 

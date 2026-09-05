@@ -29,7 +29,7 @@ D:\UE_5.8\Engine\Binaries\Win64\UnrealEditor-Cmd.exe D:\Unreal_projects\Ertugrul
    Section Size 63x63, Sections per Component 2x2, Components 32x32 (2017x2017 avtomatik).
    Location X=-100000 Y=-100000 Z=14000, Scale X=100 Y=100 Z=62.5 (`art/landscape/README.txt`).
 3. Layers: `grass, dirt, rock, snow, sand, road` — har biriga `weight_<nom>.png`.
-4. Landscape Material: `M_ErtVertexColor` ni o'rniga qatlamli material (Landscape Layer Blend: Megascans Surfaces yoki `/Game/ErtAssets/Tex/T_<rol>_D/N`). Protsedural relyef meshini o'chirish uchun `AErtWorldBuilder` da `bBuildTerrainMesh=false` (World Outliner → ErtWorldBuilder).
+4. Landscape Material: `M_ErtVertexColor` ni o'rniga qatlamli material (Landscape Layer Blend: Megascans Surfaces yoki `/Game/ErtAssets/Tex/T_<rol>_D/N`). Protsedural relyef meshini o'chirish uchun `AErtWorldBuilder` da `bBuildTerrainMesh=false` (World Outliner → ErtWorldBuilder) yoki `-ErtNoTerrainMesh` (keyingi builddan boshlab).
    *Eslatma:* HeightAt() hisob-kitobi o'zgarmaydi, shuning uchun shaharlar, yo'llar, GPS, missiyalar Landscape bilan ham mos keladi.
 
 ## 3. PCG Graph (ixtiyoriy)

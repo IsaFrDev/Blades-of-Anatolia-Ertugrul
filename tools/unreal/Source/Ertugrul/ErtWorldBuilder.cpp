@@ -413,6 +413,7 @@ FLinearColor AErtWorldBuilder::TerrainColor(float E, float N, float H, float Slo
 
 void AErtWorldBuilder::BuildTerrain()
 {
+	if (!bBuildTerrainMesh || FParse::Param(FCommandLine::Get(), TEXT("ErtNoTerrainMesh"))) return;
 	const float Half = WorldSizeM * 0.5f;
 	const int32 Chunks = FMath::Max(1, FMath::RoundToInt(WorldSizeM / ChunkM));
 	const int32 Cells = FMath::Max(1, FMath::RoundToInt(ChunkM / CellM));
