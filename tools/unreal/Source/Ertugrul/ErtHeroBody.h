@@ -52,7 +52,7 @@ public:
 	/** Qilich zarbasi: 0 o'ngdan, 1 chapdan, 2 tepadan og'ir, 3 tepki */
 	void TriggerAttack(int32 Kind = 0);
 	/** Zarba yedi - qisqa titrash */
-	void TriggerHurt();
+	void TriggerHurt(float SideSign = 0.f);   // SideSign: -1 chapdan, +1 o'ngdan, 0 old/orqa
 	/** Suzish pozasi (gorizontal, qo'l-oyoq harakati) */
 	void SetSwimming(bool bOn) { bSwim = bOn; }
 	void SetRiding(bool bOn) { bRide = bOn; }
@@ -64,7 +64,7 @@ public:
 	/** Parry: qisqa keskin harakat */
 	void TriggerParry() { ParryT = 1.f; }
 	/** Yiqilgan holat (o'lim) */
-	void SetDead(float CapsuleHalfHeight);
+	void SetDead(float CapsuleHalfHeight, int32 Variant = -1);   // -1 tasodifiy: 0 orqaga yiqilish, 1 yuztuban, 2 tiz cho'kib yonboshga
 	bool IsBuilt() const { return Pelvis != nullptr; }
 	float AttackPhase() const { return AttackT; }
 
@@ -88,7 +88,7 @@ private:
 	float IdleT = 0.f;
 	float AttackT = 0.f;
 	int32 AttackKind = 0;
-	float HurtT = 0.f;
+	float HurtT = 0.f, HurtDir = 0.f;
 	bool bDead = false;
 	bool bSwim = false;
 	bool bRide = false;

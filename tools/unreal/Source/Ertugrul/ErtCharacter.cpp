@@ -17,6 +17,7 @@
 #include "CollisionShape.h"
 #include "UnrealClient.h"
 #include "ErtEnemy.h"
+#include "ErtFx.h"
 #include "ErtGameMode.h"
 #include "ErtWorldBuilder.h"
 #include "ErtFootsteps.h"
@@ -187,6 +188,7 @@ void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, floa
 	if (Body) Body->TriggerAttack(Kind);
 	if (LockTarget && !LockTarget->IsDead()) SetActorRotation(FRotator(0, (LockTarget->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
 	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), Kind == 2 ? 1.f : 0.8f, Kind == 2 ? 0.8f : FMath::FRandRange(0.9f, 1.1f));
+	AErtBurst::SwordArc(GetWorld(), GetActorLocation() + GetActorForwardVector() * 40.f + FVector(0, 0, Horse ? 60.f : 30.f), GetActorRotation().Yaw, Kind);
 	const FVector C = GetActorLocation() + GetActorForwardVector() * 130.f + FVector(0, 0, Horse ? 0.f : 45.f);
 	TArray<FOverlapResult> Hits;
 	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtAttack), false, this);
@@ -205,7 +207,8 @@ void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, floa
 			const float HpBefore = E->GetHealth();
 			E->ApplyHit(Dmg, this, bGuardBreak || bExecute);
 			const bool bHit = E->GetHealth() < HpBefore || E->IsDead();
-			if (!bHit) { ShakeT = FMath::Max(ShakeT, 0.08f); continue; }   // to'sildi
+			if (!bHit) { ShakeT = FMath::Max(ShakeT, 0.08f); AErtBurst::Sparks(GetWorld(), E->GetActorLocation() + FVector(0, 0, 50.f) + (GetActorLocation() - E->GetActorLocation()).GetSafeNormal2D() * 35.f, (GetActorLocation() - E->GetActorLocation()).GetSafeNormal2D()); continue; }   // to'sildi
+			AErtBurst::Blood(GetWorld(), E->GetActorLocation() + FVector(0, 0, 60.f), (E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D() + FVector(0, 0, 0.3f), bExecute ? 2.2f : (Kind == 2 ? 1.5f : 1.f));
 			if (StaggerSec > 0.f && !E->IsDead()) E->Stagger(StaggerSec);
 			if (Knock > 0.f && !E->IsDead()) E->LaunchCharacter((E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D() * Knock + FVector(0, 0, 120.f), true, true);
 			ShakeT = FMath::Max(ShakeT, bExecute ? 0.3f : (Kind == 2 ? 0.2f : 0.12f));
@@ -369,17 +372,18 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 		if (Footsteps) Footsteps->Step(GetActorLocation() - FVector(0, 0, 60.f), false, 1.2f);
 		return;
 	}
-	if (bBlocking && bFacing && Stamina > 5.f && !bUnblockable) { Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
+	if (bBlocking && bFacing && Stamina > 5.f && !bUnblockable) { AErtBurst::Sparks(GetWorld(), GetActorLocation() + To * 50.f + FVector(0, 0, 40.f), -To); Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
 	if (bPeltArmor) Damage *= 0.85f;   // bo'ri terisi zirhi
 	if (Horse) { Horse->ApplyDamage(Damage * 0.4f); Damage *= 0.6f; }
 	Health -= Damage;
 	HurtFlash = 1.f;
+	AErtBurst::Blood(GetWorld(), GetActorLocation() + FVector(0, 0, 40.f), -To + FVector(0, 0, 0.4f), FMath::Clamp(Damage / 15.f, 0.6f, 1.6f));
 	ShakeT = FMath::Min(0.35f, 0.15f + Damage * 0.01f);
 	if (!Horse && !bSwimming && !bMantling) LaunchCharacter(-To * 220.f + FVector(0, 0, 60.f), false, false);
 	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(FMath::Clamp(Damage / 20.f, 0.3f, 1.f), 0.3f);
 	NoDamageT = 0.f;
-	if (Body) Body->TriggerHurt();
+	if (Body) Body->TriggerHurt(FMath::Sign(FVector::DotProduct(GetActorRightVector(), To)) * (FMath::Abs(FVector::DotProduct(GetActorRightVector(), To)) > 0.4f ? 1.f : 0.f));
 	if (Health <= 0.f)
 	{
 		Health = 0.f; bDead = true;
@@ -597,13 +601,27 @@ void AErtCharacter::UpdateShotScript(float Dt)
 		{
 			const FVector P((N0 + 4.f) * 100.f, (E0 + (i - 1) * 1.3f) * 100.f, Z0 * 100.f + 110.f);
 			AErtEnemy* En = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), P, FRotator(0, 180.f, 0), SP);
-			if (En) { En->Init(Kinds[i], P, 0.f); En->SetActorTickEnabled(false); }
+			if (En) En->Init(Kinds[i], P, 0.f);
 			UE_LOG(LogErtugrul, Log, TEXT("Ko'rgazma dushmani %d: %s pos=%s yer=%.1f hidden=%d"), i, En ? TEXT("ok") : TEXT("YO'Q"), En ? *En->GetActorLocation().ToString() : TEXT("-"), WorldRef ? WorldRef->HeightAt(E0, N0 + 4.f) : -1.f, En ? (int32)En->IsHidden() : -1);
 		}
 		Teleport(E0, N0, Z0 + 1.5f, -6.f, 0.f);
 	}
 	if (At(54.0f)) TakeShot(TEXT("enemy"));
-	if (At(54.5f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(54.1f))
+	{
+		// Jang effektlari: personaj ko'rinadi, o'rtadagi dushmanga yaqin turib zarba beradi
+		SetActorHiddenInGame(false); GetCharacterMovement()->SetMovementMode(MOVE_Walking); TargetArm = 320.f;
+		const float E0 = -556.f, N0 = 372.f, Z0 = WorldRef ? WorldRef->HeightAt(E0, N0 + 2.6f) : 12.f;
+		SetActorLocation(FVector((N0 + 2.6f) * 100.f, E0 * 100.f, Z0 * 100.f + 100.f), false, nullptr, ETeleportType::TeleportPhysics);
+		SetActorRotation(FRotator(0, 0, 0));
+		if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-12.f, -30.f, 0.f));
+	}
+	if (At(54.4f)) DoAttack(2, 2.2f, true, 0.6f, 200.f);
+	if (At(54.55f)) TakeShot(TEXT("hit"));
+	if (At(54.8f)) DoAttack(0, 1.f, false, 0.2f, 0.f);
+	if (At(54.95f)) TakeShot(TEXT("hit2"));
+	if (At(55.6f)) TakeShot(TEXT("death"));
+	if (At(56.2f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;

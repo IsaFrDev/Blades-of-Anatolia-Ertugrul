@@ -356,3 +356,11 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `AErtWorldBuilder`: `BuildForest`/`BuildRocks` da mesh topilsa protsedural o'rniga `HierarchicalInstancedStaticMeshComponent` instanslari (mesh -> HISM, kolliziya bilan) qo'yiladi; masshtab mesh bounds dan kerakli balandlik/radiusga keltiriladi (`ScaleToHeight`, `ScaleToRadius`). Topilmasa protsedural daraxt/qoyalar.
 - Build.cs: `AssetRegistry` moduli. Nanite loyihada o'chiq, Fab meshlari fallback mesh bilan ko'rinadi.
 - Sinov: manifestga dvigatelning Cone/Sphere shakllari qo'yib, quvur (pipeline) tekshirildi, keyin manifest bo'shatildi.
+
+## Jang effektlari, o't-o'lan folyaji, yer auto-materiali
+
+- `ErtFx.h/.cpp` (`AErtBurst`): protsedural zarralar (har kadr qayta quriladigan kesishgan kvadratlar, gravitatsiya, yerga yopishish, so'nish): `Blood` (qon, 14 zarra x kuch), `Sparks` (uchqun, tez, sariq), `Dust` (chang); `SwordArc` - qilich izi (yoy shaklidagi shaffof mesh, T bo'yicha kengayadi va so'nadi; 0 gorizontal, 1 pastdan yuqoriga, 2 og'ir vertikal).
+- Ilgaklar: `DoAttack` - zarba boshida qilich izi, tegsa qon (ijroda 2.2x), to'silsa uchqun; `ReceiveHit` - blokda uchqun, zarar olganda qon; `AErtEnemy::Die` - yerga yiqilganda chang.
+- `UErtHeroBody`: `TriggerHurt(SideSign)` yo'nalishli reaksiya (tana buriladi va egiladi, qo'llar siltanadi); `SetDead(HalfH, Variant)` uch o'lim pozasi: orqaga yiqilish, yuztuban, tiz cho'kib yonboshga (tasodifiy).
+- `BuildGrass` (ErtWorldBuilder, 26000 tup, 6x6 chunk): har tup 3 kesishgan tola (alfa: tag 0, uch 1), yashil o'tloqlarda zich, janubda siyrak, oba/So'g'ut/yaylov/Bursa atrofida zichroq, yo'l va suvdan tashqari. `M_ErtGrass` (`ert_make_grass.py`): ikki tomonlama folyaj shading, WPO shamol (uch sinus, sekin o'zgaruvchi kuch, alfa bilan), rang tagi qoramtir.
+- Yer materiali (st 0) auto-qatlamlar: qiyalikda (N.z < 0.9) qoya naqshi va rangi, 75 m dan yuqorida qor, tekis pastlikda (N.z > 0.992, Z < 24 m) shovqinli ko'lmaklar (qorong'i, roughness 0.12), o't tolalari chiziqlari.

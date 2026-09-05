@@ -228,15 +228,34 @@ void UErtHeroBody::SetSwordTier(int32 Tier)
 }
 
 void UErtHeroBody::TriggerAttack(int32 Kind) { AttackT = 1.f; AttackKind = Kind; }
-void UErtHeroBody::TriggerHurt() { HurtT = 1.f; }
+void UErtHeroBody::TriggerHurt(float SideSign) { HurtT = 1.f; HurtDir = SideSign; }
 
-void UErtHeroBody::SetDead(float HalfH)
+void UErtHeroBody::SetDead(float HalfH, int32 Variant)
 {
 	if (!IsBuilt() || bDead) return;
 	bDead = true;
-	Root->SetRelativeRotation(FRotator(-82.f, 0, 12.f));
-	Root->SetRelativeLocation(FVector(30.f, 0, -HalfH + 14.f - 89.f));
-	FPose P; P.ArmL = -40.f; P.ArmR = 30.f; P.ArmSpread = 25.f; P.KneeL = 20.f; P.ThighR = 15.f;
+	if (Variant < 0) Variant = FMath::RandRange(0, 2);
+	FPose P;
+	if (Variant == 1)
+	{
+		// Yuztuban: oldinga yiqiladi, qo'llar bosh ustida
+		Root->SetRelativeRotation(FRotator(84.f, 0, -8.f));
+		Root->SetRelativeLocation(FVector(-30.f, 0, -HalfH + 16.f - 89.f));
+		P.ArmL = -150.f; P.ArmR = -120.f; P.ArmSpread = 30.f; P.ElbowL = 30.f; P.KneeR = 25.f; P.ThighL = 10.f; P.HeadPitch = 20.f;
+	}
+	else if (Variant == 2)
+	{
+		// Tiz cho'kib yonboshga: tana bukilgan, tizzalar bukilgan
+		Root->SetRelativeRotation(FRotator(-30.f, 25.f, 88.f));
+		Root->SetRelativeLocation(FVector(10.f, 20.f, -HalfH + 24.f - 89.f));
+		P.ThighL = -80.f; P.ThighR = -60.f; P.KneeL = 110.f; P.KneeR = 95.f; P.TorsoPitch = -35.f; P.ArmL = -20.f; P.ArmR = 40.f; P.ElbowR = 60.f; P.HeadPitch = 30.f;
+	}
+	else
+	{
+		Root->SetRelativeRotation(FRotator(-82.f, 0, 12.f));
+		Root->SetRelativeLocation(FVector(30.f, 0, -HalfH + 14.f - 89.f));
+		P.ArmL = -40.f; P.ArmR = 30.f; P.ArmSpread = 25.f; P.KneeL = 20.f; P.ThighR = 15.f;
+	}
 	Cur = P;
 	Apply(Cur);
 }
@@ -359,7 +378,7 @@ void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, f
 			T.TorsoPitch -= 10.f * Sweep;
 		}
 	}
-	if (HurtT > 0.f) { T.TorsoPitch += 18.f * HurtT; T.HeadPitch -= 10.f * HurtT; }
+	if (HurtT > 0.f) { T.TorsoPitch += (HurtDir == 0.f ? 18.f : 8.f) * HurtT; T.HeadPitch -= 10.f * HurtT; T.TorsoYaw += 22.f * HurtDir * HurtT; T.TorsoRoll += 12.f * HurtDir * HurtT; T.ArmL += 25.f * HurtDir * HurtT; T.ArmR -= 25.f * HurtDir * HurtT; }
 
 	const float A = FMath::Clamp(Dt * (AttackT > 0.f ? 22.f : 12.f), 0.f, 1.f);
 	auto L = [A](float& C, float Tg) { C = FMath::Lerp(C, Tg, A); };

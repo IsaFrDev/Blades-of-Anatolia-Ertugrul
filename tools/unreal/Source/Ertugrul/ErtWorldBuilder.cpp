@@ -103,6 +103,7 @@ void AErtWorldBuilder::Build()
 	Mat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtVertexColor.M_ErtVertexColor"));
 	if (!Mat) Mat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/EngineDebugMaterials/VertexColorMaterial.VertexColorMaterial"));
 	WaterMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtWater.M_ErtWater"));
+	GrassMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtGrass.M_ErtGrass"));
 	if (!WaterMat) WaterMat = Mat;
 
 	BuildTerrain();
@@ -126,7 +127,7 @@ void AErtWorldBuilder::Build()
 		BuildSogut();
 		BuildDomanic();
 	}
-	if (bBuildForest) { BuildForest(); BuildRocks(); }
+	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); }
 	if (FabTreesPlaced + FabRocksPlaced > 0) UE_LOG(LogErtugrul, Log, TEXT("Fab meshlari: %d daraxt, %d qoya (instans)"), FabTreesPlaced, FabRocksPlaced);
 	bBuilt = true;
 	int32 Tris = 0;
@@ -2607,4 +2608,63 @@ void AErtWorldBuilder::BuildDomanic()
 	AddWatchTower(M, DE(0.f), DN(DomR - 30.f), Hz(0.f, DomR - 30.f), 6.f);
 	M.AddBox(W(DE(40.f), DN(46.f), Hz(40.f, 46.f) + 0.9f), FVector(30, 30, 90), StoneG);
 	M.Commit(NewPart(TEXT("Domanic"), true), 0, true);
+}
+
+// ---------------- O't-o'lan: kesishgan tolalar, shamol materiali (alfa = tebranish og'irligi) ----------------
+
+static void ErtAddBlade(FErtMeshData& M, const FVector& Base, float Yaw, float Hgt, float Wd, const FLinearColor& Col, float Bend)
+{
+	const FQuat Q = FRotator(0, Yaw, 0).Quaternion();
+	const FVector R = Q.RotateVector(FVector(0, Wd * 0.5f, 0)), Fw = Q.RotateVector(FVector(Bend, 0, 0));
+	const int32 B = M.Verts.Num();
+	FLinearColor Bot = Col; Bot.A = 0.f; FLinearColor Top = Col; Top.A = 1.f;
+	M.Verts.Add(Base - R); M.Verts.Add(Base + R); M.Verts.Add(Base + R * 0.35f + Fw + FVector(0, 0, Hgt)); M.Verts.Add(Base - R * 0.35f + Fw + FVector(0, 0, Hgt));
+	M.Colors.Add(Bot); M.Colors.Add(Bot); M.Colors.Add(Top); M.Colors.Add(Top);
+	const FVector Nm = Q.RotateVector(FVector(1, 0, 0));
+	for (int32 i = 0; i < 4; ++i) { M.Normals.Add(Nm); M.UVs.Add(FVector2D(i & 1, i >> 1)); M.Tangents.Add(FProcMeshTangent(0, 1, 0)); }
+	M.Tris.Append({ B, B + 2, B + 1, B, B + 3, B + 2 });
+}
+
+void AErtWorldBuilder::BuildGrass()
+{
+	if (!GrassMat) return;
+	FRandomStream RS(Seed + 17);
+	const float Half = WorldSizeM * 0.5f;
+	const int32 CellsPerSide = 6;
+	TArray<FErtMeshData> Cells; Cells.Init(FErtMeshData(1.f), CellsPerSide * CellsPerSide);
+	int32 Placed = 0;
+	const FLinearColor G1(0.30f, 0.46f, 0.12f), G2(0.42f, 0.55f, 0.16f), G3(0.55f, 0.58f, 0.22f);
+	for (int32 i = 0; i < GrassClumps * 8 && Placed < GrassClumps; ++i)
+	{
+		const float E = RS.FRandRange(-Half + 5.f, Half - 5.f), N = RS.FRandRange(-Half + 5.f, Half - 5.f);
+		if (N < DesertN + 30.f) continue;
+		const float H = HeightAt(E, N);
+		const FVector Nm = TerrainNormal(E, N);
+		if (H < WaterZ + 1.2f || H > 70.f || Nm.Z < 0.86f) continue;
+		float Wd = 0.f; if (RoadDist(E, N, &Wd) < Wd * 0.5f + 1.f) continue;
+		// Zichlik: yashil o'tloqlar (shimol) zich, quruq janub siyrak; oba, So'g'ut, yaylov atrofi zichroq
+		float Dens = 0.35f + 0.5f * Smooth01((N + 100.f) / 500.f);
+		Dens *= 0.6f + 0.4f * Noise(E, N, 0.02f);
+		for (const FVector2D& Hot : { FVector2D(ObaE, ObaN), FVector2D(SogE, SogN), FVector2D(DomE, DomN), FVector2D(BurE, BurN) })
+			Dens = FMath::Max(Dens, 0.95f * (1.f - Smooth01((FVector2D::Distance(FVector2D(E, N), Hot) - 120.f) / 200.f)));
+		if (RS.FRand() > Dens) continue;
+		if (!IsBuildable(E, N)) continue;
+		const int32 cx = FMath::Clamp((int32)((E + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
+		const int32 cy = FMath::Clamp((int32)((N + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
+		FErtMeshData& M = Cells[cy * CellsPerSide + cx];
+		const FVector Base = W(E, N, H - 0.02f);
+		const float Hgt = RS.FRandRange(22.f, 42.f) * (1.f + 0.3f * Smooth01((N + 100.f) / 500.f));
+		const FLinearColor Col = ErtCol::Vary(RS.FRand() < 0.6f ? G1 : (RS.FRand() < 0.5f ? G2 : G3), 0.12f, i);
+		const float Yaw0 = RS.FRandRange(0.f, 180.f);
+		for (int32 b = 0; b < 4; ++b) ErtAddBlade(M, Base + FVector(RS.FRandRange(-16.f, 16.f), RS.FRandRange(-16.f, 16.f), 0), Yaw0 + b * 45.f, Hgt * RS.FRandRange(0.7f, 1.1f), RS.FRandRange(30.f, 50.f), Col, RS.FRandRange(-12.f, 12.f));
+		++Placed;
+	}
+	for (int32 cidx = 0; cidx < Cells.Num(); ++cidx)
+		if (Cells[cidx].Verts.Num())
+		{
+			UProceduralMeshComponent* P = NewPart(FString::Printf(TEXT("Grass_%d"), cidx), false, GrassMat);
+			Cells[cidx].Commit(P, 0, false);
+			P->SetCastShadow(false);
+		}
+	UE_LOG(LogErtugrul, Log, TEXT("O't-o'lan: %d tup"), Placed);
 }

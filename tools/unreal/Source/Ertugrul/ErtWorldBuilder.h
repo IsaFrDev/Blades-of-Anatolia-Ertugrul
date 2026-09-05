@@ -75,6 +75,8 @@ private:
 	UPROPERTY(Transient) TMap<TObjectPtr<UStaticMesh>, TObjectPtr<class UHierarchicalInstancedStaticMeshComponent>> FabInst;
 	class UHierarchicalInstancedStaticMeshComponent* FabComp(UStaticMesh* M, bool bCollision);
 	int32 FabTreesPlaced = 0, FabRocksPlaced = 0;
+	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> GrassMat;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") int32 GrassClumps = 36000;
 	UPROPERTY(Transient) TArray<TObjectPtr<UPointLightComponent>> Lights;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> Mat;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> WaterMat;
@@ -104,6 +106,7 @@ private:
 	void AddPalm(FErtMeshData& M, float E, float N, float Z, float H, int32 S);
 	void BuildForest();
 	void BuildRocks();
+	void BuildGrass();
 
 public:
 	float RiverE(float N) const;

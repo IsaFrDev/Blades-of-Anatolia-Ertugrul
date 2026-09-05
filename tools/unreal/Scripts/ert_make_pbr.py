@@ -30,7 +30,7 @@ float2 mw = (st == 2) ? float2(0.06, 0.10) : (st == 4) ? float2(0.01, 0.07) : (s
 #define FR(p) frac(CQ(p) / bs)
 #define CH(p) H2(CQ(p) / bs)
 #define MORT(p) (((FR(p)).x < mw.x || (FR(p)).y < mw.y) ? 1.0 : 0.0)
-#define HGROUND(p) (VN((p) * 3.0) * 0.5 + VN((p) * 11.0) * 0.3 + VN((p) * 40.0) * 0.2)
+#define HGROUND(p) (VN((p) * 3.0) * 0.45 + VN((p) * 11.0) * 0.25 + VN((p) * 40.0) * 0.15 + VN(float2((p).x * 90.0, (p).y * 9.0)) * 0.15)
 #define HSTONE(p) ((1.0 - MORT(p)) * (0.65 + 0.35 * CH(p)) + 0.15 * VN((p) * 20.0))
 #define HWOOD(p) ((1.0 - MORT(p)) * 0.9 + 0.12 * VN(float2((p).x * 2.0, (p).y * 70.0)))
 #define HROOF(p) ((FR(p)).y * 0.75 + 0.25 * cos(((FR(p)).x - 0.5) * 3.1416) * (1.0 - MORT(p)))
@@ -54,7 +54,21 @@ CODE_COLOR = PRE + r"""
 float h = HF(uv);
 float3 col = VC.rgb;
 float m;
-if (st == 0) { col *= 0.72 + 0.55 * h; }
+if (st == 0)
+{
+	// Auto-qatlamlar: qiyalikda qoya, 75 m dan yuqorida qor, tekis pastlikda ko'lmak
+	float slope = 1.0 - saturate((N.z - 0.62) / 0.28);
+	float rockH = HROCK(uv * 0.5);
+	float3 rockC = float3(0.42, 0.40, 0.37) * (0.62 + 0.55 * saturate(rockH + 0.25));
+	float3 grassC = col * (0.72 + 0.55 * h);
+	float snow = saturate((Pm.z - 75.0) / 18.0) * saturate((N.z - 0.55) / 0.3);
+	float puddle = (N.z > 0.995 && Pm.z < 22.0) ? smoothstep(0.80, 0.86, VN(uv * 0.35 + 7.3)) * smoothstep(0.55, 0.7, VN(uv * 0.06 + 3.1)) : 0.0;
+	col = lerp(grassC, rockC, slope);
+	col = lerp(col, float3(0.92, 0.94, 0.98) * (0.85 + 0.15 * h), snow);
+	col = lerp(col, float3(0.10, 0.13, 0.16), puddle * 0.85);
+	h = lerp(h, rockH, slope);
+	if (puddle > 0.5) h = 1.5;   // roughness tuguni uchun ko'lmak belgisi
+}
 else if (st == 1) { col *= 0.88 + 0.18 * h + 0.06 * (VN(uv * 25.0) - 0.5); }
 else if (st == 2 || st == 8) { m = MORT(uv); col *= lerp(0.78 + 0.4 * CH(uv) + 0.2 * (VN(uv * 20.0) - 0.5), 0.5, m); }
 else if (st == 3) { col *= 0.78 + 0.35 * h; }
@@ -75,7 +89,7 @@ return float4(saturate(col), h);
 
 CODE_NORMAL = PRE + r"""
 float e = (st == 1 || st == 3 || st == 5 || st == 7 || st == 9 || st == 13 || st == 14) ? 0.002 : (st == 11) ? 0.03 : 0.015;
-float bump = (st == 0) ? 0.06 : (st == 1) ? 0.004 : (st == 2) ? 0.10 : (st == 3) ? 0.012 : (st == 4) ? 0.05 : (st == 5) ? 0.03 : (st == 6) ? 0.12 : (st == 7) ? 0.02 : (st == 8) ? 0.08 : (st == 9) ? 0.004 : (st == 11) ? 0.16 : (st == 12) ? 0.06 : (st == 13) ? 0.03 : (st == 14) ? 0.01 : (st == 15) ? 0.05 : (st == 16) ? 0.12 : 0.02;
+float bump = (st == 0) ? (1.0 - saturate((N.z - 0.62) / 0.28)) * 0.1 + 0.06 : (st == 1) ? 0.004 : (st == 2) ? 0.10 : (st == 3) ? 0.012 : (st == 4) ? 0.05 : (st == 5) ? 0.03 : (st == 6) ? 0.12 : (st == 7) ? 0.02 : (st == 8) ? 0.08 : (st == 9) ? 0.004 : (st == 11) ? 0.16 : (st == 12) ? 0.06 : (st == 13) ? 0.03 : (st == 14) ? 0.01 : (st == 15) ? 0.05 : (st == 16) ? 0.12 : 0.02;
 float h0 = HF(uv);
 float hx = HF(uv + float2(e, 0));
 float hy = HF(uv + float2(0, e));
@@ -96,6 +110,7 @@ if (s >= 0.05 && s < 0.15) return 0.97;                 // mato
 if (s >= 0.30 && s < 0.36) return 0.55 + 0.25 * H;      // charm
 if (s >= 0.86 && s < 0.91) return 0.55 + 0.15 * H;      // badan
 if (s >= 0.66 && s < 0.76) return 0.92;                 // jun
+if (s < 0.05 && H > 1.2) return 0.12;                   // ko'lmak
 if (s >= 0.96 && s < 0.99) return 0.75 + 0.15 * H;      // barg
 if (s >= 0.108 && s < 0.15) return 0.98;                // kigiz
 return 0.95 - 0.25 * H;

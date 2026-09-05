@@ -1,4 +1,5 @@
 #include "ErtEnemy.h"
+#include "ErtFx.h"
 #include "Ertugrul.h"
 #include "ErtHeroBody.h"
 #include "ErtCharacter.h"
@@ -126,7 +127,12 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source, bool bGuardBreak)
 	if (Mount) Mount->ApplyDamage(Damage * 0.3f);
 	Health -= Damage;
 	bAlerted = true;
-	if (Body && Body->IsBuilt()) Body->TriggerHurt();
+	if (Body && Body->IsBuilt())
+	{
+		float Side = 0.f;
+		if (Source) { const float D = FVector::DotProduct(GetActorRightVector(), (Source->GetActorLocation() - GetActorLocation()).GetSafeNormal2D()); Side = FMath::Abs(D) > 0.4f ? FMath::Sign(D) : 0.f; }
+		Body->TriggerHurt(Side);
+	}
 	// Kaltak yeyish: orqaga uchadi, qisqa gangiydi (zarba bera olmaydi)
 	if (!Mount && Kind != EErtEnemyKind::Deer && Source)
 	{
@@ -221,6 +227,7 @@ void AErtEnemy::Die()
 	GetCharacterMovement()->DisableMovement();
 	GetCharacterMovement()->Velocity = FVector::ZeroVector;
 	if (Body && Body->IsBuilt()) Body->SetDead(GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight());
+	AErtBurst::Dust(GetWorld(), GetActorLocation() - FVector(0, 0, GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight() - 10.f), Kind == EErtEnemyKind::Boss ? 2.f : 1.f);
 	for (UProceduralMeshComponent* P : DeerParts) if (P) { P->SetRelativeRotation(FRotator(0, 0, 80.f)); P->AddRelativeLocation(FVector(0, 0, -30.f)); }
 	SetLifeSpan(30.f);
 }
