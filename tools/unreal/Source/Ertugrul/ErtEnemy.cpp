@@ -39,18 +39,18 @@ void AErtEnemy::Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadi
 	switch (Kind)
 	{
 	case EErtEnemyKind::Footman:  MaxHealth = 60.f;  AttackDamage = 10.f; AttackCooldown = 1.5f; MoveSpeed = 370.f; AttackRange = 200.f;
-		Body->Kaftan = FLinearColor(0.12f, 0.22f, 0.12f); Body->Trim = FLinearColor(0.5f, 0.5f, 0.45f); Body->bHelmet = true; break;
+		Body->Kaftan = FLinearColor(0.12f, 0.22f, 0.12f); Body->Trim = FLinearColor(0.5f, 0.5f, 0.45f); Body->bHelmet = true; Body->bBoots = true; Body->bBackShield = true; break;
 	case EErtEnemyKind::Sergeant: MaxHealth = 95.f;  AttackDamage = 14.f; AttackCooldown = 1.4f; MoveSpeed = 390.f; AttackRange = 210.f;
-		Body->Kaftan = FLinearColor(0.10f, 0.13f, 0.32f); Body->Leather = FLinearColor(0.5f, 0.5f, 0.52f); Body->bHelmet = true; break;
+		Body->Kaftan = FLinearColor(0.10f, 0.13f, 0.32f); Body->Leather = FLinearColor(0.5f, 0.5f, 0.52f); Body->bHelmet = true; Body->bLamellar = true; Body->bPauldrons = true; Body->bBoots = true; break;
 	case EErtEnemyKind::Crossbow: MaxHealth = 50.f;  AttackDamage = 9.f;  AttackCooldown = 2.6f; MoveSpeed = 330.f; AttackRange = 1600.f;
-		Body->Kaftan = FLinearColor(0.30f, 0.22f, 0.12f); Body->bHelmet = false; Body->Fur = FLinearColor(0.35f, 0.3f, 0.25f); break;
+		Body->Kaftan = FLinearColor(0.30f, 0.22f, 0.12f); Body->bHelmet = false; Body->Fur = FLinearColor(0.35f, 0.3f, 0.25f); Body->bQuiver = true; Body->bBoots = true; break;
 	case EErtEnemyKind::Elite:    MaxHealth = 170.f; AttackDamage = 18.f; AttackCooldown = 1.2f; MoveSpeed = 430.f; AttackRange = 220.f;
-		Body->Kaftan = FLinearColor(0.08f, 0.06f, 0.07f); Body->Leather = FLinearColor(0.55f, 0.08f, 0.06f); Body->Trim = FLinearColor(0.9f, 0.75f, 0.2f); Body->bHelmet = true; break;
+		Body->Kaftan = FLinearColor(0.08f, 0.06f, 0.07f); Body->Leather = FLinearColor(0.55f, 0.08f, 0.06f); Body->Trim = FLinearColor(0.9f, 0.75f, 0.2f); Body->bHelmet = true; Body->bLamellar = true; Body->bPauldrons = true; Body->bCloak = true; Body->Cloak = FLinearColor(0.4f, 0.06f, 0.05f); Body->bBoots = true; break;
 	case EErtEnemyKind::Deer:     MaxHealth = 30.f;  MoveSpeed = 140.f; break;
 	case EErtEnemyKind::Boss:     MaxHealth = 400.f; AttackDamage = 22.f; AttackCooldown = 1.1f; MoveSpeed = 400.f; AttackRange = 240.f;
-		Body->Kaftan = FLinearColor(0.06f, 0.05f, 0.06f); Body->Leather = FLinearColor(0.45f, 0.08f, 0.06f); Body->Trim = FLinearColor(0.95f, 0.8f, 0.2f); Body->Fur = FLinearColor(0.2f, 0.18f, 0.16f); Body->bHelmet = true; break;
+		Body->Kaftan = FLinearColor(0.06f, 0.05f, 0.06f); Body->Leather = FLinearColor(0.45f, 0.08f, 0.06f); Body->Trim = FLinearColor(0.95f, 0.8f, 0.2f); Body->Fur = FLinearColor(0.2f, 0.18f, 0.16f); Body->bHelmet = true; Body->bLamellar = true; Body->bPauldrons = true; Body->bCloak = true; Body->Cloak = FLinearColor(0.08f, 0.07f, 0.09f); Body->bBoots = true; Body->bMail = true; break;
 	case EErtEnemyKind::Rider:    MaxHealth = 90.f;  AttackDamage = 15.f; AttackCooldown = 1.3f; MoveSpeed = 380.f; AttackRange = 300.f;
-		Body->Kaftan = FLinearColor(0.38f, 0.10f, 0.08f); Body->Leather = FLinearColor(0.35f, 0.33f, 0.30f); Body->bHelmet = true; break;
+		Body->Kaftan = FLinearColor(0.38f, 0.10f, 0.08f); Body->Leather = FLinearColor(0.35f, 0.33f, 0.30f); Body->bHelmet = true; Body->bMail = true; Body->bCloak = true; Body->Cloak = FLinearColor(0.25f, 0.2f, 0.12f); Body->bBoots = true; break;
 	}
 	Body->bSwordInHand = Kind != EErtEnemyKind::Deer && Kind != EErtEnemyKind::Crossbow;
 	Health = MaxHealth;

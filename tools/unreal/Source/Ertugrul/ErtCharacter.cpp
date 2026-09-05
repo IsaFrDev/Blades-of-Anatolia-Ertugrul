@@ -586,7 +586,16 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(51.5f)) TakeShot(TEXT("night"));
 	if (At(51.6f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->SetTimeOfDay(TEXT("day")); GM->SetWeather(TEXT("storm")); } }
 	if (At(52.8f)) TakeShot(TEXT("storm"));
-	if (At(53.3f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
+	if (At(52.9f))
+	{
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SetWeather(TEXT("clear"));
+		TArray<AActor*> Es; UGameplayStatics::GetAllActorsOfClass(this, AErtEnemy::StaticClass(), Es);
+		AErtEnemy* Best = nullptr;
+		for (AActor* A : Es) { AErtEnemy* En = Cast<AErtEnemy>(A); if (En && !En->IsDead() && En->GetKind() != EErtEnemyKind::Deer) { Best = En; break; } }
+		if (Best) { const FVector L = Best->GetActorLocation(), F = Best->GetActorForwardVector(); SetActorLocation(L + F * 320.f + FVector(0, 0, 10.f), false, nullptr, ETeleportType::TeleportPhysics); if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-6.f, (-F).Rotation().Yaw, 0.f)); TargetArm = 260.f; }
+	}
+	if (At(54.0f)) TakeShot(TEXT("enemy"));
+	if (At(54.5f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
 	if (!DebugMove.IsNearlyZero())
 	{
 		MoveInput = DebugMove;

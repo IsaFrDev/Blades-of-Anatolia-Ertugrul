@@ -340,3 +340,10 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Yangi uslublar: `StyleMudRoof` 0.92 (tuproq tom: uch qatlam shovqin + yoriqlar) va `StyleCobble` 0.95 (tosh yotqizma: 28 sm jitterli dumaloq toshlar, chuqur choklar, kuchli relyef). Badan diapazoni [0.86,0.91) ga toraytirildi.
 - `AddHouse`: tom (`Wall * 0.75f`) alfani jun diapazoniga tushirib swirl ko'rinar edi; endi tuproq tom uslubi va tom chekkasi qo'shildi; gumbaz oddiy uslubda. Bu Bagras shahri va So'g'ut uylariga ta'sir qiladi.
 - `BuildCity` (Bagras shahri): markaziy maydon (42x42 m), 4 asosiy ko'cha, 40 ta radial tor ko'cha tosh yotqizma bilan qoplandi, maydon chetida tosh ustunchalar; Ochre devor tuslari tosh uslubida.
+
+## Dushman va NPC kiyim detallari
+
+- `UErtHeroBody` yangi bayroqlar: `bTurban` (uch qatlam o'ralgan salla, bezak), `bLamellar` (ko'krak va orqada 5x5 metall plastinka qatorlari, charm tasmalar), `bPauldrons` (yelka himoyasi, qatlamlar, to'g'nog'ich), `bCloak` (orqa plash, yelka to'g'nog'ichlari, `Cloak` rangi), `bQuiver` (sadoq, o'qlar, tasma), `bBackShield` (orqadagi yog'och qalqon, metall umbon), `bBoots` (baland charm etik, to'qa), `bMail` (zanjir ko'ylak, metall uslubi).
+- Dushmanlar: piyoda - etik, orqa qalqon; serjant - lamellar, yelka, etik; arbaletchi - sadoq, etik; elita - lamellar, yelka, qizil plash, etik; boss - lamellar, yelka, qora plash, zanjir, etik; otliq - zanjir, plash, etik.
+- NPC (erkaklar): ulamo/savdogar oq salla; oddiylar 50% rangli salla; beklar/hokimlar/tekfurlar plash, etik, oltin hoshiya (tekfur yelka himoyasi bilan); 20% plash, 40% etik.
+- Sinov skriptida dushman yaqinidan kadr (`enemy`).

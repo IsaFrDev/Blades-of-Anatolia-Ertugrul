@@ -31,6 +31,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") bool bWoman = false;
 	/** Qo'lida qilich (zarba pozasi uchun) */
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Ranglar") bool bSwordInHand = false;
+	// Kiyim detallari (dushman/NPC): salla, lamellar zirh, yelka himoyasi, plash, sadoq, orqadagi qalqon, etik, zanjir ko'ylak
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bTurban = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bLamellar = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bPauldrons = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bCloak = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bQuiver = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bBackShield = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bBoots = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") bool bMail = false;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") FLinearColor Cloak = FLinearColor(0.35f, 0.08f, 0.07f);
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") FLinearColor Turban = FLinearColor(0.9f, 0.88f, 0.8f);
 
 	/** Tanani quradi (bo'g'imlar + geometriya). Parent - kapsula yoki ildiz komponent. */
 	void Build(USceneComponent* Parent, float CapsuleHalfHeight);

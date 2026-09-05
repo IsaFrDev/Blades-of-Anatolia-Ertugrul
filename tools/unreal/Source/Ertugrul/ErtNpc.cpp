@@ -21,6 +21,17 @@ void AErtNpc::Setup(const FString& InId, const FString& NameKey, const FString& 
 	FRandomStream RS(GetTypeHash(InId));
 	Body->Fur = FLinearColor(0.55f + RS.FRand() * 0.35f, 0.5f + RS.FRand() * 0.3f, 0.4f + RS.FRand() * 0.3f);
 	Body->Beard = RS.FRand() < 0.35f ? FLinearColor(0.7f, 0.68f, 0.64f) : FLinearColor(0.16f, 0.11f, 0.06f);
+	if (!bWoman)
+	{
+		const bool bScholar = InId.Contains(TEXT("imom")) || InId.Contains(TEXT("mudarris")) || InId.Contains(TEXT("qozi")) || InId.Contains(TEXT("arabi")) || InId.Contains(TEXT("savdogar")) || InId.Contains(TEXT("bozorchi"));
+		const bool bBey = InId.Contains(TEXT("bey")) || InId.Contains(TEXT("hokim")) || InId.Contains(TEXT("tekfur")) || InId.Contains(TEXT("kopek")) || InId.Contains(TEXT("beyi"));
+		Body->bTurban = bScholar || (!bBey && RS.FRand() < 0.5f);
+		Body->Turban = bScholar ? FLinearColor(0.92f, 0.9f, 0.84f) : FLinearColor(0.3f + RS.FRand() * 0.5f, 0.2f + RS.FRand() * 0.4f, 0.15f + RS.FRand() * 0.4f);
+		Body->bCloak = bBey || RS.FRand() < 0.2f;
+		Body->Cloak = bBey ? FLinearColor(0.35f, 0.08f, 0.07f) : FLinearColor(0.25f + RS.FRand() * 0.2f, 0.18f + RS.FRand() * 0.15f, 0.1f + RS.FRand() * 0.1f);
+		Body->bBoots = bBey || RS.FRand() < 0.4f;
+		if (bBey) { Body->bPauldrons = InId.Contains(TEXT("tekfur")); Body->Trim = FLinearColor(0.9f, 0.75f, 0.25f); }
+	}
 	Body->Build(RootComponent, 92.f);
 	SetActorRotation(FRotator(0, Yaw, 0));
 	HomePos = GetActorLocation(); Target = HomePos;
