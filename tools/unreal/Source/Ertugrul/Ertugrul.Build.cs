@@ -11,7 +11,7 @@ public class Ertugrul : ModuleRules
 			"Core", "CoreUObject", "Engine", "InputCore",
 			"EnhancedInput", "AIModule", "NavigationSystem",
 			"GameplayTasks", "UMG", "Slate", "SlateCore",
-			"Json", "JsonUtilities", "ProceduralMeshComponent"
+			"Json", "JsonUtilities", "ProceduralMeshComponent", "AssetRegistry"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });

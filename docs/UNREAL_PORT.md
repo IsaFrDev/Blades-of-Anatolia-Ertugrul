@@ -348,3 +348,11 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - NPC (erkaklar): ulamo/savdogar oq salla; oddiylar 50% rangli salla; beklar/hokimlar/tekfurlar plash, etik, oltin hoshiya (tekfur yelka himoyasi bilan); 20% plash, 40% etik.
 - Sinov skriptida dushman yaqinidan kadr (`enemy`).
 - Tuzatish: `AErtEnemy::BeginPlay` avval har doim piyoda sifatida tanani qurar edi, spawner `Init` keyin faqat statistikani o'zgartirardi (barcha dushmanlar bir xil ko'rinardi). Endi standart Init birinchi Tick da chaqiriladi, spawner Init undan oldin ishlaydi.
+
+## Fab / Quixel Megascans assetlari
+
+- Loyihada `Fab` plagini yoqildi (`Ertugrul.uproject`). Assetlarni yuklash uchun muharrirda Window > Fab ochib Epic hisobiga kiriladi (bu qismni faqat foydalanuvchi qila oladi), kerakli paketlar (masalan Megascans daraxtlar, qoyalar, o'tlar) "Add to project" qilinadi. Ular odatda `/Game/Fab` yoki `/Game/Megascans` ga tushadi.
+- `ErtFab.h/.cpp` (`FErtFabLib`): Asset Registry orqali `/Game/Fab`, `/Game/Megascans`, `/Game/Quixel`, `/Game/MegascansLibrary`, `/Game/ErtAssets` skanerlanadi; statik meshlar nomiga qarab toifalanadi: pine/fir/spruce/cedar -> qarag'ay; tree/oak/beech/birch/maple/poplar/willow/olive -> daraxt; rock/boulder/cliff/stone -> qoya; bush/shrub -> buta; grass/fern/plant -> o't. `Content/Ertugrul/Data/fab_assets.json` manifestida ro'yxatlar qo'lda ham beriladi (`scan_paths` qo'shimcha yo'llar).
+- `AErtWorldBuilder`: `BuildForest`/`BuildRocks` da mesh topilsa protsedural o'rniga `HierarchicalInstancedStaticMeshComponent` instanslari (mesh -> HISM, kolliziya bilan) qo'yiladi; masshtab mesh bounds dan kerakli balandlik/radiusga keltiriladi (`ScaleToHeight`, `ScaleToRadius`). Topilmasa protsedural daraxt/qoyalar.
+- Build.cs: `AssetRegistry` moduli. Nanite loyihada o'chiq, Fab meshlari fallback mesh bilan ko'rinadi.
+- Sinov: manifestga dvigatelning Cone/Sphere shakllari qo'yib, quvur (pipeline) tekshirildi, keyin manifest bo'shatildi.

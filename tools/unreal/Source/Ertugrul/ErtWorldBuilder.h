@@ -9,6 +9,7 @@
 #include "ErtWorldBuilder.generated.h"
 
 class UProceduralMeshComponent;
+class UStaticMesh;
 class UPointLightComponent;
 class UMaterialInterface;
 struct FErtMeshData;
@@ -70,6 +71,10 @@ protected:
 
 private:
 	UPROPERTY(Transient) TArray<TObjectPtr<UProceduralMeshComponent>> Parts;
+	// Fab/Megascans meshlari uchun instanslangan komponentlar (mesh -> HISM)
+	UPROPERTY(Transient) TMap<TObjectPtr<UStaticMesh>, TObjectPtr<class UHierarchicalInstancedStaticMeshComponent>> FabInst;
+	class UHierarchicalInstancedStaticMeshComponent* FabComp(UStaticMesh* M, bool bCollision);
+	int32 FabTreesPlaced = 0, FabRocksPlaced = 0;
 	UPROPERTY(Transient) TArray<TObjectPtr<UPointLightComponent>> Lights;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> Mat;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> WaterMat;

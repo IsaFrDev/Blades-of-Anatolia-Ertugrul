@@ -1,6 +1,9 @@
 #include "ErtWorldBuilder.h"
 #include "Ertugrul.h"
 #include "ErtProcMesh.h"
+#include "ErtFab.h"
+#include "Engine/StaticMesh.h"
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "Components/PointLightComponent.h"
 #include "Materials/MaterialInterface.h"
@@ -62,6 +65,22 @@ void AErtWorldBuilder::Clear()
 	bBuilt = false;
 }
 
+UHierarchicalInstancedStaticMeshComponent* AErtWorldBuilder::FabComp(UStaticMesh* M, bool bCollision)
+{
+	if (TObjectPtr<UHierarchicalInstancedStaticMeshComponent>* Found = FabInst.Find(M)) return Found->Get();
+	UHierarchicalInstancedStaticMeshComponent* H = NewObject<UHierarchicalInstancedStaticMeshComponent>(this, MakeUniqueObjectName(this, UHierarchicalInstancedStaticMeshComponent::StaticClass(), TEXT("Fab")));
+	H->SetupAttachment(RootComponent);
+	H->SetMobility(EComponentMobility::Static);
+	H->SetStaticMesh(M);
+	H->SetCollisionEnabled(bCollision ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
+	if (bCollision) { H->SetCollisionObjectType(ECC_WorldStatic); H->SetCollisionResponseToAllChannels(ECR_Block); }
+	H->SetCastShadow(true);
+	H->bAffectDistanceFieldLighting = false;
+	H->RegisterComponent();
+	FabInst.Add(M, H);
+	return H;
+}
+
 UProceduralMeshComponent* AErtWorldBuilder::NewPart(const FString& Name, bool bCollision, UMaterialInterface* M)
 {
 	UProceduralMeshComponent* P = NewObject<UProceduralMeshComponent>(this, *Name);
@@ -108,6 +127,7 @@ void AErtWorldBuilder::Build()
 		BuildDomanic();
 	}
 	if (bBuildForest) { BuildForest(); BuildRocks(); }
+	if (FabTreesPlaced + FabRocksPlaced > 0) UE_LOG(LogErtugrul, Log, TEXT("Fab meshlari: %d daraxt, %d qoya (instans)"), FabTreesPlaced, FabRocksPlaced);
 	bBuilt = true;
 	int32 Tris = 0;
 	for (UProceduralMeshComponent* P : Parts) for (int32 s = 0; s < P->GetNumSections(); ++s) if (auto* Sec = P->GetProcMeshSection(s)) Tris += Sec->ProcIndexBuffer.Num() / 3;
@@ -1070,6 +1090,18 @@ void AErtWorldBuilder::BuildForest()
 		const FVector Nm = TerrainNormal(E, N);
 		if (H > 150.f || Nm.Z < 0.72f || H < WaterZ + 1.5f || N < DesertN + 40.f) continue;
 		const bool bPine = H > 60.f || RS.FRand() < 0.55f;
+		{
+			FErtFabLib& Fab = FErtFabLib::Get();
+			const TArray<UStaticMesh*>& Pool = (bPine && Fab.Pines.Num()) ? Fab.Pines : (Fab.Trees.Num() ? Fab.Trees : Fab.Pines);
+			if (Pool.Num())
+			{
+				UStaticMesh* Mesh = Pool[RS.RandRange(0, Pool.Num() - 1)];
+				const float Sc = FErtFabLib::ScaleToHeight(Mesh, RS.FRandRange(0.8f, 1.5f) * (bPine ? 11.f : 8.f));
+				FabComp(Mesh, true)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), W(E, N, H - 0.05f), FVector(Sc)), true);
+				++Placed; ++FabTreesPlaced;
+				continue;
+			}
+		}
 		const int32 cx = FMath::Clamp((int32)((E + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
 		const int32 cy = FMath::Clamp((int32)((N + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
 		AddTree(Cells[cy * CellsPerSide + cx], E, N, H, RS.FRandRange(0.8f, 1.5f), bPine, Placed);
@@ -1098,6 +1130,17 @@ void AErtWorldBuilder::BuildRocks()
 		if (FMath::Abs(E - RiverE(N)) < 45.f) P = 0.25f;
 		if (RS.FRand() > P || !IsBuildable(E, N) || DF < FortHalf + 45.f) continue;
 		const float R = RS.FRandRange(1.0f, 4.5f) * (H > 100.f ? 1.6f : 1.f);
+		{
+			FErtFabLib& Fab = FErtFabLib::Get();
+			if (Fab.Rocks.Num())
+			{
+				UStaticMesh* Mesh = Fab.Rocks[RS.RandRange(0, Fab.Rocks.Num() - 1)];
+				const float Sc = FErtFabLib::ScaleToRadius(Mesh, R);
+				FabComp(Mesh, true)->AddInstance(FTransform(FRotator(RS.FRandRange(-8.f, 8.f), RS.FRandRange(0.f, 360.f), RS.FRandRange(-8.f, 8.f)), W(E, N, H - R * 0.15f), FVector(Sc)), true);
+				++Placed; ++FabRocksPlaced;
+				continue;
+			}
+		}
 		M.AddSphere(W(E, N, H - R * 0.35f), R, 8, ErtCol::Vary(ErtCol::Sty(H > 150.f ? FLinearColor(0.7f, 0.7f, 0.72f) : FLinearColor(0.43f, 0.41f, 0.38f), ErtCol::StyleRock), 0.12f, Placed), FVector(RS.FRandRange(0.7f, 1.4f), RS.FRandRange(0.7f, 1.4f), RS.FRandRange(0.5f, 0.9f)), 0.18f, Placed);
 		++Placed;
 	}
