@@ -42,7 +42,7 @@ void FErtFabLib::Scan()
 			{
 				const TArray<TSharedPtr<FJsonValue>>* Arr = nullptr;
 				if (!Root->TryGetArrayField(Key, Arr)) return;
-				for (const TSharedPtr<FJsonValue>& V : *Arr) if (UStaticMesh* M = ErtLoadMesh(V->AsString())) Out.Add(M);
+				for (const TSharedPtr<FJsonValue>& V : *Arr) if (UStaticMesh* M = ErtLoadMesh(V->AsString())) { M->AddToRoot(); Out.Add(M); }
 			};
 			Fill(TEXT("trees"), Trees); Fill(TEXT("pines"), Pines); Fill(TEXT("rocks"), Rocks); Fill(TEXT("bushes"), Bushes); Fill(TEXT("grass"), Grass); Fill(TEXT("props"), Props); Fill(TEXT("stumps"), Stumps);
 			const TArray<TSharedPtr<FJsonValue>>* Paths = nullptr;
@@ -75,7 +75,7 @@ void FErtFabLib::Scan()
 			if (Name.Contains(TEXT("_lod")) && !Name.EndsWith(TEXT("lod0"))) continue;
 			// Ko'p qismli importlarning qism-meshlari (SM_PH_x_1, _2 ...): buyumlar uchun faqat asosiy mesh
 			if (Target == &Props) { int32 Us = -1; if (Name.FindLastChar(TEXT('_'), Us) && Us + 1 < Name.Len() && FChar::IsDigit(Name[Us + 1]) && Name.Mid(Us + 1).IsNumeric() && Name.Mid(Us + 1).Len() <= 2 && !Name.Contains(TEXT("_0"))) continue; }
-			if (UStaticMesh* M = Cast<UStaticMesh>(A.GetAsset())) { Target->AddUnique(M); ++Found; }
+			if (UStaticMesh* M = Cast<UStaticMesh>(A.GetAsset())) { M->AddToRoot(); Target->AddUnique(M); ++Found; }   // GC himoyasi
 		}
 	}
 	UE_LOG(LogErtugrul, Log, TEXT("Fab kutubxonasi: daraxt %d, qarag'ay %d, qoya %d, buta %d, o't %d, buyum %d, to'nka %d (registrdan %d)"), Trees.Num(), Pines.Num(), Rocks.Num(), Bushes.Num(), Grass.Num(), Props.Num(), Stumps.Num(), Found);

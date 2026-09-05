@@ -82,6 +82,8 @@ public:
 	TArray<FString> LoadProgressPublic() const { return LoadProgress(); }
 	/** Cliffhanger ekranini o'tkazib yuborish (Enter/Space) */
 	void SkipCleared() { if (State == EErtMissionState::Cleared) StateT = 99.f; }
+	/** Sinov: joriy bosqichning barcha maqsadlarini bajarilgan deb belgilash */
+	void DebugCompletePhase() { for (FErtObjective& O : Objectives) if (!O.bOptional) { O.bDone = true; O.bFailed = false; O.Progress = FMath::Max(O.Progress, O.Target); } }
 	int32 GetKills() const { return Kills; }
 	int32 GetDeaths() const { return Deaths; }
 	int32 AliveEnemies() const;

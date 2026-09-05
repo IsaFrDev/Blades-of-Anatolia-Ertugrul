@@ -410,7 +410,11 @@ void AErtWorldBuilder::BuildTerrain()
 					const FVector Nm = TerrainNormal(E, N);
 					V.Add(W(E, N, H));
 					Nrm.Add(Nm);
-					C.Add(ErtCol::Sty(TerrainColor(E, N, H, 1.f - Nm.Z), ErtCol::StyleGround));
+					{
+						float RW = 0.f; const float RD = RoadDist(E, N, &RW);
+						const bool bRoad = RD < RW * 0.5f + 0.5f && N > DesertN;
+						C.Add(ErtCol::Sty(TerrainColor(E, N, H, 1.f - Nm.Z), bRoad ? 0.03f : ErtCol::StyleGround));   // 0.03 = yo'l (tosh yotqizma)
+					}
 				}
 			FErtMeshData M(100.f);
 			M.AddGrid(V, C, Wd, Wd);

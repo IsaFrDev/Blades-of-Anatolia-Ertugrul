@@ -375,6 +375,7 @@ bool AErtHorse::TryBuildSkeletal()
 	Skel->SetRelativeLocation(FVector(0, 0, -GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight() + Zo));
 	Skel->SetRelativeRotation(FRotator(0, Yaw, 0));
 	Skel->SetRelativeScale3D(FVector(Sc));
+	SkelMeshRef = SM;
 	Skel->SetSkeletalMesh(SM);
 	Skel->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 	Skel->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -393,7 +394,7 @@ bool AErtHorse::TryBuildSkeletal()
 		for (const auto& Pair : (*Anims)->Values)
 		{
 			TArray<TObjectPtr<UAnimSequence>> List;
-			auto Add = [&](const FString& P) { if (UAnimSequence* A = LoadObject<UAnimSequence>(nullptr, *ObjPath(P))) List.Add(A); };
+			auto Add = [&](const FString& P) { if (UAnimSequence* A = LoadObject<UAnimSequence>(nullptr, *ObjPath(P))) { if (!A->IsValidAdditive()) { List.Add(A); SkelAnimRefs.Add(A); } } };
 			if (Pair.Value->Type == EJson::String) Add(Pair.Value->AsString());
 			else if (Pair.Value->Type == EJson::Array) for (const TSharedPtr<FJsonValue>& V : Pair.Value->AsArray()) Add(V->AsString());
 			if (List.Num()) SkelAnims.Add(FString(Pair.Key.ToView()), List);
@@ -406,7 +407,7 @@ bool AErtHorse::TryBuildSkeletal()
 
 void AErtHorse::SkelPlay(const FString& Key, float Rate, const TCHAR* Fallback)
 {
-	if (!Skel) return;
+	if (!Skel || !IsValid(Skel)) return;
 	const TArray<TObjectPtr<UAnimSequence>>* L = SkelAnims.Find(Key);
 	if ((!L || !L->Num()) && Fallback) L = SkelAnims.Find(Fallback);
 	if (!L || !L->Num()) L = SkelAnims.Find(TEXT("idle"));

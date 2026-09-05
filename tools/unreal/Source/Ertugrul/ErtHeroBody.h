@@ -95,6 +95,8 @@ private:
 	UPROPERTY(Transient) TObjectPtr<class USkeletalMeshComponent> Skel;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> SkelSword;
 	TMap<FString, TArray<TObjectPtr<class UAnimSequence>>> SkelAnims;
+	UPROPERTY(Transient) TArray<TObjectPtr<class UAnimSequence>> SkelAnimRefs;   // GC himoyasi (TMap UPROPERTY emas)
+	UPROPERTY(Transient) TObjectPtr<class USkeletalMesh> SkelMeshRef;
 	UPROPERTY(Transient) TObjectPtr<class UAnimSequence> CurAnim;
 	float OneShotT = 0.f, WalkRef = 200.f, RunRef = 500.f;
 	FVector SwordLoc = FVector::ZeroVector; FRotator SwordRot = FRotator::ZeroRotator; FName SwordSocket = TEXT("hand_r");

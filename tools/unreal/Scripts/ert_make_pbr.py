@@ -61,15 +61,17 @@ if (st == 0)
 	float lum = dot(VC.rgb, float3(0.3, 0.5, 0.2));
 	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.75) * 3.0);
 	float sandM = saturate((lum - 0.42) * 6.0) * dry;
-	float3 gD = lerp(GrassD1, GrassD2, 0.45);
+	float3 gD = lerp(GrassD1, GrassD2, 0.45) * float3(0.78, 1.02, 0.62);   // yashilroq o't
 	float3 dD = lerp(DirtD1, DirtD2, 0.45);
 	float3 sD = SandD;
 	float3 rD = RockD;
 	float3 nD = SnowD;
 	float3 base = lerp(gD, dD, dry);
 	base = lerp(base, sD, sandM);
+	float road = (s > 0.015) ? 1.0 : 0.0;   // relyef alfa 0.03 = yo'l
+	base = lerp(base, CobbleD * 0.9, road * (0.55 + 0.35 * VN(uv * 0.4)));
 	float3 tint = VC.rgb / max(lum, 0.05);
-	base *= lerp(float3(1, 1, 1), tint, 0.6) * (0.82 + 0.1 * VN(uv * 0.5));
+	base *= lerp(lerp(float3(1, 1, 1), tint, 0.6), float3(1, 1, 1), road) * (0.82 + 0.1 * VN(uv * 0.5));
 	float snow = saturate((Pm.z - 75.0) / 18.0) * saturate((N.z - 0.55) / 0.3);
 	float puddle = (N.z > 0.996 && Pm.z < 20.0) ? smoothstep(0.86, 0.90, VN(uv * 0.35 + 7.3)) * smoothstep(0.62, 0.74, VN(uv * 0.06 + 3.1)) : 0.0;
 	col = lerp(base, rD, slope);
@@ -107,6 +109,7 @@ if (st == 0)
 	float3 tg = GrassN, td = DirtN, ts = SandN, tr = RockN, tn = SnowN;   // Normal sampler: allaqachon -1..1
 	float3 t = lerp(lerp(lerp(tg, td, dry), ts, sandM), tr, slope);
 	t = lerp(t, tn, snow);
+	t = lerp(t, CobbleN, (s > 0.015) ? 0.8 : 0.0);
 	t.xy *= 0.8;
 	t = normalize(t);
 	// Relyef normali: XY tekislik bo'yicha, vertex normaliga aralashtiriladi (qiyaliklarda ham to'g'ri)
@@ -149,7 +152,7 @@ return (s >= 0.46 && s < 0.56) ? 0.7 : 0.0;
 
 
 TEX_ROLES = ["grass", "dirt", "rock", "sand", "snow"]
-TEX_INPUTS = ["GrassD1", "GrassD2", "DirtD1", "DirtD2", "SandD", "RockD", "SnowD", "GrassN", "DirtN", "SandN", "RockN", "SnowN"]
+TEX_INPUTS = ["GrassD1", "GrassD2", "DirtD1", "DirtD2", "SandD", "RockD", "SnowD", "CobbleD", "GrassN", "DirtN", "SandN", "RockN", "SnowN", "CobbleN"]
 
 
 def tex_exists(role, suffix):
@@ -215,6 +218,8 @@ def make():
     sample("DirtD1", "dirt", "D", uv1); sample("DirtD2", "dirt", "D", uv2)
     sample("SandD", "sand", "D", uvs); sample("RockD", "rock", "D", uvr); sample("SnowD", "snow", "D", uv1)
     sample("GrassN", "grass", "N", uv1); sample("DirtN", "dirt", "N", uv1); sample("SandN", "sand", "N", uvs); sample("RockN", "rock", "N", uvr); sample("SnowN", "snow", "N", uv1)
+    uvc = uvnode(0.004, 1700)   # tosh yotqizma 2.5 m
+    sample("CobbleD", "cobble", "D", uvc); sample("CobbleN", "cobble", "N", uvc)
     for cu in (ccol, cnrm):
         MEL.connect_material_expressions(wp, "", cu, "WP")
         MEL.connect_material_expressions(nw, "", cu, "N")

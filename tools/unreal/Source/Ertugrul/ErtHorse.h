@@ -54,6 +54,8 @@ private:
 	// Skeletli rejim (character.json: "horse" / "camel"): SingleNode, tezlikka qarab idle/walk/trot/gallop/jump
 	UPROPERTY(Transient) TObjectPtr<class USkeletalMeshComponent> Skel;
 	TMap<FString, TArray<TObjectPtr<class UAnimSequence>>> SkelAnims;
+	UPROPERTY(Transient) TArray<TObjectPtr<class UAnimSequence>> SkelAnimRefs;
+	UPROPERTY(Transient) TObjectPtr<class USkeletalMesh> SkelMeshRef;
 	UPROPERTY(Transient) TObjectPtr<class UAnimSequence> CurAnim;
 	float WalkRef = 250.f, TrotRef = 520.f, GallopRef = 950.f;
 	bool TryBuildSkeletal();

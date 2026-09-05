@@ -486,6 +486,7 @@ bool UErtHeroBody::TryBuildSkeletal(USceneComponent* Parent, float HalfH)
 	Skel->SetRelativeLocation(FVector(0, 0, -HalfH + Zo));
 	Skel->SetRelativeRotation(FRotator(0, Yaw, 0));
 	Skel->SetRelativeScale3D(FVector(Sc));
+	SkelMeshRef = SM;
 	Skel->SetSkeletalMesh(SM);
 	Skel->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 	Skel->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -504,7 +505,7 @@ bool UErtHeroBody::TryBuildSkeletal(USceneComponent* Parent, float HalfH)
 				UAnimSequence* A = LoadObject<UAnimSequence>(nullptr, *ErtObjPath(P));
 				if (!A) { UE_LOG(LogErtugrul, Warning, TEXT("character.json: animatsiya topilmadi %s"), *P); return; }
 				if (A->IsValidAdditive()) { UE_LOG(LogErtugrul, Warning, TEXT("character.json: %s additiv - o'tkazib yuborildi"), *P); return; }
-				List.Add(A);
+				List.Add(A); SkelAnimRefs.Add(A);
 			};
 			if (Pair.Value->Type == EJson::String) Add(Pair.Value->AsString());
 			else if (Pair.Value->Type == EJson::Array) for (const TSharedPtr<FJsonValue>& V : Pair.Value->AsArray()) Add(V->AsString());
@@ -553,7 +554,7 @@ UAnimSequence* UErtHeroBody::SkelPick(const FString& Key, int32 Index) const
 
 void UErtHeroBody::SkelPlay(const FString& Key, bool bLoop, float Rate, int32 Index, const TCHAR* Fallback)
 {
-	if (!Skel) return;
+	if (!Skel || !IsValid(Skel) || !Skel->IsRegistered()) return;
 	UAnimSequence* A = SkelPick(Key, Index);
 	if (!A && Fallback) A = SkelPick(Fallback, Index);
 	if (!A) A = SkelPick(TEXT("idle"), 0);

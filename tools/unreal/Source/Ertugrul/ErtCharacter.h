@@ -212,6 +212,13 @@ private:
 	float SlopeDeg = 0.f;
 	FVector FloorNormal = FVector::UpVector;
 	FVector2D MoveInput = FVector2D::ZeroVector;
+	// Avtomatik o'yinchi (-ErtAutoPlay): epizodni o'zi o'ynaydi (sinov)
+	bool bAutoPlay = false;
+	float AutoT = 0.f, AutoTotalT = 0.f, AutoStuckT = 0.f, AutoPhaseT = 0.f, AutoIdleT = 0.f, AutoPotT = 0.f;
+	int32 AutoLastPhase = -1, AutoTeleports = 0;
+	FVector AutoLastPos = FVector::ZeroVector;
+	FString AutoEpisode;
+	void UpdateAutoPlay(float Dt);
 	float TargetArm = 380.f;
 	float LandSquash = 0.f;
 
