@@ -25,6 +25,8 @@ struct ERTUGRUL_API FErtMeshData
 	void AddTri(const FVector& A, const FVector& B, const FVector& C, const FVector& Outward, const FLinearColor& Col);
 	// To'rtburchak A,B,C,D (halqa tartibida).
 	void AddQuad(const FVector& A, const FVector& B, const FVector& C, const FVector& D, const FVector& Outward, const FLinearColor& Col);
+	// To'rtburchak to'g'ri UV bilan (0,0)-(1,0)-(1,1)-(0,1): barg kartochkalari (alfa niqobli material) uchun.
+	void AddQuadUV(const FVector& A, const FVector& B, const FVector& C, const FVector& D, const FVector& Outward, const FLinearColor& Col);
 	// Quti: markaz, yarim o'lchamlar, rang, aylanish.
 	void AddBox(const FVector& Center, const FVector& Extent, const FLinearColor& Col, const FRotator& Rot = FRotator::ZeroRotator);
 	// Silindr/konus: Base - pastki markaz, o'q +Z (Rot bilan buriladi).

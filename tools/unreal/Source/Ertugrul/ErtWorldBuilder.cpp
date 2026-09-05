@@ -117,6 +117,7 @@ void AErtWorldBuilder::Build()
 	if (!Mat) Mat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/EngineDebugMaterials/VertexColorMaterial.VertexColorMaterial"));
 	WaterMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtWater.M_ErtWater"));
 	GrassMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtGrass.M_ErtGrass"));
+	LeafMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtLeaf.M_ErtLeaf"));
 	if (!WaterMat) WaterMat = Mat;
 
 	BuildTerrain();
@@ -141,7 +142,7 @@ void AErtWorldBuilder::Build()
 		BuildDomanic();
 	}
 	if (bBuildSettlements) BuildSplineWalls();
-	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); BuildShoreFoliage(); BuildProps(); }
+	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); BuildShoreFoliage(); BuildBushes(); BuildProps(); }
 	if (bBuildSettlements) BuildDecals();
 	if (FabTreesPlaced + FabRocksPlaced > 0) UE_LOG(LogErtugrul, Log, TEXT("Fab meshlari: %d daraxt, %d qoya (instans)"), FabTreesPlaced, FabRocksPlaced);
 	bBuilt = true;
@@ -2792,7 +2793,7 @@ void AErtWorldBuilder::AddWallSpline(FErtMeshData& M, const TArray<FVector2D>& I
 			const float Zt = HeightAt(C0.X, C0.Y) + H;
 			const FLinearColor Cm = ErtCol::Vary(Col, 0.08f, S + i * 97 + m);
 			// Modul: egilgan spline bo'ylab joylashgan quti (devorning o'zi)
-			M.AddBox(W(C0.X, C0.Y, (Z0 + Zt) * 0.5f), FVector(ML * 0.5f * 100.f + 1.f, Thick * 50.f, (Zt - Z0) * 50.f), Cm, FRotator(0, Yaw, 0));
+			M.AddBox(W(C0.X, C0.Y, (Z0 + Zt) * 0.5f), FVector(ML * 0.5f * 100.f + Thick * 55.f, Thick * 50.f, (Zt - Z0) * 50.f), Cm, FRotator(0, Yaw, 0));
 			if (bBattlements)
 				for (int32 t = 0; t < 2; ++t)
 				{
@@ -2801,6 +2802,12 @@ void AErtWorldBuilder::AddWallSpline(FErtMeshData& M, const TArray<FVector2D>& I
 				}
 			WallSegs.Add({ A + Dir * m * ML, A + Dir * (m + 1) * ML, Z0 + 0.6f, Zt - Z0 });
 		}
+	}
+	// Tutashuv ustunlari (burchak bo'shliqlarini yopadi)
+	for (int32 i = 0; i < Pts.Num(); ++i)
+	{
+		const float Zb = HeightAt(Pts[i].X, Pts[i].Y) - 0.6f;
+		M.AddCylinder(W(Pts[i].X, Pts[i].Y, Zb), Thick * 0.62f, Thick * 0.6f, H + 0.75f, 8, ErtCol::Vary(Col, 0.05f, S + 7 * i), true, FRotator::ZeroRotator, 0.02f, S + i);
 	}
 	if (bTowers)
 		for (int32 i = 0; i < Pts.Num(); ++i)
@@ -2938,4 +2945,85 @@ void AErtWorldBuilder::BuildShoreFoliage()
 	if (G.Verts.Num()) { UProceduralMeshComponent* P = NewPart(TEXT("ShoreGrass"), false, GrassMat ? GrassMat : Mat); G.Commit(P, 0, false); P->SetCastShadow(false); }
 	if (Pebbles.Verts.Num()) Pebbles.Commit(NewPart(TEXT("Pebbles"), false), 0, false);
 	UE_LOG(LogErtugrul, Log, TEXT("Qirg'oq/devor o'simliklari: %d tup, %d tosh"), Clumps, Stones);
+}
+
+
+// ---------------- Realistik butalar: barg kartochkalari (alfa niqobli M_ErtLeaf) + shoxlar ----------------
+
+void AErtWorldBuilder::BuildBushes()
+{
+	FRandomStream RS(Seed + 61);
+	const float Half = WorldSizeM * 0.5f;
+	const int32 CellsPerSide = 5;
+	TArray<FErtMeshData> Leaves; Leaves.Init(FErtMeshData(1.f), CellsPerSide * CellsPerSide);
+	FErtMeshData Twigs(1.f);
+	const FLinearColor Bark = ErtCol::Sty(FLinearColor(0.30f, 0.22f, 0.14f), ErtCol::StyleBark);
+	int32 Placed = 0;
+	auto Bush = [&](float E, float N, float H, int32 Kind)
+	{
+		// Kind 0 yashil buta (o'tloq), 1 to'q yashil (o'rmon), 2 quruq/kulrang (cho'l, tog'), 3 gullagan (oba/qishloq)
+		const FLinearColor Base = Kind == 0 ? FLinearColor(0.16f, 0.34f, 0.09f) : (Kind == 1 ? FLinearColor(0.10f, 0.24f, 0.07f) : (Kind == 2 ? FLinearColor(0.36f, 0.36f, 0.20f) : FLinearColor(0.20f, 0.38f, 0.10f)));
+		const float R = RS.FRandRange(80.f, 190.f) * (Kind == 2 ? 0.65f : 1.f), Hg = R * RS.FRandRange(0.75f, 1.2f);
+		const FVector C = W(E, N, H) + FVector(0, 0, Hg * 0.55f);
+		const int32 cx = FMath::Clamp((int32)((E + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
+		const int32 cy = FMath::Clamp((int32)((N + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
+		FErtMeshData& M = Leaves[cy * CellsPerSide + cx];
+		const int32 Cards = Kind == 2 ? 10 : RS.RandRange(16, 26);
+		for (int32 c = 0; c < Cards; ++c)
+		{
+			// Ellipsoid ichida tasodifiy nuqta, kartochka tashqariga qaraydi va biroz yuqoriga egilgan
+			FVector Dir(RS.FRandRange(-1.f, 1.f), RS.FRandRange(-1.f, 1.f), RS.FRandRange(-0.4f, 1.f)); Dir.Normalize();
+			const FVector P = C + FVector(Dir.X * R, Dir.Y * R, Dir.Z * Hg * 0.5f) * RS.FRandRange(0.35f, 0.85f);
+			const float S = RS.FRandRange(0.5f, 0.85f) * R;
+			FVector Out = Dir; Out.Z = FMath::Max(Out.Z, 0.1f); Out.Normalize();
+			const FVector Rt = FVector::CrossProduct(FVector::UpVector, Out).GetSafeNormal();
+			const FVector Up = FVector::CrossProduct(Out, Rt).GetSafeNormal();
+			const FQuat Twist(Out, RS.FRandRange(-0.8f, 0.8f));
+			const FVector R2 = Twist.RotateVector(Rt) * S, U2 = Twist.RotateVector(Up) * S;
+			const FLinearColor Col = ErtCol::Vary(Base * (0.75f + 0.5f * (Dir.Z * 0.5f + 0.5f)), 0.12f, Placed * 31 + c);
+			// Alfa: kartochka balandligi (0 pastda .. 1 tepada) - shamol tebranishi kuchi
+			const float A = FMath::Clamp((P.Z - (C.Z - Hg * 0.55f)) / Hg, 0.f, 1.f);
+			M.AddQuadUV(P - R2 - U2, P + R2 - U2, P + R2 + U2, P - R2 + U2, Out, ErtCol::Sty(Col, A));
+			if (Kind == 3 && c % 5 == 0) M.AddQuadUV(P - R2 * 0.3f - U2 * 0.3f + Out * 3.f, P + R2 * 0.3f - U2 * 0.3f + Out * 3.f, P + R2 * 0.3f + U2 * 0.3f + Out * 3.f, P - R2 * 0.3f + U2 * 0.3f + Out * 3.f, Out, ErtCol::Sty(FLinearColor(0.95f, 0.85f, 0.9f), A));   // gullar
+		}
+		// Shoxlar: markazdan 3-5 ta ingichka silindr
+		const int32 NT = RS.RandRange(3, 5);
+		for (int32 t = 0; t < NT; ++t)
+		{
+			const float A = RS.FRandRange(0.f, 2.f * PI), Tilt = RS.FRandRange(15.f, 45.f);
+			Twigs.AddCylinder(W(E, N, H - 0.05f), 2.2f, 1.f, Hg * 0.8f, 4, Bark, false, FRotator(0, FMath::RadiansToDegrees(A), 0) + FRotator(Tilt * FMath::Cos(A), 0, Tilt * FMath::Sin(A)));
+		}
+		++Placed;
+	};
+	for (int32 i = 0; i < BushCount * 10 && Placed < BushCount; ++i)
+	{
+		const float E = RS.FRandRange(-Half + 8.f, Half - 8.f), N = RS.FRandRange(-Half + 8.f, Half - 8.f);
+		const float H = HeightAt(E, N);
+		const FVector Nm = TerrainNormal(E, N);
+		if (H < WaterZ + 0.8f || H > 80.f || Nm.Z < 0.8f) continue;
+		float Wd = 0.f; if (RoadDist(E, N, &Wd) < Wd * 0.5f + 2.f) continue;
+		float SurfZ; if (IsWater(E, N, SurfZ)) continue;
+		if (!IsBuildable(E, N)) continue;
+		const bool bDesert = N < DesertN + 40.f;
+		// Zichlik: o'rmon chekkasi, daryo/ko'l bo'yi, oba/qishloq atrofi zich; ochiq dasht siyrak; cho'lda kam
+		float Dens = bDesert ? 0.12f : 0.3f;
+		Dens = FMath::Max(Dens, 0.8f * (1.f - Smooth01((FMath::Abs(E - RiverE(N)) - 30.f) / 50.f)));
+		for (const FVector2D& Hot : { FVector2D(ObaE, ObaN), FVector2D(SogE, SogN), FVector2D(DomE, DomN), FVector2D(BurE, BurN), FVector2D(NikE, NikN), FVector2D(-330.f, 700.f), FVector2D(LakeE, LakeN), FVector2D(AskE, AskN) })
+			Dens = FMath::Max(Dens, 0.9f * (1.f - Smooth01((FVector2D::Distance(FVector2D(E, N), Hot) - 100.f) / 220.f)));
+		Dens *= 0.5f + 0.5f * Noise(E, N, 0.03f);
+		if (RS.FRand() > Dens) continue;
+		int32 Kind = 0;
+		if (bDesert || H > 60.f) Kind = 2;
+		else if (E < -120.f && N > 80.f && RS.FRand() < 0.6f) Kind = 1;   // shimoli-g'arb o'rmoni
+		else if (RS.FRand() < 0.15f) Kind = 3;
+		Bush(E, N, H, Kind);
+	}
+	for (int32 cidx = 0; cidx < Leaves.Num(); ++cidx)
+		if (Leaves[cidx].Verts.Num())
+		{
+			UProceduralMeshComponent* P = NewPart(FString::Printf(TEXT("Bushes_%d"), cidx), false, LeafMat ? LeafMat : (GrassMat ? GrassMat : Mat));
+			Leaves[cidx].Commit(P, 0, false);
+		}
+	if (Twigs.Verts.Num()) Twigs.Commit(NewPart(TEXT("BushTwigs"), false), 0, false);
+	UE_LOG(LogErtugrul, Log, TEXT("Butalar: %d (barg kartochkali)"), Placed);
 }

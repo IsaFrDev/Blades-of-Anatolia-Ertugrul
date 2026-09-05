@@ -31,6 +31,25 @@ void FErtMeshData::AddQuad(const FVector& A, const FVector& B, const FVector& C,
 	AddTri(A, C, D, Outward, Col);
 }
 
+void FErtMeshData::AddQuadUV(const FVector& A, const FVector& B, const FVector& C, const FVector& D, const FVector& Outward, const FLinearColor& Col)
+{
+	FVector N = -FVector::CrossProduct(B - A, C - A);
+	if (N.IsNearlyZero()) return;
+	N.Normalize();
+	const bool bFlip = FVector::DotProduct(N, Outward) < 0.f;
+	if (bFlip) N = -N;
+	const int32 Base = Verts.Num();
+	Verts.Add(A); Verts.Add(B); Verts.Add(C); Verts.Add(D);
+	UVs.Add(FVector2D(0, 0)); UVs.Add(FVector2D(1, 0)); UVs.Add(FVector2D(1, 1)); UVs.Add(FVector2D(0, 1));
+	for (int32 i = 0; i < 4; ++i)
+	{
+		Normals.Add(N); Colors.Add(Col);
+		Tangents.Add(FProcMeshTangent((B - A).GetSafeNormal(), false));
+	}
+	if (bFlip) { Tris.Append({ Base, Base + 2, Base + 1, Base, Base + 3, Base + 2 }); }
+	else { Tris.Append({ Base, Base + 1, Base + 2, Base, Base + 2, Base + 3 }); }
+}
+
 void FErtMeshData::AddBox(const FVector& Center, const FVector& E, const FLinearColor& Col, const FRotator& Rot)
 {
 	const FQuat Q = Rot.Quaternion();

@@ -116,6 +116,9 @@ private:
 	void BuildGrass();
 	void BuildProps();
 	void BuildSplineWalls();
+	void BuildBushes();
+	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> LeafMat;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") int32 BushCount = 2600;
 	void BuildDecals();
 	void BuildShoreFoliage();
 	UPROPERTY(Transient) TArray<TObjectPtr<class UDecalComponent>> Decals;

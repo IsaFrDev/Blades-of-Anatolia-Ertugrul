@@ -424,3 +424,8 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 
 - **Kengash tuzatishi**: kengash NPClari va nuqtasi obadan 400 m dan uzoq epizodlarda (Bagras, Damashq...) epizod boshlanish nuqtasida (`CouncilBase`); bo'sh dialogli kengash nuqtada 2 s turish bilan o'tadi.
 - **Avtomatik sinovchi**: bosqich chegarasi 60 s, yaqinlashmaslik (8 s) bo'yicha teleport, 3 teleportdan keyin bosqich yopiladi ("XATO nomzodi"), uzoqdagi dushmanga ham boradi, `-ErtShot` bilan har 25 s skrinshot.
+
+## Realistik butalar
+- `M_ErtLeaf` (`tools/unreal/Scripts/ert_make_leaf.py`): Masked, ikki tomonlama folyaj (subsurface), UV bo'yicha protsedural barg to'plami silueti (tishli chet + teshiklar, dunyo koordinatasidan urug'), tomirlar, shamol WPO (alfa = kartochka balandligi).
+- `AErtWorldBuilder::BuildBushes` (`BushCount` 2600): har buta 16-26 barg kartochkasi (ellipsoid ichida tashqariga qaragan, burilgan) + 3-5 shox silindri. Turlari: o'tloq yashil, o'rmon to'q yashil, cho'l/tog' quruq, gullagan (oba/qishloq). Zichlik: daryo/ko'l bo'yi, o'rmon chekkasi, oba/qishloq atrofi. `FErtMeshData::AddQuadUV` - to'g'ri UV li to'rtburchak.
+- Spline devor tutashuvlarida tosh ustunlar (burchak bo'shliqlari yopildi).
