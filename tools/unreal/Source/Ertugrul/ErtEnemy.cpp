@@ -64,7 +64,7 @@ void AErtEnemy::Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadi
 void AErtEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	if (!bInit) Init(EErtEnemyKind::Footman, GetActorLocation(), 0.f);
+	// Init spawner tomonidan chaqiriladi; chaqirilmasa birinchi Tick da piyoda sifatida quriladi (BeginPlay da qursak, keyingi Init tanani qayta qurmaydi)
 }
 
 void AErtEnemy::BuildDeer()
@@ -244,6 +244,7 @@ void AErtEnemy::MoveToward(const FVector& Target, float Speed)
 void AErtEnemy::Tick(float Dt)
 {
 	Super::Tick(Dt);
+	if (!bInit) Init(EErtEnemyKind::Footman, GetActorLocation(), 0.f);
 	if (bDead) return;
 	APawn* Player = UGameplayStatics::GetPlayerPawn(this, 0);
 	if (Kind == EErtEnemyKind::Deer) TickDeer(Dt, Player);

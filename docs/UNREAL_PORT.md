@@ -347,3 +347,4 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Dushmanlar: piyoda - etik, orqa qalqon; serjant - lamellar, yelka, etik; arbaletchi - sadoq, etik; elita - lamellar, yelka, qizil plash, etik; boss - lamellar, yelka, qora plash, zanjir, etik; otliq - zanjir, plash, etik.
 - NPC (erkaklar): ulamo/savdogar oq salla; oddiylar 50% rangli salla; beklar/hokimlar/tekfurlar plash, etik, oltin hoshiya (tekfur yelka himoyasi bilan); 20% plash, 40% etik.
 - Sinov skriptida dushman yaqinidan kadr (`enemy`).
+- Tuzatish: `AErtEnemy::BeginPlay` avval har doim piyoda sifatida tanani qurar edi, spawner `Init` keyin faqat statistikani o'zgartirardi (barcha dushmanlar bir xil ko'rinardi). Endi standart Init birinchi Tick da chaqiriladi, spawner Init undan oldin ishlaydi.
