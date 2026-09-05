@@ -1,4 +1,6 @@
 #include "ErtGameMode.h"
+#include "ErtNav.h"
+#include "ErtMap3D.h"
 #include "Ertugrul.h"
 #include "ErtCharacter.h"
 #include "ErtCutscene.h"
@@ -71,6 +73,11 @@ void AErtGameMode::BeginPlay()
 	Cutscene = GetWorld()->SpawnActor<AErtCutsceneDirector>();
 	Weather = GetWorld()->SpawnActor<AErtWeather>();
 	bUnlockAll = FParse::Param(FCommandLine::Get(), TEXT("ErtUnlockAll"));
+	{
+		FString Gfx; if (FParse::Value(FCommandLine::Get(), TEXT("-ErtGfx="), Gfx)) GfxPreset = Gfx == TEXT("ultra") ? 0 : (Gfx == TEXT("low") || Gfx == TEXT("s") ? 2 : 1);
+		ApplyGfxPreset();
+		if (FParse::Param(FCommandLine::Get(), TEXT("ErtNoGps"))) bGps = false;
+	}
 	SpawnNpcs();
 	LoadGame();
 	{ FTimerHandle Th2; GetWorldTimerManager().SetTimer(Th2, [this]() { LoadGame(); }, 0.5f, false); }   // o'yinchi paydo bo'lgach inventar/daraja
@@ -247,6 +254,7 @@ void AErtGameMode::SaveGame()
 	R->SetNumberField(TEXT("language"), Language);
 	R->SetNumberField(TEXT("mouse_sens"), MouseSens);
 	R->SetBoolField(TEXT("invert_y"), bInvertY);
+	R->SetNumberField(TEXT("gfx"), GfxPreset);
 	{ TSharedPtr<FJsonObject> KO = MakeShared<FJsonObject>(); for (const auto& P : SavedKeys) KO->SetStringField(P.Key, P.Value); R->SetObjectField(TEXT("keys"), KO); }
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
@@ -272,6 +280,7 @@ void AErtGameMode::LoadGame()
 		if (R->TryGetArrayField(TEXT("flags"), A)) for (const auto& V : *A) Flags.Add(V->AsString());
 		R->TryGetNumberField(TEXT("honor"), Honor);
 		R->TryGetNumberField(TEXT("language"), Language);
+		R->TryGetNumberField(TEXT("gfx"), GfxPreset);
 		double D = 1.0; if (R->TryGetNumberField(TEXT("mouse_sens"), D)) MouseSens = (float)D;
 		R->TryGetBoolField(TEXT("invert_y"), bInvertY);
 		{ const TSharedPtr<FJsonObject>* KO = nullptr; if (R->TryGetObjectField(TEXT("keys"), KO)) for (const auto& P : (*KO)->Values) SavedKeys.Add(FString(P.Key.ToView()), P.Value->AsString()); ApplySavedKeys(); }
@@ -359,6 +368,18 @@ void AErtGameMode::SetTimeOfDay(const FString& Name)
 void AErtGameMode::Tick(float Dt)
 {
 	Super::Tick(Dt);
+	// GPS: faol maqsadga yo'l
+	if (AErtGps* G = AErtGps::Get(GetWorld()))
+	{
+		FVector T = FVector::ZeroVector;
+		if (bGps && Director && Director->GetState() != EErtMissionState::Inactive)
+		{
+			// Yaqin tirik dushman bo'lsa yo'l kerak emas; aks holda birinchi marker
+			TArray<FVector> Ms; Director->GetMarkers(Ms);
+			if (Ms.Num()) T = Ms[0];
+		}
+		G->SetTarget(T);
+	}
 	if (bCapturing)
 	{
 		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
@@ -457,6 +478,34 @@ void AErtGameMode::ToggleMap()
 	if (Dialog.IsActive() || (Cutscene && Cutscene->IsPlaying())) return;
 	if (Menu == EErtMenu::Map) OpenMenu(EErtMenu::None);
 	else if (Menu == EErtMenu::None || Menu == EErtMenu::Pause) OpenMenu(EErtMenu::Map);
+	if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) M3->SetActive(Menu == EErtMenu::Map);
+}
+
+void AErtGameMode::MapRotate(float DeltaYaw) { if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) M3->Rotate(DeltaYaw); }
+
+void AErtGameMode::ApplyGfxPreset()
+{
+	// Konsol o'zgaruvchilari: preset jadvali (docs/UNREAL_PORT.md)
+	auto Cmd = [&](const TCHAR* C) { if (GEngine) GEngine->Exec(GetWorld(), C); };
+	switch (GfxPreset)
+	{
+	case 0:   // PC Ultra: Lumen (Hardware RT), Virtual Shadow Maps High, Lumen RT aks, 100% + TSR (DLSS plagin bo'lsa o'zi almashadi)
+		Cmd(TEXT("r.DynamicGlobalIlluminationMethod 1")); Cmd(TEXT("r.Lumen.HardwareRayTracing 1")); Cmd(TEXT("r.ReflectionMethod 1")); Cmd(TEXT("r.Lumen.Reflections.HardwareRayTracing 1"));
+		Cmd(TEXT("r.Shadow.Virtual.Enable 1")); Cmd(TEXT("r.Shadow.Virtual.ResolutionLodBiasDirectional 0")); Cmd(TEXT("r.Shadow.Virtual.ResolutionLodBiasLocal 0"));
+		Cmd(TEXT("r.AntiAliasingMethod 4")); Cmd(TEXT("r.DynamicRes.OperationMode 0")); Cmd(TEXT("r.ScreenPercentage 100")); Cmd(TEXT("sg.GlobalIlluminationQuality 3")); Cmd(TEXT("sg.ShadowQuality 3")); Cmd(TEXT("sg.ReflectionQuality 3")); Cmd(TEXT("sg.FoliageQuality 3")); Cmd(TEXT("sg.ViewDistanceQuality 3"));
+		break;
+	case 1:   // PS5 / Series X 60 FPS: Lumen Software, VSM Medium, Lumen SW aks, dinamik 50-70% TSR
+		Cmd(TEXT("r.DynamicGlobalIlluminationMethod 1")); Cmd(TEXT("r.Lumen.HardwareRayTracing 0")); Cmd(TEXT("r.ReflectionMethod 1")); Cmd(TEXT("r.Lumen.Reflections.HardwareRayTracing 0"));
+		Cmd(TEXT("r.Shadow.Virtual.Enable 1")); Cmd(TEXT("r.Shadow.Virtual.ResolutionLodBiasDirectional 1")); Cmd(TEXT("r.Shadow.Virtual.ResolutionLodBiasLocal 1"));
+		Cmd(TEXT("r.AntiAliasingMethod 4")); Cmd(TEXT("r.DynamicRes.OperationMode 2")); Cmd(TEXT("r.DynamicRes.MinScreenPercentage 50")); Cmd(TEXT("r.DynamicRes.MaxScreenPercentage 70")); Cmd(TEXT("r.DynamicRes.FrameTimeBudget 16.6")); Cmd(TEXT("sg.GlobalIlluminationQuality 2")); Cmd(TEXT("sg.ShadowQuality 2")); Cmd(TEXT("sg.ReflectionQuality 2")); Cmd(TEXT("sg.FoliageQuality 2")); Cmd(TEXT("sg.ViewDistanceQuality 2"));
+		break;
+	default:  // Series S 60 FPS: SSGI (Distance Field/Screen Space), Cascaded Shadows, SSR, dinamik 50-60% TSR
+		Cmd(TEXT("r.DynamicGlobalIlluminationMethod 2")); Cmd(TEXT("r.Lumen.HardwareRayTracing 0")); Cmd(TEXT("r.ReflectionMethod 2")); Cmd(TEXT("r.SSR.Quality 2"));
+		Cmd(TEXT("r.Shadow.Virtual.Enable 0")); Cmd(TEXT("r.Shadow.CSM.MaxCascades 3"));
+		Cmd(TEXT("r.AntiAliasingMethod 4")); Cmd(TEXT("r.DynamicRes.OperationMode 2")); Cmd(TEXT("r.DynamicRes.MinScreenPercentage 50")); Cmd(TEXT("r.DynamicRes.MaxScreenPercentage 60")); Cmd(TEXT("r.DynamicRes.FrameTimeBudget 16.6")); Cmd(TEXT("sg.GlobalIlluminationQuality 1")); Cmd(TEXT("sg.ShadowQuality 1")); Cmd(TEXT("sg.ReflectionQuality 1")); Cmd(TEXT("sg.FoliageQuality 1")); Cmd(TEXT("sg.ViewDistanceQuality 2"));
+		break;
+	}
+	UE_LOG(LogErtugrul, Log, TEXT("Grafika preseti: %s"), GfxPresetName(GfxPreset));
 }
 
 void AErtGameMode::ToggleInventory()
@@ -477,7 +526,7 @@ void AErtGameMode::SettingsMove(int32 Delta)
 {
 	if (bCapturing) return;
 	if (SettingsPage == 1) { const int32 N = AErtCharacter::BindableActions().Num() + 1; KeyRow = (KeyRow + Delta + N) % N; return; }
-	SettingsRow = (SettingsRow + Delta + 8) % 8;
+	SettingsRow = (SettingsRow + Delta + 9) % 9;
 }
 
 void AErtGameMode::ApplySavedKeys()
@@ -499,6 +548,7 @@ void AErtGameMode::SettingsAdjust(int32 Delta)
 		return;
 	}
 	if (SettingsRow == 3) { SettingsPage = 1; KeyRow = 0; return; }
+	if (SettingsRow == 8) { GfxPreset = (GfxPreset + Delta + 3) % 3; ApplyGfxPreset(); return; }
 	UGameUserSettings* GS = GEngine ? GEngine->GetGameUserSettings() : nullptr;
 	if (SettingsRow >= 4 && GS)
 	{
@@ -547,6 +597,7 @@ void AErtGameMode::MenuToggle()
 void AErtGameMode::MenuMove(int32 Delta)
 {
 	if (Dialog.IsActive()) { Dialog.MoveSelection(Delta); return; }
+	if (Menu == EErtMenu::Map) { if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) M3->Zoom(Delta < 0 ? 0.8f : 1.25f); return; }
 	if (Menu == EErtMenu::Settings) { SettingsMove(Delta); return; }
 	if (Menu == EErtMenu::Main) { RowMain = (RowMain + Delta + 4) % 4; return; }
 	if (Menu == EErtMenu::Pause) { RowPause = (RowPause + Delta + 5) % 5; return; }

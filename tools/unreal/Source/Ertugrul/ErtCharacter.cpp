@@ -200,7 +200,7 @@ void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, floa
 		for (const FOverlapResult& R : Hits)
 		{
 			AErtEnemy* E = Cast<AErtEnemy>(R.GetActor());
-			if (!E || Done.Contains(E)) continue;
+			if (!E || Done.Contains(E) || E->IsAlly()) continue;
 			Done.Add(E);
 			// IJRO: gangigan yoki holdan toygan (<25%) raqib - bir zarbda
 			const bool bExecute = Kind != 3 && ((E->IsStaggered() && !E->IsBoss()) || E->GetHealth() < E->GetMaxHealth() * E->ExecuteThreshold());
@@ -460,7 +460,7 @@ void AErtCharacter::BeginPlay()
 	if (FParse::Value(FCommandLine::Get(), TEXT("-ErtShot="), ShotDir))
 	{
 		ShotDir = ShotDir.TrimQuotes();
-		ShotT = 0.f;
+		ShotT = bAutoPlay ? -1.f : 0.f;   // avtomatik o'yinchi bilan: ssenariy emas, davriy skrinshotlar
 		SetTickableWhenPaused(true);   // sinov ssenariysi pauzada ham davom etsin
 		UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi: skrinshotlar -> %s"), *ShotDir);
 	}
@@ -579,6 +579,7 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(41.0f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnAdvance(); }
 	if (At(41.8f)) TakeShot(TEXT("npc_choice"));
 	if (At(41.9f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->OnAdvance(); }
+	if (At(41.95f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) if (GM->IsDialogActive()) GM->EndDialog(); }
 	if (At(42.0f)) Teleport(420.f, 560.f, 22.f + 55.f, -18.f, 0.f);
 	if (At(42.9f)) TakeShot(TEXT("erzurum"));
 	if (At(43.0f)) Teleport(-380.f, 60.f, 9.f + 55.f, -18.f, -90.f);
@@ -794,8 +795,8 @@ void AErtCharacter::ApplyBindings()
 		if (UEnhancedInputLocalPlayerSubsystem* Sub = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer())) Sub->RequestRebuildControlMappings();
 }
 
-void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); } }
-void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); } }
+void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); else if (GM->GetMenu() == EErtMenu::Map) GM->MapRotate(-30.f); } }
+void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); else if (GM->GetMenu() == EErtMenu::Map) GM->MapRotate(30.f); } }
 void AErtCharacter::OnInventory() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleInventory(); }
 void AErtCharacter::OnPotion() { if (bInputEnabled && !bDead) UsePotion(); }
 
@@ -841,7 +842,7 @@ void AErtCharacter::OnLock()
 	for (AActor* A : All)
 	{
 		AErtEnemy* E = Cast<AErtEnemy>(A);
-		if (!E || E->IsDead() || E->IsAnimal()) continue;
+		if (!E || E->IsDead() || E->IsAnimal() || E->IsAlly()) continue;
 		const FVector To = E->GetActorLocation() - GetActorLocation();
 		const float D = To.Size2D(); if (D > 1800.f) continue;
 		const float Facing = FVector::DotProduct(Cam->GetForwardVector().GetSafeNormal2D(), To.GetSafeNormal2D());
@@ -1242,6 +1243,7 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this));
 	if (!GM) return;
 	AutoT += Dt; AutoTotalT += Dt; AutoPotT = FMath::Max(0.f, AutoPotT - Dt);
+	if (!ShotDir.IsEmpty() && (int32)(AutoTotalT / 25.f) > AutoShotN) { AutoShotN = (int32)(AutoTotalT / 25.f); TakeShot(*FString::Printf(TEXT("auto_%s_%d"), *AutoEpisode, AutoShotN)); }
 	if (AutoTotalT > 360.f) { UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] umumiy vaqt tugadi (360 s) - chiqish")); FPlatformMisc::RequestExit(false); return; }
 	if (GM->GetCutscene() && GM->GetCutscene()->IsPlaying()) { if (AutoT > 1.2f) { AutoT = 0.f; GM->OnSkip(); UE_LOG(LogErtugrul, Log, TEXT("[AutoPlay] kat-sahna o'tkazildi")); } DebugMove = FVector2D::ZeroVector; return; }
 	if (GM->IsDialogActive())
@@ -1274,7 +1276,7 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 	FVector Target = FVector::ZeroVector; bool bHas = false; AErtEnemy* Foe = nullptr; float BestD = 3500.f;
 	for (AErtEnemy* E : D->GetEnemies())
 	{
-		if (!E || E->IsDead() || E->GetKind() == EErtEnemyKind::Deer) continue;
+		if (!E || E->IsDead() || E->GetKind() == EErtEnemyKind::Deer || E->IsAlly()) continue;
 		const float Dd = FVector::Dist2D(E->GetActorLocation(), GetActorLocation());
 		if (Dd < BestD) { BestD = Dd; Foe = E; }
 	}
@@ -1299,6 +1301,8 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 		}
 	}
 	if (!bHas) { TArray<FVector> Ms; D->GetMarkers(Ms); if (Ms.Num()) { Target = Ms[0]; bHas = true; } }
+	// Hech narsa yo'q: masofadan qat'i nazar eng yaqin tirik dushman (jang bosqichi, uzoqda paydo bo'lgan)
+	if (!bHas) { float Bd = 1e12f; for (AErtEnemy* E : D->GetEnemies()) { if (!E || E->IsDead() || E->IsAlly() || E->GetKind() == EErtEnemyKind::Deer) continue; const float Dd = FVector::Dist2D(E->GetActorLocation(), GetActorLocation()); if (Dd < Bd) { Bd = Dd; Foe = E; Target = E->GetActorLocation(); bHas = true; } } }
 	if (AutoPhaseT > 60.f)
 	{
 		UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] bosqich %d 60 s da bajarilmadi - dushmanlar yo'q qilinadi"), AutoLastPhase + 1);

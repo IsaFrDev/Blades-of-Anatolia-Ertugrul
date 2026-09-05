@@ -13,6 +13,7 @@
 bool FErtDialog::Start(const FString& Id, TSet<FString>* InFlags, int32* InHonor)
 {
 	End();
+	if (Id.IsEmpty()) return false;
 	Flags = InFlags; Honor = InHonor;
 	const FString Path = FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/dialogue") / (Id + TEXT(".json"));
 	FString Text;

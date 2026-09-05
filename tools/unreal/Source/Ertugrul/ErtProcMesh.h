@@ -42,6 +42,10 @@ struct ERTUGRUL_API FErtMeshData
 	void Commit(UProceduralMeshComponent* Comp, int32 Section, bool bCollision) const;
 };
 
+/** Grid Snapping: qiymatni to'rga yopishtirish (Grid metr yoki sm - chaqiruvchi birligida) */
+inline float ErtSnap(float V, float Grid) { return Grid > 0.f ? FMath::RoundToFloat(V / Grid) * Grid : V; }
+inline FVector2D ErtSnap(const FVector2D& V, float Grid) { return FVector2D(ErtSnap(V.X, Grid), ErtSnap(V.Y, Grid)); }
+
 namespace ErtCol
 {
 	// Material uslubi (M_ErtVertexColor): vertex rangining alfa kanali naqshni tanlaydi

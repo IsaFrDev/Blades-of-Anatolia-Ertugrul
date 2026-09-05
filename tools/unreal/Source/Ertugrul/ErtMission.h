@@ -94,6 +94,10 @@ public:
 	/** Faol maqsad nuqtalari (HUD markerlari): nuqta + tugallanganmi */
 	void GetMarkers(TArray<FVector>& Out) const;
 	const TArray<TObjectPtr<AErtEnemy>>& GetEnemies() const { return Enemies; }
+	const TArray<TObjectPtr<AErtEnemy>>& GetAllies() const { return Allies; }
+	int32 AliveAllies() const;
+	/** Urush: o'yinchi atrofida N ittifoqchi alp (bir bosqichda bir marta) */
+	void SpawnAllies(int32 N);
 	const FString& GetCouncilResult() const { return CouncilResult; }
 	float GetCouncilResultT() const { return CouncilResultT; }
 
@@ -103,6 +107,8 @@ protected:
 
 private:
 	UPROPERTY(Transient) TArray<TObjectPtr<AErtEnemy>> Enemies;
+	UPROPERTY(Transient) TArray<TObjectPtr<AErtEnemy>> Allies;
+	void ClearAllies();
 	UPROPERTY(Transient) TObjectPtr<AErtHorse> Horse;
 	UPROPERTY(Transient) TArray<TObjectPtr<AErtNpc>> PhaseNpcs;
 	FString CouncilResult;   // HUD: duel natijasi
@@ -119,13 +125,14 @@ private:
 	int32 PhaseIdx = 0, WaveIdx = 0;
 	float PhaseT = 0.f, StateT = 0.f, CpFlash = 0.f;
 	EErtMissionState State = EErtMissionState::Inactive;
-	FString EpisodeId, EpisodeTitle, EpisodeDate, IntroText, PhaseTitle, NextEpisodeId, CpName, Cliffhanger;
+	FString EpisodeId, EpisodeTitle, EpisodeDate, IntroText, PhaseTitle, NextEpisodeId, CpName, Cliffhanger, EpisodeArchetype;
 	int32 Kills = 0, Deaths = 0;
 	bool bSideQuest = false; FSideInfo Side;
 	bool StartEpisodeData(const FErtEpisode& E, const FVector& Start, const TSharedPtr<class FJsonObject>& PhaseOverride);
 	TSharedPtr<class FJsonObject> PhaseOverrideObj;
 	FRandomStream Rng;
 	FVector Cursor = FVector::ZeroVector;
+	FVector2D CouncilBase = FVector2D::ZeroVector;   // kengash NPClari bazasi (reja E, N): oba yoki epizod boshlanishi
 
 	struct FCheckpoint { bool bValid = false; int32 Phase = 0; FVector Pos; float Yaw = 0.f; } Cp;
 

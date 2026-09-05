@@ -1,4 +1,7 @@
 #include "ErtHUD.h"
+#include "ErtNav.h"
+#include "ErtMap3D.h"
+#include "Engine/TextureRenderTarget2D.h"
 #include "ErtCharacter.h"
 #include "ErtEnemy.h"
 #include "ErtHorse.h"
@@ -165,7 +168,8 @@ void AErtHUD::DrawHUD()
 			const float Dist = FVector::Dist(P, H->GetActorLocation()) / 100.f;
 			const float Sz = 9 * Sc;
 			FCanvasTileItem T(FVector2D(S.X - Sz, S.Y - Sz), FVector2D(Sz * 2, Sz * 2), Gold); T.Rotation = FRotator(0, 45.f, 0); T.PivotPoint = FVector2D(0.5f, 0.5f); T.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(T);
-			const FString DS = FString::Printf(TEXT("%.0f m"), Dist);
+			FString DS = FString::Printf(TEXT("%.0f m"), Dist);
+			if (AErtGps* G = Cast<AErtGps>(UGameplayStatics::GetActorOfClass(GetWorld(), AErtGps::StaticClass()))) if (G->HasPath() && &P == &Pts[0]) DS = FString::Printf(TEXT("GPS %.0f m"), G->GetPathLengthM());
 			Text(DS, S.X - TextWidth(DS, Sc, false) * 0.5f, S.Y + Sz + 2, Gold, Sc);
 		}
 		// Dushman ko'rsatkichlari (faol, yaqin) + zarba oldidan "!" + qulf retikuli
@@ -377,7 +381,7 @@ void AErtHUD::DrawSettings(float SW, float SH, float Sc)
 		return;
 	}
 	static const TCHAR* LangNames[] = { TEXT("O'zbek"), TEXT("Türkçe"), TEXT("English") };
-	const FString Rows[8] = {
+	const FString Rows[9] = {
 		FString::Printf(TEXT("Til / Dil / Language:   < %s >"), LangNames[FMath::Clamp(GM->Language, 0, 2)]),
 		FString::Printf(TEXT("Sichqoncha sezgirligi / Mouse:   < %.1f >"), GM->MouseSens),
 		FString::Printf(TEXT("Y o'qini teskari / Invert Y:   < %s >"), GM->bInvertY ? TEXT("Ha / Yes") : TEXT("Yo'q / No")),
@@ -385,15 +389,16 @@ void AErtHUD::DrawSettings(float SW, float SH, float Sc)
 		FString::Printf(TEXT("Ekran rejimi / Window:   < %s >"), *GM->DisplayRow(4)),
 		FString::Printf(TEXT("O'lcham / Resolution:   < %s >"), *GM->DisplayRow(5)),
 		FString::Printf(TEXT("Grafika sifati / Quality:   < %s >"), *GM->DisplayRow(6)),
-		FString::Printf(TEXT("VSync:   < %s >"), *GM->DisplayRow(7)) };
-	for (int32 i = 0; i < 8; ++i)
+		FString::Printf(TEXT("VSync:   < %s >"), *GM->DisplayRow(7)),
+		FString::Printf(TEXT("Render preseti / Preset:   < %s >"), AErtGameMode::GfxPresetName(GM->GfxPreset)) };
+	for (int32 i = 0; i < 9; ++i)
 	{
 		const float Y = 110 * Sc + i * 34 * Sc;
 		if (i == GM->GetSettingsRow()) { FCanvasTileItem S(FVector2D(32 * Sc, Y - 4 * Sc), FVector2D(SW * 0.6f, 30 * Sc), FLinearColor(0.35f, 0.25f, 0.08f, 0.8f)); S.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(S); }
 		Text(Rows[i], 44 * Sc, Y, i == GM->GetSettingsRow() ? Gold : White, 1.1f * Sc);
 	}
-	Text(FString::Printf(TEXT("Or/iymon: %d    Bajarilgan epizodlar: saqlangan (Saved/ert_save.json)"), GM->GetHonor()), 44 * Sc, 400 * Sc, Grey, Sc);
-	Text(TEXT("Intel GPU uchun tavsiya: Grafika sifati Past yoki O'rta, VSync yoqilgan."), 44 * Sc, 424 * Sc, Grey, 0.9f * Sc);
+	Text(FString::Printf(TEXT("Or/iymon: %d    Bajarilgan epizodlar: saqlangan (Saved/ert_save.json)"), GM->GetHonor()), 44 * Sc, 434 * Sc, Grey, Sc);
+	Text(TEXT("Preset: PC Ultra = Lumen (HW RT) + Virtual Shadows High + 100%;  PS5/XSX = Lumen (SW) + VSM Medium + TSR 50-70%;  Series S = SSGI + CSM + SSR + TSR 50-60%"), 44 * Sc, 458 * Sc, Grey, 0.85f * Sc);
 	Text(TEXT("Yuqori/Pastga: qator   Chap/O'ng yoki Enter: o'zgartirish   O yoki Esc: yopish"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
 }
 
@@ -510,6 +515,24 @@ void AErtHUD::DrawMapArea(float X0, float Y0, float S, float CE, float CN, float
 			if (Inside(X, Y)) { FCanvasTileItem T(FVector2D(X - 3 * Sc, Y - 3 * Sc), FVector2D(6 * Sc, 6 * Sc), FLinearColor(0.85f, 0.15f, 0.1f)); Canvas->DrawItem(T); }
 		}
 	}
+	// GPS yo'li
+	if (AErtGps* G = Cast<AErtGps>(UGameplayStatics::GetActorOfClass(GetWorld(), AErtGps::StaticClass())))
+	{
+		const TArray<FVector>& Path = G->GetPath();
+		for (int32 i = 0; i + 1 < Path.Num(); ++i)
+		{
+			const FVector2D A(PX(Path[i].Y / 100.f), PY(Path[i].X / 100.f)), B(PX(Path[i + 1].Y / 100.f), PY(Path[i + 1].X / 100.f));
+			if (!Inside(A.X, A.Y) && !Inside(B.X, B.Y)) continue;
+			FCanvasLineItem L(A, B); L.SetColor(FLinearColor(1.f, 0.8f, 0.2f)); L.LineThickness = 2.f; Canvas->DrawItem(L);
+		}
+	}
+	// Ittifoqchilar (urush)
+	if (D) for (const AErtEnemy* E : D->GetAllies())
+	{
+		if (!E || E->IsDead()) continue;
+		const float X = PX(E->GetActorLocation().Y / 100.f), Y = PY(E->GetActorLocation().X / 100.f);
+		if (Inside(X, Y)) { FCanvasTileItem T(FVector2D(X - 3 * Sc, Y - 3 * Sc), FVector2D(6 * Sc, 6 * Sc), FLinearColor(0.2f, 0.85f, 0.6f)); Canvas->DrawItem(T); }
+	}
 	// NPClar
 	{
 		TArray<AActor*> Npcs; UGameplayStatics::GetAllActorsOfClass(GetWorld(), AErtNpc::StaticClass(), Npcs);
@@ -540,7 +563,31 @@ void AErtHUD::DrawMap(float SW, float SH, float Sc)
 {
 	FCanvasTileItem Bg(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.02f, 0.02f, 0.03f, 0.85f)); Bg.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Bg);
 	const float S = FMath::Min(SW, SH) - 80 * Sc;
-	DrawMapArea((SW - S) * 0.5f, 40 * Sc, S, 0.f, 0.f, 1000.f, true, Sc);
+	AErtMap3D* M3 = Cast<AErtMap3D>(UGameplayStatics::GetActorOfClass(GetWorld(), AErtMap3D::StaticClass()));
+	if (M3 && M3->GetTexture())
+	{
+		// 3D relyef xaritasi (render-tekstura) + belgilar proyeksiyasi
+		const float X0 = (SW - S) * 0.5f, Y0 = 40 * Sc;
+		FCanvasTileItem T(FVector2D(X0, Y0), M3->GetTexture()->GetResource(), FVector2D(S, S), FLinearColor::White); T.BlendMode = SE_BLEND_Opaque; Canvas->DrawItem(T);
+		using namespace ErtMap;
+		AErtWorldBuilder* W = Cast<AErtWorldBuilder>(UGameplayStatics::GetActorOfClass(GetWorld(), AErtWorldBuilder::StaticClass()));
+		const FLinearColor Ink(0.98f, 0.95f, 0.85f);
+		auto Lbl = [&](float E, float N, const TCHAR* Name, const FLinearColor& C)
+		{
+			float U, V; if (!M3->Project(AErtWorldBuilder::PlanToWorld(E, N, W ? W->HeightAt(E, N) : 0.f), U, V)) return;
+			Circle(X0 + U * S, Y0 + V * S, 3.f * Sc, C, 10);
+			Text(Name, X0 + U * S + 5 * Sc, Y0 + V * S - 8 * Sc, C, 0.85f * Sc, true, false);
+		};
+		Lbl(ObaE, ObaN, TEXT("Qayi obasi"), Ink); Lbl(FortE, FortN, TEXT("Bagras"), Ink); Lbl(CityE, CityN, TEXT("Shahar"), Ink); Lbl(CampE, CampN, TEXT("Mo'g'ul lageri"), FLinearColor(1.f, 0.4f, 0.3f));
+		Lbl(DamE, DamN, TEXT("Damashq"), Ink); Lbl(HalabE, HalabN, TEXT("Halab"), Ink); Lbl(KonE, KonN, TEXT("Konya"), Ink); Lbl(KayE, KayN, TEXT("Qayseri"), Ink); Lbl(SivE, SivN, TEXT("Sivas"), Ink); Lbl(ErzE, ErzN, TEXT("Erzurum"), Ink);
+		Lbl(BurE, BurN, TEXT("Bursa"), Ink); Lbl(NikE, NikN, TEXT("Nikeya"), Ink); Lbl(KarE, KarN, TEXT("Karacahisar"), Ink); Lbl(SogE, SogN, TEXT("So'g'ut"), Ink); Lbl(DomE, DomN, TEXT("Domaniç"), FLinearColor(0.6f, 0.95f, 0.5f)); Lbl(AskE, AskN, TEXT("Askaniya"), FLinearColor(0.5f, 0.75f, 1.f)); Lbl(LakeE, LakeN, TEXT("Ko'l"), FLinearColor(0.5f, 0.75f, 1.f));
+		if (AErtMissionDirector* Dm = Director()) { TArray<FVector> Pts; Dm->GetMarkers(Pts); for (const FVector& P : Pts) { float U, V; if (M3->Project(P, U, V)) { const float Sz = 6 * Sc; FCanvasTileItem Tm(FVector2D(X0 + U * S - Sz, Y0 + V * S - Sz), FVector2D(Sz * 2, Sz * 2), FLinearColor(1.f, 0.8f, 0.2f)); Tm.Rotation = FRotator(0, 45.f, 0); Tm.PivotPoint = FVector2D(0.5f, 0.5f); Canvas->DrawItem(Tm); } } }
+		if (APawn* P = GetOwningPawn()) { float U, V; if (M3->Project(P->GetActorLocation(), U, V)) Text(TEXT("SIZ"), X0 + U * S + 6 * Sc, Y0 + V * S - 10 * Sc, FLinearColor(0.3f, 1.f, 0.4f), 0.9f * Sc, true, true); }
+		if (AErtGps* G = Cast<AErtGps>(UGameplayStatics::GetActorOfClass(GetWorld(), AErtGps::StaticClass()))) if (G->HasPath()) Text(FString::Printf(TEXT("GPS yo'li: %.0f m"), G->GetPathLengthM()), X0 + 10 * Sc, Y0 + S - 24 * Sc, FLinearColor(1.f, 0.85f, 0.3f), Sc);
+		// Kichik 2D xarita (o'ng-past burchak)
+		DrawMapArea(SW - 230 * Sc, SH - 250 * Sc, 200 * Sc, 0.f, 0.f, 1000.f, false, Sc);
+	}
+	else DrawMapArea((SW - S) * 0.5f, 40 * Sc, S, 0.f, 0.f, 1000.f, true, Sc);
 	AErtMissionDirector* D = Director();
 	if (D && D->GetObjectives().Num())
 	{
@@ -561,7 +608,7 @@ void AErtHUD::DrawMap(float SW, float SH, float Sc)
 				Text(Mark + FErtLoc::Get().TrOr(Sq.TitleKey, Sq.Id), QX, QY, bDone ? FLinearColor(0.5f, 0.9f, 0.4f) : (bActive ? FLinearColor(1.f, 0.85f, 0.35f) : FLinearColor(0.95f, 0.95f, 0.9f)), 0.9f * Sc); QY += 19 * Sc;
 			}
 	}
-	Text(TEXT("XARITA   (M yoki Esc: yopish)   yashil - siz, oltin - maqsad, qizil - dushman, ko'k - odamlar"), 24 * Sc, SH - 28 * Sc, FLinearColor(0.6f, 0.6f, 0.55f), 0.9f * Sc);
+	Text(TEXT("3D XARITA   (M yoki Esc: yopish)   Chap/O'ng: aylantirish   Yuqori/Past: masshtab   yashil - siz, oltin - maqsad/GPS yo'li, qizil - dushman"), 24 * Sc, SH - 28 * Sc, FLinearColor(0.6f, 0.6f, 0.55f), 0.9f * Sc);
 }
 
 // ---------------- Inventar ----------------

@@ -402,3 +402,25 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - (o) `-ErtAutoPlay` (ErtCharacter::UpdateAutoPlay): kat-sahnani o'tkazadi (1.2 s), dialogda birinchi variantni tanlaydi, menyuda Confirm, Cleared da davom, maqsad: eng yaqin tirik dushman (3.5 km) -> bajarilmagan maqsad nuqtasi (Route: joriy nuqta, Hunt: kiyik) -> marker; 230 sm da hujum (15% dodge), 160 sm dan uzoqda yuradi (900 sm dan uzoqda chopadi), yaqin turganda E (NPC/buyum); sog'liq 35% dan pastda dori; 3 s tiqilsa sakraydi, 7 s da maqsad yoniga teleport; bosqich 150 s da bajarilmasa dushmanlar yo'q qilinadi; Inactive 6 s -> chiqish; 480 s umumiy limit. Log: `[AutoPlay]`.
 - `tools/unreal/Scripts/run_episodes.ps1 -Episodes EP001,EP002 ...`: har epizodni `-ErtEpisode -ErtUnlockAll -ErtCutscene -ErtAutoPlay` bilan ishga tushiradi, `[Missiya]`/`[AutoPlay]`/Fatal/Warning satrlarini `episode_report.txt` ga yig'adi.
 - Tuzatish: skelet animatsiyalari va Fab meshlari UPROPERTY bo'lmagan konteynerlarda edi - GC ~90 s da o'chirib crash berardi; endi `SkelAnimRefs`/`SkelMeshRef` UPROPERTY, Fab meshlari `AddToRoot`.
+
+## Ochiq dunyo tizimlari: spline devor, dekallar, olov, hajmli tuman, 3D xarita, GPS, urush AI, grafika presetlari
+
+- **Grid Snapping + Spline Mesh devorlar** (`ErtProcMesh.h: ErtSnap`, `AErtWorldBuilder::AddWallSpline`): nuqtalar 1 m to'rga yopishtiriladi, chiziq bo'ylab 4 m li modullar takrorlanib egiladi, burchaklarda minora, tepada tishlar. `BuildSplineWalls`: So'g'ut uzumzor devori, Domaniç qo'rasi, Bagras qo'rg'on devori, Askaniya qirg'oq devori, Konya karvon yo'li, oba chegarasi (204 modul).
+- **Dekallar** (`M_ErtDecal`, `tools/unreal/Scripts/ert_make_decal.py`; `BuildDecals`): `UDecalComponent` bilan mog'or (Kind 0), yoriq (1), dog' (2) - spline devorlar va uy/o'tov tashqi devorlarida (257 ta).
+- **Olov effektlari** (`ErtFire.h/.cpp: AErtFireFx`, Niagara o'rnida protsedural): olov tili billboardlari, tutun, uchqunlar + miltillovchi `PointLight` (uch chastotali sinus + shovqin). Har gulxan/mash'ala uchun `AddFire` joyidan spawn (34 ta), kameradan 150 m ichida jonlanadi.
+- **Hajmli tuman**: `ExponentialHeightFog` da Volumetric Fog yoqildi (`ErtWeather.cpp`). `LocalFogVolume` sinovda butun dunyoni qopladi (radius birligi noaniq) - olib tashlandi.
+- **Qirg'oq/devor o'simliklari** (`BuildShoreFoliage`): ko'l/voha/daryo bo'yida qamish tuplari va mayda toshlar, spline devor tagida maysa.
+- **3D xarita** (`ErtMap3D.h/.cpp: AErtMap3D`): dunyoning 1/50 miniatyurasi (relyef 2.5x bo'rttirilgan, suv, shahar gumbazlari, marker konuslari, GPS lentasi) osmonda 2.6 km balandda; ortografik `SceneCapture2D` -> 1024 render-tekstura; HUD `DrawMap` da ko'rsatadi, `Project()` bilan shahar nomlari/markerlar ustiga chiziladi. Chap/O'ng - aylantirish, Yuqori/Past - masshtab.
+- **GPS** (`ErtNav.h/.cpp: AErtGps`): 10 m hujayrali narx to'ri (qiyalik/suv narxi), A* yo'l, silliqlangan; yerda oltin lenta + maqsad ustuni (`M_ErtDust`), minimapda chiziq, marker ostida "GPS N m". Maqsad = birinchi missiya markeri. `-ErtNoGps` o'chiradi.
+- **Urush AI** (`AErtEnemy::Team`, `PickTarget`): 0 dushman, 1 ittifoqchi Qayi alpi. Har 0.5 s eng yaqin raqib (o'yinchi yoki boshqa jamoa) tanlanadi; zarba `ApplyHit`/`ReceiveHit`. Ittifoqchilar raqib bo'lmasa o'yinchiga ergashadi. `AErtMissionDirector::SpawnAllies`: 3+ dushmanli to'lqinda 3-8 alp (SIEGE/DEFENSE da +3). O'yinchi zarbasi/o'qi/qulfi ittifoqchiga tegmaydi.
+- **Grafika presetlari** (`AErtGameMode::ApplyGfxPreset`, sozlamalar 9-qator, `-ErtGfx=ultra|console|low`):
+
+| Sozlama | PC Ultra | PS5 / Xbox Series X (60 FPS) | Xbox Series S (60 FPS) |
+|---|---|---|---|
+| Global Illumination | Lumen (Hardware RT) | Lumen (Software) | SSGI (Screen Space) |
+| Soyalar | Virtual Shadow Maps (High) | Virtual Shadow Maps (Medium) | Cascaded Shadows |
+| Aks | Lumen (Ray Traced) | Lumen (Software) | SSR |
+| O'lcham | 100% + TSR (DLSS plagin bilan almashadi) | Dinamik 50-70% TSR | Dinamik 50-60% TSR |
+
+- **Kengash tuzatishi**: kengash NPClari va nuqtasi obadan 400 m dan uzoq epizodlarda (Bagras, Damashq...) epizod boshlanish nuqtasida (`CouncilBase`); bo'sh dialogli kengash nuqtada 2 s turish bilan o'tadi.
+- **Avtomatik sinovchi**: bosqich chegarasi 60 s, yaqinlashmaslik (8 s) bo'yicha teleport, 3 teleportdan keyin bosqich yopiladi ("XATO nomzodi"), uzoqdagi dushmanga ham boradi, `-ErtShot` bilan har 25 s skrinshot.

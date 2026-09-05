@@ -116,6 +116,13 @@ public:
 	void SettingsMove(int32 Delta);
 	void SettingsAdjust(int32 Delta);
 	int32 Language = 0; float MouseSens = 1.f; bool bInvertY = false;
+	/** Grafika preseti: 0 PC Ultra (Lumen HW, VSM High, TSR 100%), 1 PS5/XSX (Lumen SW, VSM Medium, TSR 50-70%), 2 Series S (SSGI, CSM, SSR, TSR 50-60%) */
+	int32 GfxPreset = 1;
+	void ApplyGfxPreset();
+	static const TCHAR* GfxPresetName(int32 P) { return P == 0 ? TEXT("PC Ultra") : (P == 1 ? TEXT("PS5 / Xbox Series X (60 FPS)") : TEXT("Xbox Series S (60 FPS)")); }
+	/** 3D xarita aylantirish (chap/o'ng) */
+	void MapRotate(float DeltaYaw);
+	bool bGps = true;
 private:
 	int32 SettingsRow = 0;
 	void SetPlayerInput(bool bEnabled, bool bHide);

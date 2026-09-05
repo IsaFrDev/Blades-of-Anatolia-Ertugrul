@@ -6,6 +6,8 @@
 #include "ProceduralMeshComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "Engine/ExponentialHeightFog.h"
+#include "Components/LocalFogVolumeComponent.h"
+#include "ErtWorldBuilder.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/PlayerCameraManager.h"
@@ -40,8 +42,15 @@ void AErtWeather::BeginPlay()
 		F->SecondFogData.FogDensity = 0.0006f;
 		F->SecondFogData.FogHeightFalloff = 0.02f;
 		F->SecondFogData.FogHeightOffset = -40000.f;
+		// Volumetric Fog: nur shu'lalari va suv/o'rmon ustidagi hajmli tuman
+		F->SetVolumetricFog(true);
+		F->SetVolumetricFogScatteringDistribution(0.45f);
+		F->SetVolumetricFogExtinctionScale(1.6f);
+		F->VolumetricFogDistance = 14000.f;
+		F->VolumetricFogAlbedo = FColor(235, 238, 245);
 		F->MarkRenderStateDirty();
 	}
+	// Mahalliy tuman hajmlari (LocalFogVolume) sinovda butun dunyoni qopladi - o'rniga global hajmli tuman + ob-havo zichligi ishlatiladi
 	// Bulut qatlami: 2 km balandlikda 36 km kenglikdagi tekislik (ikki qatlam), yulduz gumbazi: 60 km radiusli sfera (ichkaridan ko'rinadi)
 	auto MakeSky = [&](const TCHAR* Name, const TCHAR* MatPath, TObjectPtr<UMaterialInstanceDynamic>& OutMID)
 	{

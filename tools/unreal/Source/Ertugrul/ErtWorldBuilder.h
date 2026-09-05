@@ -64,6 +64,13 @@ public:
 	/** Reja nuqtasi suv ustidami (daryo/ko'l/voha); SurfZ - suv sathi (metr) */
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") bool IsWater(float E, float N, float& SurfZ) const;
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") static bool IsDesert(float E, float N) { return N < -700.f + 60.f; }
+	/** Relyef rangi (xarita uchun) */
+	FLinearColor ColorAt(float E, float N) const;
+	/** Gulxan/mash'ala joylari (dunyo sm, W = masshtab) - BeginPlay da olov effektlari spawn qilinadi */
+	TArray<FVector4> FireSpots;
+	/** Spline devor segmentlari (reja m): A, B, Z (poydevor), H - dekallar va o't-o'lan uchun */
+	struct FWallSeg { FVector2D A, B; float Z, H; };
+	TArray<FWallSeg> WallSegs;
 
 protected:
 	virtual void OnConstruction(const FTransform& T) override;
@@ -108,6 +115,11 @@ private:
 	void BuildRocks();
 	void BuildGrass();
 	void BuildProps();
+	void BuildSplineWalls();
+	void BuildDecals();
+	void BuildShoreFoliage();
+	UPROPERTY(Transient) TArray<TObjectPtr<class UDecalComponent>> Decals;
+	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> DecalMat;
 	/** O'tov/uy ichkarisi: E, N, R (m), Z (pol balandligi) - BuildProps buyumlarni ichkariga qo'yadi */
 	TArray<FVector4> Interiors;
 
@@ -128,4 +140,6 @@ private:
 	void AddBanner(FErtMeshData& M, float E, float N, float Z, float H, const FLinearColor& Flag, bool bTugh);
 	void AddFenceRect(FErtMeshData& M, float E, float N, float Z, float HalfU, float HalfV, float Gap);
 	void AddHouse(FErtMeshData& M, float E, float N, float Z, float HU, float HV, float H, float Yaw, const FLinearColor& C, int32 S);
+	/** Spline Mesh devor: nuqtalar (reja m, 1 m to'rga yopishtiriladi) bo'ylab 4 m li modullar takrorlanadi, burchaklarda minora, tepada tishlar */
+	void AddWallSpline(FErtMeshData& M, const TArray<FVector2D>& Pts, float H, float Thick, const FLinearColor& Col, bool bBattlements, bool bTowers, int32 S);
 };

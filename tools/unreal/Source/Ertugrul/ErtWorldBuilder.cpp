@@ -6,6 +6,8 @@
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "Components/PointLightComponent.h"
+#include "Components/DecalComponent.h"
+#include "ErtFire.h"
 #include "Materials/MaterialInterface.h"
 
 using namespace ErtMap;
@@ -49,6 +51,17 @@ void AErtWorldBuilder::BeginPlay()
 {
 	Super::BeginPlay();
 	if (!bBuilt) Build();
+	// Olov effektlari (olov tili + tutun + uchqun + miltillovchi nur)
+	int32 NF = 0;
+	for (const FVector4& F : FireSpots) if (AErtFireFx::Spawn(GetWorld(), FVector(F.X, F.Y, F.Z), F.W, true)) ++NF;
+	UE_LOG(LogErtugrul, Log, TEXT("Olov effektlari: %d"), NF);
+}
+
+FLinearColor AErtWorldBuilder::ColorAt(float E, float N) const
+{
+	const float H = HeightAt(E, N);
+	const FVector Nm = TerrainNormal(E, N);
+	return TerrainColor(E, N, H, 1.f - Nm.Z);
 }
 
 void AErtWorldBuilder::Rebuild()
@@ -127,7 +140,9 @@ void AErtWorldBuilder::Build()
 		BuildSogut();
 		BuildDomanic();
 	}
-	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); BuildProps(); }
+	if (bBuildSettlements) BuildSplineWalls();
+	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); BuildShoreFoliage(); BuildProps(); }
+	if (bBuildSettlements) BuildDecals();
 	if (FabTreesPlaced + FabRocksPlaced > 0) UE_LOG(LogErtugrul, Log, TEXT("Fab meshlari: %d daraxt, %d qoya (instans)"), FabTreesPlaced, FabRocksPlaced);
 	bBuilt = true;
 	int32 Tris = 0;
@@ -531,8 +546,8 @@ void AErtWorldBuilder::AddFire(FErtMeshData& M, float E, float N, float Z, bool 
 	}
 	M.AddCylinder(W(E - 0.6f, N, Z + 0.15f), 0.12f, 0.12f, 1.2f, 5, DarkWood, true, FRotator(0, 0, 90));
 	M.AddCylinder(W(E, N - 0.6f, Z + 0.25f), 0.12f, 0.12f, 1.2f, 5, DarkWood, true, FRotator(-90, 0, 0));
-	M.AddCone(W(E, N, Z + 0.2f), 0.45f, 1.1f, 6, Flame);
-	M.AddCone(W(E + 0.15f, N - 0.1f, Z + 0.2f), 0.3f, 1.5f, 5, Ember);
+	M.AddCone(W(E, N, Z + 0.2f), 0.35f, 0.5f, 6, Ember);   // cho'g' (olov tili protsedural effekt bilan)
+	FireSpots.Add(FVector4(W(E, N, Z + 0.25f), bLight ? 1.f : 0.75f));
 	if (bLight)
 	{
 		UPointLightComponent* L = NewObject<UPointLightComponent>(this, *FString::Printf(TEXT("Fire_%d"), Lights.Num()));
@@ -541,7 +556,7 @@ void AErtWorldBuilder::AddFire(FErtMeshData& M, float E, float N, float Z, bool 
 		L->SetMobility(EComponentMobility::Static);
 		L->SetRelativeLocation(W(E, N, Z + 1.4f));
 		L->SetIntensityUnits(ELightUnits::Candelas);
-		L->SetIntensity(900.f);
+		L->SetIntensity(550.f);
 		L->SetLightColor(FLinearColor(1.f, 0.62f, 0.28f));
 		L->SetAttenuationRadius(1800.f);
 		L->SetCastShadows(false);
@@ -2752,4 +2767,175 @@ void AErtWorldBuilder::BuildProps()
 		}
 	}
 	UE_LOG(LogErtugrul, Log, TEXT("Buyumlar (Fab): %d tashqarida, %d ichkarida (%d xona)"), Placed, Inside, Interiors.Num());
+}
+
+
+// ---------------- Spline devorlar (Grid Snapping + Spline Mesh uslubi), dekallar, qirg'oq o'simliklari ----------------
+
+void AErtWorldBuilder::AddWallSpline(FErtMeshData& M, const TArray<FVector2D>& InPts, float H, float Thick, const FLinearColor& Col, bool bBattlements, bool bTowers, int32 S)
+{
+	if (InPts.Num() < 2) return;
+	TArray<FVector2D> Pts; for (const FVector2D& P : InPts) Pts.Add(ErtSnap(P, 1.f));   // 1 m to'r
+	const float Module = 4.f;   // takrorlanuvchi devor bo'lagi uzunligi (m)
+	for (int32 i = 0; i + 1 < Pts.Num(); ++i)
+	{
+		const FVector2D A = Pts[i], B = Pts[i + 1];
+		const float Len = FVector2D::Distance(A, B); if (Len < 0.5f) continue;
+		const FVector2D Dir = (B - A) / Len;
+		const int32 NMod = FMath::Max(1, FMath::RoundToInt(Len / Module));
+		const float ML = Len / NMod;
+		const float Yaw = FMath::RadiansToDegrees(FMath::Atan2(Dir.Y, Dir.X));
+		for (int32 m = 0; m < NMod; ++m)
+		{
+			const FVector2D C0 = A + Dir * (m + 0.5f) * ML;
+			const float Z0 = FMath::Min(HeightAt(A.X + Dir.X * m * ML, A.Y + Dir.Y * m * ML), HeightAt(A.X + Dir.X * (m + 1) * ML, A.Y + Dir.Y * (m + 1) * ML)) - 0.6f;
+			const float Zt = HeightAt(C0.X, C0.Y) + H;
+			const FLinearColor Cm = ErtCol::Vary(Col, 0.08f, S + i * 97 + m);
+			// Modul: egilgan spline bo'ylab joylashgan quti (devorning o'zi)
+			M.AddBox(W(C0.X, C0.Y, (Z0 + Zt) * 0.5f), FVector(ML * 0.5f * 100.f + 1.f, Thick * 50.f, (Zt - Z0) * 50.f), Cm, FRotator(0, Yaw, 0));
+			if (bBattlements)
+				for (int32 t = 0; t < 2; ++t)
+				{
+					const FVector2D Ct = C0 + Dir * ((t - 0.5f) * ML * 0.5f);
+					M.AddBox(W(Ct.X, Ct.Y, Zt + 0.35f), FVector(ML * 0.2f * 100.f, Thick * 50.f, 35.f), Cm * 0.95f, FRotator(0, Yaw, 0));
+				}
+			WallSegs.Add({ A + Dir * m * ML, A + Dir * (m + 1) * ML, Z0 + 0.6f, Zt - Z0 });
+		}
+	}
+	if (bTowers)
+		for (int32 i = 0; i < Pts.Num(); ++i)
+		{
+			if (i > 0 && i + 1 < Pts.Num()) { const FVector2D D0 = (Pts[i] - Pts[i - 1]).GetSafeNormal(), D1 = (Pts[i + 1] - Pts[i]).GetSafeNormal(); if (FVector2D::DotProduct(D0, D1) > 0.9f) continue; }   // to'g'ri chiziqda minora yo'q
+			const float Zb = HeightAt(Pts[i].X, Pts[i].Y) - 0.6f;
+			M.AddCylinder(W(Pts[i].X, Pts[i].Y, Zb), Thick * 1.4f, Thick * 1.3f, H + 1.8f + 0.6f, 10, ErtCol::Vary(Col, 0.06f, S + i), true, FRotator::ZeroRotator, 0.03f, S + i);
+			M.AddCone(W(Pts[i].X, Pts[i].Y, Zb + H + 2.4f), Thick * 1.5f, 1.2f, 10, ErtCol::Sty(FLinearColor(0.42f, 0.28f, 0.18f), ErtCol::StyleRoof));
+		}
+}
+
+void AErtWorldBuilder::BuildSplineWalls()
+{
+	FErtMeshData M(100.f);
+	const FLinearColor DryStone = ErtCol::Sty(FLinearColor(0.58f, 0.55f, 0.48f), ErtCol::StyleStone), Curtain = ErtCol::Sty(FLinearColor(0.50f, 0.48f, 0.45f), ErtCol::StyleStone), Quay = ErtCol::Sty(FLinearColor(0.55f, 0.56f, 0.55f), ErtCol::StyleStone);
+	// So'g'ut: uzumzor devori (past quruq tosh, egri spline)
+	AddWallSpline(M, { {SogE - 95.f, SogN + 20.f}, {SogE - 80.f, SogN + 45.f}, {SogE - 55.f, SogN + 62.f}, {SogE - 20.f, SogN + 70.f}, {SogE + 25.f, SogN + 66.f} }, 1.4f, 0.6f, DryStone, false, false, 3100);
+	// Domaniç: qo'ra (halqa)
+	{
+		TArray<FVector2D> Ring; for (int32 i = 0; i <= 8; ++i) { const float A = 2.f * PI * i / 8; Ring.Add(FVector2D(DomE + 40.f + FMath::Cos(A) * 14.f, DomN - 30.f + FMath::Sin(A) * 14.f)); }
+		AddWallSpline(M, Ring, 1.2f, 0.5f, DryStone, false, false, 3200);
+	}
+	// Bagras: yo'l bo'yidagi tashqi qo'rg'on devori (tishli, minorali)
+	AddWallSpline(M, { {FortE - 150.f, FortN - 210.f}, {FortE - 120.f, FortN - 180.f}, {FortE - 95.f, FortN - 140.f}, {FortE - 80.f, FortN - 100.f} }, 4.5f, 1.4f, Curtain, true, true, 3300);
+	// Nikeya: Askaniya ko'li qirg'og'idagi tosh qirg'oq devori (yoy)
+	{
+		TArray<FVector2D> Arc; for (int32 i = 0; i <= 10; ++i) { const float A = FMath::DegreesToRadians(200.f + 14.f * i); Arc.Add(FVector2D(AskE + FMath::Cos(A) * (AskR + 7.f), AskN + FMath::Sin(A) * (AskR + 7.f))); }
+		AddWallSpline(M, Arc, 1.1f, 0.8f, Quay, false, false, 3400);
+	}
+	// Konya: shahar tashqarisidagi karvon yo'li devori
+	AddWallSpline(M, { {KonE - 200.f, KonN - 40.f}, {KonE - 175.f, KonN - 10.f}, {KonE - 160.f, KonN + 30.f}, {KonE - 165.f, KonN + 70.f} }, 3.2f, 1.1f, Curtain, true, true, 3500);
+	// Qayi obasi: janubiy chegara devori (yog'och ustunli tosh)
+	AddWallSpline(M, { {ObaE - 130.f, ObaN - 140.f}, {ObaE - 90.f, ObaN - 150.f}, {ObaE - 40.f, ObaN - 152.f}, {ObaE + 10.f, ObaN - 148.f} }, 1.6f, 0.7f, DryStone, false, false, 3600);
+	M.Commit(NewPart(TEXT("SplineWalls"), true), 0, true);
+	UE_LOG(LogErtugrul, Log, TEXT("Spline devorlar: %d modul"), WallSegs.Num());
+}
+
+void AErtWorldBuilder::BuildDecals()
+{
+	DecalMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtDecal.M_ErtDecal"));
+	if (!DecalMat) { UE_LOG(LogErtugrul, Warning, TEXT("M_ErtDecal yo'q - dekallar o'tkazib yuborildi (ert_make_decal.py)")); return; }
+	FRandomStream RS(Seed + 41);
+	int32 N = 0;
+	auto Place = [&](const FVector& Pos, float Yaw, float Size, float Kind)
+	{
+		UDecalComponent* D = NewObject<UDecalComponent>(this, *FString::Printf(TEXT("Decal_%d"), N));
+		D->SetupAttachment(RootComponent);
+		D->SetDecalMaterial(DecalMat);
+		D->DecalSize = FVector(40.f, Size, Size);
+		D->SetWorldLocation(Pos);
+		D->SetWorldRotation(FRotator(0.f, Yaw, RS.FRandRange(0.f, 360.f)));
+		D->SetFadeScreenSize(0.005f);
+		D->RegisterComponent();
+		if (UMaterialInstanceDynamic* MID = D->CreateDynamicMaterialInstance()) { MID->SetScalarParameterValue(TEXT("Kind"), Kind); MID->SetScalarParameterValue(TEXT("Seed"), RS.FRandRange(0.f, 10.f)); }
+		Decals.Add(D); ++N;
+	};
+	// Spline devorlar: har modulda 55% ehtimol bilan mog'or (pastda) yoki yoriq (o'rtada), ikki tomonda
+	for (const FWallSeg& Sg : WallSegs)
+	{
+		if (RS.FRand() > 0.55f) continue;
+		const FVector2D Dir = (Sg.B - Sg.A).GetSafeNormal(), Nrm(-Dir.Y, Dir.X);
+		const FVector2D C = (Sg.A + Sg.B) * 0.5f + Dir * RS.FRandRange(-1.2f, 1.2f);
+		const bool bMoss = RS.FRand() < 0.6f;
+		const float Zc = Sg.Z + (bMoss ? 0.35f : Sg.H * RS.FRandRange(0.4f, 0.75f));
+		const float Side = RS.FRand() < 0.5f ? 1.f : -1.f;
+		const FVector2D P = C + Nrm * Side * 0.05f;
+		// Dekal X o'qi devorga qarab (proyeksiya yo'nalishi): Nrm * -Side
+		Place(W(P.X, P.Y, Zc) + FVector(0, 0, 0), FMath::RadiansToDegrees(FMath::Atan2(-Side * Nrm.Y, -Side * Nrm.X)), RS.FRandRange(70.f, 140.f), bMoss ? 0.f : 1.f);
+	}
+	// Uylar/o'tovlar (Interiors): tashqi devor tagida mog'or/dog'
+	for (const FVector4& In : Interiors)
+	{
+		if (RS.FRand() > 0.5f) continue;
+		const float A = RS.FRand() * 2.f * PI;
+		const float R = In.Z + 0.02f;
+		const FVector2D P(In.X + FMath::Cos(A) * R, In.Y + FMath::Sin(A) * R);
+		Place(W(P.X, P.Y, In.W + 0.4f), FMath::RadiansToDegrees(A) + 180.f, RS.FRandRange(60.f, 110.f), RS.FRand() < 0.7f ? 0.f : 2.f);
+	}
+	UE_LOG(LogErtugrul, Log, TEXT("Dekallar: %d"), N);
+}
+
+void AErtWorldBuilder::BuildShoreFoliage()
+{
+	FRandomStream RS(Seed + 53);
+	FErtMeshData G(1.f), Pebbles(100.f);
+	const FLinearColor Reed(0.38f, 0.52f, 0.20f), ReedD(0.30f, 0.42f, 0.16f), Pebble = ErtCol::Sty(FLinearColor(0.55f, 0.53f, 0.48f), ErtCol::StyleRock);
+	int32 Clumps = 0, Stones = 0;
+	auto Clump = [&](float E, float N, float Hgt, const FLinearColor& C)
+	{
+		const float H = HeightAt(E, N);
+		float SurfZ; if (IsWater(E, N, SurfZ) && H < SurfZ - 0.1f) return;
+		const FVector Base = W(E, N, H - 0.02f);
+		const float Yaw0 = RS.FRandRange(0.f, 180.f);
+		for (int32 b = 0; b < 4; ++b) ErtAddBlade(G, Base + FVector(RS.FRandRange(-14.f, 14.f), RS.FRandRange(-14.f, 14.f), 0), Yaw0 + b * 45.f, Hgt * RS.FRandRange(0.7f, 1.15f), RS.FRandRange(30.f, 55.f), ErtCol::Vary(C, 0.12f, Clumps), RS.FRandRange(-10.f, 10.f));
+		++Clumps;
+	};
+	auto Pebb = [&](float E, float N)
+	{
+		const float H = HeightAt(E, N);
+		Pebbles.AddSphere(W(E, N, H - 0.05f), RS.FRandRange(0.08f, 0.22f), 5, ErtCol::Vary(Pebble, 0.15f, Stones), FVector(1.f, RS.FRandRange(0.7f, 1.f), 0.6f), 0.2f, Stones);
+		++Stones;
+	};
+	// Ko'l va voha qirg'oqlari: qamish + mayda toshlar (halqa)
+	struct FLk { float E, N, R; };
+	for (const FLk& L : { FLk{LakeE, LakeN, LakeR}, FLk{AskE, AskN, AskR}, FLk{OasisE, OasisN, OasisR} })
+		for (int32 i = 0; i < 260; ++i)
+		{
+			const float A = RS.FRand() * 2.f * PI, R = L.R + RS.FRandRange(4.5f, 12.f);
+			const float E = L.E + FMath::Cos(A) * R, N = L.N + FMath::Sin(A) * R;
+			if (!IsBuildable(E, N)) continue;
+			if (RS.FRand() < 0.7f) Clump(E, N, RS.FRandRange(45.f, 80.f), RS.FRand() < 0.5f ? Reed : ReedD); else Pebb(E, N);
+		}
+	// Daryo bo'ylari
+	for (float N = -980.f; N < 980.f; N += 3.f)
+	{
+		if (N < DesertN + 20.f) continue;
+		for (int32 s = -1; s <= 1; s += 2)
+		{
+			if (RS.FRand() > 0.55f) continue;
+			const float E = RiverE(N) + s * RS.FRandRange(27.f, 36.f);
+			float Wd = 0.f; if (RoadDist(E, N, &Wd) < Wd * 0.5f + 1.f) continue;
+			if (RS.FRand() < 0.75f) Clump(E, N, RS.FRandRange(40.f, 75.f), Reed); else Pebb(E, N);
+		}
+	}
+	// Spline devor tagi: maysa va toshchalar (ikki tomon)
+	for (const FWallSeg& Sg : WallSegs)
+	{
+		const FVector2D Dir = (Sg.B - Sg.A).GetSafeNormal(), Nrm(-Dir.Y, Dir.X);
+		for (int32 k = 0; k < 3; ++k)
+		{
+			const FVector2D P = Sg.A + Dir * RS.FRandRange(0.f, FVector2D::Distance(Sg.A, Sg.B)) + Nrm * (RS.FRand() < 0.5f ? 1.f : -1.f) * RS.FRandRange(0.5f, 1.4f);
+			if (RS.FRand() < 0.7f) Clump(P.X, P.Y, RS.FRandRange(25.f, 45.f), ReedD); else Pebb(P.X, P.Y);
+		}
+	}
+	if (G.Verts.Num()) { UProceduralMeshComponent* P = NewPart(TEXT("ShoreGrass"), false, GrassMat ? GrassMat : Mat); G.Commit(P, 0, false); P->SetCastShadow(false); }
+	if (Pebbles.Verts.Num()) Pebbles.Commit(NewPart(TEXT("Pebbles"), false), 0, false);
+	UE_LOG(LogErtugrul, Log, TEXT("Qirg'oq/devor o'simliklari: %d tup, %d tosh"), Clumps, Stones);
 }

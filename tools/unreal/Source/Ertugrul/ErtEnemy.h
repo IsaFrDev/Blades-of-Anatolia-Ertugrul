@@ -20,6 +20,11 @@ public:
 	AErtEnemy();
 
 	void Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadius);
+	/** Jamoa: 0 dushman, 1 ittifoqchi (Qayi alplari) - Init dan oldin qo'yiladi */
+	int32 Team = 0;
+	bool IsAlly() const { return Team == 1; }
+	/** Hozirgi raqib (o'yinchi yoki boshqa jamoa) */
+	AActor* CurrentTarget() const { return TargetActor.Get(); }
 	/** bGuardBreak - og'ir zarba/tepki: qalqonni chetlab o'tadi */
 	void ApplyHit(float Damage, AActor* Source, bool bGuardBreak = false);
 	bool IsGuarding() const { return GuardT > 0.f; }
@@ -69,6 +74,9 @@ private:
 	void TickDeer(float Dt, APawn* Player);
 	void TickGuard(float Dt, APawn* Player);
 	void MoveToward(const FVector& Target, float Speed);
-	bool CanSee(const APawn* Player) const;
+	bool CanSee(const AActor* Target) const;
+	TWeakObjectPtr<AActor> TargetActor;
+	float RetargetT = 0.f;
+	AActor* PickTarget(APawn* Player);
 	void Die();
 };

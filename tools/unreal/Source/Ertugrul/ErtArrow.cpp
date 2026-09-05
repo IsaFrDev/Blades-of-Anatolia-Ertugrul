@@ -58,7 +58,7 @@ void AErtArrow::Tick(float Dt)
 		for (AActor* A : All)
 		{
 			AErtEnemy* E = Cast<AErtEnemy>(A);
-			if (!E || E->IsDead()) continue;
+			if (!E || E->IsDead() || E->IsAlly()) continue;
 			const FVector C = E->GetActorLocation();
 			const float DistSeg = FMath::PointDistToSegment(C, From, To);
 			if (DistSeg < 70.f)

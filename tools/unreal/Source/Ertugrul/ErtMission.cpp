@@ -276,6 +276,7 @@ bool AErtMissionDirector::StartEpisodeData(const FErtEpisode& EData, const FVect
 void AErtMissionDirector::StopEpisode()
 {
 	ClearEnemies();
+	ClearAllies();
 	ClearPhaseNpcs();
 	Phases.Reset(); Objectives.Reset(); Waves.Reset();
 	State = EErtMissionState::Inactive;
@@ -289,6 +290,33 @@ void AErtMissionDirector::ClearPhaseNpcs()
 	PhaseNpcs.Reset();
 }
 
+int32 AErtMissionDirector::AliveAllies() const { int32 N = 0; for (const AErtEnemy* E : Allies) if (E && !E->IsDead()) ++N; return N; }
+
+void AErtMissionDirector::ClearAllies()
+{
+	for (AErtEnemy* E : Allies) if (E) E->Destroy();
+	Allies.Reset();
+}
+
+void AErtMissionDirector::SpawnAllies(int32 N)
+{
+	AErtCharacter* H = Hero();
+	if (!H) return;
+	FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	int32 Made = 0;
+	for (int32 i = 0; i < N; ++i)
+	{
+		const float A = 2.f * PI * i / N + PI;   // o'yinchi orqasida yarim doira
+		const FVector P = GroundAt(H->GetActorLocation().X + FMath::Cos(A) * 380.f, H->GetActorLocation().Y + FMath::Sin(A) * 380.f);
+		AErtEnemy* E = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), P + FVector(0, 0, 100.f), FRotator(0, H->GetActorRotation().Yaw, 0), SP);
+		if (!E) continue;
+		E->Team = 1;
+		E->Init(i % 3 == 0 ? EErtEnemyKind::Sergeant : EErtEnemyKind::Footman, P, 0.f);
+		Allies.Add(E); ++Made;
+	}
+	UE_LOG(LogErtugrul, Log, TEXT("[Missiya] urush: %d ittifoqchi alp"), Made);
+}
+
 void AErtMissionDirector::ClearEnemies()
 {
 	for (AErtEnemy* E : Enemies) if (E) { if (AErtHorse* Hs = E->GetMount()) Hs->Destroy(); E->Destroy(); }
@@ -297,6 +325,11 @@ void AErtMissionDirector::ClearEnemies()
 
 void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 {
+	EpisodeArchetype = E.Archetype;
+	{
+		const FVector2D StartEN(Cursor.Y / 100.f, Cursor.X / 100.f);
+		CouncilBase = FVector2D::Distance(StartEN, FVector2D(ObaE, ObaN)) < 400.f ? FVector2D(ObaE, ObaN) : StartEN;   // uzoq epizodlarda kengash shu yerda
+	}
 	Phases.Reset();
 	const int32 Tier = FMath::Clamp(E.DifficultyTier, 1, 5);
 	const int32 SeasonN = (E.SeasonId.Len() >= 2) ? FMath::Clamp(E.SeasonId[1] - '0', 1, 4) : 1;
@@ -483,7 +516,7 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 				FErtPhase Ph; Ph.TitleKey = TEXT("ui.phase.council");
 				FErtObjective O; O.Kind = EErtObjKind::Council; O.LocKey = TEXT("ui.obj.council"); O.DialogId = P.Dialog; O.Threshold = P.Threshold;
 				const FErtCouncilNpc* First = P.Npcs.Num() ? &P.Npcs[0] : nullptr;
-				O.Point = GroundAt((ObaN + (First ? First->V : -7.f)) * 100.f, (ObaE + (First ? First->U : -6.f)) * 100.f);
+				O.Point = GroundAt((CouncilBase.Y + (First ? First->V : -7.f)) * 100.f, (CouncilBase.X + (First ? First->U : -6.f)) * 100.f);
 				Ph.Objectives.Add(O);
 				Ph.Npcs = P.Npcs;
 				Phases.Add(Ph);
@@ -513,10 +546,18 @@ void AErtMissionDirector::StartPhase(int32 Idx)
 	Waves = P.Waves;
 	WaveIdx = 0;
 	SpawnWave(0);
+	// Urush: 3+ dushmanli to'lqin bo'lsa Qayi alplari yordamga keladi (SIEGE/DEFENSE da ko'proq)
+	{
+		int32 MaxW = 0; for (const FErtWave& Wv : Waves) MaxW = FMath::Max(MaxW, Wv.Spawns.Num());
+		const bool bBig = EpisodeArchetype == TEXT("SIEGE") || EpisodeArchetype == TEXT("DEFENSE");
+		const int32 Want = MaxW >= 3 ? FMath::Clamp(MaxW + (bBig ? 3 : 0), 3, 8) : 0;
+		if (Want > AliveAllies()) { ClearAllies(); SpawnAllies(Want); }
+		else if (Want == 0) ClearAllies();
+	}
 	ClearPhaseNpcs();
 	for (const FErtCouncilNpc& C : P.Npcs)
 	{
-		const FVector G = GroundAt((ObaN + C.V) * 100.f, (ObaE + C.U) * 100.f);
+		const FVector G = GroundAt((CouncilBase.Y + C.V) * 100.f, (CouncilBase.X + C.U) * 100.f);
 		AErtNpc* Npc = GetWorld()->SpawnActor<AErtNpc>(AErtNpc::StaticClass(), G + FVector(0, 0, 92.f), FRotator(0, C.Yaw, 0));
 		if (!Npc) continue;
 		const FString Dlg = (P.Objectives.Num() && &C == &P.Npcs[0]) ? P.Objectives[0].DialogId : FString();
@@ -644,7 +685,7 @@ void AErtMissionDirector::UpdateObjectives(float Dt)
 			if (O.Progress < O.Points.Num())
 			{
 				const FVector& T = O.Points[O.Progress];
-				const bool bNear = FVector::Dist2D(PL, T) < O.Radius && (!O.bNeedZ || FeetZ > T.Z - 120.f) && FMath::Abs(FeetZ - T.Z) < 400.f;
+				const bool bNear = FVector::Dist2D(PL, T) < O.Radius * 1.4f && (!O.bNeedZ || FeetZ > T.Z - 200.f) && FMath::Abs(FeetZ - T.Z) < 700.f;
 				if (bNear) { ++O.Progress; bMarkersDirty = true; }
 			}
 			if (O.Progress >= O.Points.Num()) O.bDone = true;
@@ -672,6 +713,13 @@ void AErtMissionDirector::UpdateObjectives(float Dt)
 			if (O.Progress > O.Target) O.bFailed = true;
 			break;
 		case EErtObjKind::Council:
+			if (O.DialogId.IsEmpty())
+			{
+				// Dialog grafi yo'q: kengash nuqtasida 2 s turish kifoya
+				if (FVector::Dist2D(PL, O.Point) < 450.f) O.Hold += Dt; else O.Hold = 0.f;
+				if (O.Hold > 2.f) { O.bDone = true; UE_LOG(LogErtugrul, Log, TEXT("[Missiya] kengash (dialogsiz) o'tdi")); }
+				break;
+			}
 			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
 				if (GM->LastDialogId == O.DialogId && GM->LastDialogEndTime > GetWorld()->GetTimeSeconds() - PhaseT - 1.f)
 				{

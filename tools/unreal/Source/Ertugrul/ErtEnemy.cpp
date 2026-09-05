@@ -54,6 +54,12 @@ void AErtEnemy::Init(EErtEnemyKind InKind, const FVector& Home, float PatrolRadi
 	case EErtEnemyKind::Rider:    MaxHealth = 90.f;  AttackDamage = 15.f; AttackCooldown = 1.3f; MoveSpeed = 380.f; AttackRange = 300.f;
 		Body->Kaftan = FLinearColor(0.38f, 0.10f, 0.08f); Body->Leather = FLinearColor(0.35f, 0.33f, 0.30f); Body->bHelmet = true; Body->bMail = true; Body->bCloak = true; Body->Cloak = FLinearColor(0.25f, 0.2f, 0.12f); Body->bBoots = true; break;
 	}
+	if (Team == 1)
+	{
+		// Qayi alplari: oq-jigarrang kaftan, ko'k belbog', qalpoq/dubulg'a
+		Body->Kaftan = FLinearColor(0.72f, 0.62f, 0.45f); Body->Trim = FLinearColor(0.15f, 0.25f, 0.5f); Body->Leather = FLinearColor(0.35f, 0.22f, 0.12f); Body->bCloak = false;
+		bAlerted = true; MaxHealth *= 1.3f;
+	}
 	Body->bSwordInHand = Kind != EErtEnemyKind::Deer && Kind != EErtEnemyKind::Crossbow;
 	Health = MaxHealth;
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
@@ -234,12 +240,12 @@ void AErtEnemy::Die()
 	SetLifeSpan(30.f);
 }
 
-bool AErtEnemy::CanSee(const APawn* Player) const
+bool AErtEnemy::CanSee(const AActor* Target) const
 {
 	FHitResult H;
 	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtSee), false, this);
-	Q.AddIgnoredActor(Player);
-	const FVector A = GetActorLocation() + FVector(0, 0, 60), B = Player->GetActorLocation() + FVector(0, 0, 40);
+	Q.AddIgnoredActor(Target);
+	const FVector A = GetActorLocation() + FVector(0, 0, 60), B = Target->GetActorLocation() + FVector(0, 0, 40);
 	return !GetWorld()->LineTraceSingleByChannel(H, A, B, ECC_Visibility, Q);
 }
 
@@ -299,26 +305,39 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 	AttackCD -= Dt;
 	if (GuardT > 0.f) { GuardT -= Dt; if (GuardT <= 0.f && Body) Body->SetBlocking(false); }
 	if (StaggerT > 0.f) { StaggerT -= Dt; return; }
-	AErtCharacter* Hero = Cast<AErtCharacter>(Player);
-	const bool bHeroAlive = Hero && !Hero->IsDead();
-	const float DP = bHeroAlive ? FVector::Dist2D(Hero->GetActorLocation(), GetActorLocation()) : 1e9f;
+	// Nishon: o'yinchi (dushman uchun) yoki boshqa jamoa a'zosi (urush) - har 0.5 s qayta tanlanadi
+	RetargetT -= Dt;
+	if (RetargetT <= 0.f || !TargetActor.IsValid()) { RetargetT = 0.5f; TargetActor = PickTarget(Player); }
+	AActor* Tgt = TargetActor.Get();
+	AErtCharacter* Hero = Cast<AErtCharacter>(Tgt);
+	AErtEnemy* Foe = Cast<AErtEnemy>(Tgt);
+	const bool bHeroAlive = (Hero && !Hero->IsDead()) || (Foe && !Foe->IsDead());
+	const float DP = bHeroAlive ? FVector::Dist2D(Tgt->GetActorLocation(), GetActorLocation()) : 1e9f;
+	auto DealHit = [&](float Dmg, bool bHeavy) { if (Hero) Hero->ReceiveHit(Dmg, GetActorLocation(), this, bHeavy); else if (Foe) { Foe->ApplyHit(Dmg, this, bHeavy); AErtBurst::Blood(GetWorld(), Foe->GetActorLocation() + FVector(0, 0, 60.f), (Foe->GetActorLocation() - GetActorLocation()).GetSafeNormal2D(), 0.7f); } };
 
 	// Kechiktirilgan zarba (animatsiya o'rtasida tegadi)
 	if (HitPending >= 0.f)
 	{
 		HitPending -= Dt;
-		if (HitPending < 0.f && bHeroAlive && DP < AttackRange + 80.f) { Hero->ReceiveHit(bHeavyPending ? AttackDamage * 2.f : AttackDamage, GetActorLocation(), this, bHeavyPending); bHeavyPending = false; }
+		if (HitPending < 0.f && bHeroAlive && DP < AttackRange + 80.f) { DealHit(bHeavyPending ? AttackDamage * 2.f : AttackDamage, bHeavyPending); bHeavyPending = false; }
 	}
 
-	if (Mount && bAlerted) { TickRider(Dt, bHeroAlive ? Hero : nullptr, DP); return; }
+	if (Mount && bAlerted && Hero) { TickRider(Dt, bHeroAlive ? Hero : nullptr, DP); return; }
+	if (Team == 1 && !bHeroAlive)
+	{
+		// Ittifoqchi: raqib yo'q - o'yinchiga ergashadi (4-7 m orqada)
+		if (APawn* Pl = Player) { const float Dpl = FVector::Dist2D(Pl->GetActorLocation(), GetActorLocation()); if (Dpl > 700.f) MoveToward(Pl->GetActorLocation(), Dpl > 1800.f ? MoveSpeed * 1.25f : MoveSpeed); else if (Dpl > 420.f) MoveToward(Pl->GetActorLocation(), 220.f); }
+		return;
+	}
+	if (Hero) Hero = bHeroAlive ? Hero : nullptr;
 	if (!bAlerted && bHeroAlive)
 	{
-		const FVector To = (Hero->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
+		const FVector To = (Tgt->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
 		const float Facing = FVector::DotProduct(GetActorForwardVector(), To);
-		const float SeeRange = Mount ? 2600.f : (Hero->bIsCrouched ? 900.f : 1400.f);
-		if ((DP < SeeRange && Facing > 0.35f && CanSee(Hero)) || DP < 320.f) bAlerted = true;
+		const float SeeRange = Mount ? 2600.f : ((Hero && Hero->bIsCrouched) ? 900.f : 1400.f);
+		if ((DP < SeeRange && Facing > 0.35f && CanSee(Tgt)) || DP < 320.f) bAlerted = true;
 	}
-	if (bAlerted && bHeroAlive && Kind == EErtEnemyKind::Footman && Health < MaxHealth * 0.3f)
+	if (bAlerted && Hero && Team == 0 && Kind == EErtEnemyKind::Footman && Health < MaxHealth * 0.3f)
 	{
 		// Or/iymon yuqori bo'lsa oddiy askarlar qo'rqib qochadi
 		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
@@ -328,16 +347,16 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 	{
 		if (Kind == EErtEnemyKind::Crossbow)
 		{
-			if (DP > AttackRange) MoveToward(Hero->GetActorLocation(), MoveSpeed);
-			else if (DP < 500.f) MoveToward(GetActorLocation() + (GetActorLocation() - Hero->GetActorLocation()).GetSafeNormal2D() * 400.f, MoveSpeed * 0.8f);
-			else SetActorRotation(FRotator(0, (Hero->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
-			if (DP <= AttackRange && AttackCD <= 0.f && CanSee(Hero))
+			if (DP > AttackRange) MoveToward(Tgt->GetActorLocation(), MoveSpeed);
+			else if (DP < 500.f) MoveToward(GetActorLocation() + (GetActorLocation() - Tgt->GetActorLocation()).GetSafeNormal2D() * 400.f, MoveSpeed * 0.8f);
+			else SetActorRotation(FRotator(0, (Tgt->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
+			if (DP <= AttackRange && AttackCD <= 0.f && CanSee(Tgt))
 			{
 				AttackCD = AttackCooldown;
 				Body->TriggerAttack();
 				// Ko'rinadigan o'q: o'yinchining hozirgi joyiga (biroz oldinga) - dodge bilan qochish mumkin
 				const FVector Start = GetActorLocation() + FVector(0, 0, 60.f) + GetActorForwardVector() * 40.f;
-				const FVector Target = Hero->GetActorLocation() + Hero->GetVelocity() * 0.35f + FVector(FMath::FRandRange(-40.f, 40.f), FMath::FRandRange(-40.f, 40.f), 0);
+				const FVector Target = Tgt->GetActorLocation() + Tgt->GetVelocity() * 0.35f + FVector(FMath::FRandRange(-40.f, 40.f), FMath::FRandRange(-40.f, 40.f), 0);
 				const float Dist = FVector::Dist(Start, Target);
 				FVector Dir = (Target - Start).GetSafeNormal(); Dir.Z += Dist / 9000.f;   // parabola kompensatsiyasi
 				if (AErtArrow* Ar = GetWorld()->SpawnActor<AErtArrow>(AErtArrow::StaticClass(), Start, Dir.Rotation())) Ar->Launch(Dir, 2600.f, AttackDamage, false, this);
@@ -345,8 +364,8 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 			}
 			return;
 		}
-		if (DP > AttackRange * 0.85f) MoveToward(Hero->GetActorLocation(), MoveSpeed);
-		else SetActorRotation(FRotator(0, (Hero->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
+		if (DP > AttackRange * 0.85f) MoveToward(Tgt->GetActorLocation(), MoveSpeed);
+		else SetActorRotation(FRotator(0, (Tgt->GetActorLocation() - GetActorLocation()).Rotation().Yaw, 0));
 		if (Kind == EErtEnemyKind::Boss) HeavyCD -= Dt;
 		if (Kind == EErtEnemyKind::Boss && HeavyCD <= 0.f && DP <= AttackRange + 60.f && AttackCD <= 0.f)
 		{
@@ -377,4 +396,28 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 		}
 		if (FVector::Dist2D(WanderTarget, GetActorLocation()) > 90.f) MoveToward(WanderTarget, 150.f);
 	}
+}
+
+
+AActor* AErtEnemy::PickTarget(APawn* Player)
+{
+	AErtCharacter* Hero = Cast<AErtCharacter>(Player);
+	const bool bHeroAlive = Hero && !Hero->IsDead();
+	AActor* Best = nullptr; float BestD = Team == 1 ? 3200.f : 2600.f;
+	// Boshqa jamoa a'zolari (urush)
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtEnemy::StaticClass(), All);
+	for (AActor* A : All)
+	{
+		AErtEnemy* E = Cast<AErtEnemy>(A);
+		if (!E || E == this || E->IsDead() || E->IsAnimal() || E->Team == Team) continue;
+		const float D = FVector::Dist2D(E->GetActorLocation(), GetActorLocation());
+		if (D < BestD) { BestD = D; Best = E; }
+	}
+	if (Team == 0 && bHeroAlive)
+	{
+		// Dushman: o'yinchi yaqinroq bo'lsa (yoki allaqachon sezgan bo'lsa) o'yinchini tanlaydi
+		const float Dh = FVector::Dist2D(Hero->GetActorLocation(), GetActorLocation());
+		if (!Best || Dh < BestD * 1.1f || (TargetActor.Get() == Hero && Dh < 1500.f)) Best = Hero;
+	}
+	return Best;
 }
