@@ -176,7 +176,7 @@ bool AErtCutsceneDirector::Play(const FString& EpisodeId, const FVector& InOrigi
 	for (const FErtCutActorDef& A : Scene.Actors)
 	{
 		if (A.Keys.Num() == 0) continue;
-		AErtCutActor* Act = GetWorld()->SpawnActor<AErtCutActor>(AErtCutActor::StaticClass(), ToWorld(A.Keys[0].Pos, true), FRotator(0, A.Keys[0].Yaw, 0));
+		AErtCutActor* Act = GetWorld()->SpawnActor<AErtCutActor>(AErtCutActor::StaticClass(), ToWorld(A.Keys[0].Pos, true) + FVector(0, 0, 92.f), FRotator(0, A.Keys[0].Yaw, 0));
 		if (!Act) continue;
 		Act->Setup(A.Id, A.Tint, A.Scale);
 		Spawned.Add(Act);
@@ -240,7 +240,7 @@ void AErtCutsceneDirector::Tick(float Dt)
 			Clip = K[j + 1].Clip == TEXT("Walk") || K[j].Clip == TEXT("Walk") ? TEXT("Walk") : K[j].Clip;
 		}
 		else { P = K[j].Pos; Yaw = K[j].Yaw; }
-		const FVector W = ToWorld(P, true);
+		const FVector W = ToWorld(P, true) + FVector(0, 0, 92.f);   // tana ildizi kapsula markazida
 		const float Speed = FVector::Dist2D(W, PrevPos[i]) / FMath::Max(Dt, 0.001f);
 		PrevPos[i] = W;
 		A->SetActorLocation(W);

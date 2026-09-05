@@ -2827,7 +2827,7 @@ void AErtWorldBuilder::BuildGrass()
 		const float Hgt = RS.FRandRange(22.f, 42.f) * (1.f + 0.3f * Smooth01((N + 100.f) / 500.f));
 		const FLinearColor Col = ErtCol::Vary(RS.FRand() < 0.6f ? G1 : (RS.FRand() < 0.5f ? G2 : G3), 0.12f, i);
 		const float Yaw0 = RS.FRandRange(0.f, 180.f);
-		for (int32 b = 0; b < 4; ++b) ErtAddBlade(M, Base + FVector(RS.FRandRange(-16.f, 16.f), RS.FRandRange(-16.f, 16.f), 0), Yaw0 + b * 45.f, Hgt * RS.FRandRange(0.7f, 1.1f), RS.FRandRange(30.f, 50.f), Col, RS.FRandRange(-12.f, 12.f));
+		for (int32 b = 0; b < 7; ++b) ErtAddBlade(M, Base + FVector(RS.FRandRange(-18.f, 18.f), RS.FRandRange(-18.f, 18.f), 0), Yaw0 + b * 26.f, Hgt * RS.FRandRange(0.7f, 1.15f), RS.FRandRange(8.f, 14.f), Col, RS.FRandRange(-14.f, 14.f));
 		++Placed;
 	}
 	for (int32 cidx = 0; cidx < Cells.Num(); ++cidx)
@@ -3017,7 +3017,7 @@ void AErtWorldBuilder::BuildShoreFoliage()
 		float SurfZ; if (IsWater(E, N, SurfZ) && H < SurfZ - 0.1f) return;
 		const FVector Base = W(E, N, H - 0.02f);
 		const float Yaw0 = RS.FRandRange(0.f, 180.f);
-		for (int32 b = 0; b < 4; ++b) ErtAddBlade(G, Base + FVector(RS.FRandRange(-14.f, 14.f), RS.FRandRange(-14.f, 14.f), 0), Yaw0 + b * 45.f, Hgt * RS.FRandRange(0.7f, 1.15f), RS.FRandRange(30.f, 55.f), ErtCol::Vary(C, 0.12f, Clumps), RS.FRandRange(-10.f, 10.f));
+		for (int32 b = 0; b < 6; ++b) ErtAddBlade(G, Base + FVector(RS.FRandRange(-14.f, 14.f), RS.FRandRange(-14.f, 14.f), 0), Yaw0 + b * 30.f, Hgt * RS.FRandRange(0.7f, 1.15f), RS.FRandRange(6.f, 12.f), ErtCol::Vary(C, 0.12f, Clumps), RS.FRandRange(-10.f, 10.f));
 		++Clumps;
 	};
 	auto Pebb = [&](float E, float N)
