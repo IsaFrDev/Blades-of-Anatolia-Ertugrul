@@ -590,15 +590,17 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	{
 		// Ko'rgazma: uchta dushman (serjant, elita, arbaletchi) kamera oldida
 		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SetWeather(TEXT("clear"));
-		const float E0 = -556.f, N0 = 372.f, Z0 = 12.f;
+		const float E0 = -556.f, N0 = 372.f, Z0 = WorldRef ? WorldRef->HeightAt(E0, N0 + 4.f) : 12.f;
 		const EErtEnemyKind Kinds[] = { EErtEnemyKind::Sergeant, EErtEnemyKind::Elite, EErtEnemyKind::Crossbow };
 		FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		for (int32 i = 0; i < 3; ++i)
 		{
 			const FVector P((N0 + 4.f) * 100.f, (E0 + (i - 1) * 1.3f) * 100.f, Z0 * 100.f + 110.f);
-			if (AErtEnemy* En = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), P, FRotator(0, 180.f, 0), SP)) { En->Init(Kinds[i], P, 0.f); En->SetActorTickEnabled(false); }
+			AErtEnemy* En = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), P, FRotator(0, 180.f, 0), SP);
+			if (En) { En->Init(Kinds[i], P, 0.f); En->SetActorTickEnabled(false); }
+			UE_LOG(LogErtugrul, Log, TEXT("Ko'rgazma dushmani %d: %s pos=%s yer=%.1f hidden=%d"), i, En ? TEXT("ok") : TEXT("YO'Q"), En ? *En->GetActorLocation().ToString() : TEXT("-"), WorldRef ? WorldRef->HeightAt(E0, N0 + 4.f) : -1.f, En ? (int32)En->IsHidden() : -1);
 		}
-		Teleport(E0, N0, Z0 + 1.4f, -8.f, 0.f);
+		Teleport(E0, N0, Z0 + 1.5f, -6.f, 0.f);
 	}
 	if (At(54.0f)) TakeShot(TEXT("enemy"));
 	if (At(54.5f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
