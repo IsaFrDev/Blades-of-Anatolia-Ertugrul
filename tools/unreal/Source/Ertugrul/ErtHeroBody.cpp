@@ -228,6 +228,32 @@ void UErtHeroBody::SetSwordTier(int32 Tier)
 }
 
 void UErtHeroBody::TriggerAttack(int32 Kind) { AttackT = 1.f; AttackKind = Kind; }
+
+void UErtHeroBody::AddWound(float SideSign, float Strength)
+{
+	if (!IsBuilt() || bDead) return;
+	if (!Wounds) Wounds = MakePart(TEXT("Wounds"), Torso, FVector::ZeroVector);
+	const int32 Count = FMath::Clamp(FMath::RoundToInt(Strength * 1.5f), 1, 3);
+	for (int32 i = 0; i < Count; ++i)
+	{
+		FVector4 Wd;
+		const float Z = FMath::FRandRange(8.f, 42.f), Sz = FMath::FRandRange(2.5f, 5.f) * FMath::Clamp(Strength, 0.6f, 1.6f);
+		if (SideSign == 0.f) Wd = FVector4(FMath::FRand() < 0.7f ? 13.7f : -13.7f, FMath::FRandRange(-12.f, 12.f), Z, Sz);
+		else Wd = FVector4(FMath::FRandRange(-8.f, 8.f), SideSign * 19.6f, Z, Sz);
+		WoundList.Add(Wd);
+	}
+	if (WoundList.Num() > 12) WoundList.RemoveAt(0, WoundList.Num() - 12);
+	FErtMeshData M;
+	const FLinearColor Dark = ErtCol::Sty(FLinearColor(0.28f, 0.02f, 0.01f), ErtCol::StyleLeather);
+	for (const FVector4& Wd : WoundList)
+	{
+		const bool bSide = FMath::Abs(Wd.Y) > 19.f;
+		// Yuzaga yopishgan yassi dog' (0.4 sm qalin) + pastga oqqan iz
+		if (bSide) { M.AddBox(FVector(Wd.X, Wd.Y, Wd.Z), FVector(Wd.W, 0.4f, Wd.W * 0.8f), Dark); M.AddBox(FVector(Wd.X, Wd.Y, Wd.Z - Wd.W * 1.4f), FVector(Wd.W * 0.25f, 0.4f, Wd.W * 0.9f), Dark); }
+		else { M.AddBox(FVector(Wd.X, Wd.Y, Wd.Z), FVector(0.4f, Wd.W, Wd.W * 0.8f), Dark); M.AddBox(FVector(Wd.X, Wd.Y, Wd.Z - Wd.W * 1.4f), FVector(0.4f, Wd.W * 0.25f, Wd.W * 0.9f), Dark); }
+	}
+	M.Commit(Wounds, 0, false);
+}
 void UErtHeroBody::TriggerHurt(float SideSign) { HurtT = 1.f; HurtDir = SideSign; }
 
 void UErtHeroBody::SetDead(float HalfH, int32 Variant)

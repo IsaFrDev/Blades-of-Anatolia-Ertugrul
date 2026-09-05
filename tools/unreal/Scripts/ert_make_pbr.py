@@ -62,10 +62,10 @@ if (st == 0)
 	float3 rockC = float3(0.42, 0.40, 0.37) * (0.62 + 0.55 * saturate(rockH + 0.25));
 	float3 grassC = col * (0.72 + 0.55 * h);
 	float snow = saturate((Pm.z - 75.0) / 18.0) * saturate((N.z - 0.55) / 0.3);
-	float puddle = (N.z > 0.995 && Pm.z < 22.0) ? smoothstep(0.80, 0.86, VN(uv * 0.35 + 7.3)) * smoothstep(0.55, 0.7, VN(uv * 0.06 + 3.1)) : 0.0;
+	float puddle = (N.z > 0.996 && Pm.z < 20.0) ? smoothstep(0.86, 0.90, VN(uv * 0.35 + 7.3)) * smoothstep(0.62, 0.74, VN(uv * 0.06 + 3.1)) : 0.0;
 	col = lerp(grassC, rockC, slope);
 	col = lerp(col, float3(0.92, 0.94, 0.98) * (0.85 + 0.15 * h), snow);
-	col = lerp(col, float3(0.10, 0.13, 0.16), puddle * 0.85);
+	col = lerp(col, float3(0.20, 0.24, 0.27), puddle * 0.75);
 	h = lerp(h, rockH, slope);
 	if (puddle > 0.5) h = 1.5;   // roughness tuguni uchun ko'lmak belgisi
 }

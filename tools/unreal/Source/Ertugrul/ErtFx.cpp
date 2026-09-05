@@ -112,7 +112,19 @@ void AErtBurst::Tick(float Dt)
 			P.V.Z -= 980.f * Dt * 1.2f;
 			P.V *= FMath::Max(0.f, 1.f - 1.8f * Dt);
 			P.P += P.V * Dt;
-			if (P.P.Z < -GetActorLocation().Z + 2.f) { P.P.Z = -GetActorLocation().Z + 2.f; P.bStuck = true; P.Size *= 1.6f; }
+			if (P.P.Z < -GetActorLocation().Z + 2.f)
+			{
+				P.P.Z = -GetActorLocation().Z + 2.f; P.bStuck = true; P.Size *= 1.6f;
+				// Yerga tekkan qon: doimiy dog' (yer balandligi: trace)
+				if (!bSplatDone && P.C.R > 0.3f && P.C.G < 0.1f)
+				{
+					bSplatDone = true;
+					FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtSplat), true, this);
+					const FVector Wp = GetActorLocation() + FVector(P.P.X, P.P.Y, 0);
+					if (GetWorld()->LineTraceSingleByChannel(Hit, Wp + FVector(0, 0, 150.f), Wp - FVector(0, 0, 300.f), ECC_Visibility, Q) && Hit.ImpactNormal.Z > 0.7f)
+						if (AErtSplats* S = AErtSplats::Get(GetWorld())) S->AddSplat(Hit.ImpactPoint, FMath::FRandRange(28.f, 55.f) * FMath::Sqrt((float)Ps.Num() / 14.f), FLinearColor(0.30f, 0.02f, 0.01f));
+				}
+			}
 		}
 		if (!bAny || T > Duration + 0.2f) { Destroy(); return; }
 	}
@@ -151,4 +163,61 @@ void AErtBurst::SwordArc(UWorld* W, const FVector& Center, float Yaw, int32 Atta
 	if (AttackKind == 0) B->InitArc(Center, Yaw, 70.f, -70.f, 150.f, 10.f, false);
 	else if (AttackKind == 1) B->InitArc(Center, Yaw, -70.f, 70.f, 145.f, -25.f, false);
 	else B->InitArc(Center, Yaw, 110.f, -20.f, 170.f, 80.f, true);
+}
+
+
+// ---------------- Yerdagi doimiy qon dog'lari ----------------
+
+AErtSplats::AErtSplats()
+{
+	PrimaryActorTick.bCanEverTick = false;
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	Mesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Mesh->SetCastShadow(false);
+	Mesh->bUseAsyncCooking = false;
+}
+
+AErtSplats* AErtSplats::Get(UWorld* W)
+{
+	if (!W) return nullptr;
+	if (AErtSplats* S = Cast<AErtSplats>(UGameplayStatics::GetActorOfClass(W, AErtSplats::StaticClass()))) return S;
+	AErtSplats* S = W->SpawnActor<AErtSplats>(AErtSplats::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+	if (S && S->Mesh) S->Mesh->SetMaterial(0, ErtFxMat(false));
+	return S;
+}
+
+void AErtSplats::AddSplat(const FVector& Pos, float Size, const FLinearColor& Col)
+{
+	FS S; S.P = Pos + FVector(0, 0, 1.5f); S.Size = Size; S.C = Col; S.Yaw = FMath::FRandRange(0.f, 360.f);
+	Splats.Add(S);
+	if (Splats.Num() > 400) Splats.RemoveAt(0, Splats.Num() - 400);
+	Rebuild();
+}
+
+void AErtSplats::Rebuild()
+{
+	FErtMeshData M;
+	int32 Seed = 0;
+	for (const FS& S : Splats)
+	{
+		// Notekis dog': 9 nurli yulduzsimon ko'pburchak, har nur uzunligi tasodifiy; qirralarda mayda tomchilar
+		FRandomStream RS(++Seed * 7919);
+		const int32 N = 9;
+		TArray<FVector> Ring; Ring.Reserve(N);
+		for (int32 i = 0; i < N; ++i)
+		{
+			const float A = FMath::DegreesToRadians(S.Yaw + i * 360.f / N), R = S.Size * RS.FRandRange(0.45f, 1.f);
+			Ring.Add(S.P + FVector(FMath::Cos(A) * R, FMath::Sin(A) * R, 0));
+		}
+		for (int32 i = 0; i < N; ++i) M.AddTri(S.P, Ring[i], Ring[(i + 1) % N], FVector::UpVector, ErtCol::Sty(S.C * RS.FRandRange(0.8f, 1.1f), ErtCol::StylePlain));
+		for (int32 i = 0; i < 4; ++i)
+		{
+			const float A = FMath::DegreesToRadians(RS.FRandRange(0.f, 360.f)), R = S.Size * RS.FRandRange(1.05f, 1.6f), r = S.Size * RS.FRandRange(0.08f, 0.18f);
+			const FVector Cn = S.P + FVector(FMath::Cos(A) * R, FMath::Sin(A) * R, 0);
+			M.AddQuad(Cn + FVector(-r, -r, 0), Cn + FVector(r, -r, 0), Cn + FVector(r, r, 0), Cn + FVector(-r, r, 0), FVector::UpVector, ErtCol::Sty(S.C * 0.9f, ErtCol::StylePlain));
+		}
+	}
+	if (M.Verts.Num()) Mesh->CreateMeshSection_LinearColor(0, M.Verts, M.Tris, M.Normals, M.UVs, M.Colors, M.Tangents, false, false);
 }

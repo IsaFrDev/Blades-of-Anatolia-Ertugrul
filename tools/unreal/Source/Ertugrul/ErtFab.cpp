@@ -27,7 +27,7 @@ static UStaticMesh* ErtLoadMesh(const FString& Path)
 void FErtFabLib::Scan()
 {
 	bScanned = true;
-	Trees.Reset(); Pines.Reset(); Rocks.Reset(); Bushes.Reset(); Grass.Reset();
+	Trees.Reset(); Pines.Reset(); Rocks.Reset(); Bushes.Reset(); Grass.Reset(); Props.Reset(); Stumps.Reset();
 	TArray<FString> ScanPaths = { TEXT("/Game/Fab"), TEXT("/Game/Megascans"), TEXT("/Game/Quixel"), TEXT("/Game/MegascansLibrary"), TEXT("/Game/ErtAssets") };
 	// Manifest
 	const FString ManifestPath = FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/fab_assets.json");
@@ -44,7 +44,7 @@ void FErtFabLib::Scan()
 				if (!Root->TryGetArrayField(Key, Arr)) return;
 				for (const TSharedPtr<FJsonValue>& V : *Arr) if (UStaticMesh* M = ErtLoadMesh(V->AsString())) Out.Add(M);
 			};
-			Fill(TEXT("trees"), Trees); Fill(TEXT("pines"), Pines); Fill(TEXT("rocks"), Rocks); Fill(TEXT("bushes"), Bushes); Fill(TEXT("grass"), Grass);
+			Fill(TEXT("trees"), Trees); Fill(TEXT("pines"), Pines); Fill(TEXT("rocks"), Rocks); Fill(TEXT("bushes"), Bushes); Fill(TEXT("grass"), Grass); Fill(TEXT("props"), Props); Fill(TEXT("stumps"), Stumps);
 			const TArray<TSharedPtr<FJsonValue>>* Paths = nullptr;
 			if (Root->TryGetArrayField(TEXT("scan_paths"), Paths)) for (const TSharedPtr<FJsonValue>& V : *Paths) ScanPaths.AddUnique(V->AsString());
 		}
@@ -52,6 +52,8 @@ void FErtFabLib::Scan()
 	// Asset Registry: statik meshlar nomi bo'yicha
 	FAssetRegistryModule& ARM = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 	IAssetRegistry& AR = ARM.Get();
+	// O'yin rejimida registr asinxron yuklanadi - bu yo'llarni sinxron skanerlaymiz
+	AR.ScanPathsSynchronous(ScanPaths, true);
 	int32 Found = 0;
 	for (const FString& Root : ScanPaths)
 	{
@@ -62,7 +64,9 @@ void FErtFabLib::Scan()
 			if (A.AssetClassPath.GetAssetName() != TEXT("StaticMesh")) continue;
 			const FString Name = A.AssetName.ToString().ToLower();
 			TArray<UStaticMesh*>* Target = nullptr;
-			if (Name.Contains(TEXT("pine")) || Name.Contains(TEXT("fir")) || Name.Contains(TEXT("spruce")) || Name.Contains(TEXT("cedar")) || Name.Contains(TEXT("conifer"))) Target = &Pines;
+			if (Name.Contains(TEXT("stump")) || Name.Contains(TEXT("trunk")) || Name.Contains(TEXT("log"))) Target = &Stumps;
+			else if (Name.Contains(TEXT("barrel")) || Name.Contains(TEXT("crate")) || Name.Contains(TEXT("bucket")) || Name.Contains(TEXT("lantern")) || Name.Contains(TEXT("table")) || Name.Contains(TEXT("stool")) || Name.Contains(TEXT("fire_pit")) || Name.Contains(TEXT("shield"))) Target = &Props;
+			else if (Name.Contains(TEXT("pine")) || Name.Contains(TEXT("fir")) || Name.Contains(TEXT("spruce")) || Name.Contains(TEXT("cedar")) || Name.Contains(TEXT("conifer"))) Target = &Pines;
 			else if (Name.Contains(TEXT("tree")) || Name.Contains(TEXT("oak")) || Name.Contains(TEXT("beech")) || Name.Contains(TEXT("birch")) || Name.Contains(TEXT("maple")) || Name.Contains(TEXT("poplar")) || Name.Contains(TEXT("willow")) || Name.Contains(TEXT("olive"))) Target = &Trees;
 			else if (Name.Contains(TEXT("rock")) || Name.Contains(TEXT("boulder")) || Name.Contains(TEXT("cliff")) || Name.Contains(TEXT("stone"))) Target = &Rocks;
 			else if (Name.Contains(TEXT("bush")) || Name.Contains(TEXT("shrub"))) Target = &Bushes;
@@ -72,7 +76,7 @@ void FErtFabLib::Scan()
 			if (UStaticMesh* M = Cast<UStaticMesh>(A.GetAsset())) { Target->AddUnique(M); ++Found; }
 		}
 	}
-	UE_LOG(LogErtugrul, Log, TEXT("Fab kutubxonasi: daraxt %d, qarag'ay %d, qoya %d, buta %d, o't %d (registrdan %d)"), Trees.Num(), Pines.Num(), Rocks.Num(), Bushes.Num(), Grass.Num(), Found);
+	UE_LOG(LogErtugrul, Log, TEXT("Fab kutubxonasi: daraxt %d, qarag'ay %d, qoya %d, buta %d, o't %d, buyum %d, to'nka %d (registrdan %d)"), Trees.Num(), Pines.Num(), Rocks.Num(), Bushes.Num(), Grass.Num(), Props.Num(), Stumps.Num(), Found);
 }
 
 float FErtFabLib::ScaleToHeight(UStaticMesh* M, float TargetMeters)

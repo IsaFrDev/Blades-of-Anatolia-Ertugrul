@@ -26,6 +26,7 @@ public:
 
 protected:
 	virtual void Tick(float Dt) override;
+	bool bSplatDone = false;
 
 private:
 	struct FP { FVector P, V; float Life, Size; FLinearColor C; bool bStuck; };
@@ -35,5 +36,21 @@ private:
 	int32 Mode = 0;   // 0 zarralar, 1 yoy
 	// Yoy
 	FVector ArcCenter; float ArcYaw = 0.f, ArcA0 = 0.f, ArcA1 = 0.f, ArcR = 0.f, ArcTilt = 0.f; bool bArcHeavy = false;
+	void Rebuild();
+};
+
+/** Yerdagi doimiy qon dog'lari (bitta aktor, 400 tagacha, eskilari o'chadi) */
+UCLASS()
+class ERTUGRUL_API AErtSplats : public AActor
+{
+	GENERATED_BODY()
+public:
+	AErtSplats();
+	static AErtSplats* Get(UWorld* W);
+	void AddSplat(const FVector& Pos, float Size, const FLinearColor& Col);
+private:
+	struct FS { FVector P; float Size; FLinearColor C; float Yaw; };
+	TArray<FS> Splats;
+	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> Mesh;
 	void Rebuild();
 };

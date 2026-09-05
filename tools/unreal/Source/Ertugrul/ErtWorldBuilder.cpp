@@ -127,7 +127,7 @@ void AErtWorldBuilder::Build()
 		BuildSogut();
 		BuildDomanic();
 	}
-	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); }
+	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); BuildProps(); }
 	if (FabTreesPlaced + FabRocksPlaced > 0) UE_LOG(LogErtugrul, Log, TEXT("Fab meshlari: %d daraxt, %d qoya (instans)"), FabTreesPlaced, FabRocksPlaced);
 	bBuilt = true;
 	int32 Tris = 0;
@@ -1110,6 +1110,12 @@ void AErtWorldBuilder::BuildForest()
 		const bool bPine = H > 60.f || RS.FRand() < 0.55f;
 		{
 			FErtFabLib& Fab = FErtFabLib::Get();
+			if (Fab.Stumps.Num() && RS.FRand() < 0.04f)
+			{
+				UStaticMesh* Mesh = Fab.Stumps[RS.RandRange(0, Fab.Stumps.Num() - 1)];
+				FabComp(Mesh, true)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), W(E, N, H - 0.05f), FVector(FErtFabLib::ScaleToRadius(Mesh, RS.FRandRange(0.9f, 1.6f)))), true);
+				continue;
+			}
 			const TArray<UStaticMesh*>& Pool = (bPine && Fab.Pines.Num()) ? Fab.Pines : (Fab.Trees.Num() ? Fab.Trees : Fab.Pines);
 			if (Pool.Num())
 			{
@@ -2668,6 +2674,16 @@ void AErtWorldBuilder::BuildGrass()
 		if (!IsBuildable(E, N)) continue;
 		const int32 cx = FMath::Clamp((int32)((E + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
 		const int32 cy = FMath::Clamp((int32)((N + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
+		{
+			FErtFabLib& Fab = FErtFabLib::Get();
+			if (Fab.Bushes.Num() && (Placed % 40) == 17)
+			{
+				UStaticMesh* Mesh = Fab.Bushes[RS.RandRange(0, Fab.Bushes.Num() - 1)];
+				FabComp(Mesh, false)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), W(E, N, H - 0.03f), FVector(FErtFabLib::ScaleToHeight(Mesh, RS.FRandRange(0.5f, 1.1f)))), true);
+				++Placed;
+				continue;
+			}
+		}
 		FErtMeshData& M = Cells[cy * CellsPerSide + cx];
 		const FVector Base = W(E, N, H - 0.02f);
 		const float Hgt = RS.FRandRange(22.f, 42.f) * (1.f + 0.3f * Smooth01((N + 100.f) / 500.f));
@@ -2684,4 +2700,36 @@ void AErtWorldBuilder::BuildGrass()
 			P->SetCastShadow(false);
 		}
 	UE_LOG(LogErtugrul, Log, TEXT("O't-o'lan: %d tup"), Placed);
+}
+
+// ---------------- Buyumlar (Fab/Poly Haven): oba, qishloq, shahar maydonlari atrofida ----------------
+
+void AErtWorldBuilder::BuildProps()
+{
+	FErtFabLib& Fab = FErtFabLib::Get();
+	if (!Fab.Props.Num()) return;
+	FRandomStream RS(Seed + 23);
+	struct FHot { float E, N, R; int32 Count; };
+	const FHot Hots[] = { {ObaE, ObaN, 90.f, 40}, {SogE, SogN, 50.f, 24}, {DomE, DomN, 30.f, 14}, {BurE, BurN, 70.f, 24}, {CityE, CityN, 60.f, 24}, {DamE, DamN, 80.f, 24}, {HalabE, HalabN, 60.f, 18}, {KonE, KonN, 70.f, 18}, {KayE, KayN, 60.f, 16}, {SivE, SivN, 60.f, 16}, {ErzE, ErzN, 50.f, 14}, {NikE, NikN, 60.f, 16}, {CampE, CampN, 70.f, 20}, {CaravanE, CaravanN, 30.f, 14}, {KarE, KarN - KarR - 30.f, 30.f, 10} };
+	int32 Placed = 0;
+	for (const FHot& Hn : Hots)
+	{
+		for (int32 i = 0, Tries = 0; i < Hn.Count && Tries < Hn.Count * 12; ++Tries)
+		{
+			const float A = RS.FRand() * 2.f * PI, R = FMath::Sqrt(RS.FRand()) * Hn.R;
+			const float E = Hn.E + FMath::Cos(A) * R, N = Hn.N + FMath::Sin(A) * R;
+			const float H = HeightAt(E, N);
+			float SurfZ; if (IsWater(E, N, SurfZ)) continue;
+			// Binolar ichiga tushmasligi uchun: yer ustidagi bo'sh joyni trace bilan tekshiramiz (mesh kolliziyasi)
+			FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtProp), true);
+			const FVector Wp = W(E, N, H);
+			if (GetWorld()->LineTraceSingleByChannel(Hit, Wp + FVector(0, 0, 400.f), Wp + FVector(0, 0, 20.f), ECC_Visibility, Q)) continue;   // ustida narsa bor (tom)
+			if (GetWorld()->OverlapAnyTestByChannel(Wp + FVector(0, 0, 60.f), FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(70.f), Q)) continue;   // devor/uy yonida
+			UStaticMesh* Mesh = Fab.Props[RS.RandRange(0, Fab.Props.Num() - 1)];
+			const float TargetH = RS.FRandRange(0.7f, 1.1f);
+			FabComp(Mesh, true)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), Wp, FVector(FErtFabLib::ScaleToHeight(Mesh, TargetH))), true);
+			++i; ++Placed;
+		}
+	}
+	UE_LOG(LogErtugrul, Log, TEXT("Buyumlar (Fab): %d"), Placed);
 }

@@ -107,6 +107,7 @@ private:
 	void BuildForest();
 	void BuildRocks();
 	void BuildGrass();
+	void BuildProps();
 
 public:
 	float RiverE(float N) const;

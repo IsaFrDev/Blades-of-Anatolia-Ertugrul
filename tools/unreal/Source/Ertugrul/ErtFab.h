@@ -9,7 +9,7 @@ class UStaticMesh;
 
 struct FErtFabLib
 {
-	TArray<UStaticMesh*> Trees, Pines, Rocks, Bushes, Grass;
+	TArray<UStaticMesh*> Trees, Pines, Rocks, Bushes, Grass, Props, Stumps;   // Props: bochka/yashik/chelak/fonar/stol; Stumps: to'nka/yotgan tana
 	bool bScanned = false;
 
 	/** Manifest + Asset Registry skaneri. Manifest: {"trees":[...], "pines":[...], "rocks":[...], "bushes":[...], "grass":[...], "scan_paths":["/Game/Fab", ...]} */

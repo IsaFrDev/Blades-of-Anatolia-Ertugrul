@@ -383,7 +383,12 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	if (!Horse && !bSwimming && !bMantling) LaunchCharacter(-To * 220.f + FVector(0, 0, 60.f), false, false);
 	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(FMath::Clamp(Damage / 20.f, 0.3f, 1.f), 0.3f);
 	NoDamageT = 0.f;
-	if (Body) Body->TriggerHurt(FMath::Sign(FVector::DotProduct(GetActorRightVector(), To)) * (FMath::Abs(FVector::DotProduct(GetActorRightVector(), To)) > 0.4f ? 1.f : 0.f));
+	if (Body)
+	{
+		const float SideW = FMath::Sign(FVector::DotProduct(GetActorRightVector(), To)) * (FMath::Abs(FVector::DotProduct(GetActorRightVector(), To)) > 0.4f ? 1.f : 0.f);
+		Body->TriggerHurt(SideW);
+		if (Damage > 2.f) Body->AddWound(SideW, Damage / 15.f);
+	}
 	if (Health <= 0.f)
 	{
 		Health = 0.f; bDead = true;

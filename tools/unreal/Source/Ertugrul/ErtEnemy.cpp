@@ -132,6 +132,7 @@ void AErtEnemy::ApplyHit(float Damage, AActor* Source, bool bGuardBreak)
 		float Side = 0.f;
 		if (Source) { const float D = FVector::DotProduct(GetActorRightVector(), (Source->GetActorLocation() - GetActorLocation()).GetSafeNormal2D()); Side = FMath::Abs(D) > 0.4f ? FMath::Sign(D) : 0.f; }
 		Body->TriggerHurt(Side);
+		Body->AddWound(Side, Damage / 15.f);
 	}
 	// Kaltak yeyish: orqaga uchadi, qisqa gangiydi (zarba bera olmaydi)
 	if (!Mount && Kind != EErtEnemyKind::Deer && Source)

@@ -25,3 +25,6 @@ assets/downloads/
 .vscode/
 .idea/
 *.user
+
+# Poly Haven yuklab olingan manbalar (58 MB) - repoga kirmaydi, ert_import_ph.py bilan qayta yuklanadi
+art/polyhaven/

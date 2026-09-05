@@ -52,7 +52,9 @@ public:
 	/** Qilich zarbasi: 0 o'ngdan, 1 chapdan, 2 tepadan og'ir, 3 tepki */
 	void TriggerAttack(int32 Kind = 0);
 	/** Zarba yedi - qisqa titrash */
-	void TriggerHurt(float SideSign = 0.f);   // SideSign: -1 chapdan, +1 o'ngdan, 0 old/orqa
+	void TriggerHurt(float SideSign = 0.f);
+	/** Jarohat izi: ko'krak/orqa/yon yuzasida qora-qizil dog' (12 tagacha) */
+	void AddWound(float SideSign, float Strength);   // SideSign: -1 chapdan, +1 o'ngdan, 0 old/orqa
 	/** Suzish pozasi (gorizontal, qo'l-oyoq harakati) */
 	void SetSwimming(bool bOn) { bSwim = bOn; }
 	void SetRiding(bool bOn) { bRide = bOn; }
@@ -82,6 +84,9 @@ private:
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> ShinL;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> ShinR;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> Shield;
+	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> Wounds;
+	TArray<FVector4> WoundList;   // x,y,z markaz (Torso koordinatasi), w o'lcham
+	int32 WoundCount = 0;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> Mat;
 
 	float Phase = 0.f;
