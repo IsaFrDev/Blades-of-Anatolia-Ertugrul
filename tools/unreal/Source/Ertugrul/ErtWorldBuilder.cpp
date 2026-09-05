@@ -556,8 +556,9 @@ void AErtWorldBuilder::AddHouse(FErtMeshData& M, float E, float N, float Z, floa
 	const FRotator R(0, Yaw, 0);
 	const FLinearColor Wall = ErtCol::Vary(C, 0.12f, S);
 	M.AddBox(W(E, N, Z + H * 0.5f), FVector(HV, HU, H * 0.5f) * 100.f, Wall, R);
-	M.AddBox(W(E, N, Z + H + 0.15f), FVector(HV + 0.25f, HU + 0.25f, 0.15f) * 100.f, Wall * 0.75f, R);
-	if (S % 3 == 0) M.AddSphere(W(E, N, Z + H + 0.2f), FMath::Min(HU, HV) * 0.8f, 8, Wall * 0.9f, FVector(1, 1, 0.6f));
+	M.AddBox(W(E, N, Z + H + 0.15f), FVector(HV + 0.25f, HU + 0.25f, 0.15f) * 100.f, ErtCol::Sty(Wall * 0.75f, ErtCol::StyleMudRoof), R);
+	M.AddBox(W(E, N, Z + H + 0.32f), FVector(HV + 0.28f, HU + 0.28f, 0.06f) * 100.f, ErtCol::Sty(Wall * 0.8f, ErtCol::StyleMudRoof), R);   // tom chekkasi
+	if (S % 3 == 0) M.AddSphere(W(E, N, Z + H + 0.2f), FMath::Min(HU, HV) * 0.8f, 8, ErtCol::Sty(Wall * 0.9f, ErtCol::StylePlain), FVector(1, 1, 0.6f));
 	const FQuat Q = R.Quaternion();
 	M.AddBox(W(E, N, Z + 1.0f) + Q.RotateVector(FVector(HV * 100.f, 0, 0)), FVector(4, 45, 100), DarkWood, R);
 }
@@ -872,14 +873,14 @@ void AErtWorldBuilder::BuildCity()
 			(void)Yaw;
 			if (bGate)
 			{
-				M.AddBox(W(CE(u), CN(v), Z + 8.f), FVector(Len, 1.6f, 1.5f) * 100.f, ErtCol::Vary(Ochre * 0.9f, 0.08f, ++S), FRotator(0, TanYaw, 0));
+				M.AddBox(W(CE(u), CN(v), Z + 8.f), FVector(Len, 1.6f, 1.5f) * 100.f, ErtCol::Vary(ErtCol::Sty(Ochre * 0.9f, ErtCol::StyleStone), 0.08f, ++S), FRotator(0, TanYaw, 0));
 				continue;
 			}
-			M.AddBox(W(CE(u), CN(v), Z + 4.5f), FVector(Len, 1.6f, 4.5f) * 100.f, ErtCol::Vary(Ochre * 0.9f, 0.08f, ++S), FRotator(0, TanYaw, 0));
-			M.AddBox(W(CE(u), CN(v), Z + 9.4f), FVector(Len * 0.5f, 0.8f, 0.5f) * 100.f, ErtCol::Vary(Ochre * 0.85f, 0.08f, ++S), FRotator(0, TanYaw, 0));
+			M.AddBox(W(CE(u), CN(v), Z + 4.5f), FVector(Len, 1.6f, 4.5f) * 100.f, ErtCol::Vary(ErtCol::Sty(Ochre * 0.9f, ErtCol::StyleStone), 0.08f, ++S), FRotator(0, TanYaw, 0));
+			M.AddBox(W(CE(u), CN(v), Z + 9.4f), FVector(Len * 0.5f, 0.8f, 0.5f) * 100.f, ErtCol::Vary(ErtCol::Sty(Ochre * 0.85f, ErtCol::StyleStone), 0.08f, ++S), FRotator(0, TanYaw, 0));
 			if (i % 10 == 0)
 			{
-				M.AddCylinder(W(CE(u), CN(v), Z - 0.5f), 4.2f, 3.8f, 13.f, 10, ErtCol::Vary(Ochre * 0.85f, 0.06f, ++S), true);
+				M.AddCylinder(W(CE(u), CN(v), Z - 0.5f), 4.2f, 3.8f, 13.f, 10, ErtCol::Vary(ErtCol::Sty(Ochre * 0.85f, ErtCol::StyleStone), 0.06f, ++S), true);
 				M.AddCone(W(CE(u), CN(v), Z + 12.5f), 4.3f, 3.5f, 10, FLinearColor(0.35f, 0.18f, 0.12f));
 			}
 		}
@@ -889,7 +890,7 @@ void AErtWorldBuilder::BuildCity()
 			for (int32 s = -1; s <= 1; s += 2)
 			{
 				const float A = GA + s * (9.f / CityR);
-				M.AddBox(W(CE(FMath::Cos(A) * CityR), CN(FMath::Sin(A) * CityR), Z + 6.f), FVector(280, 280, 650), ErtCol::Vary(Ochre * 0.9f, 0.06f, ++S), FRotator(0, FMath::RadiansToDegrees(A), 0));
+				M.AddBox(W(CE(FMath::Cos(A) * CityR), CN(FMath::Sin(A) * CityR), Z + 6.f), FVector(280, 280, 650), ErtCol::Vary(ErtCol::Sty(Ochre * 0.9f, ErtCol::StyleStone), 0.06f, ++S), FRotator(0, FMath::RadiansToDegrees(A), 0));
 				M.AddCone(W(CE(FMath::Cos(A) * CityR), CN(FMath::Sin(A) * CityR), Z + 12.5f), 3.6f, 3.f, 6, FLinearColor(0.35f, 0.18f, 0.12f));
 			}
 		}
@@ -938,6 +939,24 @@ void AErtWorldBuilder::BuildCity()
 			for (int32 k = 0; k < 2; ++k) M.AddCylinder(W(CE(u + (k ? 1.4f : -1.4f)), CN(v + (v > 0 ? -1.f : 1.f)), Z), 0.06f, 0.06f, 2.6f, 4, Wood, false);
 			M.AddBox(W(CE(u), CN(v), Z + 2.7f), FVector(180, 130, 6), Awn[i % 4], FRotator(0, 0, v > 0 ? 12.f : -12.f));
 			M.AddBox(W(CE(u), CN(v), Z + 1.95f), FVector(60, 40, 15), Awn[(i + 1) % 4]);
+		}
+		// Ko'chalar va markaziy maydon: tosh yotqizma (cobble uslubi), yer ustida 6 sm
+		{
+			const FLinearColor Cob = ErtCol::Sty(FLinearColor(0.58f, 0.54f, 0.48f), ErtCol::StyleCobble);
+			M.AddBox(W(CE(0), CN(0), Z + 0.03f), FVector(4200, 4200, 6), Cob);                                  // maydon
+			for (int32 g = 0; g < 4; ++g)
+			{
+				const float A = g * HALF_PI, L = CityR - 42.f + 14.f;
+				const float mu = FMath::Cos(A) * (42.f + L * 0.5f), mv = FMath::Sin(A) * (42.f + L * 0.5f);
+				M.AddBox(W(CE(mu), CN(mv), Z + 0.03f), FVector(L * 50.f, 800, 6), ErtCol::Vary(Cob, 0.04f, ++S), FRotator(0, FMath::RadiansToDegrees(A), 0));   // 4 ko'cha
+			}
+			for (int32 i = 0; i < 40; ++i)                                                                            // uy oralaridagi tor ko'chalar
+			{
+				const float A = i * 2.f * PI / 40 + 0.08f, R0 = 60.f, R1 = CityR - 30.f;
+				if (FMath::Abs(FMath::Sin(A)) < 0.12f || FMath::Abs(FMath::Cos(A)) < 0.12f) continue;
+				M.AddBox(W(CE(FMath::Cos(A) * (R0 + R1) * 0.5f), CN(FMath::Sin(A) * (R0 + R1) * 0.5f), Z + 0.02f), FVector((R1 - R0) * 50.f, 130, 4), ErtCol::Vary(Cob * 0.95f, 0.04f, ++S), FRotator(0, FMath::RadiansToDegrees(A), 0));
+			}
+			for (int32 i = 0; i < 6; ++i) M.AddCylinder(W(CE(-30.f + i * 12.f), CN(-36.f), Z + 0.06f), 0.5f, 0.5f, 0.9f, 8, ErtCol::Sty(FLinearColor(0.55f, 0.5f, 0.45f), ErtCol::StyleStone), true);   // maydon chetidagi tosh ustunchalar
 		}
 		// Chorraha favvorasi
 		M.AddCylinder(W(CE(0), CN(28), Z), 3.f, 3.f, 0.8f, 12, Stone, false);

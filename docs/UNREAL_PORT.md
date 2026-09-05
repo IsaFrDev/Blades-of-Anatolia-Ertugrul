@@ -334,3 +334,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `AErtWeather`: BeginPlay da 36 km bulut tekisligi (2 qatlam, 2.0 va 2.7 km) va 60 km yulduz sferasi (dinamik material nusxalari). `UpdateSky(Day, SunColor, Elev)`: bulut tusi (kunduzi oq, tong/shomda quyosh rangi, tunda ko'kimtir, bo'ronda qora), yulduz ko'rinishi (tunda, bulut qoplamiga bog'liq), tuman rangi (tun ko'k-qora, kunduz och ko'k, tong/shom zarhal, bo'ron kulrang). Ob-havo bulut qoplamini o'zgartiradi (rain/storm/snow/fog/dust/wind).
 - `AErtGameMode::Tick`: quyosh rangi rampasi (`SunCol`) ajratildi, yomg'ir/bo'ronda quyosh 45% xiralashadi, har kadr `Weather->UpdateSky`.
 - Sinov skriptida shom, tun va bo'ron skrinshotlari (`34_dusk`, `35_night`, `36_storm`).
+
+## Tekis tomlar va ko'cha toshlari
+
+- Yangi uslublar: `StyleMudRoof` 0.92 (tuproq tom: uch qatlam shovqin + yoriqlar) va `StyleCobble` 0.95 (tosh yotqizma: 28 sm jitterli dumaloq toshlar, chuqur choklar, kuchli relyef). Badan diapazoni [0.86,0.91) ga toraytirildi.
+- `AddHouse`: tom (`Wall * 0.75f`) alfani jun diapazoniga tushirib swirl ko'rinar edi; endi tuproq tom uslubi va tom chekkasi qo'shildi; gumbaz oddiy uslubda. Bu Bagras shahri va So'g'ut uylariga ta'sir qiladi.
+- `BuildCity` (Bagras shahri): markaziy maydon (42x42 m), 4 asosiy ko'cha, 40 ta radial tor ko'cha tosh yotqizma bilan qoplandi, maydon chetida tosh ustunchalar; Ochre devor tuslari tosh uslubida.
