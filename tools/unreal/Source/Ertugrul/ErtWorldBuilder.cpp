@@ -187,6 +187,17 @@ float AErtWorldBuilder::HeightAt(float E, float N) const
 	const float Massif = Smooth01((E - 60.f) / 260.f) * Smooth01((N - 120.f) / 260.f);
 	H += Massif * (55.f + 45.f * FMath::Max(0.f, Noise(E, N, 0.006f)) + 12.f * FMath::Abs(Noise(E, N, 0.02f)));
 	H += FMath::Exp(-FMath::Square(DF / 330.f)) * 190.f;
+	// Tizmalar va qirralar (ridged multifractal): tog' massivi va shimoliy tizmada keskin qirlar, etaklarda yumshoq
+	{
+		const float MountainMask = FMath::Clamp(Massif + Smooth01((N - 800.f) / 150.f) + FMath::Exp(-FMath::Square(DF / 330.f)) * 0.8f, 0.f, 1.f);
+		const float R1 = 1.f - FMath::Abs(Noise(E, N, 0.009f)), R2 = 1.f - FMath::Abs(Noise(E + 500.f, N - 300.f, 0.022f)), R3 = 1.f - FMath::Abs(Noise(E - 200.f, N + 700.f, 0.06f));
+		const float Ridge = R1 * R1 * 45.f + R2 * R2 * 18.f + R3 * 4.f;
+		H += Ridge * MountainMask * (0.6f + 0.4f * Smooth01((H - 40.f) / 80.f));
+		// Qatlamli qoya (strata): baland yonbag'irlarda zinapoya ko'rinishi
+		H += MountainMask * 2.2f * FMath::Sin(H * 0.30f + Noise(E, N, 0.03f) * 2.5f);
+		// Etak jarliklari: o'rta chastotali chuqurliklar (soylar)
+		H -= MountainMask * 6.f * FMath::Pow(FMath::Abs(Noise(E + 900.f, N + 100.f, 0.015f)), 1.5f);
+	}
 	// Qal'a tekisligi
 	{
 		const float Flat = 1.f - Smooth01((DF - (FortHalf + 18.f)) / 40.f);
@@ -243,7 +254,7 @@ float AErtWorldBuilder::HeightAt(float E, float N) const
 	{
 		const float DM = FVector2D::Distance(FVector2D(E, N), FVector2D(UluE, UluN));
 		const float T = Smooth01(1.f - DM / UluR);
-		H += UluH * T * T + Noise(E, N, 0.025f) * 7.f * T;
+		H += UluH * T * T + Noise(E, N, 0.025f) * 7.f * T + FMath::Square(1.f - FMath::Abs(Noise(E, N, 0.03f))) * 14.f * T;
 		const float DB = FVector2D::Distance(FVector2D(E, N), FVector2D(BurE, BurN));
 		H = FMath::Lerp(H, BurZ, 1.f - Smooth01((DB - BurR - 10.f) / 50.f));
 		const float DH = FVector2D::Distance(FVector2D(E, N), FVector2D(BurE - 30.f, BurN + 55.f));
@@ -267,7 +278,7 @@ float AErtWorldBuilder::HeightAt(float E, float N) const
 	{
 		const float DM = FVector2D::Distance(FVector2D(E, N), FVector2D(ErcE, ErcN));
 		const float T = Smooth01(1.f - DM / ErcR);
-		H += ErcH * T * T + Noise(E, N, 0.03f) * 6.f * T;
+		H += ErcH * T * T + Noise(E, N, 0.03f) * 6.f * T + FMath::Square(1.f - FMath::Abs(Noise(E + 77.f, N, 0.04f))) * 10.f * T * (1.f - T);
 		const float DK = FVector2D::Distance(FVector2D(E, N), FVector2D(KayE, KayN));
 		H = FMath::Lerp(H, KayZ, 1.f - Smooth01((DK - KayR - 10.f) / 50.f));
 	}
@@ -1254,7 +1265,7 @@ void AErtWorldBuilder::BuildRocks()
 	FErtMeshData M(100.f);
 	const float Half = WorldSizeM * 0.5f;
 	int32 Placed = 0;
-	for (int32 i = 0; i < 4000 && Placed < 320; ++i)
+	for (int32 i = 0; i < 9000 && Placed < 700; ++i)
 	{
 		const float E = RS.FRandRange(-Half + 10.f, Half - 10.f), N = RS.FRandRange(-Half + 10.f, Half - 10.f);
 		const float H = HeightAt(E, N);
@@ -1263,16 +1274,31 @@ void AErtWorldBuilder::BuildRocks()
 		float P = 0.02f;
 		if (H > 60.f) P = 0.5f;
 		if (Nm.Z < 0.8f) P += 0.3f;
+		if (Nm.Z < 0.6f) P += 0.4f;   // tik yonbag'ir: qoya devorlari
 		if (FMath::Abs(E - RiverE(N)) < 45.f) P = 0.25f;
 		if (RS.FRand() > P || !IsBuildable(E, N) || DF < FortHalf + 45.f) continue;
-		const float R = RS.FRandRange(1.0f, 4.5f) * (H > 100.f ? 1.6f : 1.f);
+		if (Nm.Z < 0.45f) continue;   // juda tik: mesh havoda qoladi
+		const bool bCliff = Nm.Z < 0.72f && H > 30.f;
+		if (bCliff)
+		{
+			// Shahar/qal'a yonida katta qoya yo'q
+			bool bNear = false;
+			for (const FVector3f& C : { FVector3f(ErzE, ErzN, ErzR), FVector3f(SivE, SivN, SivR), FVector3f(KayE, KayN, KayR), FVector3f(HalabE, HalabN, HalabR), FVector3f(KonE, KonN, KonR), FVector3f(BurE, BurN, BurR), FVector3f(NikE, NikN, NikR), FVector3f(KarE, KarN, KarR), FVector3f(SogE, SogN, SogR), FVector3f(FortE, FortN, FortHalf + 40.f), FVector3f(DomE, DomN, DomR) })
+				if (FVector2D::Distance(FVector2D(E, N), FVector2D(C.X, C.Y)) < C.Z + 50.f) { bNear = true; break; }
+			if (bNear) continue;
+		}
+		const float R = (bCliff ? RS.FRandRange(3.f, 7.f) : RS.FRandRange(1.0f, 4.5f)) * (H > 100.f ? 1.3f : 1.f);
 		{
 			FErtFabLib& Fab = FErtFabLib::Get();
 			if (Fab.Rocks.Num())
 			{
+				// Tik yonbag'irda 'cliff' nomli meshlar afzal
 				UStaticMesh* Mesh = Fab.Rocks[RS.RandRange(0, Fab.Rocks.Num() - 1)];
+				if (bCliff) for (int32 t = 0; t < 4; ++t) { UStaticMesh* C = Fab.Rocks[RS.RandRange(0, Fab.Rocks.Num() - 1)]; if (C->GetName().Contains(TEXT("Cliff"))) { Mesh = C; break; } }
 				const float Sc = FErtFabLib::ScaleToRadius(Mesh, R);
-				FabComp(Mesh, true)->AddInstance(FTransform(FRotator(RS.FRandRange(-8.f, 8.f), RS.FRandRange(0.f, 360.f), RS.FRandRange(-8.f, 8.f)), W(E, N, H - R * 0.15f), FVector(Sc)), true);
+				// Qiyalikka yotqizish: mesh yuqorisi relyef normaliga qaraydi (biroz), tasodifiy burilish
+				const FRotator Tilt = bCliff ? FRotationMatrix::MakeFromZ(FMath::Lerp(FVector::UpVector, Nm, 0.35f).GetSafeNormal()).Rotator() : FRotator(RS.FRandRange(-8.f, 8.f), 0.f, RS.FRandRange(-8.f, 8.f));
+				FabComp(Mesh, true)->AddInstance(FTransform(FRotator(Tilt.Pitch, RS.FRandRange(0.f, 360.f), Tilt.Roll), W(E, N, H - R * (bCliff ? 0.6f : 0.15f)), FVector(Sc)), true);
 				++Placed; ++FabRocksPlaced;
 				continue;
 			}
@@ -3142,7 +3168,7 @@ void AErtWorldBuilder::ExportLandscape(const FString& Dir) const
 			const float Slope = 1.f - TerrainNormal(E, N).Z;
 			float RW = 0.f; const float RD = RoadDist(E, N, &RW);
 			const bool bRoad = RD < RW * 0.5f + 0.5f && N > DesertN;
-			float Wr = FMath::Clamp((Slope - 0.25f) * 4.f, 0.f, 1.f), Ws = H > 75.f ? FMath::Clamp((H - 75.f) / 15.f, 0.f, 1.f) : 0.f;
+			float Wr = FMath::Clamp((Slope - 0.25f) * 4.f, 0.f, 1.f), Ws = H > 150.f ? FMath::Clamp((H - 150.f) / 25.f, 0.f, 1.f) : 0.f;
 			float Wsd = N < DesertN + 60.f ? FMath::Clamp((DesertN + 60.f - N) / 60.f, 0.f, 1.f) : 0.f;
 			float Wd = FMath::Clamp(0.5f - 0.5f * Smooth01((N + 100.f) / 500.f) + 0.3f * Noise(E, N, 0.01f), 0.f, 1.f) * (1.f - Wsd);
 			float Wg = FMath::Max(0.f, 1.f - Wd - Wsd);

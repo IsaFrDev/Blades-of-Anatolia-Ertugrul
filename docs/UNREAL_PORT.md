@@ -435,3 +435,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Skaner (`ErtFab.cpp`) nom bo'yicha yangi toifalar: yurt/tent/house/gate/well/cart/stall. `AErtWorldBuilder::FabPlace` meshni reja nuqtasiga poydevori yerga tegadigan qilib qo'yadi (balandlik yoki radius bo'yicha masshtab).
 - `AddYurt`/`AddHouse` mesh bo'lsa protsedural o'rniga uni ishlatadi (qorong'i kigiz -> chodir meshi); `BuildLandmarks`: darvozalar (Bagras, shahar, Karacahisar), quduqlar (8 joy), aravalar (7), rastalar (12).
 - MCP orqali Python: `python tools/unreal/Scripts/mcp_py.py <script.py>` (muharrir ochiq bo'lsa; 30 s dan uzun ishlar timeout beradi lekin bajariladi).
+
+## Realistik relyef (tog'lar)
+- `HeightAt`: tizmali ko'p-fraktal (ridged) qirralar tog' massivi va shimoliy tizmada (R1..R3, 45+18+4 m), qatlamli qoya zinalari (`sin(H*0.3)`), etak soylari; Uludog'/Erciyes tizmali detal. Qal'a tekisligi va shahar tekisliklari saqlanadi (tizma ulardan oldin qo'shiladi).
+- Relyef to'ri `CellM` 10 -> 5 m (1.09 mln uchburchak, 9.4 s qurilish).
+- `BuildRocks`: 700 tagacha qoya; tik yonbag'irlarda (Nm.z < 0.72, H > 30) 3-7 m li "cliff" meshlari qiyalikka moslab (35%), chuqur ko'milgan; Nm.z < 0.45 va shahar/qal'a atrofi (R+50 m) chiqarib tashlanadi (muallaq qoyalar xatosi tuzatildi).
+- Shader: qor chizig'i 75 -> 150 m, qoya qatlami kulrang (balandda to'qroq); Landscape eksportidagi qor qatlami ham 150 m.

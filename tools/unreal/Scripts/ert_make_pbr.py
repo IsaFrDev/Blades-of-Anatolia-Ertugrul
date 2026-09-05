@@ -64,7 +64,7 @@ if (st == 0)
 	float3 gD = lerp(GrassD1, GrassD2, 0.45) * float3(0.78, 1.02, 0.62);   // yashilroq o't
 	float3 dD = lerp(DirtD1, DirtD2, 0.45);
 	float3 sD = SandD;
-	float3 rD = RockD;
+	float3 rD = RockD * float3(0.70, 0.69, 0.70) * (1.0 - 0.25 * saturate((Pm.z - 80.0) / 120.0));   // kulrang qoya, balandda to'qroq
 	float3 nD = SnowD;
 	float3 base = lerp(gD, dD, dry);
 	base = lerp(base, sD, sandM);
@@ -72,7 +72,7 @@ if (st == 0)
 	base = lerp(base, CobbleD * 0.9, road * (0.55 + 0.35 * VN(uv * 0.4)));
 	float3 tint = VC.rgb / max(lum, 0.05);
 	base *= lerp(lerp(float3(1, 1, 1), tint, 0.6), float3(1, 1, 1), road) * (0.82 + 0.1 * VN(uv * 0.5));
-	float snow = saturate((Pm.z - 75.0) / 18.0) * saturate((N.z - 0.55) / 0.3);
+	float snow = saturate((Pm.z - 150.0) / 25.0) * saturate((N.z - 0.55) / 0.3);
 	float puddle = (N.z > 0.996 && Pm.z < 20.0) ? smoothstep(0.86, 0.90, VN(uv * 0.35 + 7.3)) * smoothstep(0.62, 0.74, VN(uv * 0.06 + 3.1)) : 0.0;
 	col = lerp(base, rD, slope);
 	col = lerp(col, nD, snow);
@@ -105,7 +105,7 @@ if (st == 0)
 	float lum = dot(VC.rgb, float3(0.3, 0.5, 0.2));
 	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.75) * 3.0);
 	float sandM = saturate((lum - 0.42) * 6.0) * dry;
-	float snow = saturate((Pm.z - 75.0) / 18.0) * saturate((N.z - 0.55) / 0.3);
+	float snow = saturate((Pm.z - 150.0) / 25.0) * saturate((N.z - 0.55) / 0.3);
 	float3 tg = GrassN, td = DirtN, ts = SandN, tr = RockN, tn = SnowN;   // Normal sampler: allaqachon -1..1
 	float3 t = lerp(lerp(lerp(tg, td, dry), ts, sandM), tr, slope);
 	t = lerp(t, tn, snow);

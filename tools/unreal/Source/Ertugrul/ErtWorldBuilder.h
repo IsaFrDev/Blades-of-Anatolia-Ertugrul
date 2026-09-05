@@ -50,7 +50,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") int32 Seed = 7;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") float WorldSizeM = 2000.f;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") float ChunkM = 200.f;
-	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") float CellM = 10.f;
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") float CellM = 5.f;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") bool bBuildForest = true;
 	/** false: protsedural relyef meshi qurilmaydi (haqiqiy Landscape import qilinganda) */
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") bool bBuildTerrainMesh = true;
