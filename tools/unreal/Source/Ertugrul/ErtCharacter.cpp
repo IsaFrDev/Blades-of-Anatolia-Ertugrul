@@ -1242,7 +1242,7 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this));
 	if (!GM) return;
 	AutoT += Dt; AutoTotalT += Dt; AutoPotT = FMath::Max(0.f, AutoPotT - Dt);
-	if (AutoTotalT > 480.f) { UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] umumiy vaqt tugadi (480 s) - chiqish")); FPlatformMisc::RequestExit(false); return; }
+	if (AutoTotalT > 360.f) { UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] umumiy vaqt tugadi (360 s) - chiqish")); FPlatformMisc::RequestExit(false); return; }
 	if (GM->GetCutscene() && GM->GetCutscene()->IsPlaying()) { if (AutoT > 1.2f) { AutoT = 0.f; GM->OnSkip(); UE_LOG(LogErtugrul, Log, TEXT("[AutoPlay] kat-sahna o'tkazildi")); } DebugMove = FVector2D::ZeroVector; return; }
 	if (GM->IsDialogActive())
 	{
@@ -1268,7 +1268,7 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 	AutoIdleT = 0.f;
 	if (bDead || St == EErtMissionState::Failed || St == EErtMissionState::Briefing) { DebugMove = FVector2D::ZeroVector; return; }
 	// Bosqich vaqti: 150 s dan oshsa dushmanlar yo'q qilinadi (tiqilib qolgan bosqichni o'tkazish)
-	if (D->GetPhaseIndex() != AutoLastPhase) { AutoLastPhase = D->GetPhaseIndex(); AutoPhaseT = 0.f; UE_LOG(LogErtugrul, Log, TEXT("[AutoPlay] bosqich %d/%d"), AutoLastPhase + 1, D->GetPhaseCount()); }
+	if (D->GetPhaseIndex() != AutoLastPhase) { AutoLastPhase = D->GetPhaseIndex(); AutoPhaseT = 0.f; AutoPhaseTeleports = 0; AutoBestDist = 1e9f; AutoNoProgT = 0.f; UE_LOG(LogErtugrul, Log, TEXT("[AutoPlay] bosqich %d/%d"), AutoLastPhase + 1, D->GetPhaseCount()); }
 	else AutoPhaseT += Dt;
 	// Maqsad: eng yaqin tirik dushman, bo'lmasa bajarilmagan maqsad nuqtasi, bo'lmasa marker
 	FVector Target = FVector::ZeroVector; bool bHas = false; AErtEnemy* Foe = nullptr; float BestD = 3500.f;
@@ -1299,9 +1299,9 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 		}
 	}
 	if (!bHas) { TArray<FVector> Ms; D->GetMarkers(Ms); if (Ms.Num()) { Target = Ms[0]; bHas = true; } }
-	if (AutoPhaseT > 150.f)
+	if (AutoPhaseT > 60.f)
 	{
-		UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] bosqich %d 150 s da bajarilmadi - dushmanlar yo'q qilinadi"), AutoLastPhase + 1);
+		UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] bosqich %d 60 s da bajarilmadi - dushmanlar yo'q qilinadi"), AutoLastPhase + 1);
 		for (AErtEnemy* E : D->GetEnemies()) if (E && !E->IsDead()) E->ApplyHit(99999.f, this, true);
 		D->DebugCompletePhase();
 		AutoPhaseT = 0.f;
@@ -1336,14 +1336,23 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 	if (FVector::Dist2D(GetActorLocation(), AutoLastPos) < 25.f && !DebugMove.IsNearlyZero()) AutoStuckT += Dt; else AutoStuckT = 0.f;
 	AutoLastPos = GetActorLocation();
 	if (AutoStuckT > 3.f && AutoStuckT < 3.2f) Jump();
-	if (AutoStuckT > 7.f)
+	// Yaqinlashish to'xtadi (8 s davomida maqsadga 1 m ham yaqinlashmadi) -> teleport
+	if (Dist < AutoBestDist - 100.f) { AutoBestDist = Dist; AutoNoProgT = 0.f; } else if (!Foe && Dist > 160.f) AutoNoProgT += Dt;
+	if (AutoStuckT > 7.f || AutoNoProgT > 8.f)
 	{
-		AutoStuckT = 0.f; ++AutoTeleports;
+		AutoStuckT = 0.f; AutoNoProgT = 0.f; AutoBestDist = 1e9f; ++AutoTeleports; ++AutoPhaseTeleports;
 		if (Horse) DismountHorse();
 		const FVector Dir = (GetActorLocation() - Target).GetSafeNormal2D();
-		const FVector P = Target + Dir * 260.f;
+		const FVector P = Target + Dir * (Foe ? 200.f : 40.f);
 		const float Zg = WorldRef ? WorldRef->HeightAt(P.Y / 100.f, P.X / 100.f) : P.Z / 100.f;
-		SetActorLocation(FVector(P.X, P.Y, Zg * 100.f + 120.f), false, nullptr, ETeleportType::TeleportPhysics);
-		UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] tiqilib qoldi - teleport (%d)"), AutoTeleports);
+		const float Z = FMath::Max(Zg * 100.f, Target.Z) + 120.f;
+		SetActorLocation(FVector(P.X, P.Y, Z), false, nullptr, ETeleportType::TeleportPhysics);
+		UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] tiqilib qoldi - teleport (%d) maqsad (%.0f, %.0f, %.0f) yer Z %.0f"), AutoTeleports, Target.X, Target.Y, Target.Z, Zg * 100.f);
+		if (AutoPhaseTeleports >= 3)
+		{
+			UE_LOG(LogErtugrul, Warning, TEXT("[AutoPlay] bosqich %d: 3 teleportdan keyin ham yetib bo'lmadi - majburan yopiladi (XATO nomzodi)"), AutoLastPhase + 1);
+			for (AErtEnemy* E : D->GetEnemies()) if (E && !E->IsDead()) E->ApplyHit(99999.f, this, true);
+			D->DebugCompletePhase(); AutoPhaseTeleports = 0; AutoPhaseT = 0.f;
+		}
 	}
 }

@@ -215,7 +215,8 @@ private:
 	// Avtomatik o'yinchi (-ErtAutoPlay): epizodni o'zi o'ynaydi (sinov)
 	bool bAutoPlay = false;
 	float AutoT = 0.f, AutoTotalT = 0.f, AutoStuckT = 0.f, AutoPhaseT = 0.f, AutoIdleT = 0.f, AutoPotT = 0.f;
-	int32 AutoLastPhase = -1, AutoTeleports = 0;
+	int32 AutoLastPhase = -1, AutoTeleports = 0, AutoPhaseTeleports = 0;
+	float AutoBestDist = 1e9f, AutoNoProgT = 0.f;
 	FVector AutoLastPos = FVector::ZeroVector;
 	FString AutoEpisode;
 	void UpdateAutoPlay(float Dt);

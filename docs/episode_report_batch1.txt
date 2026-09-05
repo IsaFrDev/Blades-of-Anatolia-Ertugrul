@@ -1,0 +1,120 @@
+﻿Epizod sinovi 09/05/2026 18:52:57
+
+=== EP001 : OK (171 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP001 bosqich 1/5: ui.phase.travel (maqsad 1, to'lqin 0)
+LogErtugrul: [Missiya] EP001 'Och qarg'alar' (INVESTIGATION, tier 1): 5 bosqich, boshlanish V(X=35000.00, Y=-56000.00, Z=809.92)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/5
+LogErtugrul: [Missiya] EP001 bosqich 2/5: ui.phase.collect (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 2/5
+LogErtugrul: [Missiya] EP001 bosqich 3/5: ui.phase.council (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 3/5
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (1)
+LogErtugrul: [Missiya] kengash: 0/0 ball, yutdi
+LogErtugrul: [Missiya] EP001 bosqich 4/5: ui.phase.stealth (maqsad 2, to'lqin 1)
+LogErtugrul: [AutoPlay] bosqich 4/5
+LogErtugrul: [Missiya] sezildi - qo'shimcha kuch (2)
+LogErtugrul: [Missiya] EP001 bosqich 5/5: ui.phase.fight (maqsad 1, to'lqin 1)
+LogErtugrul: [AutoPlay] bosqich 5/5
+LogErtugrul: [Missiya] EP001 bajarildi: 8 o'ldirildi, 0 o'lim
+LogErtugrul: [Missiya] EP002 bosqich 1/5: ui.phase.travel (maqsad 1, to'lqin 0)
+LogErtugrul: [Missiya] EP002 'Ikki asir' (ESCORT, tier 1): 5 bosqich, boshlanish V(X=15500.00, Y=-66100.00, Z=845.88)
+LogErtugrul: [AutoPlay] EP001 tugadi, keyingi (EP002) boshlandi - chiqish (85 s, 1 teleport)
+
+=== EP002 : TIMEOUT (303 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP002 bosqich 1/5: ui.phase.travel (maqsad 1, to'lqin 0)
+LogErtugrul: [Missiya] EP002 'Ikki asir' (ESCORT, tier 1): 5 bosqich, boshlanish V(X=15500.00, Y=-66100.00, Z=845.88)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/5
+LogErtugrul: [Missiya] EP002 bosqich 2/5: ui.phase.collect (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 2/5
+LogErtugrul: [Missiya] EP002 bosqich 3/5: ui.phase.council (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 3/5
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (1)
+LogErtugrul: [Missiya] kengash: 4/3 ball, yutdi
+LogErtugrul: [Missiya] EP002 bosqich 4/5: ui.phase.travel (maqsad 2, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 4/5
+
+=== EP003 : TIMEOUT (303 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP003 bosqich 1/4: ui.phase.travel (maqsad 2, to'lqin 0)
+LogErtugrul: [Missiya] EP003 'Oq plash' (DEFENSE, tier 1): 4 bosqich, boshlanish V(X=43000.00, Y=-56200.00, Z=1986.45)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/4
+LogErtugrul: [Missiya] EP003 bosqich 2/4: ui.phase.defend (maqsad 1, to'lqin 2)
+LogErtugrul: [AutoPlay] bosqich 2/4
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (1)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (2)
+LogErtugrul: [Missiya] EP003 bosqich 3/4: ui.phase.council (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 3/4
+LogErtugrul: [Missiya] kengash: 0/0 ball, yutdi
+LogErtugrul: [Missiya] EP003 bosqich 4/4: ui.phase.fight (maqsad 1, to'lqin 1)
+LogErtugrul: [AutoPlay] bosqich 4/4
+
+=== EP005 : TIMEOUT (303 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP005 bosqich 1/4: ui.phase.hunt (maqsad 1, to'lqin 1)
+LogErtugrul: [Missiya] EP005 'Qorli dovon' (SURVIVAL, tier 1): 4 bosqich, boshlanish V(X=84000.00, Y=-41400.00, Z=1095.07)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/4
+LogErtugrul: Warning: [AutoPlay] bosqich 1 150 s da bajarilmadi - dushmanlar yo'q qilinadi
+LogErtugrul: [Missiya] EP005 bosqich 2/4: ui.phase.travel (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 2/4
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (1)
+LogErtugrul: [Missiya] EP005 bosqich 3/4: ui.phase.council (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 3/4
+
+=== EP008 : TIMEOUT (303 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP008 bosqich 1/5: ui.phase.travel (maqsad 1, to'lqin 0)
+LogErtugrul: [Missiya] EP008 'Sham yo'li: Ibn Arabiy' (ESCORT, tier 2): 5 bosqich, boshlanish V(X=-93000.00, Y=67800.00, Z=1540.00)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/5
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (1)
+LogErtugrul: Warning: [AutoPlay] bosqich 1 150 s da bajarilmadi - dushmanlar yo'q qilinadi
+LogErtugrul: [Missiya] EP008 bosqich 2/5: ui.phase.defend (maqsad 1, to'lqin 2)
+LogErtugrul: [AutoPlay] bosqich 2/5
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (2)
+
+=== EP012 : TIMEOUT (303 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP012 bosqich 1/5: ui.phase.council (maqsad 1, to'lqin 0)
+LogErtugrul: [Missiya] EP012 'Bagras' (SIEGE, tier 2): 5 bosqich, boshlanish V(X=52500.00, Y=50900.00, Z=20416.34)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/5
+LogErtugrul: Warning: [AutoPlay] bosqich 1 150 s da bajarilmadi - dushmanlar yo'q qilinadi
+LogErtugrul: [Missiya] EP012 bosqich 2/5: ui.phase.travel (maqsad 2, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 2/5
+
+=== EP020 : TIMEOUT (303 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP020 bosqich 1/5: ui.phase.travel (maqsad 1, to'lqin 0)
+LogErtugrul: [Missiya] EP020 'Köpek hukmronligi' (COURT, tier 4): 5 bosqich, boshlanish V(X=62000.00, Y=23100.00, Z=4043.71)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/5
+LogErtugrul: Warning: [AutoPlay] bosqich 1 150 s da bajarilmadi - dushmanlar yo'q qilinadi
+LogErtugrul: [Missiya] EP020 bosqich 2/5: ui.phase.collect (maqsad 1, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 2/5
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (1)
+
+=== EP035 : TIMEOUT (303 s) ===
+LogErtugrul: [AutoPlay] yoqildi
+LogErtugrul: [Missiya] EP035 bosqich 1/5: ui.phase.council (maqsad 1, to'lqin 0)
+LogErtugrul: [Missiya] EP035 'Köse Dağ' (SIEGE, tier 5): 5 bosqich, boshlanish V(X=63000.00, Y=44600.00, Z=2200.00)
+LogErtugrul: [AutoPlay] kat-sahna o'tkazildi
+LogErtugrul: [AutoPlay] bosqich 1/5
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (1)
+LogErtugrul: [Missiya] kengash: 0/0 ball, yutdi
+LogErtugrul: [Missiya] EP035 bosqich 2/5: ui.phase.travel (maqsad 2, to'lqin 0)
+LogErtugrul: [AutoPlay] bosqich 2/5
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (2)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (3)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (4)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (5)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (6)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (7)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (8)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (9)
+LogErtugrul: Warning: [AutoPlay] tiqilib qoldi - teleport (10)
