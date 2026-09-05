@@ -31,6 +31,7 @@ AErtEnemy::AErtEnemy()
 	CM->bUseRVOAvoidance = false;
 	if (USkeletalMeshComponent* SK = GetMesh()) SK->SetVisibility(false);
 	Body = CreateDefaultSubobject<UErtHeroBody>(TEXT("Body"));
+	Body->Profile = TEXT("enemy");
 	AutoPossessAI = EAutoPossessAI::Disabled;
 }
 

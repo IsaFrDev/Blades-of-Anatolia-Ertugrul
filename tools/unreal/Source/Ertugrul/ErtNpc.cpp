@@ -11,6 +11,7 @@ AErtNpc::AErtNpc()
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	Body = CreateDefaultSubobject<UErtHeroBody>(TEXT("Body"));
+	Body->Profile = TEXT("npc");
 }
 
 void AErtNpc::Setup(const FString& InId, const FString& NameKey, const FString& InDialogId, bool bWoman, const FLinearColor& Kaftan, float Yaw)

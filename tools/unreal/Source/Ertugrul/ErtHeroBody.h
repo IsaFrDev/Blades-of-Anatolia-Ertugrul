@@ -43,6 +43,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") FLinearColor Cloak = FLinearColor(0.35f, 0.08f, 0.07f);
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Kiyim") FLinearColor Turban = FLinearColor(0.9f, 0.88f, 0.8f);
 
+	/** character.json dagi profil (hero / enemy / npc). Profilda skeletli mesh bo'lsa protsedural tana o'rniga u ishlatiladi. */
+	UPROPERTY(EditAnywhere, Category = "Ertugrul|Skelet") FString Profile = TEXT("hero");
+	bool IsSkeletal() const { return Skel != nullptr; }
 	/** Tanani quradi (bo'g'imlar + geometriya). Parent - kapsula yoki ildiz komponent. */
 	void Build(USceneComponent* Parent, float CapsuleHalfHeight);
 
@@ -67,7 +70,7 @@ public:
 	void TriggerParry() { ParryT = 1.f; }
 	/** Yiqilgan holat (o'lim) */
 	void SetDead(float CapsuleHalfHeight, int32 Variant = -1);   // -1 tasodifiy: 0 orqaga yiqilish, 1 yuztuban, 2 tiz cho'kib yonboshga
-	bool IsBuilt() const { return Pelvis != nullptr; }
+	bool IsBuilt() const { return Pelvis != nullptr || Skel != nullptr; }
 	float AttackPhase() const { return AttackT; }
 
 private:
@@ -88,6 +91,18 @@ private:
 	TArray<FVector4> WoundList;   // x,y,z markaz (Torso koordinatasi), w o'lcham
 	int32 WoundCount = 0;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> Mat;
+	// Skeletli rejim (character.json): SingleNode animatsiya, holatga qarab almashtiriladi
+	UPROPERTY(Transient) TObjectPtr<class USkeletalMeshComponent> Skel;
+	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> SkelSword;
+	TMap<FString, TArray<TObjectPtr<class UAnimSequence>>> SkelAnims;
+	UPROPERTY(Transient) TObjectPtr<class UAnimSequence> CurAnim;
+	float OneShotT = 0.f, WalkRef = 200.f, RunRef = 500.f;
+	FVector SwordLoc = FVector::ZeroVector; FRotator SwordRot = FRotator::ZeroRotator; FName SwordSocket = TEXT("hand_r");
+	bool TryBuildSkeletal(USceneComponent* Parent, float HalfH);
+	class UAnimSequence* SkelPick(const FString& Key, int32 Index = -1) const;
+	void SkelPlay(const FString& Key, bool bLoop, float Rate = 1.f, int32 Index = -1, const TCHAR* Fallback = nullptr);
+	void SkelAnimate(float Dt, float Speed, bool bInAir, bool bCrouched);
+	void SkelBuildSword();
 
 	float Phase = 0.f;
 	float IdleT = 0.f;
