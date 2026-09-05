@@ -588,25 +588,17 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(52.8f)) TakeShot(TEXT("storm"));
 	if (At(52.9f))
 	{
+		// Ko'rgazma: uchta dushman (serjant, elita, arbaletchi) kamera oldida
 		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->SetWeather(TEXT("clear"));
-		TArray<AActor*> Es; UGameplayStatics::GetAllActorsOfClass(this, AErtEnemy::StaticClass(), Es);
-		AErtEnemy* Best = nullptr;
-		for (AActor* A : Es) { AErtEnemy* En = Cast<AErtEnemy>(A); if (En && !En->IsDead() && En->GetKind() != EErtEnemyKind::Deer) { Best = En; break; } }
-		if (!Best)
+		const float E0 = -556.f, N0 = 372.f, Z0 = 12.f;
+		const EErtEnemyKind Kinds[] = { EErtEnemyKind::Sergeant, EErtEnemyKind::Elite, EErtEnemyKind::Crossbow };
+		FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		for (int32 i = 0; i < 3; ++i)
 		{
-			// Erkin yurishda dushman yo'q: ko'rgazma uchun uchtasini yaratamiz (serjant, elita, arbaletchi)
-			const FVector Base = GetActorLocation() + GetActorForwardVector() * 380.f;
-			const EErtEnemyKind Kinds[] = { EErtEnemyKind::Sergeant, EErtEnemyKind::Elite, EErtEnemyKind::Crossbow };
-			FActorSpawnParameters SP; SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			for (int32 i = 0; i < 3; ++i)
-			{
-				const FVector P = Base + GetActorRightVector() * ((i - 1) * 110.f);
-				AErtEnemy* En = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), P + FVector(0, 0, 100.f), FRotator(0, GetActorRotation().Yaw + 180.f, 0), SP);
-				if (En) { En->Init(Kinds[i], P, 0.f); En->SetActorTickEnabled(false); if (!Best) Best = En; }
-			}
-			TargetArm = 300.f;
+			const FVector P((N0 + 4.f) * 100.f, (E0 + (i - 1) * 1.3f) * 100.f, Z0 * 100.f + 110.f);
+			if (AErtEnemy* En = GetWorld()->SpawnActor<AErtEnemy>(AErtEnemy::StaticClass(), P, FRotator(0, 180.f, 0), SP)) { En->Init(Kinds[i], P, 0.f); En->SetActorTickEnabled(false); }
 		}
-		else { const FVector L = Best->GetActorLocation(), F = Best->GetActorForwardVector(); SetActorLocation(L + F * 320.f + FVector(0, 0, 10.f), false, nullptr, ETeleportType::TeleportPhysics); if (APlayerController* PC = Cast<APlayerController>(GetController())) PC->SetControlRotation(FRotator(-6.f, (-F).Rotation().Yaw, 0.f)); TargetArm = 260.f; }
+		Teleport(E0, N0, Z0 + 1.4f, -8.f, 0.f);
 	}
 	if (At(54.0f)) TakeShot(TEXT("enemy"));
 	if (At(54.5f)) { UE_LOG(LogErtugrul, Log, TEXT("Sinov ssenariysi tugadi")); FPlatformMisc::RequestExit(false); }
