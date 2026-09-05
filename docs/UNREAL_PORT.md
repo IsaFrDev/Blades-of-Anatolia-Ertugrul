@@ -364,3 +364,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `UErtHeroBody`: `TriggerHurt(SideSign)` yo'nalishli reaksiya (tana buriladi va egiladi, qo'llar siltanadi); `SetDead(HalfH, Variant)` uch o'lim pozasi: orqaga yiqilish, yuztuban, tiz cho'kib yonboshga (tasodifiy).
 - `BuildGrass` (ErtWorldBuilder, 26000 tup, 6x6 chunk): har tup 3 kesishgan tola (alfa: tag 0, uch 1), yashil o'tloqlarda zich, janubda siyrak, oba/So'g'ut/yaylov/Bursa atrofida zichroq, yo'l va suvdan tashqari. `M_ErtGrass` (`ert_make_grass.py`): ikki tomonlama folyaj shading, WPO shamol (uch sinus, sekin o'zgaruvchi kuch, alfa bilan), rang tagi qoramtir.
 - Yer materiali (st 0) auto-qatlamlar: qiyalikda (N.z < 0.9) qoya naqshi va rangi, 75 m dan yuqorida qor, tekis pastlikda (N.z > 0.992, Z < 24 m) shovqinli ko'lmaklar (qorong'i, roughness 0.12), o't tolalari chiziqlari.
+
+## Ufq tumani va quyosh nurlari; Blender yo'riqnomasi
+
+- `AErtGameMode::BeginPlay`: quyoshda ekran-fazo light shaft (bloom 0.35, threshold 0.6, okklyuziya 0.08, 1.2 km) - bulut va tog' orqasidan nur tolalari, Intel GPU uchun arzon.
+- `AErtWeather::BeginPlay`: tuman ikki qatlamli (height falloff 0.12, start 25 m, max opacity 0.92, ikkinchi qatlam zichlik 0.0006, falloff 0.02, offset -400 m) - ufqdagi keskin oq chiziq yumshaydi; yo'naltirilgan inscattering (daraja 12, 80 m dan) kun vaqtiga qarab quyosh rangida (`UpdateSky`).
+- `docs/guides/blender_ue_guide.html`: Blender 4.x -> UE 5.8 yo'riqnomasi (birliklar, model, vertex rang + alfa uslublari, Rigify, FBX eksport katakchalari, UE import, `fab_assets.json`, xatolar jadvali). Artifact sifatida ham chop etilgan.

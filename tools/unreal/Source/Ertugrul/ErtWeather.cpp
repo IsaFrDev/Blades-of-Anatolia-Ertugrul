@@ -26,6 +26,22 @@ void AErtWeather::BeginPlay()
 	Mesh->RegisterComponent();
 	if (UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Ertugrul/Materials/M_ErtVertexColor.M_ErtVertexColor"))) Mesh->SetMaterial(0, M);
 	Fog = Cast<AExponentialHeightFog>(UGameplayStatics::GetActorOfClass(this, AExponentialHeightFog::StaticClass()));
+	if (Fog && Fog->GetComponent())
+	{
+		// Ufqni yumshatish: ikki qatlamli tuman - past qatlam sekin so'nadi, ikkinchi qatlam ufqdagi keskin oq chiziqni yopadi
+		UExponentialHeightFogComponent* F = Fog->GetComponent();
+		F->SetFogHeightFalloff(0.12f);
+		F->SetStartDistance(2500.f);
+		F->SetFogMaxOpacity(0.92f);
+		F->SetFogCutoffDistance(0.f);
+		F->SetDirectionalInscatteringExponent(12.f);
+		F->SetDirectionalInscatteringStartDistance(8000.f);
+		F->SetDirectionalInscatteringColor(FLinearColor(0.9f, 0.7f, 0.45f));
+		F->SecondFogData.FogDensity = 0.0006f;
+		F->SecondFogData.FogHeightFalloff = 0.02f;
+		F->SecondFogData.FogHeightOffset = -40000.f;
+		F->MarkRenderStateDirty();
+	}
 	// Bulut qatlami: 2 km balandlikda 36 km kenglikdagi tekislik (ikki qatlam), yulduz gumbazi: 60 km radiusli sfera (ichkaridan ko'rinadi)
 	auto MakeSky = [&](const TCHAR* Name, const TCHAR* MatPath, TObjectPtr<UMaterialInstanceDynamic>& OutMID)
 	{
@@ -84,6 +100,7 @@ void AErtWeather::UpdateSky(float Day, const FLinearColor& SunColor, float ElevD
 		FogCol = FMath::Lerp(FogCol, FLinearColor(0.95f, 0.55f, 0.32f), Twilight * Day * 0.8f);
 		if (CloudDark > 0.f) FogCol = FMath::Lerp(FogCol, FLinearColor(0.35f, 0.37f, 0.4f), CloudDark * 0.7f);
 		Fog->GetComponent()->SetFogInscatteringColor(FogCol);
+		Fog->GetComponent()->SetDirectionalInscatteringColor(FMath::Lerp(FLinearColor(0.05f, 0.06f, 0.1f), FMath::Lerp(FLinearColor(0.75f, 0.72f, 0.65f), SunColor * 1.1f, Twilight), Day));
 	}
 }
 

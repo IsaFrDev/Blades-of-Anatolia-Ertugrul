@@ -76,6 +76,15 @@ void AErtGameMode::BeginPlay()
 	{ FTimerHandle Th2; GetWorldTimerManager().SetTimer(Th2, [this]() { LoadGame(); }, 0.5f, false); }   // o'yinchi paydo bo'lgach inventar/daraja
 	Sun = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(this, ADirectionalLight::StaticClass()));
 	Sky = Cast<ASkyLight>(UGameplayStatics::GetActorOfClass(this, ASkyLight::StaticClass()));
+	// Quyosh nurlari (ekran-fazo light shaft: bulut va tog' orqasidan nur tolalari) - arzon, Intel GPU ga ham to'g'ri keladi
+	if (Sun && Sun->GetComponent())
+	{
+		UDirectionalLightComponent* DL = Sun->GetComponent();
+		DL->bEnableLightShaftBloom = true; DL->BloomScale = 0.35f; DL->BloomThreshold = 0.6f; DL->BloomMaxBrightness = 12.f; DL->BloomTint = FColor(255, 232, 200);
+		DL->bEnableLightShaftOcclusion = true; DL->OcclusionMaskDarkness = 0.08f; DL->OcclusionDepthRange = 120000.f;
+		DL->LightShaftOverrideDirection = FVector::ZeroVector;
+		DL->MarkRenderStateDirty();
+	}
 
 	FString Ep;
 	const bool bDirect = FParse::Value(FCommandLine::Get(), TEXT("-ErtEpisode="), Ep);
