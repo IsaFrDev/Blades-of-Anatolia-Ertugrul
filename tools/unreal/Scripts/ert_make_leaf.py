@@ -14,21 +14,22 @@ def log(s):
 
 # Kartochka UV (0..1): markazdan radial silueti barg tishli, ichida teshiklar; natija: rgb = rang, a = niqob
 CODE = r"""
-float2 u = UV - 0.5;
-float r = length(u) * 2.0;
-float ang = atan2(u.y, u.x);
 float seed = frac(sin(dot(floor(WP.xy / 37.0), float2(127.1, 311.7))) * 43758.5453) * 6.283;
-// Barg to'plami silueti: 5-7 bo'lakli, tishli chet
-float lobes = 0.72 + 0.16 * sin(ang * 5.0 + seed) + 0.10 * sin(ang * 11.0 - seed * 2.0) + 0.06 * sin(ang * 23.0 + seed);
-// Teshiklar (kichik shovqin)
-float2 q = UV * 7.0 + seed;
-float2 q0 = floor(q), f = frac(q); f = f * f * (3.0 - 2.0 * f);
-#define H(v) frac(sin(dot(v, float2(127.1, 311.7))) * 43758.5453)
-float n = lerp(lerp(H(q0), H(q0 + float2(1, 0)), f.x), lerp(H(q0 + float2(0, 1)), H(q0 + float2(1, 1)), f.x), f.y);
-float mask = (r < lobes && n > 0.16) ? 1.0 : 0.0;
-// Rang: markaz qoramtir, chetlar ochroq; tomirlar
-float3 c = VC * (0.65 + 0.55 * r) * (0.8 + 0.4 * n);
-float vein = 1.0 - 0.15 * saturate(1.0 - abs(sin(ang * 6.0 + seed) * 8.0));
+// Kartochka = 3x3 mayda barglar (har biri tishli ellips), umumiy dumaloq chegara
+float2 g = UV * 3.0;
+float2 cell = floor(g);
+float cs = frac(sin(dot(cell + seed, float2(269.5, 183.3))) * 43758.5453);
+float2 u = (frac(g) - 0.5) * 2.0;
+float rot = cs * 6.283;
+float2 ur = float2(u.x * cos(rot) - u.y * sin(rot), u.x * sin(rot) + u.y * cos(rot));
+ur.x *= 1.6;   // cho'ziq barg
+float r = length(ur);
+float ang = atan2(ur.y, ur.x);
+float lobes = 0.85 + 0.12 * sin(ang * 7.0 + cs * 9.0) + 0.06 * sin(ang * 15.0);
+float gr = length(UV - 0.5) * 2.0;
+float mask = (r < lobes && gr < 0.98 && cs > 0.12) ? 1.0 : 0.0;
+float3 c = VC * (0.7 + 0.5 * r) * (0.8 + 0.4 * cs);
+float vein = 1.0 - 0.2 * saturate(1.0 - abs(ur.y) * 12.0);   // markaziy tomir
 c *= vein;
 return float4(c, mask);
 """

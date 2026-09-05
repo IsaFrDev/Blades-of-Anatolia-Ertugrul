@@ -117,6 +117,10 @@ private:
 	void BuildProps();
 	void BuildSplineWalls();
 	void BuildBushes();
+	/** Landscape import uchun: 16-bit heightmap + qatlam weightmap'lari (PNG) */
+	void ExportLandscape(const FString& Dir) const;
+	/** AddTree uchun barg kartochkalari meshi (null bo'lsa eski shar/konus shoxlar) */
+	struct FErtMeshData* CurLeaf = nullptr;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> LeafMat;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") int32 BushCount = 2600;
 	void BuildDecals();

@@ -8,6 +8,10 @@
 #include "Components/PointLightComponent.h"
 #include "Components/DecalComponent.h"
 #include "ErtFire.h"
+#include "IImageWrapper.h"
+#include "IImageWrapperModule.h"
+#include "Modules/ModuleManager.h"
+#include "Misc/FileHelper.h"
 #include "Materials/MaterialInterface.h"
 
 using namespace ErtMap;
@@ -55,6 +59,7 @@ void AErtWorldBuilder::BeginPlay()
 	int32 NF = 0;
 	for (const FVector4& F : FireSpots) if (AErtFireFx::Spawn(GetWorld(), FVector(F.X, F.Y, F.Z), F.W, true)) ++NF;
 	UE_LOG(LogErtugrul, Log, TEXT("Olov effektlari: %d"), NF);
+	FString ExpDir; if (FParse::Value(FCommandLine::Get(), TEXT("-ErtExportLandscape="), ExpDir)) ExportLandscape(ExpDir.TrimQuotes());
 }
 
 FLinearColor AErtWorldBuilder::ColorAt(float E, float N) const
@@ -498,6 +503,73 @@ void AErtWorldBuilder::AddYurt(FErtMeshData& M, float E, float N, float Z, float
 void AErtWorldBuilder::AddTree(FErtMeshData& M, float E, float N, float Z, float Sc, bool bPine, int32 S)
 {
 	const FLinearColor Trunk = ErtCol::Vary(ErtCol::Sty(FLinearColor(0.30f, 0.20f, 0.11f), ErtCol::StyleBark), 0.15f, S);
+	FRandomStream RS(S * 131 + 7);
+	if (CurLeaf)
+	{
+		// Realistik daraxt: tanasi + shoxlar (kolliziya meshida), barg kartochkalari (M_ErtLeaf, kolliziyasiz)
+		FErtMeshData& L = *CurLeaf;
+		auto Card = [&](const FVector& P, const FVector& Out0, float Size, const FLinearColor& C, float A)
+		{
+			FVector Out = Out0; if (Out.IsNearlyZero()) Out = FVector::UpVector; Out.Normalize();
+			const FVector Rt = FVector::CrossProduct(FVector::UpVector, Out).GetSafeNormal(KINDA_SMALL_NUMBER, FVector::ForwardVector);
+			const FVector Up = FVector::CrossProduct(Out, Rt).GetSafeNormal();
+			const FQuat Tw(Out, RS.FRandRange(-1.f, 1.f));
+			const FVector R2 = Tw.RotateVector(Rt) * Size, U2 = Tw.RotateVector(Up) * Size;
+			L.AddQuadUV(P - R2 - U2, P + R2 - U2, P + R2 + U2, P - R2 + U2, Out, ErtCol::Sty(C, A));
+		};
+		if (bPine)
+		{
+			const FLinearColor Leaf = ErtCol::Vary(FLinearColor(0.07f, 0.20f, 0.08f), 0.18f, S + 7);
+			const float TH = 8.5f * Sc;
+			M.AddCylinder(W(E, N, Z - 0.3f), 0.30f * Sc, 0.08f * Sc, TH + 0.3f, 6, Trunk, false);
+			// Qavatli igna bargli shoxlar: pastda keng, tepada tor, pastga osilgan kartochkalar
+			for (int32 tier = 0; tier < 6; ++tier)
+			{
+				const float F = tier / 5.f;
+				const float Zt = Z + TH * (0.28f + 0.68f * F), Rr = (2.7f - 2.0f * F) * Sc;
+				const int32 Nc = tier < 4 ? 7 : 5;
+				for (int32 c = 0; c < Nc; ++c)
+				{
+					const float A = 2.f * PI * (c + RS.FRand() * 0.5f) / Nc;
+					const FVector Dir(FMath::Cos(A), FMath::Sin(A), 0.f);
+					const FVector P = W(E, N, Zt) + Dir * Rr * 55.f;
+					Card(P, (Dir + FVector(0, 0, 0.55f)).GetSafeNormal(), (0.9f - 0.45f * F) * Sc * 100.f, ErtCol::Vary(Leaf, 0.1f, S + tier * 9 + c), 0.4f + 0.6f * F);
+				}
+			}
+			Card(W(E, N, Z + TH * 0.97f), FVector(0.3f, 0.2f, 1.f), 0.6f * Sc * 100.f, Leaf * 1.1f, 1.f);
+		}
+		else
+		{
+			const FLinearColor Leaf = ErtCol::Vary(FLinearColor(0.17f, 0.36f, 0.10f), 0.2f, S + 7);
+			const float TH = 4.0f * Sc;
+			M.AddCylinder(W(E, N, Z - 0.3f), 0.42f * Sc, 0.24f * Sc, TH + 0.3f, 7, Trunk, false, FRotator::ZeroRotator, 0.04f, S);
+			// Shoxlar: 4-6 ta yuqoriga egilgan silindr, uchlarida barg to'plamlari
+			const int32 NB = RS.RandRange(4, 6);
+			const FVector Top = W(E, N, Z + TH);
+			for (int32 b = 0; b < NB; ++b)
+			{
+				const float A = 2.f * PI * (b + RS.FRand() * 0.4f) / NB, Tilt = RS.FRandRange(35.f, 60.f), BL = RS.FRandRange(2.0f, 3.2f) * Sc;
+				const FVector Dir(FMath::Cos(A) * FMath::Sin(FMath::DegreesToRadians(Tilt)), FMath::Sin(A) * FMath::Sin(FMath::DegreesToRadians(Tilt)), FMath::Cos(FMath::DegreesToRadians(Tilt)));
+				const FVector Base = Top - FVector(0, 0, RS.FRandRange(0.2f, 1.0f) * Sc * 100.f);
+				M.AddCylinder(Base, 0.14f * Sc, 0.05f * Sc, BL, 5, Trunk * 0.95f, false, FRotator(-(90.f - Tilt), FMath::RadiansToDegrees(A), 0));
+				const FVector Tip = Base + Dir * BL * 100.f;
+				const int32 Nc = RS.RandRange(5, 7);
+				for (int32 c = 0; c < Nc; ++c)
+				{
+					FVector Off(RS.FRandRange(-1.f, 1.f), RS.FRandRange(-1.f, 1.f), RS.FRandRange(-0.5f, 1.f)); Off.Normalize();
+					const FVector P = Tip + Off * RS.FRandRange(0.3f, 1.3f) * Sc * 100.f;
+					Card(P, (Off + Dir * 0.5f).GetSafeNormal(), RS.FRandRange(0.9f, 1.5f) * Sc * 100.f, ErtCol::Vary(Leaf * (0.85f + 0.3f * (Off.Z * 0.5f + 0.5f)), 0.12f, S + b * 11 + c), 0.5f + 0.5f * FMath::Clamp(Off.Z, 0.f, 1.f));
+				}
+			}
+			// Markaziy to'plam (yoriqlarni yopadi)
+			for (int32 c = 0; c < 8; ++c)
+			{
+				FVector Off(RS.FRandRange(-1.f, 1.f), RS.FRandRange(-1.f, 1.f), RS.FRandRange(0.f, 1.f)); Off.Normalize();
+				Card(Top + FVector(0, 0, 1.2f * Sc * 100.f) + Off * RS.FRandRange(0.5f, 1.8f) * Sc * 100.f, Off, RS.FRandRange(1.0f, 1.6f) * Sc * 100.f, ErtCol::Vary(Leaf, 0.12f, S + 90 + c), 0.9f);
+			}
+		}
+		return;
+	}
 	if (bPine)
 	{
 		const FLinearColor Leaf = ErtCol::Vary(ErtCol::Sty(FLinearColor(0.09f, 0.24f, 0.10f), ErtCol::StyleLeaf), 0.18f, S + 7);
@@ -1113,6 +1185,7 @@ void AErtWorldBuilder::BuildForest()
 	const float Half = WorldSizeM * 0.5f;
 	const int32 CellsPerSide = 4;
 	TArray<FErtMeshData> Cells; Cells.Init(FErtMeshData(100.f), CellsPerSide * CellsPerSide);
+	TArray<FErtMeshData> LeafCells; LeafCells.Init(FErtMeshData(1.f), CellsPerSide * CellsPerSide);
 	int32 Placed = 0;
 	for (int32 i = 0; i < TreeCount * 6 && Placed < TreeCount; ++i)
 	{
@@ -1150,11 +1223,16 @@ void AErtWorldBuilder::BuildForest()
 		}
 		const int32 cx = FMath::Clamp((int32)((E + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
 		const int32 cy = FMath::Clamp((int32)((N + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
+		CurLeaf = LeafMat ? &LeafCells[cy * CellsPerSide + cx] : nullptr;
 		AddTree(Cells[cy * CellsPerSide + cx], E, N, H, RS.FRandRange(0.8f, 1.5f), bPine, Placed);
+		CurLeaf = nullptr;
 		++Placed;
 	}
 	for (int32 c = 0; c < Cells.Num(); ++c)
+	{
 		if (Cells[c].Verts.Num()) Cells[c].Commit(NewPart(FString::Printf(TEXT("Forest_%d"), c), true), 0, true);
+		if (LeafCells[c].Verts.Num()) { UProceduralMeshComponent* P = NewPart(FString::Printf(TEXT("ForestLeaves_%d"), c), false, LeafMat); LeafCells[c].Commit(P, 0, false); }
+	}
 	UE_LOG(LogErtugrul, Log, TEXT("O'rmon: %d daraxt"), Placed);
 }
 
@@ -3026,4 +3104,60 @@ void AErtWorldBuilder::BuildBushes()
 		}
 	if (Twigs.Verts.Num()) Twigs.Commit(NewPart(TEXT("BushTwigs"), false), 0, false);
 	UE_LOG(LogErtugrul, Log, TEXT("Butalar: %d (barg kartochkali)"), Placed);
+}
+
+
+// ---------------- Landscape eksporti: heightmap (16-bit PNG, 2017x2017 = 1 m/piksel) va qatlam weightmap'lari (8-bit) ----------------
+
+void AErtWorldBuilder::ExportLandscape(const FString& Dir) const
+{
+	IImageWrapperModule& IW = FModuleManager::LoadModuleChecked<IImageWrapperModule>("ImageWrapper");
+	const int32 Res = 2017;   // UE tavsiya o'lchami (2017 = 63*32+1 ... 8 komponent x 255 quad)
+	const float Half = WorldSizeM * 0.5f;
+	const float Step = WorldSizeM / (Res - 1);
+	// Balandlik diapazoni: -20..300 m -> 0..65535; Landscape Z masshtabi: (320 m * 100 sm) / 512 * 100 = 6250
+	const float Zmin = -20.f, Zmax = 300.f;
+	TArray<uint16> Hm; Hm.SetNumUninitialized(Res * Res);
+	TArray<uint8> Wgrass, Wdirt, Wrock, Wsnow, Wsand, Wroad; for (TArray<uint8>* Wt : { &Wgrass, &Wdirt, &Wrock, &Wsnow, &Wsand, &Wroad }) Wt->SetNumZeroed(Res * Res);
+	for (int32 y = 0; y < Res; ++y)
+		for (int32 x = 0; x < Res; ++x)
+		{
+			// Landscape X = +sharq (E), Y = +janub (UE Y o'qi); bizning reja: X=N, Y=E -> Landscape X <- E, Landscape Y <- -N
+			const float E = -Half + x * Step, N = Half - y * Step;
+			const float H = HeightAt(E, N);
+			const int32 i = y * Res + x;
+			Hm[i] = (uint16)FMath::Clamp((H - Zmin) / (Zmax - Zmin) * 65535.f, 0.f, 65535.f);
+			const float Slope = 1.f - TerrainNormal(E, N).Z;
+			float RW = 0.f; const float RD = RoadDist(E, N, &RW);
+			const bool bRoad = RD < RW * 0.5f + 0.5f && N > DesertN;
+			float Wr = FMath::Clamp((Slope - 0.25f) * 4.f, 0.f, 1.f), Ws = H > 75.f ? FMath::Clamp((H - 75.f) / 15.f, 0.f, 1.f) : 0.f;
+			float Wsd = N < DesertN + 60.f ? FMath::Clamp((DesertN + 60.f - N) / 60.f, 0.f, 1.f) : 0.f;
+			float Wd = FMath::Clamp(0.5f - 0.5f * Smooth01((N + 100.f) / 500.f) + 0.3f * Noise(E, N, 0.01f), 0.f, 1.f) * (1.f - Wsd);
+			float Wg = FMath::Max(0.f, 1.f - Wd - Wsd);
+			float Wrd = bRoad ? 1.f : 0.f;
+			const float Rest = FMath::Max(0.f, 1.f - Wr - Ws - Wrd);
+			Wgrass[i] = (uint8)(Wg * Rest * 255.f); Wdirt[i] = (uint8)(Wd * Rest * 255.f); Wsand[i] = (uint8)(Wsd * Rest * 255.f);
+			Wrock[i] = (uint8)(Wr * 255.f); Wsnow[i] = (uint8)(Ws * 255.f); Wroad[i] = (uint8)(Wrd * 255.f);
+		}
+	IFileManager::Get().MakeDirectory(*Dir, true);
+	{
+		TSharedPtr<IImageWrapper> Png = IW.CreateImageWrapper(EImageFormat::PNG);
+		if (Png.IsValid() && Png->SetRaw(Hm.GetData(), Hm.Num() * 2, Res, Res, ERGBFormat::Gray, 16))
+		{
+			const TArray64<uint8> Data = Png->GetCompressed();
+			FFileHelper::SaveArrayToFile(TArrayView<const uint8>(Data.GetData(), Data.Num()), *(Dir / TEXT("heightmap.png")));
+		}
+	}
+	auto SaveW = [&](const TArray<uint8>& Wt, const TCHAR* Name)
+	{
+		TSharedPtr<IImageWrapper> Png = IW.CreateImageWrapper(EImageFormat::PNG);
+		if (Png.IsValid() && Png->SetRaw(Wt.GetData(), Wt.Num(), Res, Res, ERGBFormat::Gray, 8))
+		{
+			const TArray64<uint8> Data = Png->GetCompressed();
+			FFileHelper::SaveArrayToFile(TArrayView<const uint8>(Data.GetData(), Data.Num()), *(Dir / FString::Printf(TEXT("weight_%s.png"), Name)));
+		}
+	};
+	SaveW(Wgrass, TEXT("grass")); SaveW(Wdirt, TEXT("dirt")); SaveW(Wrock, TEXT("rock")); SaveW(Wsnow, TEXT("snow")); SaveW(Wsand, TEXT("sand")); SaveW(Wroad, TEXT("road"));
+	FFileHelper::SaveStringToFile(FString::Printf(TEXT("Landscape import:\n  Section Size 63x63, Sections per component 2x2, Components 32x32 -> 2017x2017\n  Location X=%.0f Y=%.0f Z=%.0f (sm)\n  Scale X=100 Y=100 Z=%.2f  (balandlik %g..%g m)\n  Qatlamlar: grass, dirt, rock, snow, sand, road (weight_*.png)\n"), -Half * 100.f, -Half * 100.f, (Zmin + (Zmax - Zmin) * 0.5f) * 100.f, (Zmax - Zmin) * 100.f / 512.f, Zmin, Zmax), *(Dir / TEXT("README.txt")));
+	UE_LOG(LogErtugrul, Log, TEXT("Landscape eksport: %s (heightmap %dx%d, 6 qatlam)"), *Dir, Res, Res);
 }
