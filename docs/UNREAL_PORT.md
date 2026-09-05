@@ -429,3 +429,9 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `M_ErtLeaf` (`tools/unreal/Scripts/ert_make_leaf.py`): Masked, ikki tomonlama folyaj (subsurface), UV bo'yicha protsedural barg to'plami silueti (tishli chet + teshiklar, dunyo koordinatasidan urug'), tomirlar, shamol WPO (alfa = kartochka balandligi).
 - `AErtWorldBuilder::BuildBushes` (`BushCount` 2600): har buta 16-26 barg kartochkasi (ellipsoid ichida tashqariga qaragan, burilgan) + 3-5 shox silindri. Turlari: o'tloq yashil, o'rmon to'q yashil, cho'l/tog' quruq, gullagan (oba/qishloq). Zichlik: daryo/ko'l bo'yi, o'rmon chekkasi, oba/qishloq atrofi. `FErtMeshData::AddQuadUV` - to'g'ri UV li to'rtburchak.
 - Spline devor tutashuvlarida tosh ustunlar (burchak bo'shliqlari yopildi).
+
+## AssetHub (Tripo) rasm->3D modellari
+- GLB fayllar `Content/ErtAssets/Gen/src/SM_<Tur>_<Nom>.glb` ga qo'yiladi; `tools/unreal/Scripts/ue_import_gen.py` (MCP `execute_python_code` yoki commandlet) import qiladi, `ue_fix_gen_mats.py` to'g'ri PBR material yaratadi (Color sRGB -> BaseColor, NormalGL -> Normal (yashil kanal teskari), ORM: R=AO, G=Roughness, metallik 0), `ue_gen_usage.py` "Used with Instanced Static Meshes" + Nanite yoqadi (busiz o'yinda kulrang standart material chiqadi).
+- Skaner (`ErtFab.cpp`) nom bo'yicha yangi toifalar: yurt/tent/house/gate/well/cart/stall. `AErtWorldBuilder::FabPlace` meshni reja nuqtasiga poydevori yerga tegadigan qilib qo'yadi (balandlik yoki radius bo'yicha masshtab).
+- `AddYurt`/`AddHouse` mesh bo'lsa protsedural o'rniga uni ishlatadi (qorong'i kigiz -> chodir meshi); `BuildLandmarks`: darvozalar (Bagras, shahar, Karacahisar), quduqlar (8 joy), aravalar (7), rastalar (12).
+- MCP orqali Python: `python tools/unreal/Scripts/mcp_py.py <script.py>` (muharrir ochiq bo'lsa; 30 s dan uzun ishlar timeout beradi lekin bajariladi).

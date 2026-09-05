@@ -9,7 +9,10 @@ class UStaticMesh;
 
 struct FErtFabLib
 {
-	TArray<UStaticMesh*> Trees, Pines, Rocks, Bushes, Grass, Props, Stumps;   // Props: bochka/yashik/chelak/fonar/stol; Stumps: to'nka/yotgan tana
+	TArray<UStaticMesh*> Trees, Pines, Rocks, Bushes, Grass, Props, Stumps;
+	/** Nomli inshoot/buyum meshlari (AssetHub/Tripo, Fab): SM_Yurt_*, SM_House_*, SM_Gate_*, SM_Well_*, SM_Cart_*, SM_Stall_*, SM_Tent_* */
+	TArray<UStaticMesh*> Yurts, Houses, Gates, Wells, Carts, Stalls, Tents;
+	static UStaticMesh* Pick(const TArray<UStaticMesh*>& L, int32 Seed) { return L.Num() ? L[FMath::Abs(Seed) % L.Num()] : nullptr; }   // Props: bochka/yashik/chelak/fonar/stol; Stumps: to'nka/yotgan tana
 	bool bScanned = false;
 
 	/** Manifest + Asset Registry skaneri. Manifest: {"trees":[...], "pines":[...], "rocks":[...], "bushes":[...], "grass":[...], "scan_paths":["/Game/Fab", ...]} */

@@ -146,7 +146,7 @@ void AErtWorldBuilder::Build()
 		BuildSogut();
 		BuildDomanic();
 	}
-	if (bBuildSettlements) BuildSplineWalls();
+	if (bBuildSettlements) { BuildSplineWalls(); BuildLandmarks(); }
 	if (bBuildForest) { BuildForest(); BuildRocks(); BuildGrass(); BuildShoreFoliage(); BuildBushes(); BuildProps(); }
 	if (bBuildSettlements) BuildDecals();
 	if (FabTreesPlaced + FabRocksPlaced > 0) UE_LOG(LogErtugrul, Log, TEXT("Fab meshlari: %d daraxt, %d qoya (instans)"), FabTreesPlaced, FabRocksPlaced);
@@ -492,6 +492,13 @@ void AErtWorldBuilder::BuildWater()
 void AErtWorldBuilder::AddYurt(FErtMeshData& M, float E, float N, float Z, float R, float WallH, float RoofH, const FLinearColor& Wall, const FLinearColor& Roof, float DoorYaw, int32 S)
 {
 	if (R >= 2.3f) Interiors.Add(FVector4(E, N, R - 0.7f, Z));
+	{
+		// AssetHub/Fab o'tov meshi bo'lsa - protsedural o'rniga (qorong'i kigiz = mo'g'ul chodiri)
+		FErtFabLib& Fab = FErtFabLib::Get();
+		const bool bDark = Wall.GetLuminance() < 0.35f;
+		UStaticMesh* Mesh = bDark ? FErtFabLib::Pick(Fab.Tents.Num() ? Fab.Tents : Fab.Yurts, S) : FErtFabLib::Pick(Fab.Yurts, S);
+		if (Mesh) { FabPlace(Mesh, E, N, Z, DoorYaw, R, false, true); ++FabYurts; return; }
+	}
 	M.AddCylinder(W(E, N, Z), R, R, WallH, 12, ErtCol::Vary(Wall, 0.08f, S), false);
 	M.AddCylinder(W(E, N, Z + WallH), R * 1.08f, R * 0.12f, RoofH, 12, ErtCol::Vary(Roof, 0.08f, S + 1), true);
 	M.AddCylinder(W(E, N, Z + WallH + RoofH - 0.2f), R * 0.16f, R * 0.16f, 0.5f, 8, DarkWood);
@@ -686,6 +693,10 @@ void AErtWorldBuilder::AddFenceRect(FErtMeshData& M, float E, float N, float Z, 
 void AErtWorldBuilder::AddHouse(FErtMeshData& M, float E, float N, float Z, float HU, float HV, float H, float Yaw, const FLinearColor& C, int32 S)
 {
 	Interiors.Add(FVector4(E, N, FMath::Min(HU, HV) - 0.8f, Z));
+	{
+		FErtFabLib& Fab = FErtFabLib::Get();
+		if (UStaticMesh* Mesh = FErtFabLib::Pick(Fab.Houses, S)) { FabPlace(Mesh, E, N, Z, Yaw, FMath::Max(HU, HV) * 1.1f, false, true); ++FabHouses; return; }
+	}
 	const FRotator R(0, Yaw, 0);
 	const FLinearColor Wall = ErtCol::Vary(C, 0.12f, S);
 	M.AddBox(W(E, N, Z + H * 0.5f), FVector(HV, HU, H * 0.5f) * 100.f, Wall, R);
@@ -3161,4 +3172,60 @@ void AErtWorldBuilder::ExportLandscape(const FString& Dir) const
 	SaveW(Wgrass, TEXT("grass")); SaveW(Wdirt, TEXT("dirt")); SaveW(Wrock, TEXT("rock")); SaveW(Wsnow, TEXT("snow")); SaveW(Wsand, TEXT("sand")); SaveW(Wroad, TEXT("road"));
 	FFileHelper::SaveStringToFile(FString::Printf(TEXT("Landscape import:\n  Section Size 63x63, Sections per component 2x2, Components 32x32 -> 2017x2017\n  Location X=%.0f Y=%.0f Z=%.0f (sm)\n  Scale X=100 Y=100 Z=%.2f  (balandlik %g..%g m)\n  Qatlamlar: grass, dirt, rock, snow, sand, road (weight_*.png)\n"), -Half * 100.f, -Half * 100.f, (Zmin + (Zmax - Zmin) * 0.5f) * 100.f, (Zmax - Zmin) * 100.f / 512.f, Zmin, Zmax), *(Dir / TEXT("README.txt")));
 	UE_LOG(LogErtugrul, Log, TEXT("Landscape eksport: %s (heightmap %dx%d, 6 qatlam)"), *Dir, Res, Res);
+}
+
+
+// ---------------- AssetHub/Fab meshlarini joylashtirish va landmarklar (darvoza, quduq, arava, rasta) ----------------
+
+void AErtWorldBuilder::FabPlace(UStaticMesh* M, float E, float N, float Z, float Yaw, float TargetM, bool bByHeight, bool bCollision)
+{
+	if (!M) return;
+	const FBoxSphereBounds B = M->GetBounds();
+	const float Sc = bByHeight ? FErtFabLib::ScaleToHeight(M, TargetM) : FErtFabLib::ScaleToRadius(M, TargetM);
+	const float BottomZ = (B.Origin.Z - B.BoxExtent.Z) * Sc;   // poydevor
+	FabComp(M, bCollision)->AddInstance(FTransform(FRotator(0, Yaw, 0), W(E, N, Z) - FVector(0, 0, BottomZ + 4.f), FVector(Sc)), true);
+}
+
+void AErtWorldBuilder::BuildLandmarks()
+{
+	FErtFabLib& Fab = FErtFabLib::Get();
+	int32 N = 0;
+	auto Hz = [&](float E, float Nn) { return HeightAt(E, Nn); };
+	// Darvoza: Bagras qo'rg'on devori boshida (yo'lga qaragan), shahar janubiy kirishi, Karacahisar etagi
+	if (UStaticMesh* G = FErtFabLib::Pick(Fab.Gates, 0))
+	{
+		FabPlace(G, FortE - 80.f, FortN - 100.f, Hz(FortE - 80.f, FortN - 100.f), 200.f, 12.f, true, true); ++N;
+		FabPlace(G, CityE, CityN - CityR - 6.f, Hz(CityE, CityN - CityR - 6.f), 90.f, 13.f, true, true); ++N;
+		FabPlace(G, KarE, KarN - KarR - 2.f, Hz(KarE, KarN - KarR - 2.f), 90.f, 10.f, true, true); ++N;
+	}
+	// Quduqlar: oba, So'g'ut, Domaniç, shahar maydonlari
+	if (UStaticMesh* Wl = FErtFabLib::Pick(Fab.Wells, 0))
+	{
+		struct FP { float E, N; };
+		for (const FP& P : { FP{ObaE + 24.f, ObaN + 8.f}, FP{SogE + 6.f, SogN - 14.f}, FP{DomE + 12.f, DomN - 6.f}, FP{CityE + 22.f, CityN + 40.f}, FP{KonE + 18.f, KonN - 20.f}, FP{DamE - 20.f, DamN + 10.f}, FP{NikE + 16.f, NikN + 18.f}, FP{BurE - 14.f, BurN + 12.f} })
+		{
+			FabPlace(Wl, P.E, P.N, Hz(P.E, P.N), FMath::Fmod(P.E * 7.f, 360.f), 3.2f, true, true); ++N;
+		}
+	}
+	// Aravalar: oba, So'g'ut, karvonsaroy, shahar darvozasi oldi
+	if (Fab.Carts.Num())
+	{
+		struct FP { float E, N, Yaw; };
+		int32 k = 0;
+		for (const FP& P : { FP{ObaE - 40.f, ObaN - 30.f, 20.f}, FP{ObaE + 60.f, ObaN + 70.f, 110.f}, FP{SogE - 20.f, SogN + 22.f, 75.f}, FP{CaravanE + 12.f, CaravanN - 8.f, 160.f}, FP{CityE - 10.f, CityN - CityR - 16.f, 95.f}, FP{DomE - 25.f, DomN + 15.f, 40.f}, FP{KayE + 30.f, KayN - 60.f, 0.f} })
+		{
+			FabPlace(FErtFabLib::Pick(Fab.Carts, k++), P.E, P.N, Hz(P.E, P.N), P.Yaw, 1.9f, false, true); ++N;
+		}
+	}
+	// Bozor rastalari: shahar bozorlari
+	if (Fab.Stalls.Num())
+	{
+		struct FP { float E, N, Yaw; };
+		int32 k = 0;
+		for (const FP& P : { FP{CityE - 30.f, CityN + 30.f, 0.f}, FP{CityE - 30.f, CityN + 42.f, 0.f}, FP{CityE + 40.f, CityN + 30.f, 180.f}, FP{DamE + 30.f, DamN - 20.f, 90.f}, FP{DamE + 30.f, DamN - 32.f, 90.f}, FP{HalabE - 40.f, HalabN + 10.f, 270.f}, FP{KonE - 30.f, KonN + 30.f, 0.f}, FP{KayE - 20.f, KayN + 30.f, 0.f}, FP{SivE + 25.f, SivN - 20.f, 180.f}, FP{BurE + 30.f, BurN - 30.f, 270.f}, FP{NikE - 25.f, NikN - 30.f, 0.f}, FP{SogE + 20.f, SogN + 4.f, 90.f} })
+		{
+			FabPlace(FErtFabLib::Pick(Fab.Stalls, k++), P.E, P.N, Hz(P.E, P.N), P.Yaw, 3.4f, true, true); ++N;
+		}
+	}
+	UE_LOG(LogErtugrul, Log, TEXT("Landmarklar (AssetHub/Fab): %d; o'tov meshlari %d, uy meshlari %d"), N, FabYurts, FabHouses);
 }

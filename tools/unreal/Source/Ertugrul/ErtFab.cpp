@@ -28,6 +28,7 @@ void FErtFabLib::Scan()
 {
 	bScanned = true;
 	Trees.Reset(); Pines.Reset(); Rocks.Reset(); Bushes.Reset(); Grass.Reset(); Props.Reset(); Stumps.Reset();
+	Yurts.Reset(); Houses.Reset(); Gates.Reset(); Wells.Reset(); Carts.Reset(); Stalls.Reset(); Tents.Reset();
 	TArray<FString> ScanPaths = { TEXT("/Game/Fab"), TEXT("/Game/Megascans"), TEXT("/Game/Quixel"), TEXT("/Game/MegascansLibrary"), TEXT("/Game/ErtAssets") };
 	// Manifest
 	const FString ManifestPath = FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/fab_assets.json");
@@ -64,7 +65,14 @@ void FErtFabLib::Scan()
 			if (A.AssetClassPath.GetAssetName() != TEXT("StaticMesh")) continue;
 			const FString Name = A.AssetName.ToString().ToLower();
 			TArray<UStaticMesh*>* Target = nullptr;
-			if (Name.Contains(TEXT("stump")) || Name.Contains(TEXT("trunk")) || Name.Contains(TEXT("log"))) Target = &Stumps;
+			if (Name.Contains(TEXT("yurt")) || Name.Contains(TEXT("ger_"))) Target = &Yurts;
+			else if (Name.Contains(TEXT("tent"))) Target = &Tents;
+			else if (Name.Contains(TEXT("house")) || Name.Contains(TEXT("hut")) || Name.Contains(TEXT("cottage"))) Target = &Houses;
+			else if (Name.Contains(TEXT("gate"))) Target = &Gates;
+			else if (Name.Contains(TEXT("well"))) Target = &Wells;
+			else if (Name.Contains(TEXT("cart")) || Name.Contains(TEXT("wagon"))) Target = &Carts;
+			else if (Name.Contains(TEXT("stall")) || Name.Contains(TEXT("market")) || Name.Contains(TEXT("bazaar"))) Target = &Stalls;
+			else if (Name.Contains(TEXT("stump")) || Name.Contains(TEXT("trunk")) || Name.Contains(TEXT("log"))) Target = &Stumps;
 			else if (Name.Contains(TEXT("barrel")) || Name.Contains(TEXT("crate")) || Name.Contains(TEXT("bucket")) || Name.Contains(TEXT("lantern")) || Name.Contains(TEXT("table")) || Name.Contains(TEXT("stool")) || Name.Contains(TEXT("fire_pit")) || Name.Contains(TEXT("shield"))) Target = &Props;
 			else if (Name.Contains(TEXT("pine")) || Name.Contains(TEXT("fir")) || Name.Contains(TEXT("spruce")) || Name.Contains(TEXT("cedar")) || Name.Contains(TEXT("conifer"))) Target = &Pines;
 			else if (Name.Contains(TEXT("tree")) || Name.Contains(TEXT("oak")) || Name.Contains(TEXT("beech")) || Name.Contains(TEXT("birch")) || Name.Contains(TEXT("maple")) || Name.Contains(TEXT("poplar")) || Name.Contains(TEXT("willow")) || Name.Contains(TEXT("olive"))) Target = &Trees;
@@ -78,7 +86,7 @@ void FErtFabLib::Scan()
 			if (UStaticMesh* M = Cast<UStaticMesh>(A.GetAsset())) { M->AddToRoot(); Target->AddUnique(M); ++Found; }   // GC himoyasi
 		}
 	}
-	UE_LOG(LogErtugrul, Log, TEXT("Fab kutubxonasi: daraxt %d, qarag'ay %d, qoya %d, buta %d, o't %d, buyum %d, to'nka %d (registrdan %d)"), Trees.Num(), Pines.Num(), Rocks.Num(), Bushes.Num(), Grass.Num(), Props.Num(), Stumps.Num(), Found);
+	UE_LOG(LogErtugrul, Log, TEXT("Fab kutubxonasi: daraxt %d, qarag'ay %d, qoya %d, buta %d, o't %d, buyum %d, to'nka %d; o'tov %d, uy %d, darvoza %d, quduq %d, arava %d, rasta %d, chodir %d (registrdan %d)"), Trees.Num(), Pines.Num(), Rocks.Num(), Bushes.Num(), Grass.Num(), Props.Num(), Stumps.Num(), Yurts.Num(), Houses.Num(), Gates.Num(), Wells.Num(), Carts.Num(), Stalls.Num(), Tents.Num(), Found);
 }
 
 float FErtFabLib::ScaleToHeight(UStaticMesh* M, float TargetMeters)

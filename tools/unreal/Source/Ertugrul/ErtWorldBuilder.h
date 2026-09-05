@@ -83,6 +83,10 @@ private:
 	// Fab/Megascans meshlari uchun instanslangan komponentlar (mesh -> HISM)
 	UPROPERTY(Transient) TMap<TObjectPtr<UStaticMesh>, TObjectPtr<class UHierarchicalInstancedStaticMeshComponent>> FabInst;
 	class UHierarchicalInstancedStaticMeshComponent* FabComp(UStaticMesh* M, bool bCollision);
+	/** Mesh instansini reja nuqtasiga qo'yish: TargetM - balandlik (bByHeight) yoki eng katta yarim o'lcham metrda; poydevori yerga tegadi */
+	void FabPlace(UStaticMesh* M, float E, float N, float Z, float Yaw, float TargetM, bool bByHeight, bool bCollision);
+	void BuildLandmarks();
+	int32 FabYurts = 0, FabHouses = 0;
 	int32 FabTreesPlaced = 0, FabRocksPlaced = 0;
 	UPROPERTY(Transient) TObjectPtr<UMaterialInterface> GrassMat;
 	UPROPERTY(EditAnywhere, Category = "Ertugrul|Dunyo") int32 GrassClumps = 36000;
