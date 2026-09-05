@@ -8,6 +8,14 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "Materials/MaterialInterface.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
+#include "Animation/AnimSequence.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 AErtHorse::AErtHorse()
 {
@@ -51,6 +59,7 @@ void AErtHorse::Build()
 {
 	if (bBuilt) return;
 	bBuilt = true;
+	if (TryBuildSkeletal()) return;
 	if (bCamel)
 	{
 		// Tuya: uzun oyoqlar, o'rkach, uzun bo'yin, kichik bosh; egar o'rkach ustida
@@ -219,6 +228,7 @@ void AErtHorse::ApplyDamage(float D)
 	Rider = nullptr;
 	GetCharacterMovement()->DisableMovement();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (Skel) { SkelPlay(TEXT("death"), 1.f, TEXT("idle")); if (CurAnim) { Skel->PlayAnimation(CurAnim, false); } }
 	if (BodyMesh) { BodyMesh->SetRelativeRotation(FRotator(0, 0, 75.f)); BodyMesh->SetRelativeLocation(FVector(0, 0, -40.f)); }
 	for (UProceduralMeshComponent* L : Legs) if (L) { L->SetRelativeRotation(FRotator(0, 0, 75.f)); L->AddRelativeLocation(FVector(0, 0, -60.f)); }
 	for (UProceduralMeshComponent* L : LowerLegs) if (L) L->SetRelativeRotation(FRotator(0, 0, 0));
@@ -292,6 +302,16 @@ void AErtHorse::Tick(float Dt)
 
 void AErtHorse::Animate(float Dt)
 {
+	if (Skel)
+	{
+		const float Sp2 = GetCharacterMovement()->Velocity.Size2D();
+		if (GetCharacterMovement()->IsFalling()) SkelPlay(TEXT("jump"), 1.f, TEXT("gallop"));
+		else if (Sp2 < 15.f) SkelPlay(TEXT("idle"), 1.f);
+		else if (Sp2 < WalkRef * 1.4f) SkelPlay(TEXT("walk"), FMath::Clamp(Sp2 / WalkRef, 0.5f, 1.5f), TEXT("idle"));
+		else if (Sp2 < TrotRef * 1.4f) SkelPlay(TEXT("trot"), FMath::Clamp(Sp2 / TrotRef, 0.6f, 1.5f), TEXT("walk"));
+		else SkelPlay(TEXT("gallop"), FMath::Clamp(Sp2 / GallopRef, 0.6f, 1.4f), TEXT("trot"));
+		return;
+	}
 	const float Sp = GetCharacterMovement()->Velocity.Size2D();
 	const float Stride = bCamel ? 340.f : (Sp > 600.f ? 300.f : 190.f);
 	if (Sp > 10.f) Phase += Dt * (Sp / Stride) * 2.f * PI;
@@ -329,4 +349,69 @@ void AErtHorse::Animate(float Dt)
 	if (TailMesh) TailMesh->SetRelativeRotation(FRotator(FMath::Clamp(Sp / 900.f, 0.f, 1.f) * 25.f, FMath::Sin(T * 2.3f) * 12.f + FMath::Sin(Phase) * 4.f, 0));
 	if (BodyMesh) BodyMesh->SetRelativeLocation(FVector(0, 0, (bCamel ? 45.f : 25.f) + FMath::Abs(FMath::Sin(Phase)) * FMath::Min(Sp / 400.f, 1.f) * (bCamel ? 8.f : 5.f)));
 	if (BodyMesh && !bCamel && !bDead) BodyMesh->SetRelativeRotation(FRotator(FMath::Sin(Phase) * FMath::Min(Sp / 700.f, 1.f) * 3.f, 0, 0));
+}
+
+
+// ---------------- Skeletli ot (character.json "horse"/"camel") ----------------
+
+bool AErtHorse::TryBuildSkeletal()
+{
+	FString Json;
+	if (!FFileHelper::LoadFileToString(Json, *(FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/character.json")))) return false;
+	TSharedPtr<FJsonObject> Cfg;
+	const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Json);
+	if (!FJsonSerializer::Deserialize(Reader, Cfg) || !Cfg.IsValid()) return false;
+	const TSharedPtr<FJsonObject>* Prof = nullptr;
+	if (!Cfg->TryGetObjectField(bCamel ? TEXT("camel") : TEXT("horse"), Prof) || !Prof->IsValid()) return false;
+	FString MeshPath; if (!(*Prof)->TryGetStringField(TEXT("mesh"), MeshPath) || MeshPath.IsEmpty()) return false;
+	auto ObjPath = [](FString P) { if (!P.Contains(TEXT("."))) { const FString Nm = FPaths::GetBaseFilename(P); P = P + TEXT(".") + Nm; } return P; };
+	USkeletalMesh* SM = LoadObject<USkeletalMesh>(nullptr, *ObjPath(MeshPath));
+	if (!SM) { UE_LOG(LogErtugrul, Warning, TEXT("character.json: ot meshi topilmadi %s"), *MeshPath); return false; }
+	Skel = NewObject<USkeletalMeshComponent>(this, TEXT("SkelHorse"));
+	Skel->SetupAttachment(GetCapsuleComponent());
+	const double Yaw = (*Prof)->HasField(TEXT("yaw")) ? (*Prof)->GetNumberField(TEXT("yaw")) : -90.0;
+	const double Zo = (*Prof)->HasField(TEXT("z")) ? (*Prof)->GetNumberField(TEXT("z")) : 0.0;
+	const double Sc = (*Prof)->HasField(TEXT("scale")) ? (*Prof)->GetNumberField(TEXT("scale")) : 1.0;
+	Skel->SetRelativeLocation(FVector(0, 0, -GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight() + Zo));
+	Skel->SetRelativeRotation(FRotator(0, Yaw, 0));
+	Skel->SetRelativeScale3D(FVector(Sc));
+	Skel->SetSkeletalMesh(SM);
+	Skel->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	Skel->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Skel->RegisterComponent();
+	if ((*Prof)->HasField(TEXT("walk_ref"))) WalkRef = (*Prof)->GetNumberField(TEXT("walk_ref"));
+	if ((*Prof)->HasField(TEXT("trot_ref"))) TrotRef = (*Prof)->GetNumberField(TEXT("trot_ref"));
+	if ((*Prof)->HasField(TEXT("gallop_ref"))) GallopRef = (*Prof)->GetNumberField(TEXT("gallop_ref"));
+	// Egar joyi: "saddle": [x, y, z] (mesh koordinatasida, sm) yoki "saddle_socket"
+	const TArray<TSharedPtr<FJsonValue>>* Sd = nullptr;
+	if ((*Prof)->TryGetArrayField(TEXT("saddle"), Sd) && Sd->Num() == 3) Saddle->SetRelativeLocation(FVector((*Sd)[0]->AsNumber(), (*Sd)[1]->AsNumber(), (*Sd)[2]->AsNumber()));
+	FString SaddleSock;
+	if ((*Prof)->TryGetStringField(TEXT("saddle_socket"), SaddleSock) && !SaddleSock.IsEmpty()) { Saddle->AttachToComponent(Skel, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(*SaddleSock)); }
+	const TSharedPtr<FJsonObject>* Anims = nullptr;
+	if ((*Prof)->TryGetObjectField(TEXT("anims"), Anims) && Anims->IsValid())
+	{
+		for (const auto& Pair : (*Anims)->Values)
+		{
+			TArray<TObjectPtr<UAnimSequence>> List;
+			auto Add = [&](const FString& P) { if (UAnimSequence* A = LoadObject<UAnimSequence>(nullptr, *ObjPath(P))) List.Add(A); };
+			if (Pair.Value->Type == EJson::String) Add(Pair.Value->AsString());
+			else if (Pair.Value->Type == EJson::Array) for (const TSharedPtr<FJsonValue>& V : Pair.Value->AsArray()) Add(V->AsString());
+			if (List.Num()) SkelAnims.Add(FString(Pair.Key.ToView()), List);
+		}
+	}
+	SkelPlay(TEXT("idle"), 1.f);
+	UE_LOG(LogErtugrul, Log, TEXT("Skeletli %s: %s, %d animatsiya turi"), bCamel ? TEXT("tuya") : TEXT("ot"), *SM->GetName(), SkelAnims.Num());
+	return true;
+}
+
+void AErtHorse::SkelPlay(const FString& Key, float Rate, const TCHAR* Fallback)
+{
+	if (!Skel) return;
+	const TArray<TObjectPtr<UAnimSequence>>* L = SkelAnims.Find(Key);
+	if ((!L || !L->Num()) && Fallback) L = SkelAnims.Find(Fallback);
+	if (!L || !L->Num()) L = SkelAnims.Find(TEXT("idle"));
+	if (!L || !L->Num()) return;
+	UAnimSequence* A = (*L)[0];
+	if (A != CurAnim || !Skel->IsPlaying()) { CurAnim = A; Skel->PlayAnimation(A, Key != TEXT("death")); }
+	Skel->SetPlayRate(Rate);
 }

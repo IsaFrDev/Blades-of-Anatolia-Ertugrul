@@ -276,7 +276,7 @@ void UErtHeroBody::AddWound(float SideSign, float Strength)
 void UErtHeroBody::TriggerHurt(float SideSign)
 {
 	HurtT = 1.f; HurtDir = SideSign;
-	if (Skel && OneShotT <= 0.15f)
+	if (Skel && OneShotT <= 0.15f && SkelAnims.Contains(TEXT("hurt")))
 	{
 		SkelPlay(TEXT("hurt"), false, 1.3f, -1, TEXT("idle"));
 		if (CurAnim) OneShotT = FMath::Min(0.6f, CurAnim->GetPlayLength() / 1.3f);
@@ -499,7 +499,13 @@ bool UErtHeroBody::TryBuildSkeletal(USceneComponent* Parent, float HalfH)
 		for (const auto& Pair : (*Anims)->Values)
 		{
 			TArray<TObjectPtr<UAnimSequence>> List;
-			auto Add = [&](const FString& P) { if (UAnimSequence* A = LoadObject<UAnimSequence>(nullptr, *ErtObjPath(P))) List.Add(A); else UE_LOG(LogErtugrul, Warning, TEXT("character.json: animatsiya topilmadi %s"), *P); };
+			auto Add = [&](const FString& P)
+			{
+				UAnimSequence* A = LoadObject<UAnimSequence>(nullptr, *ErtObjPath(P));
+				if (!A) { UE_LOG(LogErtugrul, Warning, TEXT("character.json: animatsiya topilmadi %s"), *P); return; }
+				if (A->IsValidAdditive()) { UE_LOG(LogErtugrul, Warning, TEXT("character.json: %s additiv - o'tkazib yuborildi"), *P); return; }
+				List.Add(A);
+			};
 			if (Pair.Value->Type == EJson::String) Add(Pair.Value->AsString());
 			else if (Pair.Value->Type == EJson::Array) for (const TSharedPtr<FJsonValue>& V : Pair.Value->AsArray()) Add(V->AsString());
 			if (List.Num()) SkelAnims.Add(FString(Pair.Key.ToView()), List);

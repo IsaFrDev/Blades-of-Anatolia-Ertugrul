@@ -465,6 +465,7 @@ void AErtWorldBuilder::BuildWater()
 
 void AErtWorldBuilder::AddYurt(FErtMeshData& M, float E, float N, float Z, float R, float WallH, float RoofH, const FLinearColor& Wall, const FLinearColor& Roof, float DoorYaw, int32 S)
 {
+	if (R >= 2.3f) Interiors.Add(FVector4(E, N, R - 0.7f, Z));
 	M.AddCylinder(W(E, N, Z), R, R, WallH, 12, ErtCol::Vary(Wall, 0.08f, S), false);
 	M.AddCylinder(W(E, N, Z + WallH), R * 1.08f, R * 0.12f, RoofH, 12, ErtCol::Vary(Roof, 0.08f, S + 1), true);
 	M.AddCylinder(W(E, N, Z + WallH + RoofH - 0.2f), R * 0.16f, R * 0.16f, 0.5f, 8, DarkWood);
@@ -591,6 +592,7 @@ void AErtWorldBuilder::AddFenceRect(FErtMeshData& M, float E, float N, float Z, 
 
 void AErtWorldBuilder::AddHouse(FErtMeshData& M, float E, float N, float Z, float HU, float HV, float H, float Yaw, const FLinearColor& C, int32 S)
 {
+	Interiors.Add(FVector4(E, N, FMath::Min(HU, HV) - 0.8f, Z));
 	const FRotator R(0, Yaw, 0);
 	const FLinearColor Wall = ErtCol::Vary(C, 0.12f, S);
 	M.AddBox(W(E, N, Z + H * 0.5f), FVector(HV, HU, H * 0.5f) * 100.f, Wall, R);
@@ -2726,10 +2728,24 @@ void AErtWorldBuilder::BuildProps()
 			if (GetWorld()->LineTraceSingleByChannel(Hit, Wp + FVector(0, 0, 400.f), Wp + FVector(0, 0, 20.f), ECC_Visibility, Q)) continue;   // ustida narsa bor (tom)
 			if (GetWorld()->OverlapAnyTestByChannel(Wp + FVector(0, 0, 60.f), FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(70.f), Q)) continue;   // devor/uy yonida
 			UStaticMesh* Mesh = Fab.Props[RS.RandRange(0, Fab.Props.Num() - 1)];
-			const float TargetH = RS.FRandRange(0.7f, 1.1f);
-			FabComp(Mesh, true)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), Wp, FVector(FErtFabLib::ScaleToHeight(Mesh, TargetH))), true);
+			const float TargetR = RS.FRandRange(0.45f, 0.75f);   // maksimal yarim o'lcham (m) - yupqa taxtalar ulkan bo'lmasin
+			FabComp(Mesh, true)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), Wp, FVector(FErtFabLib::ScaleToRadius(Mesh, TargetR))), true);
 			++i; ++Placed;
 		}
 	}
-	UE_LOG(LogErtugrul, Log, TEXT("Buyumlar (Fab): %d"), Placed);
+	// Ichki jihozlar: har o'tov/uyga 1-3 buyum (trace tekshiruvisiz - tom ostida), devordan uzoqroq
+	int32 Inside = 0;
+	for (const FVector4& In : Interiors)
+	{
+		const int32 Cnt = RS.RandRange(1, 3);
+		for (int32 i = 0; i < Cnt; ++i)
+		{
+			const float A = RS.FRand() * 2.f * PI, R = RS.FRandRange(0.3f, 0.8f) * In.Z;
+			const float E = In.X + FMath::Cos(A) * R, N = In.Y + FMath::Sin(A) * R;
+			UStaticMesh* Mesh = Fab.Props[RS.RandRange(0, Fab.Props.Num() - 1)];
+			FabComp(Mesh, false)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), W(E, N, In.W), FVector(FErtFabLib::ScaleToRadius(Mesh, RS.FRandRange(0.3f, 0.5f)))), true);
+			++Inside;
+		}
+	}
+	UE_LOG(LogErtugrul, Log, TEXT("Buyumlar (Fab): %d tashqarida, %d ichkarida (%d xona)"), Placed, Inside, Interiors.Num());
 }

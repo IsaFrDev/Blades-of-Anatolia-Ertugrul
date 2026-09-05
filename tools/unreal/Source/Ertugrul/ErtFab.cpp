@@ -73,6 +73,8 @@ void FErtFabLib::Scan()
 			else if (Name.Contains(TEXT("grass")) || Name.Contains(TEXT("fern")) || Name.Contains(TEXT("plant")) || Name.Contains(TEXT("clover"))) Target = &Grass;
 			if (!Target) continue;
 			if (Name.Contains(TEXT("_lod")) && !Name.EndsWith(TEXT("lod0"))) continue;
+			// Ko'p qismli importlarning qism-meshlari (SM_PH_x_1, _2 ...): buyumlar uchun faqat asosiy mesh
+			if (Target == &Props) { int32 Us = -1; if (Name.FindLastChar(TEXT('_'), Us) && Us + 1 < Name.Len() && FChar::IsDigit(Name[Us + 1]) && Name.Mid(Us + 1).IsNumeric() && Name.Mid(Us + 1).Len() <= 2 && !Name.Contains(TEXT("_0"))) continue; }
 			if (UStaticMesh* M = Cast<UStaticMesh>(A.GetAsset())) { Target->AddUnique(M); ++Found; }
 		}
 	}

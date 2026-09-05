@@ -56,17 +56,26 @@ float3 col = VC.rgb;
 float m;
 if (st == 0)
 {
-	// Auto-qatlamlar: qiyalikda qoya, 75 m dan yuqorida qor, tekis pastlikda ko'lmak
+	// Auto-qatlamlar teksturadan: o't/tuproq (relyef rangi bo'yicha), qum (cho'l), qiyalikda qoya, 75 m dan yuqorida qor, ko'lmak
 	float slope = 1.0 - saturate((N.z - 0.62) / 0.28);
-	float rockH = HROCK(uv * 0.5);
-	float3 rockC = float3(0.42, 0.40, 0.37) * (0.62 + 0.55 * saturate(rockH + 0.25));
-	float3 grassC = col * (0.72 + 0.55 * h);
+	float lum = dot(VC.rgb, float3(0.3, 0.5, 0.2));
+	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.75) * 3.0);
+	float sandM = saturate((lum - 0.42) * 6.0) * dry;
+	float3 gD = lerp(GrassD1, GrassD2, 0.45);
+	float3 dD = lerp(DirtD1, DirtD2, 0.45);
+	float3 sD = SandD;
+	float3 rD = RockD;
+	float3 nD = SnowD;
+	float3 base = lerp(gD, dD, dry);
+	base = lerp(base, sD, sandM);
+	float3 tint = VC.rgb / max(lum, 0.05);
+	base *= lerp(float3(1, 1, 1), tint, 0.6) * (0.82 + 0.1 * VN(uv * 0.5));
 	float snow = saturate((Pm.z - 75.0) / 18.0) * saturate((N.z - 0.55) / 0.3);
 	float puddle = (N.z > 0.996 && Pm.z < 20.0) ? smoothstep(0.86, 0.90, VN(uv * 0.35 + 7.3)) * smoothstep(0.62, 0.74, VN(uv * 0.06 + 3.1)) : 0.0;
-	col = lerp(grassC, rockC, slope);
-	col = lerp(col, float3(0.92, 0.94, 0.98) * (0.85 + 0.15 * h), snow);
+	col = lerp(base, rD, slope);
+	col = lerp(col, nD, snow);
 	col = lerp(col, float3(0.20, 0.24, 0.27), puddle * 0.75);
-	h = lerp(h, rockH, slope);
+	h = lerp(h, HROCK(uv * 0.5), slope);
 	if (puddle > 0.5) h = 1.5;   // roughness tuguni uchun ko'lmak belgisi
 }
 else if (st == 1) { col *= 0.88 + 0.18 * h + 0.06 * (VN(uv * 25.0) - 0.5); }
@@ -88,6 +97,23 @@ return float4(saturate(col), h);
 """
 
 CODE_NORMAL = PRE + r"""
+if (st == 0)
+{
+	float slope = 1.0 - saturate((N.z - 0.62) / 0.28);
+	float lum = dot(VC.rgb, float3(0.3, 0.5, 0.2));
+	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.75) * 3.0);
+	float sandM = saturate((lum - 0.42) * 6.0) * dry;
+	float snow = saturate((Pm.z - 75.0) / 18.0) * saturate((N.z - 0.55) / 0.3);
+	float3 tg = GrassN, td = DirtN, ts = SandN, tr = RockN, tn = SnowN;   // Normal sampler: allaqachon -1..1
+	float3 t = lerp(lerp(lerp(tg, td, dry), ts, sandM), tr, slope);
+	t = lerp(t, tn, snow);
+	t.xy *= 0.8;
+	t = normalize(t);
+	// Relyef normali: XY tekislik bo'yicha, vertex normaliga aralashtiriladi (qiyaliklarda ham to'g'ri)
+	float3 n0 = normalize(float3(t.x, t.y, t.z) + N * 1.2);
+	float puddle = (N.z > 0.996 && Pm.z < 20.0) ? smoothstep(0.86, 0.90, VN(uv * 0.35 + 7.3)) * smoothstep(0.62, 0.74, VN(uv * 0.06 + 3.1)) : 0.0;
+	return normalize(lerp(n0, N, puddle));
+}
 float e = (st == 1 || st == 3 || st == 5 || st == 7 || st == 9 || st == 13 || st == 14) ? 0.002 : (st == 11) ? 0.03 : 0.015;
 float bump = (st == 0) ? (1.0 - saturate((N.z - 0.62) / 0.28)) * 0.1 + 0.06 : (st == 1) ? 0.004 : (st == 2) ? 0.10 : (st == 3) ? 0.012 : (st == 4) ? 0.05 : (st == 5) ? 0.03 : (st == 6) ? 0.12 : (st == 7) ? 0.02 : (st == 8) ? 0.08 : (st == 9) ? 0.004 : (st == 11) ? 0.16 : (st == 12) ? 0.06 : (st == 13) ? 0.03 : (st == 14) ? 0.01 : (st == 15) ? 0.05 : (st == 16) ? 0.12 : 0.02;
 float h0 = HF(uv);
@@ -122,13 +148,21 @@ return (s >= 0.46 && s < 0.56) ? 0.7 : 0.0;
 """
 
 
+TEX_ROLES = ["grass", "dirt", "rock", "sand", "snow"]
+TEX_INPUTS = ["GrassD1", "GrassD2", "DirtD1", "DirtD2", "SandD", "RockD", "SnowD", "GrassN", "DirtN", "SandN", "RockN", "SnowN"]
+
+
+def tex_exists(role, suffix):
+    return EAL.does_asset_exist("/Game/ErtAssets/Tex/T_%s_%s" % (role, suffix))
+
+
 def custom(m, code, name, x, y, out_type):
     cu = MEL.create_material_expression(m, unreal.MaterialExpressionCustom, x, y)
     cu.set_editor_property("code", code)
     cu.set_editor_property("description", name)
     cu.set_editor_property("output_type", out_type)
     ins = []
-    for nm in ["WP", "N", "VC"]:
+    for nm in ["WP", "N", "VC"] + TEX_INPUTS:
         ci = unreal.CustomInput()
         ci.set_editor_property("input_name", nm)
         ins.append(ci)
@@ -150,10 +184,43 @@ def make():
     vc4 = MEL.create_material_expression(m, unreal.MaterialExpressionAppendVector, -1000, 200)
     MEL.connect_material_expressions(vc, "", vc4, "A")
     MEL.connect_material_expressions(vc, "A", vc4, "B")
+    # Dunyo koordinatali UV (XY tekisligi): WorldPosition.xy * masshtab
+    wpm = MEL.create_material_expression(m, unreal.MaterialExpressionComponentMask, -1500, 500)
+    wpm.set_editor_property("r", True); wpm.set_editor_property("g", True); wpm.set_editor_property("b", False); wpm.set_editor_property("a", False)
+    MEL.connect_material_expressions(wp, "", wpm, "")
+    def uvnode(scale, y):
+        k = MEL.create_material_expression(m, unreal.MaterialExpressionConstant, -1500, y)
+        k.set_editor_property("r", scale)
+        mu = MEL.create_material_expression(m, unreal.MaterialExpressionMultiply, -1400, y)
+        MEL.connect_material_expressions(wpm, "", mu, "A"); MEL.connect_material_expressions(k, "", mu, "B")
+        return mu
+    uv1 = uvnode(0.0033, 560)    # 3 m plitka
+    uv2 = uvnode(0.0009, 620)    # 11 m plitka
+    uvs = uvnode(0.005, 680)     # qum 2 m
+    uvr = uvnode(0.0022, 740)    # qoya 4.5 m
+    texnodes = {}
+    tyy = [800]
+    def sample(key, role, suffix, uvn):
+        path = "/Game/ErtAssets/Tex/T_%s_%s" % (role, suffix)
+        ts = MEL.create_material_expression(m, unreal.MaterialExpressionTextureSample, -1200, tyy[0]); tyy[0] += 70
+        t = EAL.load_asset(path) if EAL.does_asset_exist(path) else None
+        if t is None:
+            t = EAL.load_asset("/Engine/EngineResources/DefaultTexture") if suffix == "D" else EAL.load_asset("/Engine/EngineMaterials/DefaultNormal")
+            log("tekstura yo'q, standart: " + path)
+        ts.set_editor_property("texture", t)
+        ts.set_editor_property("sampler_type", unreal.MaterialSamplerType.SAMPLERTYPE_NORMAL if suffix == "N" else unreal.MaterialSamplerType.SAMPLERTYPE_COLOR)
+        MEL.connect_material_expressions(uvn, "", ts, "UVs")
+        texnodes[key] = ts
+    sample("GrassD1", "grass", "D", uv1); sample("GrassD2", "grass", "D", uv2)
+    sample("DirtD1", "dirt", "D", uv1); sample("DirtD2", "dirt", "D", uv2)
+    sample("SandD", "sand", "D", uvs); sample("RockD", "rock", "D", uvr); sample("SnowD", "snow", "D", uv1)
+    sample("GrassN", "grass", "N", uv1); sample("DirtN", "dirt", "N", uv1); sample("SandN", "sand", "N", uvs); sample("RockN", "rock", "N", uvr); sample("SnowN", "snow", "N", uv1)
     for cu in (ccol, cnrm):
         MEL.connect_material_expressions(wp, "", cu, "WP")
         MEL.connect_material_expressions(nw, "", cu, "N")
         MEL.connect_material_expressions(vc4, "", cu, "VC")
+        for key, ts in texnodes.items():
+            MEL.connect_material_expressions(ts, "RGB", cu, key)
     rgb = MEL.create_material_expression(m, unreal.MaterialExpressionComponentMask, -450, -150)
     rgb.set_editor_property("r", True); rgb.set_editor_property("g", True); rgb.set_editor_property("b", True); rgb.set_editor_property("a", False)
     MEL.connect_material_expressions(ccol, "", rgb, "")

@@ -2,34 +2,115 @@
  "_izoh": "Skeletli personajlar. Profil (hero/enemy/npc) da mesh bo'lsa protsedural tana o'rniga ishlatiladi. mesh - USkeletalMesh yo'li, anims - kalit: yo'l yoki yo'llar ro'yxati (idle, walk, run, fall, jump, attack, heavy, kick, hurt, death, block, crouch, crouchwalk, ride, swim). yaw/z/scale - mesh joylashuvi kapsulaga nisbatan. sword - qilich biriktiriladigan suyak va joylashuv. Blender'dan chiqqan FBX ni /Game/ErtAssets ga import qilib shu yerga yo'lini yozing.",
  "hero": {
   "mesh": "/Game/Characters/Mannequins/Meshes/SKM_Manny_Simple",
-  "yaw": -90, "z": 0, "scale": 1.0, "walk_ref": 200, "run_ref": 520,
+  "yaw": -90,
+  "z": 0,
+  "scale": 1.0,
+  "walk_ref": 200,
+  "run_ref": 520,
   "anims": {
    "idle": "/Game/Characters/Mannequins/Anims/Unarmed/MM_Idle",
    "walk": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd",
    "run": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd",
    "jump": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Jump",
    "fall": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Fall_Loop",
-   "attack": ["/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01", "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_02", "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_03"],
+   "attack": [
+    "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01",
+    "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_02",
+    "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_03"
+   ],
    "heavy": "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_ChargedAttack",
-   "hurt": ["/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_01", "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_02", "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Med_01"],
-   "death": ["/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01", "/Game/Characters/Mannequins/Anims/Death/MM_Death_Back_01", "/Game/Characters/Mannequins/Anims/Death/MM_Death_Left_01", "/Game/Characters/Mannequins/Anims/Death/MM_Death_Right_01"]
+   "death": [
+    "/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01",
+    "/Game/Characters/Mannequins/Anims/Death/MM_Death_Back_01",
+    "/Game/Characters/Mannequins/Anims/Death/MM_Death_Left_01",
+    "/Game/Characters/Mannequins/Anims/Death/MM_Death_Right_01"
+   ]
   },
-  "sword": { "socket": "hand_r", "loc": [0, 0, 0], "rot": [0, 0, 0] }
+  "sword": {
+   "socket": "hand_r",
+   "loc": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ]
+  },
+  "_hurt_izoh": "Mannequin HitReact animatsiyalari additiv (SingleNode bilan ishlamaydi) - hurt yo'q; Blender'dan oddiy hurt qo'shilsa ishlaydi"
  },
  "enemy": {
   "mesh": "/Game/Characters/Mannequins/Meshes/SKM_Quinn_Simple",
-  "yaw": -90, "z": 0, "scale": 1.0, "walk_ref": 200, "run_ref": 520,
+  "yaw": -90,
+  "z": 0,
+  "scale": 1.0,
+  "walk_ref": 200,
+  "run_ref": 520,
   "anims": {
    "idle": "/Game/Characters/Mannequins/Anims/Unarmed/MM_Idle",
    "walk": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd",
    "run": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd",
    "fall": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Fall_Loop",
-   "attack": ["/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01", "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_02"],
+   "attack": [
+    "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01",
+    "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_02"
+   ],
    "heavy": "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_ChargedAttack",
-   "hurt": ["/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_01", "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Med_01"],
-   "death": ["/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01", "/Game/Characters/Mannequins/Anims/Death/MM_Death_Back_01", "/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_02"]
+   "death": [
+    "/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01",
+    "/Game/Characters/Mannequins/Anims/Death/MM_Death_Back_01",
+    "/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_02"
+   ]
   },
-  "sword": { "socket": "hand_r", "loc": [0, 0, 0], "rot": [0, 0, 0] }
+  "sword": {
+   "socket": "hand_r",
+   "loc": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ]
+  },
+  "_hurt_izoh": "Mannequin HitReact animatsiyalari additiv (SingleNode bilan ishlamaydi) - hurt yo'q; Blender'dan oddiy hurt qo'shilsa ishlaydi"
  },
- "npc": { "mesh": "" }
+ "npc": {
+  "mesh": ""
+ },
+ "horse": {
+  "mesh": "",
+  "yaw": -90,
+  "z": 0,
+  "scale": 1.0,
+  "walk_ref": 250,
+  "trot_ref": 520,
+  "gallop_ref": 950,
+  "saddle": [
+   -8,
+   0,
+   66
+  ],
+  "saddle_socket": "",
+  "anims": {
+   "idle": "",
+   "walk": "",
+   "trot": "",
+   "gallop": "",
+   "jump": "",
+   "death": ""
+  },
+  "_izoh": "Blender'dan ot FBX: mesh yo'lini va animatsiyalarni yozing; bo'sh bo'lsa protsedural ot"
+ },
+ "camel": {
+  "mesh": "",
+  "yaw": -90,
+  "z": 0,
+  "scale": 1.0,
+  "anims": {}
+ }
 }

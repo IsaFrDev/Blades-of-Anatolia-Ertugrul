@@ -108,6 +108,8 @@ private:
 	void BuildRocks();
 	void BuildGrass();
 	void BuildProps();
+	/** O'tov/uy ichkarisi: E, N, R (m), Z (pol balandligi) - BuildProps buyumlarni ichkariga qo'yadi */
+	TArray<FVector4> Interiors;
 
 public:
 	float RiverE(float N) const;

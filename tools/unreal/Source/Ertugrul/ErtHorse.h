@@ -51,6 +51,13 @@ private:
 	UPROPERTY(Transient) TArray<TObjectPtr<UProceduralMeshComponent>> LowerLegs;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> TailMesh;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> NeckMesh;
+	// Skeletli rejim (character.json: "horse" / "camel"): SingleNode, tezlikka qarab idle/walk/trot/gallop/jump
+	UPROPERTY(Transient) TObjectPtr<class USkeletalMeshComponent> Skel;
+	TMap<FString, TArray<TObjectPtr<class UAnimSequence>>> SkelAnims;
+	UPROPERTY(Transient) TObjectPtr<class UAnimSequence> CurAnim;
+	float WalkRef = 250.f, TrotRef = 520.f, GallopRef = 950.f;
+	bool TryBuildSkeletal();
+	void SkelPlay(const FString& Key, float Rate, const TCHAR* Fallback = nullptr);
 	FVector2D Input = FVector2D::ZeroVector;
 	bool bGallopIn = false, bBuilt = false;
 	float CurSpeed = 0.f, Phase = 0.f, WanderT = 0.f, HeadBob = 0.f;
