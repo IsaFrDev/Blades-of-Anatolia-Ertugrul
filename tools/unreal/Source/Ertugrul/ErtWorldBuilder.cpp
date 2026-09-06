@@ -221,7 +221,10 @@ float AErtWorldBuilder::HeightAt(float E, float N) const
 	// Janubiy cho'l: barxanlar (N < -700)
 	{
 		const float Des = Smooth01((-N - 700.f) / 140.f);
-		const float Dune = 10.f + 5.f * Noise(E, N, 0.004f) + 4.f * FMath::Abs(Noise(E + 300.f, N, 0.012f)) + 1.2f * FMath::Abs(Noise(E, N, 0.045f));
+		// Damashq atrofida barxanlar past (shahar devori ko'milmasin)
+		const float DamD = FMath::Sqrt(FMath::Square(FMath::Max(0.f, FMath::Abs(E - DamE) - DamHalfE)) + FMath::Square(FMath::Max(0.f, FMath::Abs(N - DamN) - DamHalfN)));
+		const float DuneAmp = 0.25f + 0.75f * Smooth01((DamD - 60.f) / 220.f);
+		const float Dune = 10.f + (5.f * Noise(E, N, 0.004f) + 4.f * FMath::Abs(Noise(E + 300.f, N, 0.012f)) + 1.2f * FMath::Abs(Noise(E, N, 0.045f))) * DuneAmp;
 		H = FMath::Lerp(H, Dune, Des);
 	}
 	// Domaniç yaylovi: keng baland gumbaz (yassi tepa), mayin to'lqinlar
@@ -298,7 +301,7 @@ float AErtWorldBuilder::HeightAt(float E, float N) const
 	{
 		const float DX = FMath::Max(0.f, FMath::Abs(E - DamE) - DamHalfE), DY = FMath::Max(0.f, FMath::Abs(N - DamN) - DamHalfN);
 		const float DD = FMath::Sqrt(DX * DX + DY * DY);
-		H = FMath::Lerp(H, DamZ, 1.f - Smooth01((DD - 15.f) / 45.f));
+		H = FMath::Lerp(H, DamZ, 1.f - Smooth01((DD - 20.f) / 90.f));
 	}
 	// Voha ko'li va oba yonidagi ko'l: qirg'oq tekis, o'rtasi chuqur
 	{

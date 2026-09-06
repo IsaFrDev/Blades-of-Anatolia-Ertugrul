@@ -39,7 +39,8 @@
     0
    ]
   },
-  "_hurt_izoh": "Mannequin HitReact animatsiyalari additiv (SingleNode bilan ishlamaydi) - hurt yo'q; Blender'dan oddiy hurt qo'shilsa ishlaydi"
+  "_hurt_izoh": "Mannequin HitReact animatsiyalari additiv (SingleNode bilan ishlamaydi) - hurt yo'q; Blender'dan oddiy hurt qo'shilsa ishlaydi",
+  "_ride_izoh": "Mannequin'da otda o'tirish animatsiyasi yo'q: Mixamo'dan 'Horse Riding Idle' (Manny skeleti uchun retarget) ni /Game/ErtAssets ga import qilib anims.ride ga yo'lini yozing"
  },
  "enemy": {
   "mesh": "/Game/Characters/Mannequins/Meshes/SKM_Quinn_Simple",
