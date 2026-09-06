@@ -206,14 +206,15 @@ void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, floa
 			// IJRO: gangigan yoki holdan toygan (<25%) raqib - bir zarbda
 			const bool bExecute = Kind != 3 && ((E->IsStaggered() && !E->IsBoss()) || E->GetHealth() < E->GetMaxHealth() * E->ExecuteThreshold());
 			if (bExecute) { ExecuteFlash = 1.f; if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.9f, 0.25f); }
-			const float Dmg = bExecute ? 999.f : AttackDamage * DamageMul * (RiposteT > 0.f ? 2.f : 1.f);
+			const float Dmg = bExecute ? 999.f : AttackDamage * WarriorMelee * DamageMul * (RiposteT > 0.f ? 2.f : 1.f);
 			const float HpBefore = E->GetHealth();
 			E->ApplyHit(Dmg, this, bGuardBreak || bExecute);
 			const bool bHit = E->GetHealth() < HpBefore || E->IsDead();
 			if (!bHit) { ShakeT = FMath::Max(ShakeT, 0.08f); AErtBurst::Sparks(GetWorld(), E->GetActorLocation() + FVector(0, 0, 50.f) + (GetActorLocation() - E->GetActorLocation()).GetSafeNormal2D() * 35.f, (GetActorLocation() - E->GetActorLocation()).GetSafeNormal2D()); continue; }   // to'sildi
 			AErtBurst::Blood(GetWorld(), E->GetActorLocation() + FVector(0, 0, 60.f), (E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D() + FVector(0, 0, 0.3f), bExecute ? 2.2f : (Kind == 2 ? 1.5f : 1.f));
-			if (StaggerSec > 0.f && !E->IsDead()) E->Stagger(StaggerSec);
-			if (Knock > 0.f && !E->IsDead()) E->LaunchCharacter((E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D() * Knock + FVector(0, 0, 120.f), true, true);
+			AddAlp(7.f);
+			if (StaggerSec + WarriorStagger > 0.f && !E->IsDead()) E->Stagger(StaggerSec + WarriorStagger);
+			if (Knock * WarriorKnock > 0.f && !E->IsDead()) E->LaunchCharacter((E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D() * Knock * WarriorKnock + FVector(0, 0, 120.f), true, true);
 			ShakeT = FMath::Max(ShakeT, bExecute ? 0.3f : (Kind == 2 ? 0.2f : 0.12f));
 			if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->HitStop(bExecute ? 0.22f : (Kind == 2 ? 0.12f : 0.07f));
 			FErtAudio::PlaySfx(GetWorld(), E->IsDead() ? TEXT("kill") : TEXT("hit"), E->GetActorLocation(), 1.f, FMath::FRandRange(0.9f, 1.1f));
@@ -354,7 +355,7 @@ void AErtCharacter::OnShoot()
 	else if (GetWorld()->LineTraceSingleByChannel(H, A, A + Dir * 6000.f, ECC_Visibility, Q)) Target = H.ImpactPoint;
 	const FVector Start = GetActorLocation() + GetActorForwardVector() * 50.f + FVector(0, 0, 40.f);
 	FVector D2 = (Target - Start).GetSafeNormal(); D2.Z += FVector::Dist(Start, Target) / 14000.f;
-	if (AErtArrow* Ar = GetWorld()->SpawnActor<AErtArrow>(AErtArrow::StaticClass(), Start, D2.Rotation())) Ar->Launch(D2, 4200.f, ArrowDamage, true, this);
+	if (AErtArrow* Ar = GetWorld()->SpawnActor<AErtArrow>(AErtArrow::StaticClass(), Start, D2.Rotation())) Ar->Launch(D2, 4200.f, ArrowDamage * WarriorArrow, true, this);
 }
 
 void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Attacker, bool bUnblockable)
@@ -366,7 +367,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	if (bBlocking && bFacing && BlockT < 0.25f && !bUnblockable)
 	{
 		// PARRY: zarar yo'q, raqib gangiydi, keyingi zarba ikki baravar
-		ParryFlash = 1.f; RiposteT = 1.6f;
+		ParryFlash = 1.f; RiposteT = 1.6f; AddAlp(20.f);
 		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.5f, 0.15f);
 		FErtAudio::PlaySfx(GetWorld(), TEXT("parry"), GetActorLocation(), 1.f);
 		Stamina = FMath::Min(StaminaMax, Stamina + 6.f);
@@ -623,6 +624,10 @@ void AErtCharacter::UpdateShotScript(float Dt)
 		Teleport(E0, N0, Z0 + 1.5f, -6.f, 0.f);
 	}
 	if (At(54.0f)) TakeShot(TEXT("enemy"));
+	if (At(54.02f)) { SetWarrior(1); AlpBar = 100.f; }
+	if (At(54.05f)) { OnSkill(); }
+	if (At(54.08f)) TakeShot(TEXT("skill_turgut"));
+	if (At(54.09f)) SetWarrior(0);
 	if (At(54.1f))
 	{
 		// Jang effektlari: personaj ko'rinadi, o'rtadagi dushmanga yaqin turib zarba beradi
@@ -687,6 +692,11 @@ void AErtCharacter::BuildInput()
 	IA_Inventory = MakeAction(TEXT("IA_ErtInventory"), EInputActionValueType::Boolean); IA_Inventory->bTriggerWhenPaused = true;
 	IA_Potion = MakeAction(TEXT("IA_ErtPotion"), EInputActionValueType::Boolean);
 	IA_Kick = MakeAction(TEXT("IA_ErtKick"), EInputActionValueType::Boolean);
+	IA_Skill = MakeAction(TEXT("IA_ErtSkill"), EInputActionValueType::Boolean);
+	IA_Whistle = MakeAction(TEXT("IA_ErtWhistle"), EInputActionValueType::Boolean);
+	IA_Warrior1 = MakeAction(TEXT("IA_ErtWarrior1"), EInputActionValueType::Boolean);
+	IA_Warrior2 = MakeAction(TEXT("IA_ErtWarrior2"), EInputActionValueType::Boolean);
+	IA_Warrior3 = MakeAction(TEXT("IA_ErtWarrior3"), EInputActionValueType::Boolean);
 	// Menyu harakatlari pauzada ham ishlaydi
 	for (UInputAction* A : { IA_Menu, IA_MenuUp, IA_MenuDown, IA_Confirm, IA_MenuLeft, IA_MenuRight, IA_Settings, IA_Map, IA_Choice1, IA_Choice2, IA_Choice3, IA_Choice4, IA_Jump }) if (A) A->bTriggerWhenPaused = true;
 
@@ -751,11 +761,14 @@ void AErtCharacter::BuildInput()
 	Map(IA_Inventory, EKeys::I); Map(IA_Inventory, EKeys::Gamepad_DPad_Right);
 	Map(IA_Potion, EKeys::H); Map(IA_Potion, EKeys::Gamepad_DPad_Left);
 	Map(IA_Kick, EKeys::V); Map(IA_Kick, EKeys::Gamepad_RightTrigger);
+	Map(IA_Skill, EKeys::F); Map(IA_Skill, EKeys::Gamepad_LeftShoulder);
+	Map(IA_Whistle, EKeys::Z); Map(IA_Whistle, EKeys::Gamepad_DPad_Down);
+	Map(IA_Warrior1, EKeys::F1); Map(IA_Warrior2, EKeys::F2); Map(IA_Warrior3, EKeys::F3);
 }
 
 const TArray<FString>& AErtCharacter::BindableActions()
 {
-	static const TArray<FString> A = { TEXT("Jump"), TEXT("Sprint"), TEXT("Crouch"), TEXT("Walk"), TEXT("Attack"), TEXT("Block"), TEXT("Shoot"), TEXT("Interact"), TEXT("Dodge"), TEXT("Lock"), TEXT("Kick"), TEXT("Inventory"), TEXT("Potion"), TEXT("Map"), TEXT("Settings") };
+	static const TArray<FString> A = { TEXT("Jump"), TEXT("Sprint"), TEXT("Crouch"), TEXT("Walk"), TEXT("Attack"), TEXT("Block"), TEXT("Shoot"), TEXT("Interact"), TEXT("Dodge"), TEXT("Lock"), TEXT("Kick"), TEXT("Inventory"), TEXT("Potion"), TEXT("Map"), TEXT("Settings"), TEXT("Skill"), TEXT("Whistle") };
 	return A;
 }
 
@@ -763,7 +776,7 @@ UInputAction* AErtCharacter::ActionByName(const FString& N) const
 {
 	if (N == TEXT("Jump")) return IA_Jump; if (N == TEXT("Sprint")) return IA_Sprint; if (N == TEXT("Crouch")) return IA_Crouch; if (N == TEXT("Walk")) return IA_Walk;
 	if (N == TEXT("Attack")) return IA_Attack; if (N == TEXT("Block")) return IA_Block; if (N == TEXT("Shoot")) return IA_Shoot; if (N == TEXT("Interact")) return IA_Interact;
-	if (N == TEXT("Dodge")) return IA_Dodge; if (N == TEXT("Lock")) return IA_Lock; if (N == TEXT("Kick")) return IA_Kick; if (N == TEXT("Inventory")) return IA_Inventory;
+	if (N == TEXT("Dodge")) return IA_Dodge; if (N == TEXT("Lock")) return IA_Lock; if (N == TEXT("Kick")) return IA_Kick; if (N == TEXT("Inventory")) return IA_Inventory; if (N == TEXT("Skill")) return IA_Skill; if (N == TEXT("Whistle")) return IA_Whistle;
 	if (N == TEXT("Potion")) return IA_Potion; if (N == TEXT("Map")) return IA_Map; if (N == TEXT("Settings")) return IA_Settings;
 	return nullptr;
 }
@@ -954,6 +967,11 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_Dodge, ETriggerEvent::Started, this, &AErtCharacter::OnDodge);
 	EIC->BindAction(IA_Inventory, ETriggerEvent::Started, this, &AErtCharacter::OnInventory);
 	EIC->BindAction(IA_Potion, ETriggerEvent::Started, this, &AErtCharacter::OnPotion);
+	EIC->BindAction(IA_Skill, ETriggerEvent::Started, this, &AErtCharacter::OnSkill);
+	EIC->BindAction(IA_Whistle, ETriggerEvent::Started, this, &AErtCharacter::OnWhistle);
+	EIC->BindAction(IA_Warrior1, ETriggerEvent::Started, this, &AErtCharacter::OnWarrior1);
+	EIC->BindAction(IA_Warrior2, ETriggerEvent::Started, this, &AErtCharacter::OnWarrior2);
+	EIC->BindAction(IA_Warrior3, ETriggerEvent::Started, this, &AErtCharacter::OnWarrior3);
 }
 
 void AErtCharacter::OnMove(const FInputActionValue& V)
@@ -1022,7 +1040,7 @@ void AErtCharacter::UpdateGait(float Dt)
 	else if (bWalkToggle) Gait = EErtGait::Walk;
 	else Gait = EErtGait::Jog;
 
-	float Speed = Gait == EErtGait::Sprint ? SprintSpeed : (Gait == EErtGait::Walk ? WalkSpeed : JogSpeed);
+	float Speed = (Gait == EErtGait::Sprint ? SprintSpeed : (Gait == EErtGait::Walk ? WalkSpeed : JogSpeed)) * WarriorSpeed;
 	// Nishab: tepaga sekin, pastga bir oz tez
 	const FVector Vel2D = CM->Velocity.GetSafeNormal2D();
 	const float Uphill = -FVector::DotProduct(Vel2D, FVector(FloorNormal.X, FloorNormal.Y, 0.f).GetSafeNormal()) * FMath::Sin(FMath::DegreesToRadians(SlopeDeg));
@@ -1176,6 +1194,7 @@ void AErtCharacter::Tick(float Dt)
 	UpdateCombat(Dt);
 	DodgeT = FMath::Max(0.f, DodgeT - Dt);
 	ComboWindowT = FMath::Max(0.f, ComboWindowT - Dt);
+	SkillFlash = FMath::Max(0.f, SkillFlash - Dt * 1.5f);
 	if (AttackHoldT >= 0.f)
 	{
 		AttackHoldT += Dt;
@@ -1372,4 +1391,95 @@ void AErtCharacter::UpdateAutoPlay(float Dt)
 			D->DebugCompletePhase(); AutoPhaseTeleports = 0; AutoPhaseT = 0.f;
 		}
 	}
+}
+
+
+// ---------------- Jangchilar, Alp mahorati, hushtak (raqobatchi tahlili: Ertugrul of Ulukayin) ----------------
+
+void AErtCharacter::SetWarrior(int32 W)
+{
+	if (!bInputEnabled || bDead || Horse) return;
+	Warrior = FMath::Clamp(W, 0, 2);
+	switch (Warrior)
+	{
+	case 1: WarriorMelee = 1.6f; WarriorArrow = 0.8f; WarriorSpeed = 0.92f; WarriorStagger = 0.45f; WarriorKnock = 1.6f; break;   // Turg'ut: bolta
+	case 2: WarriorMelee = 0.7f; WarriorArrow = 1.45f; WarriorSpeed = 1.12f; WarriorStagger = 0.f; WarriorKnock = 0.8f; break;   // Meryem: kamon
+	default: WarriorMelee = 1.f; WarriorArrow = 1.f; WarriorSpeed = 1.f; WarriorStagger = 0.f; WarriorKnock = 1.f; break;
+	}
+	if (Body)
+	{
+		Body->bAxe = Warrior == 1;
+		if (Warrior == 1) { Body->Kaftan = FLinearColor(0.20f, 0.16f, 0.12f); Body->Trim = FLinearColor(0.55f, 0.45f, 0.25f); Body->Cloak = FLinearColor(0.25f, 0.12f, 0.08f); }
+		else if (Warrior == 2) { Body->Kaftan = FLinearColor(0.18f, 0.28f, 0.38f); Body->Trim = FLinearColor(0.85f, 0.75f, 0.45f); Body->Cloak = FLinearColor(0.15f, 0.22f, 0.32f); }
+		else { Body->Kaftan = FLinearColor(0.35f, 0.08f, 0.07f); Body->Trim = FLinearColor(0.85f, 0.70f, 0.25f); Body->Cloak = FLinearColor(0.35f, 0.08f, 0.07f); }
+		Body->RefreshWeapon();
+	}
+	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = FString::Printf(TEXT("%s: %s"), WarriorName(), Warrior == 1 ? TEXT("bolta - sekin, kuchli, gangituvchi") : (Warrior == 2 ? TEXT("kamon +45%, tez, yashirinish") : TEXT("qilich - muvozanat"))); GM->ShopMsgT = 2.5f; }
+	UE_LOG(LogErtugrul, Log, TEXT("Jangchi: %s"), WarriorName());
+}
+
+void AErtCharacter::OnSkill()
+{
+	if (!bInputEnabled || bDead) return;
+	if (AlpBar < 100.f) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = FString::Printf(TEXT("Alp shkalasi %.0f%% - zarba va parry bilan to'ldiring"), AlpBar); GM->ShopMsgT = 1.5f; } return; }
+	AlpBar = 0.f; SkillFlash = 1.f;
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this));
+	if (Warrior == 2)
+	{
+		// Meryem: uch o'q (o'q sarflanmaydi)
+		const FVector Start = GetActorLocation() + FVector(0, 0, 60.f) + GetActorForwardVector() * 40.f;
+		const FVector Base = Cam ? Cam->GetForwardVector() : GetActorForwardVector();
+		for (int32 i = -1; i <= 1; ++i)
+		{
+			const FVector Dir = FRotator(0, i * 7.f, 0).RotateVector(Base) + FVector(0, 0, 0.03f);
+			if (AErtArrow* Ar = GetWorld()->SpawnActor<AErtArrow>(AErtArrow::StaticClass(), Start, Dir.Rotation())) Ar->Launch(Dir.GetSafeNormal(), 4400.f, ArrowDamage * WarriorArrow * 1.2f, true, this);
+		}
+		FErtAudio::PlaySfx(GetWorld(), TEXT("bowshot"), GetActorLocation(), 1.f, 0.9f);
+		if (Body) Body->TriggerAttack(1);
+		return;
+	}
+	const bool bSlam = Warrior == 1;
+	if (Body) Body->TriggerAttack(2);
+	AErtBurst::SwordArc(GetWorld(), GetActorLocation() + FVector(0, 0, 30.f), GetActorRotation().Yaw, 2);
+	AErtBurst::SwordArc(GetWorld(), GetActorLocation() + FVector(0, 0, 30.f), GetActorRotation().Yaw + 180.f, 2);
+	AErtBurst::Dust(GetWorld(), GetActorLocation(), bSlam ? 3.f : 1.5f);
+	FErtAudio::PlaySfx(GetWorld(), TEXT("swing"), GetActorLocation(), 1.f, 0.6f);
+	TArray<FOverlapResult> Hits;
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtSkill), false, this);
+	const float R = bSlam ? 420.f : 280.f;
+	if (GetWorld()->OverlapMultiByChannel(Hits, GetActorLocation(), FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(R), Q))
+	{
+		TSet<AActor*> Done;
+		for (const FOverlapResult& Hr : Hits)
+		{
+			AErtEnemy* E = Cast<AErtEnemy>(Hr.GetActor());
+			if (!E || Done.Contains(E) || E->IsAlly() || E->IsDead()) continue;
+			Done.Add(E);
+			E->ApplyHit(AttackDamage * WarriorMelee * (bSlam ? 1.3f : 1.9f), this, true);
+			if (E->IsDead()) { AddXP(E->XPValue()); continue; }
+			E->Stagger(bSlam ? 1.8f : 0.9f);
+			const FVector Away = (E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
+			E->LaunchCharacter(Away * (bSlam ? 700.f : 350.f) + FVector(0, 0, bSlam ? 320.f : 140.f), true, true);
+			AErtBurst::Blood(GetWorld(), E->GetActorLocation() + FVector(0, 0, 60.f), Away + FVector(0, 0, 0.3f), 1.4f);
+		}
+	}
+	ShakeT = FMath::Max(ShakeT, bSlam ? 0.45f : 0.25f);
+	if (GM) { GM->Rumble(bSlam ? 1.f : 0.7f, 0.4f); GM->HitStop(0.12f, 0.2f); }
+}
+
+void AErtCharacter::OnWhistle()
+{
+	if (!bInputEnabled || bDead || Horse) return;
+	AErtHorse* Best = nullptr; float BestD = 30000.f;
+	TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtHorse::StaticClass(), All);
+	for (AActor* A : All)
+	{
+		AErtHorse* Hs = Cast<AErtHorse>(A);
+		if (!Hs || Hs->IsDead() || Hs->IsMounted() || Hs->IsCamel()) continue;
+		const float D = FVector::Dist2D(Hs->GetActorLocation(), GetActorLocation());
+		if (D < BestD) { BestD = D; Best = Hs; }
+	}
+	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this));
+	if (Best) { Best->Summon(GetActorLocation()); if (GM) { GM->ShopMsg = FString::Printf(TEXT("Hushtak: ot kelmoqda (%.0f m)"), BestD / 100.f); GM->ShopMsgT = 2.f; } FErtAudio::PlaySfx(GetWorld(), TEXT("bowshot"), GetActorLocation(), 0.6f, 1.6f); }
+	else if (GM) { GM->ShopMsg = TEXT("Yaqinda ot yo'q (300 m)"); GM->ShopMsgT = 1.5f; }
 }

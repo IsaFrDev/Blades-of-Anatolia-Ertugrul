@@ -123,6 +123,10 @@ public:
 	/** 3D xarita aylantirish (chap/o'ng) */
 	void MapRotate(float DeltaYaw);
 	bool bGps = true;
+	/** Tush (Ulukayin mifi) rejimi: binafsha tuslash, tuman, tun */
+	bool bDream = false; float SavedDayT = 0.38f; FString SavedWeather;
+	void SetDream(bool bOn);
+	const FString& GetWeatherName() const;
 	// AC/GTA uslubidagi xarita: yo'l nuqtasi, kashf qilingan hududlar, sichqoncha boshqaruvi
 	FVector Waypoint = FVector::ZeroVector; bool bWaypoint = false;
 	void SetWaypoint(const FVector& W) { Waypoint = W; bWaypoint = true; }

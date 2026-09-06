@@ -278,6 +278,7 @@ void AErtMissionDirector::StopEpisode()
 	ClearEnemies();
 	ClearAllies();
 	ClearPhaseNpcs();
+	if (AErtGameMode* GMd = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) if (GMd->bDream) { GMd->SetDream(false); if (AErtCharacter* Hd = Hero()) if (!DreamReturn.IsNearlyZero()) Hd->ResetAt(DreamReturn + FVector(0, 0, 100.f), DreamReturnYaw); }
 	Phases.Reset(); Objectives.Reset(); Waves.Reset();
 	State = EErtMissionState::Inactive;
 	Cp.bValid = false;
@@ -426,6 +427,22 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 		P.Objectives.Add(O);
 		Phases.Add(P);
 	};
+	// Tush (Ulukayin mifi): Uludog' cho'qqisida 3 belgi (jumboq) yig'iladi, dunyo binafsha tumanda; tugagach qaytish
+	auto AddDream = [&]()
+	{
+		FErtPhase P; P.TitleKey = TEXT("ui.phase.dream"); P.bDream = true;
+		const float SE = UluE, SN = UluN;
+		P.DreamSpot = FVector(SN * 100.f, SE * 100.f, (World ? World->HeightAt(SE, SN) : 100.f) * 100.f);
+		FErtObjective O; O.Kind = EErtObjKind::Collect; O.LocKey = TEXT("ui.obj.dream"); O.Radius = 260.f; O.Target = 3;
+		for (int32 k = 0; k < 3; ++k)
+		{
+			const float A = 2.f * PI * k / 3.f + Rng.FRandRange(-0.4f, 0.4f), R = Rng.FRandRange(22.f, 48.f);
+			const float E = SE + FMath::Cos(A) * R, N = SN + FMath::Sin(A) * R;
+			O.Points.Add(FVector(N * 100.f, E * 100.f, (World ? World->HeightAt(E, N) : 100.f) * 100.f)); O.Collected.Add(false);
+		}
+		P.Objectives.Add(O);
+		Phases.Add(P);
+	};
 	auto AddDuel = [&]()
 	{
 		FErtPhase P; P.TitleKey = TEXT("ui.phase.duel");
@@ -523,6 +540,8 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 				Cursor = O.Point;
 			}
 		}
+		// Qo'lda ssenariyda ham har 4-epizodda tush bosqichi (2-o'rinda)
+		if (Phases.Num() >= 2 && E.GlobalIndex % 4 == 2) { bool bHas = false; for (const FErtPhase& Ph : Phases) bHas |= Ph.bDream; if (!bHas) { AddDream(); FErtPhase D = Phases.Last(); Phases.RemoveAt(Phases.Num() - 1); Phases.Insert(D, 1); } }
 		return;
 	}
 	const FString& A = E.Archetype;
@@ -532,9 +551,11 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 	else if (A == TEXT("INFILTRATION")) { AddTravel(2, false); AddStealth(FMath::Clamp(PerWave, 2, 4)); AddCollect(2); AddTravel(2, true); }
 	else if (A == TEXT("CHASE"))        { AddTravel(4, true); AddFight(1, false); AddTravel(2, true); AddDuel(); }
 	else if (A == TEXT("ESCORT"))       { AddTravel(2, false); AddDefend(30 + Tier * 6, 2); AddTravel(2, false); AddFight(1, false); }
-	else if (A == TEXT("RITUAL"))       { AddCollect(3); AddHunt(1); AddTravel(2, false); AddDuel(); }
+	else if (A == TEXT("RITUAL"))       { AddDream(); AddCollect(2); AddHunt(1); AddTravel(2, false); AddDuel(); }
 	else if (A == TEXT("COURT"))        { AddCollect(2); AddTravel(2, false); AddStealth(2); AddDuel(); }
 	else                                { AddTravel(2, false); AddCollect(3); AddStealth(2); AddFight(1, false); }
+	// Har 4-epizodda (global indeks % 4 == 2) ikkinchi bosqich - tush
+	if (Phases.Num() >= 2 && E.GlobalIndex % 4 == 2 && !Phases[1].bDream) { AddDream(); FErtPhase D = Phases.Last(); Phases.RemoveAt(Phases.Num() - 1); Phases.Insert(D, 1); }
 }
 
 void AErtMissionDirector::StartPhase(int32 Idx)
@@ -542,6 +563,12 @@ void AErtMissionDirector::StartPhase(int32 Idx)
 	if (!Phases.IsValidIndex(Idx)) return;
 	FErtPhase& P = Phases[Idx];
 	PhaseIdx = Idx; PhaseT = 0.f;
+	if (AErtGameMode* GMd = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
+	{
+		AErtCharacter* Hd = Hero();
+		if (P.bDream && Hd) { DreamReturn = Hd->GetActorLocation(); DreamReturnYaw = Hd->GetActorRotation().Yaw; Hd->ResetAt(P.DreamSpot + FVector(0, 0, 100.f), 0.f); GMd->SetDream(true); }
+		else if (GMd->bDream) { GMd->SetDream(false); if (Hd && !DreamReturn.IsNearlyZero()) Hd->ResetAt(DreamReturn + FVector(0, 0, 100.f), DreamReturnYaw); }
+	}
 	Objectives = P.Objectives;
 	Waves = P.Waves;
 	WaveIdx = 0;

@@ -457,3 +457,10 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Nanite folyaj meshlarida O'CHIRILGAN (`ue_leaf_test.py`): Nanite soddalashtirish barg geometriyasini yo'qotadi (5.8 da `shape_preservation` sozlamasi bilan sinash mumkin).
 - Skaner: `tree` -> Trees (island_tree), `fir` -> Pines, `shrub` -> Bushes, `grass` -> Grass; `BuildForest` Fab daraxtlarni 10/12 m balandlikka masshtablaydi, `BuildGrass` har 5-tupda Poly Haven o't meshi.
 - O't rangi: relyef shaderida to'q yashil tint (0.62, 1.06, 0.48), quruq aralashma kam; tola ranglari to'yingan yashil.
+
+## Raqobatchi tahlili asosidagi yangiliklar (docs/COMPETITOR_ULUKAYIN.md)
+- **Uch jangchi** (F1/F2/F3): Ertug'rul (qilich, 1.0), Turg'ut Alp (bolta: zarar 1.6x, tezlik 0.92, +0.45 s gangitish, uloqtirish 1.6x, bolta modeli), Meryem (kamon 1.45x, qilich 0.7x, tezlik 1.12, cho'kkanda dushman ko'rish masofasi 60%). `AErtCharacter::SetWarrior`, `Warrior*` ko'paytirgichlari.
+- **Alp mahorat shkalasi** (`AlpBar`, zarba +7, parry +20; HUD): F - Bo'ron qilichi (360°, 1.9x, gangitish), Yer zarbasi (420 sm radius, uloqtirish, 1.8 s gangitish, hit-stop), Uch o'q (o'q sarflanmaydi).
+- **Rangli hujum ko'rsatkichi**: dushman zarbasi oldidan sariq halqa PARRY (yengil), qizil DODGE (og'ir, `IsHeavyPending`).
+- **Ot hushtagi** (Z): 300 m ichidagi bo'sh ot yo'rtib/chopib keladi (`AErtHorse::Summon`).
+- **Tush bosqichi** ("Tush: Ulukayin"): RITUAL epizodlarida va har 4-epizodda (global indeks % 4 == 2) 2-bosqich; o'yinchi Uludog' cho'qqisiga o'tadi, tun + tuman + binafsha tuslash (`AErtGameMode::SetDream`), 3 belgi yig'iladi, so'ng avvalgi joyga qaytadi. Sinov: EP003 da o'tdi.

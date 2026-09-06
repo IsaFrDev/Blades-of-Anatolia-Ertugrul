@@ -136,6 +136,11 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Inventory;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Potion;
 	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Kick;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Skill;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Whistle;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Warrior1;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Warrior2;
+	UPROPERTY(Transient) TObjectPtr<UInputAction> IA_Warrior3;
 
 private:
 	void OnMenu();
@@ -150,7 +155,21 @@ public:
 	class AErtLoot* NearestLoot(float MaxDist) const;
 private:
 	void OnLock(); void OnDodge(); void UpdateLock(float Dt); void OnInventory(); void OnPotion();
-	void OnAttackPressed(); void OnAttackReleased(); void OnKick(); void DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, float Stagger, float Knock);
+	void OnAttackPressed(); void OnAttackReleased(); void OnKick();
+public:
+	// Jangchilar (raqobatchi tahlili): 0 Ertug'rul (qilich, muvozanat), 1 Turg'ut (bolta: sekin, kuchli, gangitadi), 2 Meryem (kamon, yashirinish, tez)
+	int32 Warrior = 0;
+	void SetWarrior(int32 W);
+	const TCHAR* WarriorName() const { return Warrior == 1 ? TEXT("Turg'ut Alp") : (Warrior == 2 ? TEXT("Meryem") : TEXT("Ertug'rul Bey")); }
+	float WarriorMelee = 1.f, WarriorArrow = 1.f, WarriorSpeed = 1.f, WarriorStagger = 0.f, WarriorKnock = 1.f;
+	/** Alp mahorat shkalasi (0..100): zarba +7, parry +20; F - maxsus zarba */
+	float AlpBar = 0.f;
+	void AddAlp(float V) { AlpBar = FMath::Clamp(AlpBar + V, 0.f, 100.f); }
+	float GetAlpBar() const { return AlpBar; }
+	const TCHAR* SkillName() const { return Warrior == 1 ? TEXT("Yer zarbasi") : (Warrior == 2 ? TEXT("Uch o'q") : TEXT("Bo'ron qilichi")); }
+	void OnSkill(); void OnWhistle(); void OnWarrior1() { SetWarrior(0); } void OnWarrior2() { SetWarrior(1); } void OnWarrior3() { SetWarrior(2); }
+	float SkillFlash = 0.f;
+private: void DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, float Stagger, float Knock);
 	float AttackHoldT = -1.f, ComboWindowT = 0.f; int32 ComboStep = 0; bool bHeavyDone = false;
 public:
 	int32 GetComboStep() const { return ComboStep; }

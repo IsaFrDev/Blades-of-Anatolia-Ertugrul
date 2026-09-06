@@ -279,6 +279,21 @@ void AErtHorse::Tick(float Dt)
 		CM->MaxWalkSpeed = FMath::Max(50.f, FMath::Abs(CurSpeed) * ((bSand && !bCamel) ? 0.75f : 1.f));
 		if (FMath::Abs(CurSpeed) > 5.f) AddMovementInput(GetActorForwardVector(), CurSpeed > 0 ? 1.f : -1.f);
 	}
+	else if (SummonT > 0.f)
+	{
+		// Hushtak: egasi tomon yo'rtish
+		SummonT -= Dt;
+		const FVector D = (SummonTo - GetActorLocation()).GetSafeNormal2D();
+		const float Dist = FVector::Dist2D(SummonTo, GetActorLocation());
+		if (Dist > 260.f && !D.IsNearlyZero())
+		{
+			CurSpeed = FMath::FInterpConstantTo(CurSpeed, Dist > 1500.f ? GallopSpeed * 0.8f : TrotSpeed, Dt, 400.f);
+			CM->MaxWalkSpeed = FMath::Max(80.f, CurSpeed);
+			SetActorRotation(FMath::RInterpTo(GetActorRotation(), FRotator(0, D.Rotation().Yaw, 0), Dt, 4.f));
+			AddMovementInput(GetActorForwardVector(), 1.f);
+		}
+		else { SummonT = 0.f; HomePos = GetActorLocation(); WanderTarget = HomePos; CurSpeed = 0.f; }
+	}
 	else
 	{
 		CurSpeed = FMath::FInterpConstantTo(CurSpeed, 0.f, Dt, 600.f);

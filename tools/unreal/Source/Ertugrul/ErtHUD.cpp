@@ -75,6 +75,16 @@ void AErtHUD::DrawHUD()
 		Bar(X, Y + 20 * Sc, 200 * Sc, 10 * Sc, H->GetStamina() / 100.f, FLinearColor(0.85f, 0.7f, 0.25f));
 		Bar(X, Y + 32 * Sc, 200 * Sc, 5 * Sc, (float)H->XP / H->XPToNext(), FLinearColor(0.4f, 0.7f, 1.f));
 		Text(FString::Printf(TEXT("%s %d   %s %d   Dori %d  Go'sht %d   Oltin %d   Daraja %d"), *L.Tr(TEXT("ui.hud.health")), (int32)H->GetHealth(), *L.Tr(TEXT("ui.hud.arrows")), H->GetArrows(), H->Potions, H->Meat, H->Gold, H->Level), X, Y + 40 * Sc, White, Sc);
+		// Jangchi va Alp mahorat shkalasi (F)
+		{
+			const float AX = X + 290 * Sc, AY = Y;
+			Text(FString::Printf(TEXT("%s   [F1/F2/F3]"), H->WarriorName()), AX, AY - 18 * Sc, Gold, 0.9f * Sc);
+			const bool bReady = H->GetAlpBar() >= 100.f;
+			Bar(AX, AY, 180 * Sc, 10 * Sc, H->GetAlpBar() / 100.f, bReady ? FLinearColor(0.4f, 0.9f, 1.f) : FLinearColor(0.2f, 0.55f, 0.85f));
+			Text(FString::Printf(TEXT("ALP %s: %s %s"), bReady ? TEXT("TAYYOR") : TEXT(""), H->SkillName(), bReady ? TEXT("[F]") : TEXT("")), AX, AY + 12 * Sc, bReady ? FLinearColor(0.5f, 0.95f, 1.f) : Grey, 0.85f * Sc);
+			if (H->SkillFlash > 0.f) Text(H->SkillName(), SW * 0.5f - TextWidth(H->SkillName(), 1.7f * Sc, true) * 0.5f, SH * 0.34f, FLinearColor(0.5f, 0.95f, 1.f, H->SkillFlash), 1.7f * Sc, true, true);
+		}
+		if (GM && GM->bDream) { Text(TEXT("TUSH"), SW * 0.5f - TextWidth(TEXT("TUSH"), 1.2f * Sc, true) * 0.5f, 18 * Sc, FLinearColor(0.8f, 0.6f, 1.f, 0.8f), 1.2f * Sc, true, true); }
 		if (H->LevelFlash > 0.f) Text(FString::Printf(TEXT("DARAJA %d!"), H->Level), SW * 0.5f - TextWidth(FString::Printf(TEXT("DARAJA %d!"), H->Level), 1.6f * Sc, true) * 0.5f, SH * 0.30f, FLinearColor(0.5f, 0.85f, 1.f, H->LevelFlash), 1.6f * Sc, true, true);
 		if (GM && GM->ShopMsgT > 0.f) Text(GM->ShopMsg, SW * 0.5f - TextWidth(GM->ShopMsg, Sc, false) * 0.5f, SH * 0.36f, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		if (H->GetComboWindow() > 0.f && H->GetComboStep() > 0) Text(FString::Printf(TEXT("x%d"), H->GetComboStep() + 1), SW * 0.5f + 120 * Sc, SH * 0.5f - 40 * Sc, FLinearColor(1.f, 0.7f, 0.3f, FMath::Min(1.f, H->GetComboWindow() * 2.f)), 1.3f * Sc, true, true);
@@ -184,7 +194,14 @@ void AErtHUD::DrawHUD()
 			const FVector S = Project(E->GetActorLocation() + FVector(0, 0, 130.f));
 			if (S.Z <= 0.f) continue;
 			Bar(S.X - 20 * Sc, S.Y, 40 * Sc, 5 * Sc, E->GetHealth() / E->GetMaxHealth(), Red);
-			if (E->IsWindingUp()) Text(TEXT("!"), S.X - 5 * Sc, S.Y - 30 * Sc, FLinearColor(1.f, 0.25f, 0.1f), 1.6f * Sc, true, true);
+			if (E->IsWindingUp())
+			{
+				// Rangli ko'rsatkich: sariq - yengil (parry/blok), qizil - og'ir (to'sib bo'lmaydi, dodge)
+				const bool bHeavy = E->IsHeavyPending();
+				const FLinearColor Cw = bHeavy ? FLinearColor(1.f, 0.2f, 0.1f) : FLinearColor(1.f, 0.85f, 0.2f);
+				Circle(S.X, S.Y - 34 * Sc, 10 * Sc, Cw, 16); Circle(S.X, S.Y - 34 * Sc, 5 * Sc, FLinearColor(0.1f, 0.05f, 0.02f), 10);
+				Text(bHeavy ? TEXT("DODGE") : TEXT("PARRY"), S.X - 18 * Sc, S.Y - 62 * Sc, Cw, 0.8f * Sc, true, true);
+			}
 			if (E == H->GetLockTarget()) { const float R = 22 * Sc; for (int32 k = 0; k < 4; ++k) { const float A = k * PI * 0.5f + PI * 0.25f; FCanvasLineItem Ln(FVector2D(S.X + FMath::Cos(A) * R, S.Y + 8 * Sc + FMath::Sin(A) * R), FVector2D(S.X + FMath::Cos(A + 0.9f) * R, S.Y + 8 * Sc + FMath::Sin(A + 0.9f) * R)); Ln.SetColor(Gold); Ln.LineThickness = 2.f; Canvas->DrawItem(Ln); } }
 		}
 	}

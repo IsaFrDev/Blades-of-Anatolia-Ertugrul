@@ -540,8 +540,19 @@ void UErtHeroBody::SkelBuildSword()
 	// Mannequin suyaklarida X o'qi barmoqlar tomon: tig' +X bo'ylab (mushtdan tashqariga), dasta -X
 	M.AddBox(FVector(-10, 0, 0), FVector(10, 1.6f, 1.6f), LeatherS);            // dasta (kaftda)
 	M.AddBox(FVector(2, 0, 0), FVector(1.5f, 1.5f, 7), TrimS);                   // qo'riqlovchi
-	M.AddBox(FVector(46, 0, 0), FVector(42, 0.6f, 3.2f), SteelS);                // tig'
-	M.AddSphere(FVector(-21, 0, 0), 2.f, 6, TrimS);                              // soqqa
+	if (bAxe)
+	{
+		// Bolta: uzun dasta, keng tig' (Turg'ut Alp)
+		M.AddCylinder(FVector(-12, 0, 0), 1.6f, 1.6f, 70.f, 8, ErtCol::Sty(FLinearColor(0.30f, 0.20f, 0.11f), ErtCol::StyleWood), true, FRotator(-90, 0, 0));
+		M.AddBox(FVector(52, 0, 9), FVector(6, 1.0f, 12), SteelS);                 // tig' (ikki tomonlama)
+		M.AddBox(FVector(52, 0, -9), FVector(6, 1.0f, 12), SteelS);
+		M.AddBox(FVector(52, 0, 0), FVector(4, 2.2f, 4), TrimS);                   // bog'lam
+	}
+	else
+	{
+		M.AddBox(FVector(46, 0, 0), FVector(42, 0.6f, 3.2f), SteelS);                // tig'
+		M.AddSphere(FVector(-21, 0, 0), 2.f, 6, TrimS);                              // soqqa
+	}
 	M.Commit(SkelSword, 0, false);
 }
 

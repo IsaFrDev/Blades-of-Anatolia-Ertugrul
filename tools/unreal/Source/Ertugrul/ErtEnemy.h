@@ -33,6 +33,8 @@ public:
 	bool IsStaggered() const { return StaggerT > 0.f; }
 	/** Zarba oldidan (ogohlantirish belgisi uchun) */
 	bool IsWindingUp() const { return HitPending > 0.f; }
+	/** Kutilayotgan zarba og'irmi (to'sib bo'lmaydi - qochish kerak) */
+	bool IsHeavyPending() const { return bHeavyPending; }
 	/** Otliq dushman: otga o'tqazish */
 	void MountHorse(AErtHorse* H);
 	AErtHorse* GetMount() const { return Mount; }

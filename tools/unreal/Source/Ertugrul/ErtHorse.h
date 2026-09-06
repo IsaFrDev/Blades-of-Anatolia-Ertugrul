@@ -36,6 +36,9 @@ public:
 	float Health = 200.f, MaxHealth = 200.f;
 	bool bDead = false;
 	void ApplyDamage(float D);
+	/** Hushtak: ot o'yinchi tomon yo'rtib keladi (25 s) */
+	void Summon(const FVector& To) { SummonTo = To; SummonT = 25.f; }
+	bool IsSummoned() const { return SummonT > 0.f; }
 	bool IsDead() const { return bDead; }
 
 protected:
@@ -63,7 +66,8 @@ private:
 	FVector2D Input = FVector2D::ZeroVector;
 	bool bGallopIn = false, bBuilt = false;
 	float CurSpeed = 0.f, Phase = 0.f, WanderT = 0.f, HeadBob = 0.f;
-	FVector HomePos = FVector::ZeroVector, WanderTarget = FVector::ZeroVector;
+	FVector HomePos = FVector::ZeroVector, WanderTarget = FVector::ZeroVector, SummonTo = FVector::ZeroVector;
+	float SummonT = 0.f;
 	void Build();
 	void Animate(float Dt);
 };

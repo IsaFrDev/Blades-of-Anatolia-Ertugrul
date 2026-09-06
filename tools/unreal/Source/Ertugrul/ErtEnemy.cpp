@@ -334,7 +334,8 @@ void AErtEnemy::TickGuard(float Dt, APawn* Player)
 	{
 		const FVector To = (Tgt->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
 		const float Facing = FVector::DotProduct(GetActorForwardVector(), To);
-		const float SeeRange = Mount ? 2600.f : ((Hero && Hero->bIsCrouched) ? 900.f : 1400.f);
+		float SeeRange = Mount ? 2600.f : ((Hero && Hero->bIsCrouched) ? 900.f : 1400.f);
+		if (Hero && Hero->Warrior == 2 && Hero->bIsCrouched) SeeRange *= 0.6f;   // Meryem: yashirinish ustasi
 		if ((DP < SeeRange && Facing > 0.35f && CanSee(Tgt)) || DP < 320.f) bAlerted = true;
 	}
 	if (bAlerted && Hero && Team == 0 && Kind == EErtEnemyKind::Footman && Health < MaxHealth * 0.3f)

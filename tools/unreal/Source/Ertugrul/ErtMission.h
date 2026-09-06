@@ -47,7 +47,7 @@ struct FErtObjective
 struct FErtSpawn { EErtEnemyKind Kind = EErtEnemyKind::Footman; FVector Pos = FVector::ZeroVector; float Yaw = 0.f; float Patrol = 0.f; };
 struct FErtWave { TArray<FErtSpawn> Spawns; float Delay = 0.f; };
 struct FErtCouncilNpc { FString Id, NameKey; float U = 0, V = 0, Yaw = 0; bool bWoman = false; FLinearColor Kaftan = FLinearColor(0.3f, 0.2f, 0.1f); };
-struct FErtPhase { FString TitleKey; TArray<FErtObjective> Objectives; TArray<FErtWave> Waves; FErtWave Reinforce; bool bReinforced = false; TArray<FErtCouncilNpc> Npcs; };
+struct FErtPhase { FString TitleKey; TArray<FErtObjective> Objectives; TArray<FErtWave> Waves; FErtWave Reinforce; bool bReinforced = false; TArray<FErtCouncilNpc> Npcs; bool bDream = false; FVector DreamSpot = FVector::ZeroVector; };
 
 UCLASS()
 class ERTUGRUL_API AErtMissionDirector : public AActor
@@ -132,7 +132,8 @@ private:
 	TSharedPtr<class FJsonObject> PhaseOverrideObj;
 	FRandomStream Rng;
 	FVector Cursor = FVector::ZeroVector;
-	FVector2D CouncilBase = FVector2D::ZeroVector;   // kengash NPClari bazasi (reja E, N): oba yoki epizod boshlanishi
+	FVector2D CouncilBase = FVector2D::ZeroVector;
+	FVector DreamReturn = FVector::ZeroVector; float DreamReturnYaw = 0.f;   // kengash NPClari bazasi (reja E, N): oba yoki epizod boshlanishi
 
 	struct FCheckpoint { bool bValid = false; int32 Phase = 0; FVector Pos; float Yaw = 0.f; } Cp;
 

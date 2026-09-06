@@ -457,6 +457,15 @@ void AErtGameMode::Tick(float Dt)
 		PPV->Settings.bOverride_AutoExposureBias = true; PPV->Settings.AutoExposureBias = FMath::Lerp(-0.9f, 0.3f, Day);
 		PPV->Settings.bOverride_ColorSaturation = true; const float Sat = FMath::Lerp(0.55f, 1.12f, Day); PPV->Settings.ColorSaturation = FVector4(Sat, Sat, Sat, 1.f);
 		PPV->Settings.bOverride_ColorGain = true; PPV->Settings.ColorGain = FVector4(FMath::Lerp(0.75f, 1.f, Day), FMath::Lerp(0.85f, 1.f, Day), 1.f, 1.f);
+		if (bDream)
+		{
+			// Tush: binafsha-ko'k tus, past to'yinganlik, kuchli vinyetka
+			PPV->Settings.ColorSaturation = FVector4(0.45f, 0.45f, 0.45f, 1.f);
+			PPV->Settings.ColorGain = FVector4(0.85f, 0.65f, 1.25f, 1.f);
+			PPV->Settings.bOverride_VignetteIntensity = true; PPV->Settings.VignetteIntensity = 0.8f;
+			PPV->Settings.AutoExposureBias = -0.2f;
+		}
+		else { PPV->Settings.bOverride_VignetteIntensity = true; PPV->Settings.VignetteIntensity = 0.35f; }
 	}
 }
 
@@ -550,6 +559,21 @@ void AErtGameMode::MapInput(float Dt)
 		if (bWaypoint && FVector::Dist2D(Wp, Waypoint) < 3000.f) ClearWaypoint(); else SetWaypoint(Wp);
 	}
 	if (PC->WasInputKeyJustPressed(EKeys::Delete) || PC->WasInputKeyJustPressed(EKeys::BackSpace)) ClearWaypoint();
+}
+
+void AErtGameMode::SetDream(bool bOn)
+{
+	if (bOn == bDream) return;
+	bDream = bOn;
+	if (bOn) { SavedDayT = DayT; SavedWeather = GetWeatherName(); DayT = 0.97f; SetWeather(TEXT("fog")); }
+	else { DayT = SavedDayT; SetWeather(SavedWeather.IsEmpty() ? TEXT("clear") : SavedWeather); }
+	UE_LOG(LogErtugrul, Log, TEXT("Tush rejimi: %s"), bOn ? TEXT("yoqildi") : TEXT("o'chdi"));
+}
+
+const FString& AErtGameMode::GetWeatherName() const
+{
+	static FString Empty;
+	return Weather ? Weather->GetWeather() : Empty;
 }
 
 void AErtGameMode::MapRotate(float DeltaYaw) { if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) M3->Rotate(DeltaYaw); }
