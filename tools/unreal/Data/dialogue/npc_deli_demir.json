@@ -78,6 +78,24 @@
      "requires_evidence": "can_craft_shield"
     },
     {
+     "text_key": "DLG_CRAFT_TAN",
+     "next": "craft_done",
+     "set_flag": "craft_tan",
+     "requires_evidence": "can_craft_tan"
+    },
+    {
+     "text_key": "DLG_CRAFT_BOW",
+     "next": "craft_done",
+     "set_flag": "craft_bow",
+     "requires_evidence": "can_craft_bow"
+    },
+    {
+     "text_key": "DLG_CRAFT_SADDLE",
+     "next": "craft_done",
+     "set_flag": "craft_saddle",
+     "requires_evidence": "can_craft_saddle"
+    },
+    {
      "text_key": "DLG_CRAFT_BACK",
      "next": "end"
     }

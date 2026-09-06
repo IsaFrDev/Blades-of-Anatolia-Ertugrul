@@ -516,6 +516,7 @@ bool UErtHeroBody::TryBuildSkeletal(USceneComponent* Parent, float HalfH)
 	if ((*Prof)->TryGetObjectField(TEXT("sword"), Sw) && Sw->IsValid())
 	{
 		FString Sock; if ((*Sw)->TryGetStringField(TEXT("socket"), Sock)) SwordSocket = FName(*Sock);
+		FString Sh; if ((*Sw)->TryGetStringField(TEXT("sheath_socket"), Sh)) SheathSocket = FName(*Sh); if ((*Sw)->TryGetStringField(TEXT("shield_back_socket"), Sh)) ShieldBackSocket = FName(*Sh); if ((*Sw)->TryGetStringField(TEXT("shield_hand_socket"), Sh)) ShieldHandSocket = FName(*Sh);
 		const TArray<TSharedPtr<FJsonValue>>* L = nullptr;
 		if ((*Sw)->TryGetArrayField(TEXT("loc"), L) && L->Num() == 3) SwordLoc = FVector((*L)[0]->AsNumber(), (*L)[1]->AsNumber(), (*L)[2]->AsNumber());
 		if ((*Sw)->TryGetArrayField(TEXT("rot"), L) && L->Num() == 3) SwordRot = FRotator((*L)[0]->AsNumber(), (*L)[1]->AsNumber(), (*L)[2]->AsNumber());
@@ -524,6 +525,33 @@ bool UErtHeroBody::TryBuildSkeletal(USceneComponent* Parent, float HalfH)
 	SkelPlay(TEXT("idle"), true);
 	UE_LOG(LogErtugrul, Log, TEXT("Skeletli tana (%s): %s, %d animatsiya turi"), *Profile, *SM->GetName(), SkelAnims.Num());
 	return true;
+}
+
+void UErtHeroBody::SetSheathed(bool bOn)
+{
+	bSheathed = bOn;
+	if (!Skel || !SkelSword) return;
+	if (bOn) { SkelSword->AttachToComponent(Skel, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SheathSocket); SkelSword->SetRelativeLocation(SheathLoc); SkelSword->SetRelativeRotation(SheathRot); }
+	else { SkelSword->AttachToComponent(Skel, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SwordSocket); SkelSword->SetRelativeLocation(SwordLoc); SkelSword->SetRelativeRotation(SwordRot); }
+}
+
+void UErtHeroBody::SkelBuildShield(bool bHas)
+{
+	if (!Skel) return;
+	if (!bHas) { if (SkelShield) { SkelShield->DestroyComponent(); SkelShield = nullptr; } return; }
+	if (!SkelShield) { SkelShield = MakePart(TEXT("SkelShield"), Skel, FVector::ZeroVector); }
+	const bool bHand = bBlock;
+	SkelShield->AttachToComponent(Skel, FAttachmentTransformRules::SnapToTargetNotIncludingScale, bHand ? ShieldHandSocket : ShieldBackSocket);
+	SkelShield->SetRelativeLocation(bHand ? FVector(0, -6.f, 0) : FVector(-14.f, 0, 0)); SkelShield->SetRelativeRotation(bHand ? FRotator(0, 0, 0) : FRotator(0, 0, 90.f));
+	if (SkelShield->GetNumSections() == 0)
+	{
+		FErtMeshData M;
+		const FLinearColor WoodS = ErtCol::Sty(FLinearColor(0.36f, 0.22f, 0.10f), ErtCol::StyleWood), IronS = ErtCol::Sty(FLinearColor(0.35f, 0.34f, 0.33f), ErtCol::StyleMetal);
+		M.AddCylinder(FVector(0, 0, -1.5f), 30.f, 30.f, 3.f, 24, WoodS, true, FRotator(90.f, 0, 0));
+		M.AddCylinder(FVector(0, 0, -2.f), 31.5f, 31.5f, 1.2f, 24, IronS, true, FRotator(90.f, 0, 0));
+		M.AddSphere(FVector(0, 0, 1.5f), 6.f, 8, IronS, FVector(1, 1, 0.5f));
+		M.Commit(SkelShield, 0, false);
+	}
 }
 
 void UErtHeroBody::SkelBuildSword()

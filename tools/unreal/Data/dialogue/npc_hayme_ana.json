@@ -27,6 +27,24 @@
      "next": "h",
      "requires_evidence": "honor_high",
      "set_flag": "hayme_blessing"
+    },
+    {
+     "text_key": "DLG_TRIBE_GOLD",
+     "next": "t",
+     "set_flag": "donate_gold",
+     "requires_evidence": "can_donate_gold"
+    },
+    {
+     "text_key": "DLG_TRIBE_MEAT",
+     "next": "t",
+     "set_flag": "donate_meat",
+     "requires_evidence": "can_donate_meat"
+    },
+    {
+     "text_key": "DLG_TRIBE_LEATHER",
+     "next": "t",
+     "set_flag": "donate_leather",
+     "requires_evidence": "can_donate_leather"
     }
    ]
   },
@@ -43,6 +61,11 @@
   "h": {
    "speaker": "Hayma Ona",
    "text_key": "DLG_HAYME_HONOR_HIGH_R",
+   "next": "end"
+  },
+  "t": {
+   "speaker": "Hayma Ona",
+   "text_key": "DLG_TRIBE_THANKS",
    "next": "end"
   }
  }

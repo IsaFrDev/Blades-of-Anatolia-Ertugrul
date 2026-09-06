@@ -84,6 +84,10 @@ private:
 	FErtDialog Dialog;
 	TSet<FString> Flags;
 	int32 Honor = 0;
+public:
+	int32 TribeScore = 0;   // qabila boshqaruvi: hadyalar -> daraja 1..3 (ittifoqchi +, narx -5%/daraja)
+	int32 TribeLevel() const { return TribeScore >= 120 ? 3 : (TribeScore >= 50 ? 2 : 1); }
+private:
 	void SpawnNpcs();
 	UPROPERTY(Transient) TObjectPtr<class ADirectionalLight> Sun;
 	UPROPERTY(Transient) TObjectPtr<class ASkyLight> Sky;

@@ -580,7 +580,8 @@ void AErtMissionDirector::StartPhase(int32 Idx)
 	{
 		int32 MaxW = 0; for (const FErtWave& Wv : Waves) MaxW = FMath::Max(MaxW, Wv.Spawns.Num());
 		const bool bBig = EpisodeArchetype == TEXT("SIEGE") || EpisodeArchetype == TEXT("DEFENSE");
-		const int32 Want = MaxW >= 3 ? FMath::Clamp(MaxW + (bBig ? 3 : 0), 3, 8) : 0;
+		int32 TribeBonus = 0; if (AErtGameMode* GMt = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) TribeBonus = GMt->TribeLevel() - 1;   // qabila darajasi: +1/+2 alp
+		const int32 Want = MaxW >= 3 ? FMath::Clamp(MaxW + (bBig ? 3 : 0) + TribeBonus, 3, 10) : 0;
 		if (Want > AliveAllies()) { ClearAllies(); SpawnAllies(Want); }
 		else if (Want == 0) ClearAllies();
 	}

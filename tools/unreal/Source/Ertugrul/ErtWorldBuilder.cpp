@@ -3239,6 +3239,22 @@ void AErtWorldBuilder::BuildLandmarks()
 {
 	FErtFabLib& Fab = FErtFabLib::Get();
 	int32 N = 0;
+	// Ulukayin - hayot daraxti (voha, tush bosqichi joyi): ulkan tana, 6 shox, ko'k-oq nurli barg sharlari
+	{
+		const float UE_ = OasisE + 40.f, UN_ = OasisN + 30.f, UZ = HeightAt(UE_, UN_);
+		FErtMeshData M(100.f);
+		const FLinearColor Bark(0.30f, 0.22f, 0.16f), Leaf(0.62f, 0.82f, 1.0f), LeafD(0.40f, 0.62f, 0.95f);
+		M.AddCylinder(W(UE_, UN_, UZ), 1.6f, 1.0f, 9.f, 14, Bark, false, FRotator::ZeroRotator, 0.08f, 7);
+		for (int32 i = 0; i < 6; ++i)
+		{
+			const float A = i * 60.f + 20.f, Ar = FMath::DegreesToRadians(A);
+			M.AddCone(W(UE_ + FMath::Cos(Ar) * 0.6f, UN_ + FMath::Sin(Ar) * 0.6f, UZ + 7.f + (i % 2) * 1.2f), 0.55f, 6.5f, 8, Bark, FRotator(-38.f, A, 0));
+			M.AddSphere(W(UE_ + FMath::Cos(Ar) * 4.8f, UN_ + FMath::Sin(Ar) * 4.8f, UZ + 11.5f + (i % 2) * 1.2f), 3.2f, 10, (i % 2) ? Leaf : LeafD, FVector(1.f, 1.f, 0.8f), 0.18f, 11 + i);
+		}
+		M.AddSphere(W(UE_, UN_, UZ + 14.5f), 3.8f, 12, Leaf, FVector(1.f, 1.f, 0.85f), 0.15f, 5);
+		for (int32 r = 0; r < 8; ++r) { const float Ar = r * 0.785f; M.AddCone(W(UE_ + FMath::Cos(Ar) * 1.4f, UN_ + FMath::Sin(Ar) * 1.4f, UZ - 0.2f), 0.5f, 2.2f, 6, Bark, FRotator(-80.f, r * 45.f, 0)); }   // ildizlar
+		M.Commit(NewPart(TEXT("Ulukayin"), true), 0, true); ++N;
+	}
 	// Ertug'rul Bey modeli (AssetHub/Blender, statik): oba markazi olovi yonida, keyinchalik skeletli versiya bilan almashadi
 	if (UStaticMesh* Hero = LoadObject<UStaticMesh>(nullptr, TEXT("/Game/ErtAssets/Chars/Hero/SM_ErtugrulHero1")))
 	{ const float HE = ObaE + 24.f, HN = ObaN + 18.f; FabPlace(Hero, HE, HN, HeightAt(HE, HN), 180.f, 1.85f, true, true); /* gulxan (18,18) yonida, olovga qaragan */ ++N; UE_LOG(LogErtugrul, Log, TEXT("Ertug'rul modeli obada (%.0f, %.0f)"), HE, HN); }

@@ -504,3 +504,10 @@ Blender 4.2.3 portable: `D:\Blender\blender-4.2.3-windows-x64\blender.exe` (5.2.
 - Suv: `M_ErtWater` to'lqin kodi `p.x -= t*0.9` (daryo janubga oqadi) + sekin yon tebranish. Qamishlar daryo/ko'l bo'yida allaqachon bor edi.
 - Ot: `HorseName` (Bo'ra, Tulpor, Qorabayir, Chaqmoq, Bo'z, Yulduz, Shamol, Qizil, Oqtosh, Burgut; tuya = Tuya), HUD: minganda "nom HP | parvarish % tezlik +%", yonida "[E] nom: minish V: tarash H: boqish (go'sht n) parvarish %".
 - Kat-sahna: kamera Catmull-Rom (pozitsiya + qarash), FOV smoothstep; JSON `intro_fly` (s) - birinchi kalitdan 22 m orqa/26 m balanddan tushib keladigan 2 ta qo'shimcha kalit, barcha vaqtlar suriladi. 48 ta `ep*_intro.json` ga `intro_fly: 5` qo'shildi. EP001 test: 41.5 s, xatosiz.
+
+## Hunarmandchilik+, Ulukayin daraxti, qabila boshqaruvi, qilich/qalqon soketlari (ro'yxat 10-14, 2026-09-06)
+- 10: kiyik -> xom teri (`RawHide`); Deli Demir: oshlash (2 xom -> 3 charm), kompozit kamon (1 temir + 2 charm), egar (1 temir + 3 charm; `bSaddle` -> minilgan ot `bSaddled`, tezlik +8%). Elite/chavandoz o'ljasida 40% charm. Saqlanadi (rawHide, saddle).
+- 11: `BuildLandmarks` da Ulukayin daraxti (voha, tush joyi OasisE+40/OasisN+30): 9 m tana, 6 shox (AddCone), 7 ko'k-oq barg shari, 8 ildiz; protsedural mesh "Ulukayin".
+- 12: `TribeScore`/`TribeLevel()` (1: <50, 2: <120, 3). Hayma Ona dialogi: 100 oltin (+10), 5 go'sht (+5), 3 charm (+6), or +1. Ta'sir: ittifoqchi alplar +1/+2 (max 10), narxlar -5%/daraja. Inventarda "Qabila" qatori. Saqlanadi (tribe).
+- 13: silliq 24 fps video: `-benchmark -fps=24` (belgilangan qadam) + `-ErtFlyStep=0.0417` -> har o'yin kadri = video kadri; ffmpeg `-framerate 24`.
+- 14: skelet tana: `SetSheathed` (qilich `thigh_l` qinda, R tugmasi; hujumda avtomatik chiqadi), `SkelBuildShield` (qalqon `spine_03` orqada, blokda `hand_l`), `character.json` `sword.sheath_socket / shield_back_socket / shield_hand_socket` bilan sozlanadi. Mixamo rigi kelganda shu soketlar ishlatiladi.

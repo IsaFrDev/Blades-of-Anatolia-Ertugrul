@@ -721,18 +721,20 @@ void AErtHUD::DrawInventory(float SW, float SH, float Sc)
 	Row(TEXT("Dori (H)"), FString::Printf(TEXT("%d   (+45 sog'liq)"), H->Potions));
 	Row(TEXT("Kiyik go'shti"), FString::Printf(TEXT("%d   (+25, dori bo'lmasa H bilan)"), H->Meat));
 	Row(TEXT("O'qlar"), FString::Printf(TEXT("%d / %d%s"), H->GetArrows(), H->MaxArrows, H->ArrowTier >= 2 ? TEXT("  (po'lat, +8)") : TEXT("")));
-	Row(TEXT("Temir / teri"), FString::Printf(TEXT("%d / %d   (dushman o'ljasi / kiyik; Deli Demir temirxonasi - oba)"), H->Iron, H->Leather));
+	Row(TEXT("Temir / charm / xom teri"), FString::Printf(TEXT("%d / %d / %d   (dushman o'ljasi / oshlangan / kiyik; Deli Demir - oba)"), H->Iron, H->Leather, H->RawHide));
+	if (AErtGameMode* GMq = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(GetWorld()))) Row(TEXT("Qabila"), FString::Printf(TEXT("daraja %d (%d ball)  - Hayma Onaga hadya: oltin/go'sht/charm; +ittifoqchi, arzon narx"), GMq->TribeLevel(), GMq->TribeScore));
 	Y += 10 * Sc;
 	Text(TEXT("JIHOZ"), 44 * Sc, Y, Gold, 1.1f * Sc, true, true); Y += 30 * Sc;
 	Row(TEXT("Qilich"), H->SwordTier >= 2 ? TEXT("Damashq po'lati (+12 zarar)") : TEXT("Oddiy qilich"));
 	Row(TEXT("Zirh"), H->bIronArmor ? TEXT("Temir zirh (zarar -20%)") : H->bPeltArmor ? TEXT("Bo'ri terisi (zarar -15%)") : TEXT("Charm ko'krak zirhi"));
 	Row(TEXT("Qalqon"), H->bShield ? TEXT("Yog'och qalqon (blok 95%, kam stamina)") : TEXT("Yo'q"));
 	Row(TEXT("Kamon"), H->BowTier >= 2 ? TEXT("Kompozit kamon (+20 zarar, 24 o'q)") : TEXT("Oddiy kamon"));
+	Row(TEXT("Egar"), H->bSaddle ? TEXT("Charm egar (ot +8% tez)") : TEXT("Yo'q (3 charm + 1 temir)"));
 	Row(TEXT("Zarar"), FString::Printf(TEXT("qilich %d, o'q %d"), (int32)H->AttackDamage, (int32)H->ArrowDamage));
 	Y += 16 * Sc;
 	Text(TEXT("Savdogar Yusuf (shahar bozori): dori 15, 8 o'q 10, qalqon 60, kompozit kamon 90, Damashq qilichi 120 oltin"), 44 * Sc, Y, Grey, 0.9f * Sc);
 	Text(TEXT("XP: dushman 20-80, epizod 150.  Oltin: dushmandan 4-14, epizod 40."), 44 * Sc, Y + 22 * Sc, Grey, 0.9f * Sc);
-	Text(TEXT("Temirchi Deli Demir: 12 po'lat o'q = 1 temir + 1 teri; temir zirh = 3 temir + 2 teri; Damashq qilichi = 4 temir; qalqon = 2 temir + 1 teri"), 44 * Sc, Y + 44 * Sc, Grey, 0.9f * Sc);
+	Text(TEXT("Temirchi Deli Demir: 12 po'lat o'q = 1 temir + 1 teri; temir zirh = 3 temir + 2 teri; Damashq qilichi = 4 temir; qalqon = 2 temir + 1 teri; oshlash 2 xom -> 3 charm; kamon 1 temir + 2 charm; egar 1 temir + 3 charm"), 44 * Sc, Y + 44 * Sc, Grey, 0.9f * Sc);
 	Text(TEXT("Ot: yonida V - tarash, H (go'sht bilan) - boqish: sog'liq to'liq, tezlik +12% gacha"), 44 * Sc, Y + 66 * Sc, Grey, 0.9f * Sc);
 	Text(TEXT("I yoki Esc: yopish"), 40 * Sc, SH - 30 * Sc, Grey, 0.9f * Sc);
 }

@@ -69,7 +69,7 @@ public:
 	void SetTalk(bool bOn) { bTalk = bOn; }
 	void FaceAnimate(float Dt);
 	bool bTalk = false; float TalkT = 0.f, BlinkT = 2.f, BlinkV = 0.f; int32 MouthMorph = -2, BlinkMorph = -2; FName MouthName, BlinkName, BlinkName2; float FaceScan = 0.f;
-	void SetBlocking(bool bOn) { bBlock = bOn; }
+	void SetBlocking(bool bOn) { const bool bWas = bBlock; bBlock = bOn; if (Skel && SkelShield && bWas != bOn) SkelBuildShield(true); }
 	/** Chap bilakda qalqon */
 	void SetShield(bool bOn);
 	/** Damashq po'lati: tig' rangi */
@@ -108,6 +108,14 @@ private:
 	UPROPERTY(Transient) TObjectPtr<class UAnimSequence> CurAnim;
 	float OneShotT = 0.f, WalkRef = 200.f, RunRef = 500.f;
 	FVector SwordLoc = FVector::ZeroVector; FRotator SwordRot = FRotator::ZeroRotator; FName SwordSocket = TEXT("hand_r");
+	// Qin (chap son) va qalqon (orqa / chap qo'l): character.json sheath_socket/shield_socket bilan almashtiriladi
+	FName SheathSocket = TEXT("thigh_l"), ShieldBackSocket = TEXT("spine_03"), ShieldHandSocket = TEXT("hand_l");
+	FVector SheathLoc = FVector(28.f, -6.f, 12.f); FRotator SheathRot = FRotator(0.f, 0.f, 95.f);
+	bool bSheathed = false; UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> SkelShield;
+public:
+	void SetSheathed(bool bOn); bool IsSheathed() const { return bSheathed; }
+	void SkelBuildShield(bool bHas);
+private:
 	bool TryBuildSkeletal(USceneComponent* Parent, float HalfH);
 	class UAnimSequence* SkelPick(const FString& Key, int32 Index = -1) const;
 	void SkelPlay(const FString& Key, bool bLoop, float Rate = 1.f, int32 Index = -1, const TCHAR* Fallback = nullptr);

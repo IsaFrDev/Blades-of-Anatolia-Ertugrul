@@ -44,13 +44,14 @@ FString AErtLoot::Describe() const
 	if (Potions > 0) S += FString::Printf(TEXT("%d dori  "), Potions);
 	if (Meat > 0) S += FString::Printf(TEXT("%d go'sht  "), Meat);
 	if (Iron > 0) S += FString::Printf(TEXT("%d temir  "), Iron);
+	if (Leather > 0) S += FString::Printf(TEXT("%d charm  "), Leather);
 	return S.TrimEnd();
 }
 
 void AErtLoot::GiveTo(AErtCharacter* H)
 {
 	if (!H) return;
-	H->AddGold(Gold); H->AddArrows(Arrows); H->Potions += Potions; H->Meat += Meat; H->Iron += Iron;
+	H->AddGold(Gold); H->AddArrows(Arrows); H->Potions += Potions; H->Meat += Meat; H->Iron += Iron; H->Leather += Leather;
 	Destroy();
 }
 

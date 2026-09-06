@@ -197,6 +197,10 @@ void AErtGameMode::RefreshCraftFlags()
 	Set(TEXT("can_craft_armor"), H->Iron >= 3 && H->Leather >= 2 && !H->bIronArmor);
 	Set(TEXT("can_craft_sword"), H->Iron >= 4 && H->SwordTier < 2);
 	Set(TEXT("can_craft_shield"), H->Iron >= 2 && H->Leather >= 1 && !H->bShield);
+	Set(TEXT("can_craft_tan"), H->RawHide >= 2);
+	Set(TEXT("can_craft_bow"), H->Iron >= 1 && H->Leather >= 2 && H->BowTier < 2);
+	Set(TEXT("can_craft_saddle"), H->Iron >= 1 && H->Leather >= 3 && !H->bSaddle);
+	Set(TEXT("can_donate_gold"), H->Gold >= 100); Set(TEXT("can_donate_meat"), H->Meat >= 5); Set(TEXT("can_donate_leather"), H->Leather >= 3);
 }
 
 bool AErtGameMode::StartDialogId(const FString& Id)
@@ -250,7 +254,7 @@ void AErtGameMode::EndDialog()
 		{
 			if (!Flags.Contains(Flag)) return;
 			Flags.Remove(Flag);
-			Price = FMath::RoundToInt(Price * (Honor >= 10 ? 0.85f : (Honor <= -5 ? 1.3f : 1.f)));   // or/iymon narxga ta'sir qiladi
+			Price = FMath::RoundToInt(Price * (Honor >= 10 ? 0.85f : (Honor <= -5 ? 1.3f : 1.f)) * (1.f - 0.05f * (TribeLevel() - 1)));   // or/iymon va qabila darajasi narxga ta'sir qiladi
 			if (H->Gold >= Price) { H->AddGold(-Price); Give(); ShopMsg = FString::Printf(TEXT("Sotib olindi (-%d oltin)"), Price); }
 			else ShopMsg = TEXT("Oltin yetarli emas");
 			ShopMsgT = 3.f;
@@ -282,9 +286,17 @@ void AErtGameMode::EndDialog()
 		Craft(TEXT("craft_armor"), 3, 2, [&]() { H->bIronArmor = true; }, TEXT("Temirchi: temir zirh (zarar -20%)"));
 		Craft(TEXT("craft_sword"), 4, 0, [&]() { H->SwordTier = 2; }, TEXT("Temirchi: Damashq qilichi (+12 zarar)"));
 		Craft(TEXT("craft_shield"), 2, 1, [&]() { H->bShield = true; }, TEXT("Temirchi: temir qoplamali qalqon"));
+		Craft(TEXT("craft_bow"), 1, 2, [&]() { H->BowTier = 2; }, TEXT("Temirchi: kompozit kamon (+20 zarar, 24 o'q)"));
+		Craft(TEXT("craft_saddle"), 1, 3, [&]() { H->bSaddle = true; if (H->GetHorse()) H->GetHorse()->bSaddled = true; }, TEXT("Temirchi: egar - har qanday ot +8% tez"));
+		if (Flags.Contains(TEXT("craft_tan"))) { Flags.Remove(TEXT("craft_tan")); if (H->RawHide >= 2) { H->RawHide -= 2; H->Leather += 3; ShopMsg = TEXT("Teri oshlandi: 2 xom teri -> 3 charm"); SaveGame(); } else ShopMsg = TEXT("Kamida 2 xom teri kerak"); ShopMsgT = 4.f; }
 		// Tush jumboqlari: to'g'ri javob - donolik (or +5, keyingi bosqichda to'liq shifo); noto'g'ri - or -2
 		if (Flags.Contains(TEXT("dream_wise"))) { Flags.Remove(TEXT("dream_wise")); Flags.Add(TEXT("dream_gift")); AddHonor(5); H->Heal(100.f); ShopMsg = TEXT("Tush jumboqi yechildi: or +5, Ulukayin ne'mati (shifo)"); ShopMsgT = 4.f; }
 		if (Flags.Contains(TEXT("dream_lost"))) { Flags.Remove(TEXT("dream_lost")); AddHonor(-2); ShopMsg = TEXT("Tush jumboqi yechilmadi: or -2"); ShopMsgT = 4.f; }
+		// Qabila hadyalari (Hayma Ona): oltin 100 -> +10 ball, go'sht 5 -> +5, charm 3 -> +6; or +1
+		auto Donate = [&](const TCHAR* Flag, TFunction<bool()> Take, int32 Pts, const TCHAR* Msg) { if (!Flags.Contains(Flag)) return; Flags.Remove(Flag); if (Take()) { const int32 L0 = TribeLevel(); TribeScore += Pts; AddHonor(1); ShopMsg = FString::Printf(TEXT("%s: qabila +%d ball (daraja %d)%s"), Msg, Pts, TribeLevel(), TribeLevel() > L0 ? TEXT("  - DARAJA OSHDI!") : TEXT("")); ShopMsgT = 4.f; SaveGame(); } };
+		Donate(TEXT("donate_gold"), [&]() { if (H->Gold < 100) return false; H->AddGold(-100); return true; }, 10, TEXT("100 oltin hadya"));
+		Donate(TEXT("donate_meat"), [&]() { if (H->Meat < 5) return false; H->Meat -= 5; return true; }, 5, TEXT("5 go'sht hadya"));
+		Donate(TEXT("donate_leather"), [&]() { if (H->Leather < 3) return false; H->Leather -= 3; return true; }, 6, TEXT("3 charm hadya"));
 		Buy(TEXT("buy_potion"), 15, [&]() { H->Potions += 1; });
 		Buy(TEXT("buy_arrows"), 10, [&]() { H->AddArrows(8); });
 		Buy(TEXT("buy_shield"), 60, [&]() { H->bShield = true; H->ApplyEquipment(); });
@@ -315,7 +327,7 @@ void AErtGameMode::SaveGame()
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
 		R->SetNumberField(TEXT("meat"), H->Meat); R->SetBoolField(TEXT("pelt"), H->bPeltArmor);
-	R->SetNumberField(TEXT("iron"), H->Iron); R->SetNumberField(TEXT("leather"), H->Leather); R->SetBoolField(TEXT("ironArmor"), H->bIronArmor); R->SetNumberField(TEXT("arrowTier"), H->ArrowTier);
+	R->SetNumberField(TEXT("iron"), H->Iron); R->SetNumberField(TEXT("leather"), H->Leather); R->SetBoolField(TEXT("ironArmor"), H->bIronArmor); R->SetNumberField(TEXT("arrowTier"), H->ArrowTier); R->SetNumberField(TEXT("rawHide"), H->RawHide); R->SetBoolField(TEXT("saddle"), H->bSaddle); R->SetNumberField(TEXT("tribe"), TribeScore);
 		R->SetNumberField(TEXT("gold"), H->Gold); R->SetNumberField(TEXT("potions"), H->Potions); R->SetNumberField(TEXT("arrows"), H->GetArrows());
 		R->SetNumberField(TEXT("level"), H->Level); R->SetNumberField(TEXT("xp"), H->XP);
 		R->SetNumberField(TEXT("sword"), H->SwordTier); R->SetNumberField(TEXT("bow"), H->BowTier); R->SetBoolField(TEXT("shield"), H->bShield);
@@ -347,7 +359,7 @@ void AErtGameMode::LoadGame()
 			int32 V = 0;
 			if (R->TryGetNumberField(TEXT("gold"), V)) H->Gold = V;
 			if (R->TryGetNumberField(TEXT("meat"), V)) H->Meat = V;
-		{ double Dv = 0; if (R->TryGetNumberField(TEXT("iron"), Dv)) H->Iron = (int32)Dv; if (R->TryGetNumberField(TEXT("leather"), Dv)) H->Leather = (int32)Dv; bool B = false; if (R->TryGetBoolField(TEXT("ironArmor"), B)) H->bIronArmor = B; if (R->TryGetNumberField(TEXT("arrowTier"), Dv)) H->ArrowTier = (int32)Dv; }
+		{ double Dv = 0; if (R->TryGetNumberField(TEXT("iron"), Dv)) H->Iron = (int32)Dv; if (R->TryGetNumberField(TEXT("leather"), Dv)) H->Leather = (int32)Dv; bool B = false; if (R->TryGetBoolField(TEXT("ironArmor"), B)) H->bIronArmor = B; if (R->TryGetNumberField(TEXT("arrowTier"), Dv)) H->ArrowTier = (int32)Dv; if (R->TryGetNumberField(TEXT("rawHide"), Dv)) H->RawHide = (int32)Dv; if (R->TryGetBoolField(TEXT("saddle"), B)) H->bSaddle = B; if (R->TryGetNumberField(TEXT("tribe"), Dv)) TribeScore = (int32)Dv; }
 			{ bool Bp = false; if (R->TryGetBoolField(TEXT("pelt"), Bp)) H->bPeltArmor = Bp; }
 			if (R->TryGetNumberField(TEXT("potions"), V)) H->Potions = V;
 			if (R->TryGetNumberField(TEXT("arrows"), V)) H->AddArrows(V - H->GetArrows());

@@ -178,6 +178,7 @@ void AErtCharacter::OnKick()
 void AErtCharacter::OnAttack()
 {
 	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f || Boat) return;
+	if (Body && Body->IsSkeletal() && Body->IsSheathed()) Body->SetSheathed(false);
 	// Seriya: oyna ichida bosilsa keyingi zarba (0 o'ng, 1 chap, 2 yakunlovchi kuchli)
 	if (ComboWindowT <= 0.f) ComboStep = 0;
 	const int32 Step = ComboStep;
@@ -245,9 +246,9 @@ void AErtCharacter::OnInteract()
 	}
 	if (AErtEnemy* Cc = NearestCarcass(260.f))
 	{
-		Cc->bLooted = true; Meat += 2; Leather += 1; AddXP(5);
+		Cc->bLooted = true; Meat += 2; RawHide += 1; AddXP(5);
 		FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.4f, 0.8f);
-		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = TEXT("Kiyik go'shti +2, teri +1 (H: yeyish yoki ot yonida boqish)"); GM->ShopMsgT = 3.f; }
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = TEXT("Kiyik go'shti +2, xom teri +1 (Deli Demir oshlaydi: 2 xom -> 3 charm)"); GM->ShopMsgT = 3.f; }
 		return;
 	}
 	if (AErtNpc* N = NearestNpc(280.f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->StartDialog(N); return; }
@@ -313,7 +314,7 @@ AErtHorse* AErtCharacter::NearestHorse(float MaxDist) const
 void AErtCharacter::MountHorse(AErtHorse* H)
 {
 	if (!H || Horse || bSwimming || bMantling) return;
-	Horse = H;
+	Horse = H; H->bSaddled = bSaddle;
 	H->Mount(this);
 	if (bIsCrouched) UnCrouch();
 	GetCharacterMovement()->StopMovementImmediately();
@@ -703,6 +704,7 @@ void AErtCharacter::BuildInput()
 	IA_Kick = MakeAction(TEXT("IA_ErtKick"), EInputActionValueType::Boolean);
 	IA_Skill = MakeAction(TEXT("IA_ErtSkill"), EInputActionValueType::Boolean);
 	IA_Whistle = MakeAction(TEXT("IA_ErtWhistle"), EInputActionValueType::Boolean);
+	IA_Sheathe = MakeAction(TEXT("IA_ErtSheathe"), EInputActionValueType::Boolean);
 	IA_Warrior1 = MakeAction(TEXT("IA_ErtWarrior1"), EInputActionValueType::Boolean);
 	IA_Warrior2 = MakeAction(TEXT("IA_ErtWarrior2"), EInputActionValueType::Boolean);
 	IA_Warrior3 = MakeAction(TEXT("IA_ErtWarrior3"), EInputActionValueType::Boolean);
@@ -772,6 +774,7 @@ void AErtCharacter::BuildInput()
 	Map(IA_Kick, EKeys::V); Map(IA_Kick, EKeys::Gamepad_RightTrigger);
 	Map(IA_Skill, EKeys::F); Map(IA_Skill, EKeys::Gamepad_LeftShoulder);
 	Map(IA_Whistle, EKeys::Z); Map(IA_Whistle, EKeys::Gamepad_DPad_Down);
+	Map(IA_Sheathe, EKeys::R); Map(IA_Sheathe, EKeys::Gamepad_DPad_Left);
 	Map(IA_Warrior1, EKeys::F1); Map(IA_Warrior2, EKeys::F2); Map(IA_Warrior3, EKeys::F3);
 }
 
@@ -785,7 +788,7 @@ UInputAction* AErtCharacter::ActionByName(const FString& N) const
 {
 	if (N == TEXT("Jump")) return IA_Jump; if (N == TEXT("Sprint")) return IA_Sprint; if (N == TEXT("Crouch")) return IA_Crouch; if (N == TEXT("Walk")) return IA_Walk;
 	if (N == TEXT("Attack")) return IA_Attack; if (N == TEXT("Block")) return IA_Block; if (N == TEXT("Shoot")) return IA_Shoot; if (N == TEXT("Interact")) return IA_Interact;
-	if (N == TEXT("Dodge")) return IA_Dodge; if (N == TEXT("Lock")) return IA_Lock; if (N == TEXT("Kick")) return IA_Kick; if (N == TEXT("Inventory")) return IA_Inventory; if (N == TEXT("Skill")) return IA_Skill; if (N == TEXT("Whistle")) return IA_Whistle;
+	if (N == TEXT("Dodge")) return IA_Dodge; if (N == TEXT("Lock")) return IA_Lock; if (N == TEXT("Kick")) return IA_Kick; if (N == TEXT("Inventory")) return IA_Inventory; if (N == TEXT("Skill")) return IA_Skill; if (N == TEXT("Whistle")) return IA_Whistle; if (N == TEXT("Sheathe")) return IA_Sheathe;
 	if (N == TEXT("Potion")) return IA_Potion; if (N == TEXT("Map")) return IA_Map; if (N == TEXT("Settings")) return IA_Settings;
 	return nullptr;
 }
@@ -826,6 +829,13 @@ void AErtCharacter::ApplyBindings()
 void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); else if (GM->GetMenu() == EErtMenu::Map) GM->MapRotate(-30.f); } }
 void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); else if (GM->GetMenu() == EErtMenu::Map) GM->MapRotate(30.f); } }
 void AErtCharacter::OnInventory() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleInventory(); }
+void AErtCharacter::OnSheathe()
+{
+	if (!bInputEnabled || bDead || !Body || !Body->IsSkeletal()) return;
+	Body->SetSheathed(!Body->IsSheathed());
+	if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = Body->IsSheathed() ? TEXT("Qilich qinga solindi (R: chiqarish)") : TEXT("Qilich chiqarildi"); GM->ShopMsgT = 2.f; }
+}
+
 void AErtCharacter::OnPotion()
 {
 	if (!bInputEnabled || bDead) return;
@@ -864,6 +874,7 @@ void AErtCharacter::AddXP(int32 N)
 
 void AErtCharacter::ApplyEquipment()
 {
+	if (Body && Body->IsSkeletal()) Body->SkelBuildShield(bShield);
 	AttackDamage = 30.f + (Level - 1) * 3.f + (SwordTier >= 2 ? 12.f : 0.f);
 	ArrowDamage = 45.f + (Level - 1) * 3.f + (BowTier >= 2 ? 20.f : 0.f) + (ArrowTier >= 2 ? 8.f : 0.f);
 	MaxArrows = BowTier >= 2 ? 24 : 16;
@@ -988,6 +999,7 @@ void AErtCharacter::SetupPlayerInputComponent(UInputComponent* PIC)
 	EIC->BindAction(IA_Potion, ETriggerEvent::Started, this, &AErtCharacter::OnPotion);
 	EIC->BindAction(IA_Skill, ETriggerEvent::Started, this, &AErtCharacter::OnSkill);
 	EIC->BindAction(IA_Whistle, ETriggerEvent::Started, this, &AErtCharacter::OnWhistle);
+	EIC->BindAction(IA_Sheathe, ETriggerEvent::Started, this, &AErtCharacter::OnSheathe);
 	EIC->BindAction(IA_Warrior1, ETriggerEvent::Started, this, &AErtCharacter::OnWarrior1);
 	EIC->BindAction(IA_Warrior2, ETriggerEvent::Started, this, &AErtCharacter::OnWarrior2);
 	EIC->BindAction(IA_Warrior3, ETriggerEvent::Started, this, &AErtCharacter::OnWarrior3);

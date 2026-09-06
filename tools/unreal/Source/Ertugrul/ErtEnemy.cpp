@@ -215,6 +215,7 @@ void AErtEnemy::Die()
 			L->Arrows = (Kind == EErtEnemyKind::Crossbow) ? FMath::RandRange(3, 7) : (FMath::FRand() < 0.35f ? FMath::RandRange(1, 3) : 0);
 			L->Potions = Kind == EErtEnemyKind::Boss ? 3 : (FMath::FRand() < (bRich ? 0.35f : 0.12f) ? 1 : 0);
 			L->Iron = Kind == EErtEnemyKind::Boss ? 3 : (FMath::FRand() < (bRich ? 0.6f : 0.3f) ? 1 : 0);
+			L->Leather = (Kind == EErtEnemyKind::Rider || Kind == EErtEnemyKind::Elite) && FMath::FRand() < 0.4f ? 1 : 0;
 			L->bBoss = Kind == EErtEnemyKind::Boss;
 		}
 	}

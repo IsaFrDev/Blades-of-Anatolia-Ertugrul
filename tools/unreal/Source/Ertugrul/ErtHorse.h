@@ -43,7 +43,8 @@ public:
 	FString HorseName;   // nom (Bo'ra, Tulpor...) - HUD da
 	void Feed() { Health = MaxHealth; Care = FMath::Min(1.f, Care + 0.35f); CareFxT = 2.5f; }
 	void Groom() { Care = FMath::Min(1.f, Care + 0.5f); CareFxT = 2.5f; }
-	float CareSpeed() const { return 1.f + 0.12f * Care; }
+	bool bSaddled = false;   // egar (o'yinchi hunarmandchiligi)
+	float CareSpeed() const { return 1.f + 0.12f * Care + (bSaddled ? 0.08f : 0.f); }
 	float GetHealth() const { return Health; } float GetMaxHealth() const { return MaxHealth; }
 	bool IsSummoned() const { return SummonT > 0.f; }
 	bool IsDead() const { return bDead; }
