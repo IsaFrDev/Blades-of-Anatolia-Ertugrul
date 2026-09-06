@@ -542,6 +542,7 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 			}
 		}
 		// Qo'lda ssenariyda ham har 4-epizodda tush bosqichi (2-o'rinda)
+		GlobalIdx = E.GlobalIndex;
 		if (Phases.Num() >= 2 && E.GlobalIndex % 4 == 2) { bool bHas = false; for (const FErtPhase& Ph : Phases) bHas |= Ph.bDream; if (!bHas) { AddDream(); FErtPhase D = Phases.Last(); Phases.RemoveAt(Phases.Num() - 1); Phases.Insert(D, 1); } }
 		return;
 	}
@@ -556,6 +557,7 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 	else if (A == TEXT("COURT"))        { AddCollect(2); AddTravel(2, false); AddStealth(2); AddDuel(); }
 	else                                { AddTravel(2, false); AddCollect(3); AddStealth(2); AddFight(1, false); }
 	// Har 4-epizodda (global indeks % 4 == 2) ikkinchi bosqich - tush
+	GlobalIdx = E.GlobalIndex;
 	if (Phases.Num() >= 2 && E.GlobalIndex % 4 == 2 && !Phases[1].bDream) { AddDream(); FErtPhase D = Phases.Last(); Phases.RemoveAt(Phases.Num() - 1); Phases.Insert(D, 1); }
 }
 
@@ -563,7 +565,7 @@ void AErtMissionDirector::StartPhase(int32 Idx)
 {
 	if (!Phases.IsValidIndex(Idx)) return;
 	FErtPhase& P = Phases[Idx];
-	PhaseIdx = Idx; PhaseT = 0.f;
+	PhaseIdx = Idx; PhaseT = 0.f; bDreamRiddleDone = false;
 	if (AErtGameMode* GMd = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)))
 	{
 		AErtCharacter* Hd = Hero();
@@ -804,7 +806,13 @@ void AErtMissionDirector::Tick(float Dt)
 		bool bAllDone = true;
 		for (const FErtObjective& O : Objectives) if (!O.bOptional && !O.bDone) { bAllDone = false; break; }
 		const bool bWavesDone = Waves.Num() == 0 || (WaveIdx + 1 >= Waves.Num() && Alive == 0);
-		if (bAllDone && bWavesDone)
+		if (bAllDone && bWavesDone && Phases.IsValidIndex(PhaseIdx) && Phases[PhaseIdx].bDream && !bDreamRiddleDone)
+		{
+			// Tush jumboqi: Ulukayin savol beradi, javob real dunyoga bayroq beradi
+			bDreamRiddleDone = true;
+			if (AErtGameMode* GMr = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { const int32 Ri = FMath::Abs(GlobalIdx) % 3 + 1; if (GMr->StartDialogId(FString::Printf(TEXT("dream_riddle_%d"), Ri))) break; }
+		}
+		if (bAllDone && bWavesDone && !(Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this)) && Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))->IsDialogActive()))
 		{
 			H->AddArrows(4);
 			H->Heal(25.f);

@@ -578,9 +578,36 @@ void UErtHeroBody::SkelPlay(const FString& Key, bool bLoop, float Rate, int32 In
 	Skel->SetPlayRate(Rate);
 }
 
+void UErtHeroBody::FaceAnimate(float Dt)
+{
+	if (!Skel || !Skel->GetSkeletalMeshAsset()) return;
+	if (MouthMorph == -2 || FaceScan > 0.f) { FaceScan -= Dt; if (MouthMorph == -2 || FaceScan <= 0.f) {
+		FaceScan = 5.f; MouthMorph = -1; BlinkMorph = -1;
+		static const TCHAR* Mouths[] = { TEXT("MouthOpen"), TEXT("Mouth_Open"), TEXT("mouthOpen"), TEXT("JawOpen"), TEXT("jawOpen"), TEXT("Jaw_Open"), TEXT("CTRL_expressions_jawOpen"), TEXT("viseme_aa"), TEXT("AA"), TEXT("Talk") };
+		static const TCHAR* Blinks[] = { TEXT("EyeBlink"), TEXT("Blink"), TEXT("eyesClosed"), TEXT("EyesClosed"), TEXT("eyeBlinkLeft"), TEXT("Blink_L"), TEXT("CTRL_expressions_eyeBlinkL") };
+		static const TCHAR* Blinks2[] = { TEXT(""), TEXT(""), TEXT(""), TEXT(""), TEXT("eyeBlinkRight"), TEXT("Blink_R"), TEXT("CTRL_expressions_eyeBlinkR") };
+		USkeletalMesh* SM = Skel->GetSkeletalMeshAsset();
+		for (const TCHAR* Nm : Mouths) if (SM->FindMorphTarget(FName(Nm))) { MouthMorph = 1; MouthName = FName(Nm); break; }
+		for (int32 i = 0; i < UE_ARRAY_COUNT(Blinks); ++i) if (SM->FindMorphTarget(FName(Blinks[i]))) { BlinkMorph = 1; BlinkName = FName(Blinks[i]); BlinkName2 = FName(Blinks2[i]); break; }
+		if (MouthMorph < 0) { static const TCHAR* Jaws[] = { TEXT("jaw"), TEXT("Jaw"), TEXT("FACIAL_C_Jaw"), TEXT("jaw_01"), TEXT("head_jaw") }; for (const TCHAR* Nm : Jaws) if (Skel->GetBoneIndex(FName(Nm)) != INDEX_NONE) { MouthMorph = 2; MouthName = FName(Nm); break; } }
+	} }
+	if (MouthMorph == 1 || MouthMorph == 2)
+	{
+		TalkT = bTalk ? TalkT + Dt : 0.f;
+		const float Open = bTalk ? FMath::Clamp(0.25f + 0.35f * FMath::Sin(TalkT * 11.f) + 0.25f * FMath::Sin(TalkT * 17.3f + 1.f), 0.f, 0.8f) : 0.f;
+		if (MouthMorph == 1) Skel->SetMorphTarget(MouthName, Open);
+	}
+	if (BlinkMorph == 1)
+	{
+		BlinkT -= Dt; if (BlinkT <= 0.f) { BlinkT = FMath::FRandRange(2.f, 5.f); BlinkV = 1.f; }
+		if (BlinkV > 0.f) { BlinkV = FMath::Max(0.f, BlinkV - Dt * 7.f); const float B = FMath::Sin(BlinkV * PI); Skel->SetMorphTarget(BlinkName, B); if (!BlinkName2.IsNone() && BlinkName2 != NAME_None && BlinkName2.ToString().Len() > 0) Skel->SetMorphTarget(BlinkName2, B); }
+	}
+}
+
 void UErtHeroBody::SkelAnimate(float Dt, float Speed, bool bInAir, bool bCrouched)
 {
 	IdleT += Dt;
+	FaceAnimate(Dt);
 	AttackT = FMath::Max(0.f, AttackT - Dt / (AttackKind == 2 ? 0.75f : 0.45f));
 	HurtT = FMath::Max(0.f, HurtT - Dt / 0.35f);
 	ParryT = FMath::Max(0.f, ParryT - Dt / 0.3f);

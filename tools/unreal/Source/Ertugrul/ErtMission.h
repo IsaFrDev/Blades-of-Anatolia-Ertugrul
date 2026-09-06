@@ -133,6 +133,7 @@ private:
 	FRandomStream Rng;
 	FVector Cursor = FVector::ZeroVector;
 	FVector2D CouncilBase = FVector2D::ZeroVector;
+	bool bDreamRiddleDone = false; int32 GlobalIdx = 0;
 	FVector DreamReturn = FVector::ZeroVector; float DreamReturnYaw = 0.f;   // kengash NPClari bazasi (reja E, N): oba yoki epizod boshlanishi
 
 	struct FCheckpoint { bool bValid = false; int32 Phase = 0; FVector Pos; float Yaw = 0.f; } Cp;

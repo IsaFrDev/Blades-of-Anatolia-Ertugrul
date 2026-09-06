@@ -464,3 +464,19 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - **Rangli hujum ko'rsatkichi**: dushman zarbasi oldidan sariq halqa PARRY (yengil), qizil DODGE (og'ir, `IsHeavyPending`).
 - **Ot hushtagi** (Z): 300 m ichidagi bo'sh ot yo'rtib/chopib keladi (`AErtHorse::Summon`).
 - **Tush bosqichi** ("Tush: Ulukayin"): RITUAL epizodlarida va har 4-epizodda (global indeks % 4 == 2) 2-bosqich; o'yinchi cho'l vohasiga o'tadi, tun + tuman + binafsha tuslash (`AErtGameMode::SetDream`), 3 belgi yig'iladi, so'ng avvalgi joyga qaytadi. Sinov: EP003 da o'tdi.
+
+## Ot parvarishi, hunarmandchilik, tush jumboqlari, yuz animatsiyasi (2026-09-06)
+
+**Ot parvarishi** (`ErtHorse.h`: `Care`, `Feed()`, `Groom()`, `CareSpeed()`):
+- Ot yonida (3 m, minilmagan) **V** = tarash (+50% parvarish), **H** = go'sht bilan boqish (go'sht -1, ot sog'ligi to'liq, +35% parvarish).
+- Parvarish 0..100%: yo'rtish/chopish tezligi +12% gacha, o'z-o'zidan tiklanish 3 -> 7 HP/s, chaqirilganda (Z) tezroq keladi. 15 daqiqada asta kamayadi.
+
+**Hunarmandchilik** (Deli Demir, oba temirxonasi; `npc_deli_demir.json` "Temirxona" bo'limi, `AErtGameMode::RefreshCraftFlags/EndDialog`):
+- Resurslar: **temir** dushman o'ljasidan (30%, boy 60%, boss 3), **teri** kiyik go'shti bilan (+1). Saqlanadi (`iron`, `leather`, `ironArmor`, `arrowTier`).
+- Retseptlar: 12 po'lat o'q (1 temir + 1 teri, o'q zarari +8), temir zirh (3 + 2, zarar -20%), Damashq qilichi (4 temir), temir qoplamali qalqon (2 + 1). Variantlar faqat resurs yetganda ko'rinadi (`can_craft_*` bayroqlari). Inventar (I) da temir/teri va retseptlar ko'rsatiladi.
+
+**Tush jumboqlari** (`dream_riddle_1..3.json`, `AErtMissionDirector` tush bosqichi tugaganda `StartDialogId`):
+- Ulukayin 3 belgidan so'ng jumboq beradi (or-nomus / xabar / o'q dastasi). To'g'ri javob -> `dream_gift` bayrog'i, or +5, to'liq shifo; noto'g'ri -> or -2. Dialog tugaguncha bosqich o'tmaydi.
+
+**Yuz animatsiyasi** (`UErtHeroBody::FaceAnimate`): skeletli personajda morph-target nomlari avtomatik qidiriladi (MouthOpen/JawOpen/CTRL_expressions_jawOpen/viseme_aa..., EyeBlink/eyeBlinkLeft/Right...). Dialogda kim gapirsa (NPC yoki "Ertugrul" so'zlovchi) o'sha og'zini qimirlatadi, ko'zlar 2-5 s da yumiladi. Jag' suyagi (jaw/FACIAL_C_Jaw) topilsa aniqlanadi, lekin suyak burilishi AnimBP/Control Rig talab qiladi (keyingi qadam).
+- Fab Paragon personajlari (Kwang, Greystone, Sparrow...) uchun: Fab -> "Add to project" -> `character.json` da `hero.mesh` = `/Game/ParagonKwang/Characters/Heroes/Kwang/Meshes/Kwang` (anims ham Paragon `Kwang_Idle`, `Kwang_Jog_Fwd`...). Paragon meshlarida morph-targetlar bo'lsa yuz darhol ishlaydi; bo'lmasa jag' suyagi yo'li kerak. Mannequin (SKM_Manny) da morph yo'q — shuning uchun hozir yuz harakati ko'rinmaydi.

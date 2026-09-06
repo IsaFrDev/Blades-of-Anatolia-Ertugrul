@@ -8,6 +8,10 @@
    "next": "n1",
    "options": [
     {
+     "text_key": "DLG_CRAFT_OPT",
+     "next": "craft"
+    },
+    {
      "text_key": "DLG_SQ_WOLF_HUNT_OPT",
      "next": "sq_sq_wolf_hunt",
      "requires_evidence": "sq_avail_sq_wolf_hunt"
@@ -43,6 +47,45 @@
   "sq_no_sq_wolf_hunt": {
    "speaker": "Deli Demir",
    "text_key": "DLG_SQ_DECLINE",
+   "next": "end"
+  },
+  "craft": {
+   "speaker": "Deli Demir",
+   "text_key": "DLG_CRAFT_MENU",
+   "options": [
+    {
+     "text_key": "DLG_CRAFT_ARROWS",
+     "next": "craft_done",
+     "set_flag": "craft_arrows",
+     "requires_evidence": "can_craft_arrows"
+    },
+    {
+     "text_key": "DLG_CRAFT_ARMOR",
+     "next": "craft_done",
+     "set_flag": "craft_armor",
+     "requires_evidence": "can_craft_armor"
+    },
+    {
+     "text_key": "DLG_CRAFT_SWORD",
+     "next": "craft_done",
+     "set_flag": "craft_sword",
+     "requires_evidence": "can_craft_sword"
+    },
+    {
+     "text_key": "DLG_CRAFT_SHIELD",
+     "next": "craft_done",
+     "set_flag": "craft_shield",
+     "requires_evidence": "can_craft_shield"
+    },
+    {
+     "text_key": "DLG_CRAFT_BACK",
+     "next": "end"
+    }
+   ]
+  },
+  "craft_done": {
+   "speaker": "Deli Demir",
+   "text_key": "DLG_CRAFT_DONE",
    "next": "end"
   }
  }

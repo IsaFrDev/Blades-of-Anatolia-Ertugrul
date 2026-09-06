@@ -1,0 +1,42 @@
+{
+ "id": "dream_riddle_1",
+ "start": "q",
+ "nodes": {
+  "q": {
+   "speaker": "Ulukayin",
+   "text_key": "DLG_DREAM_INTRO",
+   "next": "r"
+  },
+  "r": {
+   "speaker": "Ulukayin",
+   "text_key": "DLG_DREAM_R1_Q",
+   "options": [
+    {
+     "text_key": "DLG_DREAM_R1_A",
+     "next": "bad",
+     "set_flag": "dream_lost"
+    },
+    {
+     "text_key": "DLG_DREAM_R1_B",
+     "next": "good",
+     "set_flag": "dream_wise"
+    },
+    {
+     "text_key": "DLG_DREAM_R1_C",
+     "next": "bad",
+     "set_flag": "dream_lost"
+    }
+   ]
+  },
+  "good": {
+   "speaker": "Ulukayin",
+   "text_key": "DLG_DREAM_GOOD",
+   "next": "end"
+  },
+  "bad": {
+   "speaker": "Ulukayin",
+   "text_key": "DLG_DREAM_BAD",
+   "next": "end"
+  }
+ }
+}

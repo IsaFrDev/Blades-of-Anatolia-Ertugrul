@@ -169,6 +169,23 @@ void AErtGameMode::SpawnNpcs()
 	UE_LOG(LogErtugrul, Log, TEXT("NPC: %d"), N);
 }
 
+void AErtGameMode::RefreshCraftFlags()
+{
+	AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)); if (!H) return;
+	auto Set = [&](const TCHAR* F, bool b) { if (b) Flags.Add(F); else Flags.Remove(F); };
+	Set(TEXT("can_craft_arrows"), H->Iron >= 1 && H->Leather >= 1);
+	Set(TEXT("can_craft_armor"), H->Iron >= 3 && H->Leather >= 2 && !H->bIronArmor);
+	Set(TEXT("can_craft_sword"), H->Iron >= 4 && H->SwordTier < 2);
+	Set(TEXT("can_craft_shield"), H->Iron >= 2 && H->Leather >= 1 && !H->bShield);
+}
+
+bool AErtGameMode::StartDialogId(const FString& Id)
+{
+	if (Dialog.IsActive() || (Cutscene && Cutscene->IsPlaying())) return false;
+	if (!Dialog.Start(Id, &Flags, &Honor)) return false;
+	TalkingNpc = nullptr; SetPlayerInput(false, false); return true;
+}
+
 void AErtGameMode::RefreshSideQuestFlags()
 {
 	for (const AErtMissionDirector::FSideInfo& S : AErtMissionDirector::LoadSideQuests())
@@ -185,6 +202,7 @@ void AErtGameMode::StartDialog(AErtNpc* Npc)
 {
 	if (!Npc || Dialog.IsActive() || (Cutscene && Cutscene->IsPlaying())) return;
 	RefreshSideQuestFlags();
+	RefreshCraftFlags();
 	if (!Dialog.Start(Npc->GetDialogId(), &Flags, &Honor)) return;
 	Npc->SetTalking(true); TalkingNpc = Npc;
 	SetPlayerInput(false, false);
@@ -233,6 +251,20 @@ void AErtGameMode::EndDialog()
 		if (Flags.Contains(TEXT("act_archery"))) { Flags.Remove(TEXT("act_archery")); StartActivity(1); }
 		if (Flags.Contains(TEXT("act_wrestle"))) { Flags.Remove(TEXT("act_wrestle")); StartActivity(2); }
 		if (Flags.Contains(TEXT("hayme_blessing"))) { Flags.Remove(TEXT("hayme_blessing")); H->Potions += 2; H->Heal(100.f); ShopMsg = TEXT("Onaning duosi: +2 dori, to'liq shifo"); ShopMsgT = 3.f; }
+		// Hunarmandchilik (Deli Demir temirxonasi): teri/temir -> po'lat o'q, temir zirh, Damashq qilichi, dori
+		auto Craft = [&](const TCHAR* Flag, int32 NeedIron, int32 NeedLeather, TFunction<void()> Give, const TCHAR* Msg)
+		{
+			if (!Flags.Contains(Flag)) return; Flags.Remove(Flag);
+			if (H->Iron < NeedIron || H->Leather < NeedLeather) { ShopMsg = FString::Printf(TEXT("Yetarli emas: kerak temir %d, teri %d (sizda %d / %d)"), NeedIron, NeedLeather, H->Iron, H->Leather); ShopMsgT = 4.f; return; }
+			H->Iron -= NeedIron; H->Leather -= NeedLeather; Give(); H->ApplyEquipment(); ShopMsg = Msg; ShopMsgT = 4.f; SaveGame();
+		};
+		Craft(TEXT("craft_arrows"), 1, 1, [&]() { H->AddArrows(12); H->ArrowTier = 2; }, TEXT("Temirchi: 12 po'lat o'q yasaldi (+8 zarar)"));
+		Craft(TEXT("craft_armor"), 3, 2, [&]() { H->bIronArmor = true; }, TEXT("Temirchi: temir zirh (zarar -20%)"));
+		Craft(TEXT("craft_sword"), 4, 0, [&]() { H->SwordTier = 2; }, TEXT("Temirchi: Damashq qilichi (+12 zarar)"));
+		Craft(TEXT("craft_shield"), 2, 1, [&]() { H->bShield = true; }, TEXT("Temirchi: temir qoplamali qalqon"));
+		// Tush jumboqlari: to'g'ri javob - donolik (or +5, keyingi bosqichda to'liq shifo); noto'g'ri - or -2
+		if (Flags.Contains(TEXT("dream_wise"))) { Flags.Remove(TEXT("dream_wise")); Flags.Add(TEXT("dream_gift")); AddHonor(5); H->Heal(100.f); ShopMsg = TEXT("Tush jumboqi yechildi: or +5, Ulukayin ne'mati (shifo)"); ShopMsgT = 4.f; }
+		if (Flags.Contains(TEXT("dream_lost"))) { Flags.Remove(TEXT("dream_lost")); AddHonor(-2); ShopMsg = TEXT("Tush jumboqi yechilmadi: or -2"); ShopMsgT = 4.f; }
 		Buy(TEXT("buy_potion"), 15, [&]() { H->Potions += 1; });
 		Buy(TEXT("buy_arrows"), 10, [&]() { H->AddArrows(8); });
 		Buy(TEXT("buy_shield"), 60, [&]() { H->bShield = true; H->ApplyEquipment(); });
@@ -263,6 +295,7 @@ void AErtGameMode::SaveGame()
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
 		R->SetNumberField(TEXT("meat"), H->Meat); R->SetBoolField(TEXT("pelt"), H->bPeltArmor);
+	R->SetNumberField(TEXT("iron"), H->Iron); R->SetNumberField(TEXT("leather"), H->Leather); R->SetBoolField(TEXT("ironArmor"), H->bIronArmor); R->SetNumberField(TEXT("arrowTier"), H->ArrowTier);
 		R->SetNumberField(TEXT("gold"), H->Gold); R->SetNumberField(TEXT("potions"), H->Potions); R->SetNumberField(TEXT("arrows"), H->GetArrows());
 		R->SetNumberField(TEXT("level"), H->Level); R->SetNumberField(TEXT("xp"), H->XP);
 		R->SetNumberField(TEXT("sword"), H->SwordTier); R->SetNumberField(TEXT("bow"), H->BowTier); R->SetBoolField(TEXT("shield"), H->bShield);
@@ -294,6 +327,7 @@ void AErtGameMode::LoadGame()
 			int32 V = 0;
 			if (R->TryGetNumberField(TEXT("gold"), V)) H->Gold = V;
 			if (R->TryGetNumberField(TEXT("meat"), V)) H->Meat = V;
+		{ double Dv = 0; if (R->TryGetNumberField(TEXT("iron"), Dv)) H->Iron = (int32)Dv; if (R->TryGetNumberField(TEXT("leather"), Dv)) H->Leather = (int32)Dv; bool B = false; if (R->TryGetBoolField(TEXT("ironArmor"), B)) H->bIronArmor = B; if (R->TryGetNumberField(TEXT("arrowTier"), Dv)) H->ArrowTier = (int32)Dv; }
 			{ bool Bp = false; if (R->TryGetBoolField(TEXT("pelt"), Bp)) H->bPeltArmor = Bp; }
 			if (R->TryGetNumberField(TEXT("potions"), V)) H->Potions = V;
 			if (R->TryGetNumberField(TEXT("arrows"), V)) H->AddArrows(V - H->GetArrows());

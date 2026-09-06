@@ -65,6 +65,10 @@ public:
 	/** Suzish pozasi (gorizontal, qo'l-oyoq harakati) */
 	void SetSwimming(bool bOn) { bSwim = bOn; }
 	void SetRiding(bool bOn) { bRide = bOn; }
+	// Yuz: gapirganda og'iz morph-targetlari (MetaHuman/Paragon/Daz nomlari), davriy ko'z yumish; suyakli yuzda jag' suyagi
+	void SetTalk(bool bOn) { bTalk = bOn; }
+	void FaceAnimate(float Dt);
+	bool bTalk = false; float TalkT = 0.f, BlinkT = 2.f, BlinkV = 0.f; int32 MouthMorph = -2, BlinkMorph = -2; FName MouthName, BlinkName, BlinkName2; float FaceScan = 0.f;
 	void SetBlocking(bool bOn) { bBlock = bOn; }
 	/** Chap bilakda qalqon */
 	void SetShield(bool bOn);

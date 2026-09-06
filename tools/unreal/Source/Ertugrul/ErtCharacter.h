@@ -54,7 +54,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") float GetMaxHealth() const { return MaxHealth; }
 	UFUNCTION(BlueprintPure, Category = "Ertugrul") int32 GetArrows() const { return Arrows; }
 	// Inventar va daraja
-	int32 Meat = 0;
+	int32 Meat = 0, Iron = 0, Leather = 0; bool bIronArmor = false; int32 ArrowTier = 1;
 	bool bPeltArmor = false;
 	int32 Gold = 20, Potions = 1, Level = 1, XP = 0, SwordTier = 1, BowTier = 1; bool bShield = false;
 	int32 XPToNext() const { return 80 + (Level - 1) * 60; }

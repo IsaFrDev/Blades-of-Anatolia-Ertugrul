@@ -261,13 +261,14 @@ void AErtHorse::Tick(float Dt)
 {
 	Super::Tick(Dt);
 	if (bDead) return;
-	if (!Rider && Health < MaxHealth) Health = FMath::Min(MaxHealth, Health + 3.f * Dt);
+	if (!Rider && Health < MaxHealth) Health = FMath::Min(MaxHealth, Health + (3.f + 4.f * Care) * Dt);
+	Care = FMath::Max(0.f, Care - Dt / 900.f); CareFxT = FMath::Max(0.f, CareFxT - Dt);
 	UCharacterMovementComponent* CM = GetCharacterMovement();
 	if (Rider)
 	{
 		// Maqsad tezligi
 		float Target = 0.f;
-		if (Input.Y > 0.2f) Target = bGallopIn ? GallopSpeed : (Input.Y > 0.7f ? TrotSpeed : WalkSpeed);
+		if (Input.Y > 0.2f) Target = (bGallopIn ? GallopSpeed : (Input.Y > 0.7f ? TrotSpeed : WalkSpeed)) * CareSpeed();
 		else if (Input.Y < -0.2f) Target = -140.f;
 		const float Rate = (FMath::Abs(Target) > FMath::Abs(CurSpeed)) ? 380.f : 650.f;
 		CurSpeed = FMath::FInterpConstantTo(CurSpeed, Target, Dt, Rate);
@@ -287,7 +288,7 @@ void AErtHorse::Tick(float Dt)
 		const float Dist = FVector::Dist2D(SummonTo, GetActorLocation());
 		if (Dist > 260.f && !D.IsNearlyZero())
 		{
-			CurSpeed = FMath::FInterpConstantTo(CurSpeed, Dist > 1500.f ? GallopSpeed * 0.8f : TrotSpeed, Dt, 400.f);
+			CurSpeed = FMath::FInterpConstantTo(CurSpeed, (Dist > 1500.f ? GallopSpeed * 0.8f : TrotSpeed) * CareSpeed(), Dt, 400.f);
 			CM->MaxWalkSpeed = FMath::Max(80.f, CurSpeed);
 			SetActorRotation(FMath::RInterpTo(GetActorRotation(), FRotator(0, D.Rotation().Yaw, 0), Dt, 4.f));
 			AddMovementInput(GetActorForwardVector(), 1.f);

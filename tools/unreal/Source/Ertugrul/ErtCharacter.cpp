@@ -168,6 +168,8 @@ void AErtCharacter::OnAttackReleased()
 void AErtCharacter::OnKick()
 {
 	if (!bInputEnabled || bMantling || bDead || AttackCD > 0.f || Horse) return;
+	if (AErtHorse* Hh = NearestHorse(300.f)) { if (!Hh->IsMounted()) { AttackCD = 1.2f; Hh->Groom(); if (Body) Body->TriggerAttack(3); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.35f, 0.7f);
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = FString::Printf(TEXT("Ot tarandi: parvarish %d%% (tezlik +%d%%)"), (int32)(Hh->Care * 100.f), (int32)(Hh->Care * 12.f)); GM->ShopMsgT = 3.f; } return; } }
 	AttackCD = 0.9f;
 	Stamina = FMath::Max(0.f, Stamina - 8.f);
 	DoAttack(3, 0.3f, true, 0.9f, 420.f);
@@ -243,9 +245,9 @@ void AErtCharacter::OnInteract()
 	}
 	if (AErtEnemy* Cc = NearestCarcass(260.f))
 	{
-		Cc->bLooted = true; Meat += 2; AddXP(5);
+		Cc->bLooted = true; Meat += 2; Leather += 1; AddXP(5);
 		FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.4f, 0.8f);
-		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = TEXT("Kiyik go'shti +2 (H bilan yeyiladi, +25)"); GM->ShopMsgT = 3.f; }
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = TEXT("Kiyik go'shti +2, teri +1 (H: yeyish yoki ot yonida boqish)"); GM->ShopMsgT = 3.f; }
 		return;
 	}
 	if (AErtNpc* N = NearestNpc(280.f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->StartDialog(N); return; }
@@ -378,7 +380,7 @@ void AErtCharacter::ReceiveHit(float Damage, const FVector& From, AErtEnemy* Att
 	}
 	if (bBlocking && bFacing && Stamina > 5.f && !bUnblockable) { AErtBurst::Sparks(GetWorld(), GetActorLocation() + To * 50.f + FVector(0, 0, 40.f), -To); Damage *= bShield ? 0.05f : 0.2f; Stamina = FMath::Max(0.f, Stamina - (bShield ? 6.f : 12.f)); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.9f); }
 	else FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), GetActorLocation(), 0.8f, 0.9f);
-	if (bPeltArmor) Damage *= 0.85f;   // bo'ri terisi zirhi
+	if (bIronArmor) Damage *= 0.8f; else if (bPeltArmor) Damage *= 0.85f;   // temir zirh / bo'ri terisi zirhi
 	if (Horse) { Horse->ApplyDamage(Damage * 0.4f); Damage *= 0.6f; }
 	Health -= Damage;
 	HurtFlash = 1.f;
@@ -817,7 +819,17 @@ void AErtCharacter::ApplyBindings()
 void AErtCharacter::OnMenuLeft() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(-1); else if (GM->GetMenu() == EErtMenu::Map) GM->MapRotate(-30.f); } }
 void AErtCharacter::OnMenuRight() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { if (GM->IsSettingsOpen()) GM->SettingsAdjust(1); else if (GM->GetMenu() == EErtMenu::Map) GM->MapRotate(30.f); } }
 void AErtCharacter::OnInventory() { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleInventory(); }
-void AErtCharacter::OnPotion() { if (bInputEnabled && !bDead) UsePotion(); }
+void AErtCharacter::OnPotion()
+{
+	if (!bInputEnabled || bDead) return;
+	if (!Horse) if (AErtHorse* Hh = NearestHorse(300.f)) if (!Hh->IsMounted() && Meat > 0)
+	{
+		Meat--; Hh->Feed(); FErtAudio::PlaySfx(GetWorld(), TEXT("block"), GetActorLocation(), 0.35f, 0.6f);
+		if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->ShopMsg = FString::Printf(TEXT("Ot boqildi: sog'liq to'liq, parvarish %d%%"), (int32)(Hh->Care * 100.f)); GM->ShopMsgT = 3.f; }
+		return;
+	}
+	UsePotion();
+}
 
 bool AErtCharacter::UsePotion()
 {
@@ -846,7 +858,7 @@ void AErtCharacter::AddXP(int32 N)
 void AErtCharacter::ApplyEquipment()
 {
 	AttackDamage = 30.f + (Level - 1) * 3.f + (SwordTier >= 2 ? 12.f : 0.f);
-	ArrowDamage = 45.f + (Level - 1) * 3.f + (BowTier >= 2 ? 20.f : 0.f);
+	ArrowDamage = 45.f + (Level - 1) * 3.f + (BowTier >= 2 ? 20.f : 0.f) + (ArrowTier >= 2 ? 8.f : 0.f);
 	MaxArrows = BowTier >= 2 ? 24 : 16;
 	if (Body && Body->IsBuilt()) { Body->SetShield(bShield); Body->SetSwordTier(SwordTier); }
 }
@@ -1223,6 +1235,7 @@ void AErtCharacter::Tick(float Dt)
 	{
 		Boat->SetInput(MoveInput);
 		Boom->TargetArmLength = FMath::FInterpTo(Boom->TargetArmLength, FMath::Max(TargetArm, 520.f), Dt, 6.f);
+	if (Body) if (AErtGameMode* GMt = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) Body->SetTalk(GMt->IsDialogActive() && GMt->DialogSpeaker() == TEXT("Ertugrul"));
 		if (Body) Body->Animate(Dt, 0.f, false, true, 0.f, 0.f);   // o'tirgan poza
 		MoveInput = FVector2D::ZeroVector;
 		return;

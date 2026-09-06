@@ -53,6 +53,9 @@ public:
 	FString HonorTitle() const { return Honor >= 20 ? TEXT("Sharafli Bey") : (Honor >= 10 ? TEXT("Mo'tabar") : (Honor <= -10 ? TEXT("Badnom") : (Honor <= -5 ? TEXT("Shubhali") : TEXT("Oddiy")))); }
 	const TSet<FString>& GetFlags() const { return Flags; }
 	void AddFlag(const FString& F) { Flags.Add(F); }
+	void RefreshCraftFlags();
+	FString DialogSpeaker() const { return Dialog.IsActive() ? Dialog.Speaker() : FString(); }
+	bool StartDialogId(const FString& Id); // NPCsiz dialog (tush jumboqi)
 	void RemoveFlag(const FString& F) { Flags.Remove(F); }
 	void AddHonor(int32 N) { Honor += N; }
 	void RefreshSideQuestFlags();

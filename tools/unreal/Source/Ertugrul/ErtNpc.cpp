@@ -48,6 +48,7 @@ void AErtNpc::Tick(float Dt)
 {
 	Super::Tick(Dt);
 	if (!Body || !Body->IsBuilt()) return;
+	if (AErtGameMode* GMt = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) Body->SetTalk(bTalking && GMt->IsDialogActive() && GMt->DialogSpeaker() != TEXT("Ertugrul"));
 	// Kundalik hayot: kunduzi uyi atrofida 6 m radiusda yuradi, tunda uyiga qaytib turadi
 	float Speed = 0.f;
 	AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this));

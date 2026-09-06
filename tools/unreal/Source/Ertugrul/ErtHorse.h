@@ -38,6 +38,12 @@ public:
 	void ApplyDamage(float D);
 	/** Hushtak: ot o'yinchi tomon yo'rtib keladi (25 s) */
 	void Summon(const FVector& To) { SummonTo = To; SummonT = 25.f; }
+	// Parvarish: boqish (go'sht/olma) va tarash - Care 0..1, tezlik +12% * Care, sog'liq tiklanishi tezroq, chaqirilganda tezroq keladi
+	float Care = 0.f, CareFxT = 0.f;
+	void Feed() { Health = MaxHealth; Care = FMath::Min(1.f, Care + 0.35f); CareFxT = 2.5f; }
+	void Groom() { Care = FMath::Min(1.f, Care + 0.5f); CareFxT = 2.5f; }
+	float CareSpeed() const { return 1.f + 0.12f * Care; }
+	float GetHealth() const { return Health; } float GetMaxHealth() const { return MaxHealth; }
 	bool IsSummoned() const { return SummonT > 0.f; }
 	bool IsDead() const { return bDead; }
 

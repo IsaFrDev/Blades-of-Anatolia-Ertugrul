@@ -30,7 +30,7 @@ class ERTUGRUL_API AErtLoot : public AActor
 	GENERATED_BODY()
 public:
 	AErtLoot();
-	int32 Gold = 0, Arrows = 0, Potions = 0, Meat = 0;
+	int32 Gold = 0, Arrows = 0, Potions = 0, Meat = 0, Iron = 0;
 	bool bBoss = false;
 	FString Describe() const;
 	void GiveTo(AErtCharacter* H);

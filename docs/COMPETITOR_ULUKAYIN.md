@@ -8,10 +8,10 @@ Manbalar: Steam sahifasi va sharhlar (92% ijobiy, ~264 sharh), NotebookCheck, Fi
 | 3 o'ynaladigan jangchi: Ertug'rul (qilich), Turg'ut (bolta, sekin-kuchli), Meryem (kamon, yashirinish) | Ha, almashtirish | **Qo'shildi**: F1/F2/F3, har biriga zarar/tezlik/gangitish profili, bolta modeli, Meryem yashirinish bonusi |
 | Maxsus mahoratlar: zarba/parry bilan to'ladigan shkala | Ha (lekin "qachon to'lishi noaniq" — sharhlarda tanqid) | **Qo'shildi**: Alp shkalasi HUDda foiz bilan, F: Bo'ron qilichi (360°), Yer zarbasi (gangitish+uloqtirish), Uch o'q |
 | Rangli hujum ko'rsatkichlari (parry/dodge) | Ha | **Qo'shildi**: sariq PARRY / qizil DODGE halqa |
-| Ot: chaqirish, bog'lash, tarash, boqish | Ha | **Chaqirish qo'shildi** (Z hushtak, ot yo'rtib keladi); boqish/tarash — keyin |
+| Ot: chaqirish, bog'lash, tarash, boqish | Ha | **Qo'shildi**: Z hushtak, V tarash, H boqish (go'sht) — parvarish % tezlik/tiklanish bonusi |
 | Tush sahnalari (Ulukayin — hayot daraxti mifi, jumboqlar, dunyoga ta'sir) | Ha, asosiy o'ziga xoslik | **Qo'shildi**: "Tush: Ulukayin" bosqichi (RITUAL va har 4-epizodda): voha, binafsha tus, tuman, tun, 3 belgi; tugagach qaytish |
-| Kinematik kat-sahnalar, yuz animatsiyasi | Ha (yuz — zaif) | Bizda skriptli kat-sahna + subtitr; yuz yo'q |
-| Qabila boshqaruvi, hunarmandchilik | Ha | Savdogar, or/iymon, yon kvestlar; hunarmandchilik yo'q |
+| Kinematik kat-sahnalar, yuz animatsiyasi | Ha (yuz — zaif) | Kat-sahna + subtitr; **yuz**: morph-target og'iz/ko'z (skeletli mesh talab qiladi, Paragon/MetaHuman) |
+| Qabila boshqaruvi, hunarmandchilik | Ha | Savdogar, or/iymon, yon kvestlar; **hunarmandchilik qo'shildi** (Deli Demir: temir+teri -> o'q/zirh/qilich/qalqon) |
 | AI hamrohlar | Ha | Urush AI (ittifoqchi alplar) — bizda ham |
 | Ov, resurs yig'ish | Ha | Ov (kiyik), go'sht — bor |
 | 3 xarita: asosiy, tush, g'or | Ha | Bitta 2x2 km ochiq dunyo + 14 shahar/qishloq |
@@ -26,8 +26,8 @@ Manbalar: Steam sahifasi va sharhlar (92% ijobiy, ~264 sharh), NotebookCheck, Fi
 - Faqat 1–2 bob (~5 soat) → bizda 48 epizod (1227–1261).
 
 ## Keyingi qadamlar (ulardan o'rganib)
-1. Ot parvarishi: boqish (go'sht/olma), tarash — ot sog'ligi va tezligi bonusi.
-2. Hunarmandchilik: teri/temir → o'q, zirh; temirchi NPC.
-3. Tushda jumboq matnlari (dialog) va "tushdagi qaror" real dunyoga bayroq beradi.
-4. Yuz ifodasi: skeletli personajga morph/anim (Fab Paragon assetlari bilan).
+1. ~~Ot parvarishi~~ bajarildi.
+2. ~~Hunarmandchilik~~ bajarildi.
+3. ~~Tush jumboqlari~~ bajarildi (3 jumboq, dream_gift bayrog'i).
+4. Yuz ifodasi: morph tizimi tayyor; Paragon personajini Fab dan qo'shish kerak (jag' suyagi uchun AnimBP).
 5. Qo'shimcha xarita: g'or/er osti (Karacahisar ostida).
