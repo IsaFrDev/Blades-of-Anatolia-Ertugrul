@@ -1241,7 +1241,7 @@ void AErtWorldBuilder::BuildForest()
 			if (Pool.Num())
 			{
 				UStaticMesh* Mesh = Pool[RS.RandRange(0, Pool.Num() - 1)];
-				const float Sc = FErtFabLib::ScaleToHeight(Mesh, RS.FRandRange(0.8f, 1.5f) * (bPine ? 11.f : 8.f));
+				const float Sc = FErtFabLib::ScaleToHeight(Mesh, RS.FRandRange(0.85f, 1.4f) * (bPine ? 12.f : 10.f));
 				FabComp(Mesh, true)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), W(E, N, H - 0.05f), FVector(Sc)), true);
 				++Placed; ++FabTreesPlaced;
 				continue;
@@ -2797,7 +2797,7 @@ void AErtWorldBuilder::BuildGrass()
 	const int32 CellsPerSide = 6;
 	TArray<FErtMeshData> Cells; Cells.Init(FErtMeshData(1.f), CellsPerSide * CellsPerSide);
 	int32 Placed = 0;
-	const FLinearColor G1(0.30f, 0.46f, 0.12f), G2(0.42f, 0.55f, 0.16f), G3(0.55f, 0.58f, 0.22f);
+	const FLinearColor G1(0.20f, 0.47f, 0.10f), G2(0.28f, 0.56f, 0.12f), G3(0.38f, 0.60f, 0.16f);
 	for (int32 i = 0; i < GrassClumps * 8 && Placed < GrassClumps; ++i)
 	{
 		const float E = RS.FRandRange(-Half + 5.f, Half - 5.f), N = RS.FRandRange(-Half + 5.f, Half - 5.f);
@@ -2817,6 +2817,13 @@ void AErtWorldBuilder::BuildGrass()
 		const int32 cy = FMath::Clamp((int32)((N + Half) / WorldSizeM * CellsPerSide), 0, CellsPerSide - 1);
 		{
 			FErtFabLib& Fab = FErtFabLib::Get();
+			if (Fab.Grass.Num() && (Placed % 5) == 2)
+			{
+				UStaticMesh* Mesh = Fab.Grass[RS.RandRange(0, Fab.Grass.Num() - 1)];
+				FabComp(Mesh, false)->AddInstance(FTransform(FRotator(0, RS.FRandRange(0.f, 360.f), 0), W(E, N, H - 0.03f), FVector(FErtFabLib::ScaleToHeight(Mesh, RS.FRandRange(0.35f, 0.6f)))), true);
+				++Placed;
+				continue;
+			}
 			if (Fab.Bushes.Num() && (Placed % 40) == 17)
 			{
 				UStaticMesh* Mesh = Fab.Bushes[RS.RandRange(0, Fab.Bushes.Num() - 1)];

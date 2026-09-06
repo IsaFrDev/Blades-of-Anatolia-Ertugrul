@@ -450,3 +450,10 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - `AErtMap3D`: `Center` surish, `PanPixels`, `Tilt`, `Unproject` (ekran -> dunyo, relyef sathi), pauzada ham tick.
 - 48/48 epizod avtomatik sinovdan o'tdi (docs/episode_report_full.txt).
 - Diagnostika: `-ErtCam=E,N,Z,pitch,yaw` (reja koordinatalari, m) - 6 s dan keyin shu nuqtaga teleport, 8 s da skrinshot (`D:/temp/claude/camshot/01_cam.png`), 9 s da chiqish. Skrinshot ssenariysida ketma-ket teleport+kadr past FPS da aralashishi mumkin (16_damascus aslida Halab bo'lib chiqqan) - shubhali kadrni shu opsiya bilan tekshiring.
+
+## Poly Haven daraxtlar, butalar, o't (CC0, 1K)
+- `tools/unreal/Scripts/ph_download.py <id...>`: API orqali glTF + 1K teksturalar (`art/polyhaven/<id>/`, gitignored). Yuklanganlar: island_tree_01/02, fir_sapling_medium (3 variant), shrub_02/04, grass_medium_01/02, grass_bermuda_01 (jami ~200 MB).
+- `ert_import_ph_new.py` (`new_ids.json` bo'yicha) import; `ue_fix_gltf_parent.py`: Interchange MI lari dvijokning `M_GLTF` (ISM bayrog'i yo'q -> o'yinda kulrang) o'rniga `/Game/ErtAssets/M_GLTF_Ert` ga qayta bog'lanadi; `ue_fix_ph_foliage.py`: barg/o't MI lari (Substrate translucent, o'yinda ko'rinmaydi) -> `M_ErtFoliageTex` (Masked, ikki tomonlama folyaj, BaseColor.A niqob) instanslari `*_ert`.
+- Nanite folyaj meshlarida O'CHIRILGAN (`ue_leaf_test.py`): Nanite soddalashtirish barg geometriyasini yo'qotadi (5.8 da `shape_preservation` sozlamasi bilan sinash mumkin).
+- Skaner: `tree` -> Trees (island_tree), `fir` -> Pines, `shrub` -> Bushes, `grass` -> Grass; `BuildForest` Fab daraxtlarni 10/12 m balandlikka masshtablaydi, `BuildGrass` har 5-tupda Poly Haven o't meshi.
+- O't rangi: relyef shaderida to'q yashil tint (0.62, 1.06, 0.48), quruq aralashma kam; tola ranglari to'yingan yashil.

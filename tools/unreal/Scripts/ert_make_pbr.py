@@ -59,9 +59,9 @@ if (st == 0)
 	// Auto-qatlamlar teksturadan: o't/tuproq (relyef rangi bo'yicha), qum (cho'l), qiyalikda qoya, 75 m dan yuqorida qor, ko'lmak
 	float slope = 1.0 - saturate((N.z - 0.62) / 0.28);
 	float lum = dot(VC.rgb, float3(0.3, 0.5, 0.2));
-	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.75) * 3.0);
+	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.85) * 3.0);
 	float sandM = saturate((lum - 0.42) * 6.0) * dry;
-	float3 gD = lerp(GrassD1, GrassD2, 0.45) * float3(0.78, 1.02, 0.62);   // yashilroq o't
+	float3 gD = lerp(GrassD1, GrassD2, 0.45) * float3(0.62, 1.06, 0.48);   // to'q yashil o't
 	float3 dD = lerp(DirtD1, DirtD2, 0.45);
 	float3 sD = SandD;
 	float3 rD = RockD * float3(0.70, 0.69, 0.70) * (1.0 - 0.25 * saturate((Pm.z - 80.0) / 120.0));   // kulrang qoya, balandda to'qroq
@@ -103,7 +103,7 @@ if (st == 0)
 {
 	float slope = 1.0 - saturate((N.z - 0.62) / 0.28);
 	float lum = dot(VC.rgb, float3(0.3, 0.5, 0.2));
-	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.75) * 3.0);
+	float dry = saturate((VC.r / max(VC.g, 0.01) - 0.85) * 3.0);
 	float sandM = saturate((lum - 0.42) * 6.0) * dry;
 	float snow = saturate((Pm.z - 150.0) / 25.0) * saturate((N.z - 0.55) / 0.3);
 	float3 tg = GrassN, td = DirtN, ts = SandN, tr = RockN, tn = SnowN;   // Normal sampler: allaqachon -1..1
