@@ -463,4 +463,4 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - **Alp mahorat shkalasi** (`AlpBar`, zarba +7, parry +20; HUD): F - Bo'ron qilichi (360°, 1.9x, gangitish), Yer zarbasi (420 sm radius, uloqtirish, 1.8 s gangitish, hit-stop), Uch o'q (o'q sarflanmaydi).
 - **Rangli hujum ko'rsatkichi**: dushman zarbasi oldidan sariq halqa PARRY (yengil), qizil DODGE (og'ir, `IsHeavyPending`).
 - **Ot hushtagi** (Z): 300 m ichidagi bo'sh ot yo'rtib/chopib keladi (`AErtHorse::Summon`).
-- **Tush bosqichi** ("Tush: Ulukayin"): RITUAL epizodlarida va har 4-epizodda (global indeks % 4 == 2) 2-bosqich; o'yinchi Uludog' cho'qqisiga o'tadi, tun + tuman + binafsha tuslash (`AErtGameMode::SetDream`), 3 belgi yig'iladi, so'ng avvalgi joyga qaytadi. Sinov: EP003 da o'tdi.
+- **Tush bosqichi** ("Tush: Ulukayin"): RITUAL epizodlarida va har 4-epizodda (global indeks % 4 == 2) 2-bosqich; o'yinchi cho'l vohasiga o'tadi, tun + tuman + binafsha tuslash (`AErtGameMode::SetDream`), 3 belgi yig'iladi, so'ng avvalgi joyga qaytadi. Sinov: EP003 da o'tdi.

@@ -9,7 +9,7 @@ Manbalar: Steam sahifasi va sharhlar (92% ijobiy, ~264 sharh), NotebookCheck, Fi
 | Maxsus mahoratlar: zarba/parry bilan to'ladigan shkala | Ha (lekin "qachon to'lishi noaniq" — sharhlarda tanqid) | **Qo'shildi**: Alp shkalasi HUDda foiz bilan, F: Bo'ron qilichi (360°), Yer zarbasi (gangitish+uloqtirish), Uch o'q |
 | Rangli hujum ko'rsatkichlari (parry/dodge) | Ha | **Qo'shildi**: sariq PARRY / qizil DODGE halqa |
 | Ot: chaqirish, bog'lash, tarash, boqish | Ha | **Chaqirish qo'shildi** (Z hushtak, ot yo'rtib keladi); boqish/tarash — keyin |
-| Tush sahnalari (Ulukayin — hayot daraxti mifi, jumboqlar, dunyoga ta'sir) | Ha, asosiy o'ziga xoslik | **Qo'shildi**: "Tush: Ulukayin" bosqichi (RITUAL va har 4-epizodda): Uludog' cho'qqisi, binafsha tus, tuman, tun, 3 belgi; tugagach qaytish |
+| Tush sahnalari (Ulukayin — hayot daraxti mifi, jumboqlar, dunyoga ta'sir) | Ha, asosiy o'ziga xoslik | **Qo'shildi**: "Tush: Ulukayin" bosqichi (RITUAL va har 4-epizodda): voha, binafsha tus, tuman, tun, 3 belgi; tugagach qaytish |
 | Kinematik kat-sahnalar, yuz animatsiyasi | Ha (yuz — zaif) | Bizda skriptli kat-sahna + subtitr; yuz yo'q |
 | Qabila boshqaruvi, hunarmandchilik | Ha | Savdogar, or/iymon, yon kvestlar; hunarmandchilik yo'q |
 | AI hamrohlar | Ha | Urush AI (ittifoqchi alplar) — bizda ham |

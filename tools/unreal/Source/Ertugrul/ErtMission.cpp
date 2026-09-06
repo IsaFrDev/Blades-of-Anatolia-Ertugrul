@@ -427,17 +427,18 @@ void AErtMissionDirector::BuildPhases(const FErtEpisode& E)
 		P.Objectives.Add(O);
 		Phases.Add(P);
 	};
-	// Tush (Ulukayin mifi): Uludog' cho'qqisida 3 belgi (jumboq) yig'iladi, dunyo binafsha tumanda; tugagach qaytish
+	// Tush (Ulukayin mifi): voha yonida 3 belgi (jumboq) yig'iladi, dunyo binafsha tumanda; tugagach qaytish
 	auto AddDream = [&]()
 	{
 		FErtPhase P; P.TitleKey = TEXT("ui.phase.dream"); P.bDream = true;
-		const float SE = UluE, SN = UluN;
+		const float SE = OasisE + 40.f, SN = OasisN + 30.f;   // voha: tekis, palmalar, suv - tush manzarasi
 		P.DreamSpot = FVector(SN * 100.f, SE * 100.f, (World ? World->HeightAt(SE, SN) : 100.f) * 100.f);
 		FErtObjective O; O.Kind = EErtObjKind::Collect; O.LocKey = TEXT("ui.obj.dream"); O.Radius = 260.f; O.Target = 3;
 		for (int32 k = 0; k < 3; ++k)
 		{
-			const float A = 2.f * PI * k / 3.f + Rng.FRandRange(-0.4f, 0.4f), R = Rng.FRandRange(22.f, 48.f);
-			const float E = SE + FMath::Cos(A) * R, N = SN + FMath::Sin(A) * R;
+			const float A = 2.f * PI * k / 3.f + Rng.FRandRange(-0.4f, 0.4f), R = Rng.FRandRange(18.f, 40.f);
+			float E = SE + FMath::Cos(A) * R, N = SN + FMath::Sin(A) * R;
+			float SurfZ; if (World && World->IsWater(E, N, SurfZ)) { E = SE + FMath::Cos(A) * (R + 45.f); N = SN + FMath::Sin(A) * (R + 45.f); }
 			O.Points.Add(FVector(N * 100.f, E * 100.f, (World ? World->HeightAt(E, N) : 100.f) * 100.f)); O.Collected.Add(false);
 		}
 		P.Objectives.Add(O);
