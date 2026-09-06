@@ -239,6 +239,11 @@ private:
 	int32 AutoShotN = 0;
 	// -ErtCam=E,N,Z,pitch,yaw : 6 s dan keyin shu nuqtaga teleport, skrinshot, chiqish (diagnostika)
 	TArray<float> CamShot; float CamShotT = -1.f;
+	// -ErtFly=E,N,Z,P,Y;E,N,Z,P,Y;... -ErtFlyFrames=72 -ErtFlyStep=0.35: Catmull-Rom yo'l, har kadr skrinshot (fly_NNN), oxirida chiqish
+	TArray<FVector> FlyPos; TArray<FVector2D> FlyRot; int32 FlyFrames = 0, FlyIdx = -1; float FlyStep = 0.35f;
+public:
+	float FlyT = -1.f;
+private:
 	FVector AutoLastPos = FVector::ZeroVector;
 	FString AutoEpisode;
 	void UpdateAutoPlay(float Dt);

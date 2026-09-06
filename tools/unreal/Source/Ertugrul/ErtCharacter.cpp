@@ -461,6 +461,13 @@ void AErtCharacter::BeginPlay()
 	}
 	bAutoPlay = FParse::Param(FCommandLine::Get(), TEXT("ErtAutoPlay"));
 	{
+		FString FlyArg; if (FParse::Value(FCommandLine::Get(), TEXT("-ErtFly="), FlyArg, false))
+		{
+			TArray<FString> Keys; FlyArg.TrimQuotes().ParseIntoArray(Keys, TEXT(";"));
+			for (const FString& K : Keys) { TArray<FString> P; K.ParseIntoArray(P, TEXT(",")); if (P.Num() >= 5) { FlyPos.Add(FVector(FCString::Atof(*P[0]), FCString::Atof(*P[1]), FCString::Atof(*P[2]))); FlyRot.Add(FVector2D(FCString::Atof(*P[3]), FCString::Atof(*P[4]))); } }
+			FlyFrames = 72; FParse::Value(FCommandLine::Get(), TEXT("-ErtFlyFrames="), FlyFrames); FParse::Value(FCommandLine::Get(), TEXT("-ErtFlyStep="), FlyStep);
+			if (FlyPos.Num() >= 2) { FlyT = 0.f; FlyIdx = -1; if (ShotDir.IsEmpty()) ShotDir = TEXT("D:/temp/claude/flyshot"); }
+		}
 		FString CamArg; if (FParse::Value(FCommandLine::Get(), TEXT("-ErtCam="), CamArg, false)) { TArray<FString> Parts; CamArg.TrimQuotes().ParseIntoArray(Parts, TEXT(",")); if (Parts.Num() >= 5) { for (const FString& P : Parts) CamShot.Add(FCString::Atof(*P)); CamShotT = 0.f; } }
 	}
 	if (bAutoPlay) UE_LOG(LogErtugrul, Log, TEXT("[AutoPlay] yoqildi"));
@@ -1223,6 +1230,31 @@ void AErtCharacter::Tick(float Dt)
 	else if (Boom->SocketOffset != BoomBase) Boom->SocketOffset = BoomBase;
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
 	if (bAutoPlay) UpdateAutoPlay(Dt);
+	if (FlyT >= 0.f)
+	{
+		FlyT += Dt;
+		const float Start = 8.f;
+		if (FlyT >= Start)
+		{
+			const int32 Want = FMath::Min(FlyFrames, (int32)((FlyT - Start) / FlyStep));   // FlyFrames = oxirgi kadr olindi, chiqish
+			if (Want > FlyIdx)
+			{
+				// Oldingi kadr: skrinshot (kamera bir tick oldin joylashgan)
+				if (FlyIdx >= 0) { const FString File = FString::Printf(TEXT("%s/fly_%03d.png"), *ShotDir, FlyIdx); FScreenshotRequest::RequestScreenshot(File, false, false); }
+				if (Want >= FlyFrames) { FlyT = -1.f; UE_LOG(LogErtugrul, Log, TEXT("[Fly] %d kadr tayyor"), FlyFrames); FPlatformMisc::RequestExit(false); return; }
+				FlyIdx = Want;
+				const float U = FlyFrames > 1 ? (float)FlyIdx / (float)(FlyFrames - 1) : 0.f;
+				const int32 Segs = FlyPos.Num() - 1; const float S = U * Segs; const int32 I = FMath::Clamp((int32)S, 0, Segs - 1); const float T = S - I;
+				auto At = [&](int32 k) { return FlyPos[FMath::Clamp(k, 0, FlyPos.Num() - 1)]; };
+				auto RotAt = [&](int32 k) { return FlyRot[FMath::Clamp(k, 0, FlyRot.Num() - 1)]; };
+				const FVector P = FMath::CubicCRSplineInterp(At(I - 1), At(I), At(I + 1), At(I + 2), 0.f, 1.f, 2.f, 3.f, 1.f + T);
+				const float Sm = FMath::SmoothStep(0.f, 1.f, T);
+				const FVector2D R0 = RotAt(I), R1 = RotAt(I + 1);
+				const float Pitch = FMath::Lerp(R0.X, R1.X, Sm), Yaw = R0.Y + FMath::FindDeltaAngleDegrees(R0.Y, R1.Y) * Sm;
+				Teleport(P.X, P.Y, P.Z, Pitch, Yaw); TargetArm = 0.f; Boom->TargetArmLength = 0.f;
+			}
+		}
+	}
 	if (CamShotT >= 0.f)
 	{
 		const float Prev = CamShotT; CamShotT += Dt;

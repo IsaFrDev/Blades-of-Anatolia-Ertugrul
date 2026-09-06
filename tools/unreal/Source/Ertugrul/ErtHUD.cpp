@@ -50,6 +50,7 @@ void AErtHUD::Bar(float X, float Y, float W, float H, float Frac, const FLinearC
 void AErtHUD::DrawHUD()
 {
 	Super::DrawHUD();
+	if (AErtCharacter* Hf = Cast<AErtCharacter>(GetOwningPawn())) if (Hf->FlyT >= 0.f) return;   // kino kamera: HUD siz
 	if (!Canvas) return;
 	const float SW = Canvas->SizeX, SH = Canvas->SizeY;
 	const float Sc = FMath::Clamp(SH / 720.f, 0.8f, 2.f);
