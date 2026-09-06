@@ -5,6 +5,7 @@ TEX = "D:/Unreal_projects/Ertugrul/art/blender_tex"
 GLB = "D:/Unreal_projects/Ertugrul/Content/ErtAssets/Gen/src"
 os.makedirs(TEX, exist_ok=True); os.makedirs(GLB, exist_ok=True)
 SIZE = int(os.environ.get("ERT_TEXSIZE", "2048"))
+ONLY = os.environ.get("ERT_ONLY")
 
 def clear():
     bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete()
@@ -53,8 +54,18 @@ def mat_grass():
     r2 = ramp(nt, [(0.45, (0.0, 0.0, 0.0)), (0.6, (1.0, 1.0, 1.0))]); nt.links.new(n3.outputs["Fac"], r2.inputs["Fac"])
     mc = nt.nodes.new("ShaderNodeMix"); mc.data_type = 'RGBA'; mc.inputs[7].default_value = (0.36, 0.33, 0.12, 1)
     nt.links.new(r2.outputs["Color"], mc.inputs[0]); nt.links.new(r.outputs["Color"], mc.inputs[6]); nt.links.new(mc.outputs[2], bsdf.inputs["Base Color"])
+    # Barg tolalari: cho'zilgan mayda shovqin -> to'q/ochiq chiziqlar
+    mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (60, 6, 1); mp.inputs["Rotation"].default_value = (0, 0, 0.6); nt.links.new(tc.outputs["UV"], mp.inputs["Vector"])
+    bl = nt.nodes.new("ShaderNodeTexNoise"); bl.inputs["Scale"].default_value = 3.0; bl.inputs["Detail"].default_value = 6; bl.inputs["Roughness"].default_value = 0.7; nt.links.new(mp.outputs["Vector"], bl.inputs["Vector"])
+    mp2 = nt.nodes.new("ShaderNodeMapping"); mp2.inputs["Scale"].default_value = (7, 55, 1); mp2.inputs["Rotation"].default_value = (0, 0, -0.9); nt.links.new(tc.outputs["UV"], mp2.inputs["Vector"])
+    bl2 = nt.nodes.new("ShaderNodeTexNoise"); bl2.inputs["Scale"].default_value = 3.0; bl2.inputs["Detail"].default_value = 6; nt.links.new(mp2.outputs["Vector"], bl2.inputs["Vector"])
+    bm = nt.nodes.new("ShaderNodeMath"); bm.operation = 'MULTIPLY'; nt.links.new(bl.outputs["Fac"], bm.inputs[0]); nt.links.new(bl2.outputs["Fac"], bm.inputs[1])
+    br = ramp(nt, [(0.15, (0.55, 0.6, 0.45)), (0.35, (1.0, 1.0, 1.0)), (0.6, (1.25, 1.3, 1.1))]); nt.links.new(bm.outputs[0], br.inputs["Fac"])
+    mb = nt.nodes.new("ShaderNodeMix"); mb.data_type = 'RGBA'; mb.blend_type = 'MULTIPLY'; mb.inputs[0].default_value = 1.0
+    nt.links.new(mc.outputs[2], mb.inputs[6]); nt.links.new(br.outputs["Color"], mb.inputs[7]); nt.links.new(mb.outputs[2], bsdf.inputs["Base Color"])
     bsdf.inputs["Roughness"].default_value = 0.9
-    bump(nt, bsdf, n2.outputs["Fac"], 0.5, 0.01)
+    ba = nt.nodes.new("ShaderNodeMath"); ba.operation = 'ADD'; nt.links.new(n2.outputs["Fac"], ba.inputs[0]); nt.links.new(bm.outputs[0], ba.inputs[1])
+    bump(nt, bsdf, ba.outputs[0], 0.6, 0.012)
     return m
 
 def mat_dirt():
@@ -173,7 +184,10 @@ def baked_mat(name, paths, rough=0.8):
 clear()
 paths = {}
 for name, fn in (("grass", mat_grass), ("dirt", mat_dirt), ("rock", mat_rock), ("sand", mat_sand), ("snow", mat_snow), ("cobble", mat_cobble), ("wood", mat_wood), ("hay", mat_hay)):
+    if ONLY and name != ONLY: continue
     paths[name] = bake_material(fn(), name)
+if ONLY:
+    print("FACTORY done (only %s)" % ONLY, flush=True); import sys; sys.exit(0)
 paths["cloth"] = bake_material(mat_cloth((0.55, 0.08, 0.06)), "cloth", 1024)
 
 # ---------- Oba elementlari ----------

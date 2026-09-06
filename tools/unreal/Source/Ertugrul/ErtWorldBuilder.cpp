@@ -345,6 +345,12 @@ FLinearColor AErtWorldBuilder::TerrainColor(float E, float N, float H, float Slo
 	C = FMath::Lerp(C, Rock * (1.f + 0.1f * Nz), Smooth01((Slope - 0.42f) / 0.25f));
 	const float SnowLine = 150.f + 12.f * Nz;
 	C = FMath::Lerp(C, FLinearColor(0.93f, 0.94f, 0.97f), Smooth01((H - SnowLine) / 25.f) * (1.f - Smooth01((Slope - 0.9f) / 0.3f)));
+	// Oba ichida toptalgan tuproq (o'tovlar, yo'laklar), o't dog'lari bilan
+	{
+		const float DU = FMath::Max(FMath::Abs(E - ObaE), FMath::Abs(N - ObaN));
+		const float Tr = (1.f - Smooth01((DU - ObaHalf) / 14.f)) * (0.45f + 0.4f * Smooth01((Noise(E, N, 0.12f) - 0.15f) / 0.5f));
+		C = FMath::Lerp(C, FLinearColor(0.44f, 0.36f, 0.21f) * (1.f + 0.1f * Nz), Tr);
+	}
 	// Cho'l qumi (janub) va voha atrofidagi yashillik
 	{
 		const float Des = Smooth01((-N - 700.f) / 140.f);

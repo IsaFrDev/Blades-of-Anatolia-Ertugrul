@@ -127,7 +127,7 @@ public:
 	void MapRotate(float DeltaYaw);
 	bool bGps = true;
 	/** Tush (Ulukayin mifi) rejimi: binafsha tuslash, tuman, tun */
-	bool bDream = false; float SavedDayT = 0.38f; FString SavedWeather;
+	bool bDream = false; float SavedDayT = 0.31f; FString SavedWeather;
 	void SetDream(bool bOn);
 	const FString& GetWeatherName() const;
 	// AC/GTA uslubidagi xarita: yo'l nuqtasi, kashf qilingan hududlar, sichqoncha boshqaruvi

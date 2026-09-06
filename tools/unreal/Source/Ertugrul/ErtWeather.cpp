@@ -39,9 +39,10 @@ void AErtWeather::BeginPlay()
 		F->SetDirectionalInscatteringExponent(12.f);
 		F->SetDirectionalInscatteringStartDistance(8000.f);
 		F->SetDirectionalInscatteringColor(FLinearColor(0.9f, 0.7f, 0.45f));
-		F->SecondFogData.FogDensity = 0.0006f;
-		F->SecondFogData.FogHeightFalloff = 0.02f;
-		F->SecondFogData.FogHeightOffset = -40000.f;
+		// Vodiy tumani: 18 m dan pastda qalin, tez so'nadi (tepaliklar ochiq)
+		F->SecondFogData.FogDensity = 0.0022f;
+		F->SecondFogData.FogHeightFalloff = 0.09f;
+		F->SecondFogData.FogHeightOffset = 1800.f;
 		// Volumetric Fog: nur shu'lalari va suv/o'rmon ustidagi hajmli tuman
 		F->SetVolumetricFog(true);
 		F->SetVolumetricFogScatteringDistribution(0.45f);

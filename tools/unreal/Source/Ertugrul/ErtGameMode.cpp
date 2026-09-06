@@ -401,7 +401,7 @@ void AErtGameMode::SetTimeOfDay(const FString& Name)
 	if (Name == TEXT("dawn")) DayT = 0.24f;
 	else if (Name == TEXT("dusk")) DayT = 0.74f;
 	else if (Name == TEXT("night")) DayT = 0.95f;
-	else DayT = 0.38f;
+	else DayT = 0.31f;   // oltin soat (ertalab)
 }
 
 void AErtGameMode::Tick(float Dt)

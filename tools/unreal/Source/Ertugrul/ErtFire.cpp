@@ -45,10 +45,10 @@ void AErtFireFx::Init(float InScale, bool bLight)
 		Light->SetRelativeLocation(FVector(0, 0, 90.f * Scale));
 		Light->SetMobility(EComponentMobility::Movable);
 		Light->SetIntensityUnits(ELightUnits::Candelas);
-		BaseIntensity = 350.f * Scale;
+		BaseIntensity = 45.f * Scale;
 		Light->SetIntensity(BaseIntensity);
 		Light->SetLightColor(FLinearColor(1.f, 0.6f, 0.25f));
-		Light->SetAttenuationRadius(1800.f * FMath::Sqrt(Scale));
+		Light->SetAttenuationRadius(500.f * FMath::Sqrt(Scale));
 		Light->SetCastShadows(false);
 		Light->RegisterComponent();
 	}
@@ -78,8 +78,8 @@ void AErtFireFx::Tick(float Dt)
 		FP P;
 		const float Rad = 28.f * Scale;
 		P.P = GetActorLocation() + FVector(FMath::FRandRange(-Rad, Rad), FMath::FRandRange(-Rad, Rad), 10.f * Scale);
-		if (R < 0.62f) { P.Kind = 0; P.V = FVector(FMath::FRandRange(-10.f, 10.f), FMath::FRandRange(-10.f, 10.f), FMath::FRandRange(70.f, 130.f) * Scale); P.MaxLife = FMath::FRandRange(0.5f, 0.9f); P.Size = FMath::FRandRange(18.f, 34.f) * Scale; }
-		else if (R < 0.9f) { P.Kind = 1; P.V = FVector(FMath::FRandRange(-14.f, 14.f), FMath::FRandRange(-14.f, 14.f), FMath::FRandRange(60.f, 110.f) * Scale); P.MaxLife = FMath::FRandRange(2.2f, 3.6f); P.Size = FMath::FRandRange(20.f, 36.f) * Scale; P.P.Z += 60.f * Scale; }
+		if (R < 0.62f) { P.Kind = 0; P.V = FVector(FMath::FRandRange(-8.f, 8.f), FMath::FRandRange(-8.f, 8.f), FMath::FRandRange(55.f, 95.f) * Scale); P.MaxLife = FMath::FRandRange(0.4f, 0.75f); P.Size = FMath::FRandRange(11.f, 20.f) * Scale; }
+		else if (R < 0.9f) { P.Kind = 1; P.V = FVector(FMath::FRandRange(-12.f, 12.f), FMath::FRandRange(-12.f, 12.f), FMath::FRandRange(90.f, 150.f) * Scale); P.MaxLife = FMath::FRandRange(4.0f, 6.5f); P.Size = FMath::FRandRange(18.f, 34.f) * Scale; P.P.Z += 50.f * Scale; }
 		else { P.Kind = 2; P.V = FVector(FMath::FRandRange(-60.f, 60.f), FMath::FRandRange(-60.f, 60.f), FMath::FRandRange(160.f, 300.f) * Scale); P.MaxLife = FMath::FRandRange(0.6f, 1.4f); P.Size = FMath::FRandRange(2.f, 4.f); }
 		P.Life = P.MaxLife;
 		Ps.Add(P);
