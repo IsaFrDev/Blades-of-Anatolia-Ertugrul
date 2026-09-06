@@ -40,6 +40,7 @@ public:
 	void Summon(const FVector& To) { SummonTo = To; SummonT = 25.f; }
 	// Parvarish: boqish (go'sht/olma) va tarash - Care 0..1, tezlik +12% * Care, sog'liq tiklanishi tezroq, chaqirilganda tezroq keladi
 	float Care = 0.f, CareFxT = 0.f;
+	FString HorseName;   // nom (Bo'ra, Tulpor...) - HUD da
 	void Feed() { Health = MaxHealth; Care = FMath::Min(1.f, Care + 0.35f); CareFxT = 2.5f; }
 	void Groom() { Care = FMath::Min(1.f, Care + 0.5f); CareFxT = 2.5f; }
 	float CareSpeed() const { return 1.f + 0.12f * Care; }

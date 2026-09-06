@@ -15,6 +15,8 @@ def log(s):
 CODE_WAVE = r"""
 float2 p = WP.xy / 100.0;
 float t = T;
+p.x -= t * 0.9;   // daryo oqimi: janubga (X = N o'qi)
+p.y += sin(t * 0.3) * 0.15;
 #define H2(q) frac(sin(dot(floor(q), float2(127.1, 311.7))) * 43758.5453)
 #define SM(x) ((x) * (x) * (3.0 - 2.0 * (x)))
 #define VN(q) lerp(lerp(H2(q), H2((q) + float2(1, 0)), SM(frac((q).x))), lerp(H2((q) + float2(0, 1)), H2((q) + float2(1, 1)), SM(frac((q).x))), SM(frac((q).y)))

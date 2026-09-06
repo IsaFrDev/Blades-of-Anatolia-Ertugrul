@@ -1,478 +1,479 @@
 {
-  "id": "ep033_intro",
-  "episode": "EP033",
-  "level": "aleppo_road",
-  "music": "MUS_EP033",
-  "ambience": "Ambience.Winter.Cloudy",
-  "letterbox": true,
-  "fade_in": 1.2,
-  "fade_out": 1.0,
-  "time_of_day": "day",
-  "weather": "cloudy",
-  "duration": 0,
-  "actors": [
+ "id": "ep033_intro",
+ "episode": "EP033",
+ "level": "aleppo_road",
+ "music": "MUS_EP033",
+ "ambience": "Ambience.Winter.Cloudy",
+ "letterbox": true,
+ "fade_in": 1.2,
+ "fade_out": 1.0,
+ "time_of_day": "day",
+ "weather": "cloudy",
+ "duration": 0,
+ "actors": [
+  {
+   "id": "ertugrul",
+   "char": "ertugrul",
+   "model": "assets/models/ottoman/ottoman.obj",
+   "loc_name": "chr.ertugrul.name",
+   "scale": 1.82,
+   "tint": [
+    1.0,
+    0.95,
+    0.85
+   ],
+   "keys": [
     {
-      "id": "ertugrul",
-      "char": "ertugrul",
-      "model": "assets/models/ottoman/ottoman.obj",
-      "loc_name": "chr.ertugrul.name",
-      "scale": 1.82,
-      "tint": [
-        1.0,
-        0.95,
-        0.85
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            -8.88,
-            0.0,
-            34.07
-          ],
-          "yaw": 135.0,
-          "clip": "Walk"
-        },
-        {
-          "t": 4.5,
-          "pos": [
-            -5.71,
-            0.0,
-            32.29
-          ],
-          "yaw": 126.0,
-          "clip": "Walk"
-        },
-        {
-          "t": 9.0,
-          "pos": [
-            1.23,
-            0.0,
-            29.75
-          ],
-          "yaw": 122.5,
-          "clip": "Walk"
-        },
-        {
-          "t": 14.0,
-          "pos": [
-            -2.0,
-            0.0,
-            29.0
-          ],
-          "yaw": 130.9,
-          "clip": "Idle"
-        },
-        {
-          "t": 19.0,
-          "pos": [
-            -1.0,
-            0.0,
-            28.2
-          ],
-          "yaw": 132.0,
-          "clip": "Talk"
-        },
-        {
-          "t": 24.0,
-          "pos": [
-            -1.0,
-            0.0,
-            28.2
-          ],
-          "yaw": 129.8,
-          "clip": "Point"
-        },
-        {
-          "t": 29.0,
-          "pos": [
-            -1.71,
-            0.0,
-            28.03
-          ],
-          "yaw": 131.4,
-          "clip": "Listen"
-        },
-        {
-          "t": 34.0,
-          "pos": [
-            -3.92,
-            0.0,
-            31.83
-          ],
-          "yaw": -41.2,
-          "clip": "Walk"
-        },
-        {
-          "t": 38.0,
-          "pos": [
-            -5.42,
-            0.0,
-            32.36
-          ],
-          "yaw": 133.2,
-          "clip": "Idle"
-        }
-      ]
+     "t": 0.0,
+     "pos": [
+      -8.88,
+      0.0,
+      34.07
+     ],
+     "yaw": 135.0,
+     "clip": "Walk"
     },
     {
-      "id": "keyhusrev",
-      "char": "keyhusrev",
-      "model": "assets/models/medieval+armored+warrior+3d+model.obj",
-      "loc_name": "chr.keyhusrev.name",
-      "scale": 1.84,
-      "tint": [
-        0.95,
-        0.95,
-        1.0
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            7.11,
-            0.0,
-            22.31
-          ],
-          "yaw": -53.5,
-          "clip": "Idle"
-        },
-        {
-          "t": 6.0,
-          "pos": [
-            2.6,
-            0.0,
-            25.4
-          ],
-          "yaw": -45.0,
-          "clip": "Walk"
-        },
-        {
-          "t": 12.0,
-          "pos": [
-            1.8,
-            0.0,
-            26.2
-          ],
-          "yaw": -55.0,
-          "clip": "Talk"
-        },
-        {
-          "t": 17.0,
-          "pos": [
-            1.1,
-            0.0,
-            26.53
-          ],
-          "yaw": -48.0,
-          "clip": "Listen"
-        },
-        {
-          "t": 22.0,
-          "pos": [
-            1.1,
-            0.0,
-            26.53
-          ],
-          "yaw": -48.0,
-          "clip": "Idle"
-        },
-        {
-          "t": 27.0,
-          "pos": [
-            2.08,
-            0.0,
-            27.15
-          ],
-          "yaw": -64.4,
-          "clip": "Talk"
-        },
-        {
-          "t": 32.0,
-          "pos": [
-            4.0,
-            0.0,
-            26.37
-          ],
-          "yaw": 122.0,
-          "clip": "Walk"
-        },
-        {
-          "t": 36.0,
-          "pos": [
-            5.6,
-            0.0,
-            25.6
-          ],
-          "yaw": -65.9,
-          "clip": "Point"
-        },
-        {
-          "t": 38.5,
-          "pos": [
-            6.6,
-            0.0,
-            25.0
-          ],
-          "yaw": -58.1,
-          "clip": "Idle"
-        }
-      ]
+     "t": 4.5,
+     "pos": [
+      -5.71,
+      0.0,
+      32.29
+     ],
+     "yaw": 126.0,
+     "clip": "Walk"
     },
     {
-      "id": "turgut",
-      "char": "turgut",
-      "model": "assets/models/fantasy+warrior+3d+model.obj",
-      "loc_name": "chr.turgut.name",
-      "scale": 1.92,
-      "tint": [
-        0.86,
-        0.8,
-        0.74
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            -9.6,
-            0.0,
-            30.4
-          ],
-          "yaw": 143.1,
-          "clip": "Walk"
-        },
-        {
-          "t": 5.0,
-          "pos": [
-            -8.4,
-            0.0,
-            28.8
-          ],
-          "yaw": 130.6,
-          "clip": "Walk"
-        },
-        {
-          "t": 10.0,
-          "pos": [
-            -7.0,
-            0.0,
-            27.6
-          ],
-          "yaw": 99.0,
-          "clip": "Idle"
-        },
-        {
-          "t": 15.0,
-          "pos": [
-            -6.6,
-            0.0,
-            27.4
-          ],
-          "yaw": 81.9,
-          "clip": "Listen"
-        },
-        {
-          "t": 20.0,
-          "pos": [
-            -5.59,
-            0.0,
-            27.35
-          ],
-          "yaw": 90.0,
-          "clip": "Talk"
-        },
-        {
-          "t": 26.0,
-          "pos": [
-            -0.67,
-            0.0,
-            27.31
-          ],
-          "yaw": 120.7,
-          "clip": "Listen"
-        },
-        {
-          "t": 31.0,
-          "pos": [
-            -5.36,
-            0.0,
-            32.02
-          ],
-          "yaw": -41.2,
-          "clip": "Walk"
-        },
-        {
-          "t": 36.0,
-          "pos": [
-            -9.66,
-            0.0,
-            33.36
-          ],
-          "yaw": -45.0,
-          "clip": "Walk"
-        },
-        {
-          "t": 38.5,
-          "pos": [
-            -7.68,
-            0.0,
-            33.46
-          ],
-          "yaw": 119.1,
-          "clip": "Idle"
-        }
-      ]
+     "t": 9.0,
+     "pos": [
+      1.23,
+      0.0,
+      29.75
+     ],
+     "yaw": 122.5,
+     "clip": "Walk"
+    },
+    {
+     "t": 14.0,
+     "pos": [
+      -2.0,
+      0.0,
+      29.0
+     ],
+     "yaw": 130.9,
+     "clip": "Idle"
+    },
+    {
+     "t": 19.0,
+     "pos": [
+      -1.0,
+      0.0,
+      28.2
+     ],
+     "yaw": 132.0,
+     "clip": "Talk"
+    },
+    {
+     "t": 24.0,
+     "pos": [
+      -1.0,
+      0.0,
+      28.2
+     ],
+     "yaw": 129.8,
+     "clip": "Point"
+    },
+    {
+     "t": 29.0,
+     "pos": [
+      -1.71,
+      0.0,
+      28.03
+     ],
+     "yaw": 131.4,
+     "clip": "Listen"
+    },
+    {
+     "t": 34.0,
+     "pos": [
+      -3.92,
+      0.0,
+      31.83
+     ],
+     "yaw": -41.2,
+     "clip": "Walk"
+    },
+    {
+     "t": 38.0,
+     "pos": [
+      -5.42,
+      0.0,
+      32.36
+     ],
+     "yaw": 133.2,
+     "clip": "Idle"
     }
-  ],
-  "camera": [
+   ]
+  },
+  {
+   "id": "keyhusrev",
+   "char": "keyhusrev",
+   "model": "assets/models/medieval+armored+warrior+3d+model.obj",
+   "loc_name": "chr.keyhusrev.name",
+   "scale": 1.84,
+   "tint": [
+    0.95,
+    0.95,
+    1.0
+   ],
+   "keys": [
     {
-      "t": 0.0,
-      "pos": [
-        -4.03,
-        3.6,
-        40.11
-      ],
-      "look": [
-        -2.0,
-        1.7,
-        30.0
-      ],
-      "fov": 48
+     "t": 0.0,
+     "pos": [
+      7.11,
+      0.0,
+      22.31
+     ],
+     "yaw": -53.5,
+     "clip": "Idle"
     },
     {
-      "t": 6.0,
-      "pos": [
-        -15.71,
-        2.2,
-        35.5
-      ],
-      "look": [
-        -4.0,
-        1.5,
-        29.0
-      ],
-      "fov": 40
+     "t": 6.0,
+     "pos": [
+      2.6,
+      0.0,
+      25.4
+     ],
+     "yaw": -45.0,
+     "clip": "Walk"
     },
     {
-      "t": 11.5,
-      "pos": [
-        5.71,
-        2.0,
-        23.95
-      ],
-      "look": [
-        -1.6,
-        1.5,
-        28.0
-      ],
-      "fov": 36
+     "t": 12.0,
+     "pos": [
+      1.8,
+      0.0,
+      26.2
+     ],
+     "yaw": -55.0,
+     "clip": "Talk"
     },
     {
-      "t": 17.0,
-      "pos": [
-        -5.18,
-        1.9,
-        29.87
-      ],
-      "look": [
-        0.8,
-        1.5,
-        26.8
-      ],
-      "fov": 32
+     "t": 17.0,
+     "pos": [
+      1.1,
+      0.0,
+      26.53
+     ],
+     "yaw": -48.0,
+     "clip": "Listen"
     },
     {
-      "t": 23.0,
-      "pos": [
-        13.03,
-        1.8,
-        21.7
-      ],
-      "look": [
-        -0.6,
-        1.55,
-        27.6
-      ],
-      "fov": 30
+     "t": 22.0,
+     "pos": [
+      1.1,
+      0.0,
+      26.53
+     ],
+     "yaw": -48.0,
+     "clip": "Idle"
     },
     {
-      "t": 28.5,
-      "pos": [
-        -20.62,
-        2.2,
-        35.35
-      ],
-      "look": [
-        0.6,
-        1.5,
-        27.0
-      ],
-      "fov": 38
+     "t": 27.0,
+     "pos": [
+      2.08,
+      0.0,
+      27.15
+     ],
+     "yaw": -64.4,
+     "clip": "Talk"
     },
     {
-      "t": 34.0,
-      "pos": [
-        6.41,
-        4.0,
-        37.97
-      ],
-      "look": [
-        -3.0,
-        1.35,
-        29.4
-      ],
-      "fov": 50
+     "t": 32.0,
+     "pos": [
+      4.0,
+      0.0,
+      26.37
+     ],
+     "yaw": 122.0,
+     "clip": "Walk"
+    },
+    {
+     "t": 36.0,
+     "pos": [
+      5.6,
+      0.0,
+      25.6
+     ],
+     "yaw": -65.9,
+     "clip": "Point"
+    },
+    {
+     "t": 38.5,
+     "pos": [
+      6.6,
+      0.0,
+      25.0
+     ],
+     "yaw": -58.1,
+     "clip": "Idle"
     }
-  ],
-  "lines": [
+   ]
+  },
+  {
+   "id": "turgut",
+   "char": "turgut",
+   "model": "assets/models/fantasy+warrior+3d+model.obj",
+   "loc_name": "chr.turgut.name",
+   "scale": 1.92,
+   "tint": [
+    0.86,
+    0.8,
+    0.74
+   ],
+   "keys": [
     {
-      "t": 2.0,
-      "actor": "keyhusrev",
-      "loc": "cut.ep033_intro.01",
-      "vo": "ep033_intro_01",
-      "dur": 0
+     "t": 0.0,
+     "pos": [
+      -9.6,
+      0.0,
+      30.4
+     ],
+     "yaw": 143.1,
+     "clip": "Walk"
     },
     {
-      "t": 7.4,
-      "actor": "turgut",
-      "loc": "cut.ep033_intro.02",
-      "vo": "ep033_intro_02",
-      "dur": 0
+     "t": 5.0,
+     "pos": [
+      -8.4,
+      0.0,
+      28.8
+     ],
+     "yaw": 130.6,
+     "clip": "Walk"
     },
     {
-      "t": 12.6,
-      "actor": "ertugrul",
-      "loc": "cut.ep033_intro.03",
-      "vo": "ep033_intro_03",
-      "dur": 0
+     "t": 10.0,
+     "pos": [
+      -7.0,
+      0.0,
+      27.6
+     ],
+     "yaw": 99.0,
+     "clip": "Idle"
     },
     {
-      "t": 18.2,
-      "actor": "ertugrul",
-      "loc": "cut.ep033_intro.04",
-      "vo": "ep033_intro_04",
-      "dur": 0
+     "t": 15.0,
+     "pos": [
+      -6.6,
+      0.0,
+      27.4
+     ],
+     "yaw": 81.9,
+     "clip": "Listen"
     },
     {
-      "t": 24.0,
-      "actor": "keyhusrev",
-      "loc": "cut.ep033_intro.05",
-      "vo": "ep033_intro_05",
-      "dur": 0
+     "t": 20.0,
+     "pos": [
+      -5.59,
+      0.0,
+      27.35
+     ],
+     "yaw": 90.0,
+     "clip": "Talk"
     },
     {
-      "t": 30.0,
-      "actor": "ertugrul",
-      "loc": "cut.ep033_intro.06",
-      "vo": "ep033_intro_06",
-      "dur": 0
+     "t": 26.0,
+     "pos": [
+      -0.67,
+      0.0,
+      27.31
+     ],
+     "yaw": 120.7,
+     "clip": "Listen"
     },
     {
-      "t": 35.0,
-      "actor": "turgut",
-      "loc": "cut.ep033_intro.07",
-      "vo": "ep033_intro_07",
-      "dur": 0
+     "t": 31.0,
+     "pos": [
+      -5.36,
+      0.0,
+      32.02
+     ],
+     "yaw": -41.2,
+     "clip": "Walk"
+    },
+    {
+     "t": 36.0,
+     "pos": [
+      -9.66,
+      0.0,
+      33.36
+     ],
+     "yaw": -45.0,
+     "clip": "Walk"
+    },
+    {
+     "t": 38.5,
+     "pos": [
+      -7.68,
+      0.0,
+      33.46
+     ],
+     "yaw": 119.1,
+     "clip": "Idle"
     }
-  ]
+   ]
+  }
+ ],
+ "camera": [
+  {
+   "t": 0.0,
+   "pos": [
+    -4.03,
+    3.6,
+    40.11
+   ],
+   "look": [
+    -2.0,
+    1.7,
+    30.0
+   ],
+   "fov": 48
+  },
+  {
+   "t": 6.0,
+   "pos": [
+    -15.71,
+    2.2,
+    35.5
+   ],
+   "look": [
+    -4.0,
+    1.5,
+    29.0
+   ],
+   "fov": 40
+  },
+  {
+   "t": 11.5,
+   "pos": [
+    5.71,
+    2.0,
+    23.95
+   ],
+   "look": [
+    -1.6,
+    1.5,
+    28.0
+   ],
+   "fov": 36
+  },
+  {
+   "t": 17.0,
+   "pos": [
+    -5.18,
+    1.9,
+    29.87
+   ],
+   "look": [
+    0.8,
+    1.5,
+    26.8
+   ],
+   "fov": 32
+  },
+  {
+   "t": 23.0,
+   "pos": [
+    13.03,
+    1.8,
+    21.7
+   ],
+   "look": [
+    -0.6,
+    1.55,
+    27.6
+   ],
+   "fov": 30
+  },
+  {
+   "t": 28.5,
+   "pos": [
+    -20.62,
+    2.2,
+    35.35
+   ],
+   "look": [
+    0.6,
+    1.5,
+    27.0
+   ],
+   "fov": 38
+  },
+  {
+   "t": 34.0,
+   "pos": [
+    6.41,
+    4.0,
+    37.97
+   ],
+   "look": [
+    -3.0,
+    1.35,
+    29.4
+   ],
+   "fov": 50
+  }
+ ],
+ "lines": [
+  {
+   "t": 2.0,
+   "actor": "keyhusrev",
+   "loc": "cut.ep033_intro.01",
+   "vo": "ep033_intro_01",
+   "dur": 0
+  },
+  {
+   "t": 7.4,
+   "actor": "turgut",
+   "loc": "cut.ep033_intro.02",
+   "vo": "ep033_intro_02",
+   "dur": 0
+  },
+  {
+   "t": 12.6,
+   "actor": "ertugrul",
+   "loc": "cut.ep033_intro.03",
+   "vo": "ep033_intro_03",
+   "dur": 0
+  },
+  {
+   "t": 18.2,
+   "actor": "ertugrul",
+   "loc": "cut.ep033_intro.04",
+   "vo": "ep033_intro_04",
+   "dur": 0
+  },
+  {
+   "t": 24.0,
+   "actor": "keyhusrev",
+   "loc": "cut.ep033_intro.05",
+   "vo": "ep033_intro_05",
+   "dur": 0
+  },
+  {
+   "t": 30.0,
+   "actor": "ertugrul",
+   "loc": "cut.ep033_intro.06",
+   "vo": "ep033_intro_06",
+   "dur": 0
+  },
+  {
+   "t": 35.0,
+   "actor": "turgut",
+   "loc": "cut.ep033_intro.07",
+   "vo": "ep033_intro_07",
+   "dur": 0
+  }
+ ],
+ "intro_fly": 5.0
 }

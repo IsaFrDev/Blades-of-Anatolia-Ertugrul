@@ -166,6 +166,26 @@ void AErtGameMode::SpawnNpcs()
 		AErtNpc* Npc = GetWorld()->SpawnActor<AErtNpc>(AErtNpc::StaticClass(), FVector(X, Y, Z + 92.f), FRotator(0, Yaw, 0));
 		if (Npc) { Npc->Setup(Id, Name, Dlg, bWoman, Kaftan, Yaw); ++N; }
 	}
+	// Oba hayoti: ayollar suv tashiydi (quduq <-> o'tov), o't o'radi; bolalar yugurib o'ynaydi
+	{
+		auto Gnd = [&](float E, float Nn) { const float X = Nn * 100.f, Y = E * 100.f; FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtChoreGround), true); float Z = 2000.f; if (GetWorld()->LineTraceSingleByChannel(Hit, FVector(X, Y, 60000.f), FVector(X, Y, -5000.f), ECC_Visibility, Q)) Z = Hit.ImpactPoint.Z; return FVector(X, Y, Z + 92.f); };
+		struct FCh { int32 Kind; float AE, AN, BE, BN; float R, G, B; };
+		const float OE = ErtMap::ObaE, ON = ErtMap::ObaN;
+		const FCh Ch[] = {
+			{1, OE + 13, ON + 13, OE - 22, ON + 36, 0.45f, 0.15f, 0.25f}, {1, OE + 13, ON + 13, OE + 40, ON - 12, 0.20f, 0.30f, 0.45f}, {1, OE + 13, ON + 13, OE - 42, ON - 30, 0.50f, 0.32f, 0.12f}, {1, OE + 13, ON + 13, OE + 26, ON + 42, 0.30f, 0.16f, 0.36f},
+			{2, OE - 88, ON + 66, OE - 80, ON + 74, 0.36f, 0.30f, 0.14f}, {2, OE - 92, ON + 40, OE - 84, ON + 46, 0.26f, 0.36f, 0.20f}, {2, OE + 78, ON + 70, OE + 86, ON + 62, 0.44f, 0.24f, 0.18f},
+			{3, OE + 8, ON - 38, OE + 24, ON - 44, 0.55f, 0.40f, 0.15f}, {3, OE - 30, ON - 50, OE - 12, ON - 58, 0.20f, 0.42f, 0.50f}, {3, OE + 44, ON + 20, OE + 56, ON + 30, 0.60f, 0.25f, 0.20f} };
+		int32 K = 0;
+		for (const FCh& C : Ch)
+		{
+			const FVector A = Gnd(C.AE, C.AN), B = Gnd(C.BE, C.BN);
+			AErtNpc* Npc = GetWorld()->SpawnActor<AErtNpc>(AErtNpc::StaticClass(), B, FRotator(0, 0, 0));
+			if (!Npc) continue;
+			const bool bWoman = C.Kind != 3 || (K % 2 == 0);
+			Npc->Setup(C.Kind == 3 ? TEXT("Bola") : (C.Kind == 1 ? TEXT("Oba ayoli") : TEXT("O'roqchi")), TEXT(""), TEXT(""), bWoman, FLinearColor(C.R, C.G, C.B), 0.f);
+			Npc->SetChore(C.Kind, A, B); ++K; ++N;
+		}
+	}
 	UE_LOG(LogErtugrul, Log, TEXT("NPC: %d"), N);
 }
 

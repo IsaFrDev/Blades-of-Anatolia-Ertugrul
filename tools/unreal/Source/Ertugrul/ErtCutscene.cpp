@@ -81,6 +81,7 @@ bool AErtCutsceneDirector::LoadScene(const FString& Path)
 	if (R->TryGetNumberField(TEXT("fade_in"), D)) Scene.FadeIn = D;
 	if (R->TryGetNumberField(TEXT("fade_out"), D)) Scene.FadeOut = D;
 	if (R->TryGetNumberField(TEXT("duration"), D)) Scene.Duration = D;
+	double IntroFly = 0; R->TryGetNumberField(TEXT("intro_fly"), IntroFly);
 	const TArray<TSharedPtr<FJsonValue>>* Arr;
 	if (R->TryGetArrayField(TEXT("actors"), Arr))
 		for (const auto& V : *Arr)
@@ -139,6 +140,18 @@ bool AErtCutsceneDirector::LoadScene(const FString& Path)
 		for (const auto& C : Scene.Camera) End = FMath::Max(End, C.T);
 		for (const auto& L : Scene.Lines) End = FMath::Max(End, L.T + L.Dur);
 		Scene.Duration = End + 1.5f;
+	}
+	// Intro uchish: birinchi kamera kalitidan balanddan/uzoqdan tushib keladi (-ErtFly uslubi), hamma vaqtlar suriladi
+	if (IntroFly > 0.0 && Scene.Camera.Num())
+	{
+		for (FErtCutCamKey& C : Scene.Camera) C.T += IntroFly;
+		for (FErtCutActorDef& A : Scene.Actors) for (FErtCutKey& K : A.Keys) K.T += IntroFly;
+		for (FErtCutLine& Ln : Scene.Lines) Ln.T += IntroFly;
+		Scene.Duration += IntroFly;
+		FErtCutCamKey F0 = Scene.Camera[0]; const FVector Dir = (F0.Pos - F0.Look).GetSafeNormal2D();
+		F0.T = 0.f; F0.Pos = F0.Pos + Dir * 22.f + FVector(0, 26.f, 0); F0.Fov = FMath::Max(35.f, F0.Fov - 8.f);   // y-up dvijok koordinatasi: Y = balandlik
+		FErtCutCamKey F1 = Scene.Camera[0]; F1.T = IntroFly * 0.55f; F1.Pos = Scene.Camera[0].Pos + Dir * 8.f + FVector(0, 9.f, 0);
+		Scene.Camera.Insert(F1, 0); Scene.Camera.Insert(F0, 0);
 	}
 	return Scene.Camera.Num() > 0 || Scene.Actors.Num() > 0;
 }
@@ -262,7 +275,11 @@ void AErtCutsceneDirector::Tick(float Dt)
 		{
 			float U = FMath::Clamp((Time - C[j].T) / FMath::Max(0.01f, C[j + 1].T - C[j].T), 0.f, 1.f);
 			U = U * U * (3.f - 2.f * U);
-			P = FMath::Lerp(P, C[j + 1].Pos, U); L = FMath::Lerp(L, C[j + 1].Look, U); Fov = FMath::Lerp(Fov, C[j + 1].Fov, U);
+			// Silliq kamera: Catmull-Rom (pozitsiya va qarash nuqtasi), FOV smoothstep
+			auto At = [&](int32 k) -> const FErtCutCamKey& { return C[FMath::Clamp(k, 0, C.Num() - 1)]; };
+			P = FMath::CubicCRSplineInterp(At(j - 1).Pos, At(j).Pos, At(j + 1).Pos, At(j + 2).Pos, 0.f, 1.f, 2.f, 3.f, 1.f + U);
+			L = FMath::CubicCRSplineInterp(At(j - 1).Look, At(j).Look, At(j + 1).Look, At(j + 2).Look, 0.f, 1.f, 2.f, 3.f, 1.f + U);
+			Fov = FMath::Lerp(Fov, C[j + 1].Fov, FMath::SmoothStep(0.f, 1.f, U));
 		}
 		const FVector WP = ToWorld(P, true), WL = ToWorld(L, true);
 		Cam->SetActorLocation(WP);

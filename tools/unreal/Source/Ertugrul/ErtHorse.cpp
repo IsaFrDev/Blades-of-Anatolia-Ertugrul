@@ -51,6 +51,8 @@ void AErtHorse::BeginPlay()
 	Super::BeginPlay();
 	HomePos = GetActorLocation();
 	WanderTarget = HomePos;
+	{ static const TCHAR* Names[] = { TEXT("Bo'ra"), TEXT("Tulpor"), TEXT("Qorabayir"), TEXT("Chaqmoq"), TEXT("Bo'z"), TEXT("Yulduz"), TEXT("Shamol"), TEXT("Qizil"), TEXT("Oqtosh"), TEXT("Burgut") };
+	  const int32 Hn = FMath::Abs((int32)(HomePos.X * 0.013f) + (int32)(HomePos.Y * 0.031f)); HorseName = bCamel ? TEXT("Tuya") : Names[Hn % 10]; }
 	WanderT = FMath::FRandRange(2.f, 6.f);
 	Build();
 }

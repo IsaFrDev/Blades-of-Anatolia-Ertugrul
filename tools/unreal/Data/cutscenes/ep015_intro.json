@@ -1,472 +1,473 @@
 {
-  "id": "ep015_intro",
-  "episode": "EP015",
-  "level": "oba_valley",
-  "music": "MUS_EP015",
-  "ambience": "Ambience.Winter.Cloudy",
-  "letterbox": true,
-  "fade_in": 1.2,
-  "fade_out": 1.0,
-  "time_of_day": "day",
-  "weather": "cloudy",
-  "duration": 0,
-  "actors": [
+ "id": "ep015_intro",
+ "episode": "EP015",
+ "level": "oba_valley",
+ "music": "MUS_EP015",
+ "ambience": "Ambience.Winter.Cloudy",
+ "letterbox": true,
+ "fade_in": 1.2,
+ "fade_out": 1.0,
+ "time_of_day": "day",
+ "weather": "cloudy",
+ "duration": 0,
+ "actors": [
+  {
+   "id": "ertugrul",
+   "char": "ertugrul",
+   "model": "assets/models/ottoman/ottoman.obj",
+   "loc_name": "chr.ertugrul.name",
+   "scale": 1.82,
+   "tint": [
+    1.0,
+    0.95,
+    0.85
+   ],
+   "keys": [
     {
-      "id": "ertugrul",
-      "char": "ertugrul",
-      "model": "assets/models/ottoman/ottoman.obj",
-      "loc_name": "chr.ertugrul.name",
-      "scale": 1.82,
-      "tint": [
-        1.0,
-        0.95,
-        0.85
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            -1.47,
-            0.0,
-            19.48
-          ],
-          "yaw": 175,
-          "clip": "Idle"
-        },
-        {
-          "t": 4.0,
-          "pos": [
-            -1.6,
-            0.0,
-            16.16
-          ],
-          "yaw": 175,
-          "clip": "Point"
-        },
-        {
-          "t": 8.0,
-          "pos": [
-            1.67,
-            0.0,
-            30.03
-          ],
-          "yaw": 12,
-          "clip": "Walk"
-        },
-        {
-          "t": 13.0,
-          "pos": [
-            0.4,
-            0.0,
-            28.4
-          ],
-          "yaw": 16,
-          "clip": "Walk"
-        },
-        {
-          "t": 18.0,
-          "pos": [
-            1.4,
-            0.0,
-            31.2
-          ],
-          "yaw": 20,
-          "clip": "Talk"
-        },
-        {
-          "t": 23.0,
-          "pos": [
-            2.6,
-            0.0,
-            34.0
-          ],
-          "yaw": 24,
-          "clip": "Walk"
-        },
-        {
-          "t": 28.0,
-          "pos": [
-            3.6,
-            0.0,
-            36.4
-          ],
-          "yaw": 28,
-          "clip": "Idle"
-        },
-        {
-          "t": 33.0,
-          "pos": [
-            4.4,
-            0.0,
-            38.2
-          ],
-          "yaw": 60,
-          "clip": "Point"
-        },
-        {
-          "t": 37.0,
-          "pos": [
-            4.4,
-            0.0,
-            38.2
-          ],
-          "yaw": 130,
-          "clip": "Idle"
-        }
-      ]
+     "t": 0.0,
+     "pos": [
+      -1.47,
+      0.0,
+      19.48
+     ],
+     "yaw": 175,
+     "clip": "Idle"
     },
     {
-      "id": "halime",
-      "char": "halime",
-      "model": "assets/models/woman_halime.obj",
-      "loc_name": "chr.halime.name",
-      "scale": 1.64,
-      "tint": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            -4.1,
-            0.0,
-            20.26
-          ],
-          "yaw": 20,
-          "clip": "Walk"
-        },
-        {
-          "t": 5.0,
-          "pos": [
-            -6.29,
-            0.0,
-            23.38
-          ],
-          "yaw": 18,
-          "clip": "Walk"
-        },
-        {
-          "t": 10.0,
-          "pos": [
-            -2.83,
-            0.0,
-            27.87
-          ],
-          "yaw": 16,
-          "clip": "Talk"
-        },
-        {
-          "t": 15.0,
-          "pos": [
-            -1.4,
-            0.0,
-            29.8
-          ],
-          "yaw": 18,
-          "clip": "Walk"
-        },
-        {
-          "t": 20.0,
-          "pos": [
-            -0.4,
-            0.0,
-            32.6
-          ],
-          "yaw": 20,
-          "clip": "Walk"
-        },
-        {
-          "t": 25.0,
-          "pos": [
-            0.6,
-            0.0,
-            35.0
-          ],
-          "yaw": 24,
-          "clip": "Idle"
-        },
-        {
-          "t": 30.0,
-          "pos": [
-            1.4,
-            0.0,
-            37.0
-          ],
-          "yaw": 95,
-          "clip": "Listen"
-        },
-        {
-          "t": 36.0,
-          "pos": [
-            2.2,
-            0.0,
-            38.8
-          ],
-          "yaw": 120,
-          "clip": "Talk"
-        }
-      ]
+     "t": 4.0,
+     "pos": [
+      -1.6,
+      0.0,
+      16.16
+     ],
+     "yaw": 175,
+     "clip": "Point"
     },
     {
-      "id": "deli_demir",
-      "char": "deli_demir",
-      "model": "assets/models/fantasy+warrior+3d+model.obj",
-      "loc_name": "chr.deli_demir.name",
-      "scale": 1.9,
-      "tint": [
-        0.7,
-        0.66,
-        0.62
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            7.81,
-            0.0,
-            21.98
-          ],
-          "yaw": -40,
-          "clip": "Idle"
-        },
-        {
-          "t": 5.0,
-          "pos": [
-            7.6,
-            0.0,
-            23.8
-          ],
-          "yaw": -18,
-          "clip": "Walk"
-        },
-        {
-          "t": 10.0,
-          "pos": [
-            6.8,
-            0.0,
-            26.8
-          ],
-          "yaw": -16,
-          "clip": "Walk"
-        },
-        {
-          "t": 15.0,
-          "pos": [
-            5.36,
-            0.0,
-            26.45
-          ],
-          "yaw": -85,
-          "clip": "Talk"
-        },
-        {
-          "t": 20.0,
-          "pos": [
-            4.15,
-            0.0,
-            35.97
-          ],
-          "yaw": -14,
-          "clip": "Walk"
-        },
-        {
-          "t": 26.0,
-          "pos": [
-            4.8,
-            0.0,
-            35.0
-          ],
-          "yaw": -95,
-          "clip": "Point"
-        },
-        {
-          "t": 31.0,
-          "pos": [
-            5.2,
-            0.0,
-            37.0
-          ],
-          "yaw": -100,
-          "clip": "Talk"
-        },
-        {
-          "t": 36.0,
-          "pos": [
-            5.6,
-            0.0,
-            38.6
-          ],
-          "yaw": -20,
-          "clip": "Idle"
-        }
-      ]
+     "t": 8.0,
+     "pos": [
+      1.67,
+      0.0,
+      30.03
+     ],
+     "yaw": 12,
+     "clip": "Walk"
+    },
+    {
+     "t": 13.0,
+     "pos": [
+      0.4,
+      0.0,
+      28.4
+     ],
+     "yaw": 16,
+     "clip": "Walk"
+    },
+    {
+     "t": 18.0,
+     "pos": [
+      1.4,
+      0.0,
+      31.2
+     ],
+     "yaw": 20,
+     "clip": "Talk"
+    },
+    {
+     "t": 23.0,
+     "pos": [
+      2.6,
+      0.0,
+      34.0
+     ],
+     "yaw": 24,
+     "clip": "Walk"
+    },
+    {
+     "t": 28.0,
+     "pos": [
+      3.6,
+      0.0,
+      36.4
+     ],
+     "yaw": 28,
+     "clip": "Idle"
+    },
+    {
+     "t": 33.0,
+     "pos": [
+      4.4,
+      0.0,
+      38.2
+     ],
+     "yaw": 60,
+     "clip": "Point"
+    },
+    {
+     "t": 37.0,
+     "pos": [
+      4.4,
+      0.0,
+      38.2
+     ],
+     "yaw": 130,
+     "clip": "Idle"
     }
-  ],
-  "camera": [
+   ]
+  },
+  {
+   "id": "halime",
+   "char": "halime",
+   "model": "assets/models/woman_halime.obj",
+   "loc_name": "chr.halime.name",
+   "scale": 1.64,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "keys": [
     {
-      "t": 0.0,
-      "pos": [
-        -2.79,
-        4.4,
-        40.03
-      ],
-      "look": [
-        -1.4,
-        1.6,
-        23.4
-      ],
-      "fov": 55
+     "t": 0.0,
+     "pos": [
+      -4.1,
+      0.0,
+      20.26
+     ],
+     "yaw": 20,
+     "clip": "Walk"
     },
     {
-      "t": 5.0,
-      "pos": [
-        4.48,
-        1.9,
-        26.75
-      ],
-      "look": [
-        -1.2,
-        1.5,
-        22.8
-      ],
-      "fov": 36
+     "t": 5.0,
+     "pos": [
+      -6.29,
+      0.0,
+      23.38
+     ],
+     "yaw": 18,
+     "clip": "Walk"
     },
     {
-      "t": 10.0,
-      "pos": [
-        -14.66,
-        2.2,
-        31.93
-      ],
-      "look": [
-        -1.8,
-        1.5,
-        26.0
-      ],
-      "fov": 42
+     "t": 10.0,
+     "pos": [
+      -2.83,
+      0.0,
+      27.87
+     ],
+     "yaw": 16,
+     "clip": "Talk"
     },
     {
-      "t": 15.0,
-      "pos": [
-        6.11,
-        1.8,
-        36.3
-      ],
-      "look": [
-        0.2,
-        1.45,
-        29.0
-      ],
-      "fov": 34
+     "t": 15.0,
+     "pos": [
+      -1.4,
+      0.0,
+      29.8
+     ],
+     "yaw": 18,
+     "clip": "Walk"
     },
     {
-      "t": 20.0,
-      "pos": [
-        -1.2,
-        2.0,
-        38.15
-      ],
-      "look": [
-        2.0,
-        1.5,
-        31.6
-      ],
-      "fov": 40
+     "t": 20.0,
+     "pos": [
+      -0.4,
+      0.0,
+      32.6
+     ],
+     "yaw": 20,
+     "clip": "Walk"
     },
     {
-      "t": 26.0,
-      "pos": [
-        8.0,
-        1.9,
-        37.4
-      ],
-      "look": [
-        4.0,
-        1.5,
-        34.4
-      ],
-      "fov": 33
+     "t": 25.0,
+     "pos": [
+      0.6,
+      0.0,
+      35.0
+     ],
+     "yaw": 24,
+     "clip": "Idle"
     },
     {
-      "t": 31.0,
-      "pos": [
-        -1.65,
-        2.4,
-        38.41
-      ],
-      "look": [
-        3.4,
-        1.5,
-        36.6
-      ],
-      "fov": 44
+     "t": 30.0,
+     "pos": [
+      1.4,
+      0.0,
+      37.0
+     ],
+     "yaw": 95,
+     "clip": "Listen"
     },
     {
-      "t": 37.5,
-      "pos": [
-        -5.71,
-        4.5,
-        47.97
-      ],
-      "look": [
-        4.0,
-        1.35,
-        38.0
-      ],
-      "fov": 58
+     "t": 36.0,
+     "pos": [
+      2.2,
+      0.0,
+      38.8
+     ],
+     "yaw": 120,
+     "clip": "Talk"
     }
-  ],
-  "lines": [
+   ]
+  },
+  {
+   "id": "deli_demir",
+   "char": "deli_demir",
+   "model": "assets/models/fantasy+warrior+3d+model.obj",
+   "loc_name": "chr.deli_demir.name",
+   "scale": 1.9,
+   "tint": [
+    0.7,
+    0.66,
+    0.62
+   ],
+   "keys": [
     {
-      "t": 1.4,
-      "actor": "ertugrul",
-      "loc": "cut.ep015_intro.01",
-      "vo": "ep015_intro_01",
-      "dur": 0
+     "t": 0.0,
+     "pos": [
+      7.81,
+      0.0,
+      21.98
+     ],
+     "yaw": -40,
+     "clip": "Idle"
     },
     {
-      "t": 6.6,
-      "actor": "halime",
-      "loc": "cut.ep015_intro.02",
-      "vo": "ep015_intro_02",
-      "dur": 0
+     "t": 5.0,
+     "pos": [
+      7.6,
+      0.0,
+      23.8
+     ],
+     "yaw": -18,
+     "clip": "Walk"
     },
     {
-      "t": 11.4,
-      "actor": "ertugrul",
-      "loc": "cut.ep015_intro.03",
-      "vo": "ep015_intro_03",
-      "dur": 0
+     "t": 10.0,
+     "pos": [
+      6.8,
+      0.0,
+      26.8
+     ],
+     "yaw": -16,
+     "clip": "Walk"
     },
     {
-      "t": 16.2,
-      "actor": "deli_demir",
-      "loc": "cut.ep015_intro.04",
-      "vo": "ep015_intro_04",
-      "dur": 0
+     "t": 15.0,
+     "pos": [
+      5.36,
+      0.0,
+      26.45
+     ],
+     "yaw": -85,
+     "clip": "Talk"
     },
     {
-      "t": 21.4,
-      "actor": "deli_demir",
-      "loc": "cut.ep015_intro.05",
-      "vo": "ep015_intro_05",
-      "dur": 0
+     "t": 20.0,
+     "pos": [
+      4.15,
+      0.0,
+      35.97
+     ],
+     "yaw": -14,
+     "clip": "Walk"
     },
     {
-      "t": 27.0,
-      "actor": "ertugrul",
-      "loc": "cut.ep015_intro.06",
-      "vo": "ep015_intro_06",
-      "dur": 0
+     "t": 26.0,
+     "pos": [
+      4.8,
+      0.0,
+      35.0
+     ],
+     "yaw": -95,
+     "clip": "Point"
     },
     {
-      "t": 33.2,
-      "actor": "halime",
-      "loc": "cut.ep015_intro.07",
-      "vo": "ep015_intro_07",
-      "dur": 0
+     "t": 31.0,
+     "pos": [
+      5.2,
+      0.0,
+      37.0
+     ],
+     "yaw": -100,
+     "clip": "Talk"
+    },
+    {
+     "t": 36.0,
+     "pos": [
+      5.6,
+      0.0,
+      38.6
+     ],
+     "yaw": -20,
+     "clip": "Idle"
     }
-  ]
+   ]
+  }
+ ],
+ "camera": [
+  {
+   "t": 0.0,
+   "pos": [
+    -2.79,
+    4.4,
+    40.03
+   ],
+   "look": [
+    -1.4,
+    1.6,
+    23.4
+   ],
+   "fov": 55
+  },
+  {
+   "t": 5.0,
+   "pos": [
+    4.48,
+    1.9,
+    26.75
+   ],
+   "look": [
+    -1.2,
+    1.5,
+    22.8
+   ],
+   "fov": 36
+  },
+  {
+   "t": 10.0,
+   "pos": [
+    -14.66,
+    2.2,
+    31.93
+   ],
+   "look": [
+    -1.8,
+    1.5,
+    26.0
+   ],
+   "fov": 42
+  },
+  {
+   "t": 15.0,
+   "pos": [
+    6.11,
+    1.8,
+    36.3
+   ],
+   "look": [
+    0.2,
+    1.45,
+    29.0
+   ],
+   "fov": 34
+  },
+  {
+   "t": 20.0,
+   "pos": [
+    -1.2,
+    2.0,
+    38.15
+   ],
+   "look": [
+    2.0,
+    1.5,
+    31.6
+   ],
+   "fov": 40
+  },
+  {
+   "t": 26.0,
+   "pos": [
+    8.0,
+    1.9,
+    37.4
+   ],
+   "look": [
+    4.0,
+    1.5,
+    34.4
+   ],
+   "fov": 33
+  },
+  {
+   "t": 31.0,
+   "pos": [
+    -1.65,
+    2.4,
+    38.41
+   ],
+   "look": [
+    3.4,
+    1.5,
+    36.6
+   ],
+   "fov": 44
+  },
+  {
+   "t": 37.5,
+   "pos": [
+    -5.71,
+    4.5,
+    47.97
+   ],
+   "look": [
+    4.0,
+    1.35,
+    38.0
+   ],
+   "fov": 58
+  }
+ ],
+ "lines": [
+  {
+   "t": 1.4,
+   "actor": "ertugrul",
+   "loc": "cut.ep015_intro.01",
+   "vo": "ep015_intro_01",
+   "dur": 0
+  },
+  {
+   "t": 6.6,
+   "actor": "halime",
+   "loc": "cut.ep015_intro.02",
+   "vo": "ep015_intro_02",
+   "dur": 0
+  },
+  {
+   "t": 11.4,
+   "actor": "ertugrul",
+   "loc": "cut.ep015_intro.03",
+   "vo": "ep015_intro_03",
+   "dur": 0
+  },
+  {
+   "t": 16.2,
+   "actor": "deli_demir",
+   "loc": "cut.ep015_intro.04",
+   "vo": "ep015_intro_04",
+   "dur": 0
+  },
+  {
+   "t": 21.4,
+   "actor": "deli_demir",
+   "loc": "cut.ep015_intro.05",
+   "vo": "ep015_intro_05",
+   "dur": 0
+  },
+  {
+   "t": 27.0,
+   "actor": "ertugrul",
+   "loc": "cut.ep015_intro.06",
+   "vo": "ep015_intro_06",
+   "dur": 0
+  },
+  {
+   "t": 33.2,
+   "actor": "halime",
+   "loc": "cut.ep015_intro.07",
+   "vo": "ep015_intro_07",
+   "dur": 0
+  }
+ ],
+ "intro_fly": 5.0
 }

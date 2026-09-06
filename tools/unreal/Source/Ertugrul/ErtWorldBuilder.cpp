@@ -794,6 +794,8 @@ void AErtWorldBuilder::BuildOba()
 				if (FMath::Abs(u) > ObaHalf - 8.f || FMath::Abs(v) > ObaHalf - 8.f) continue;
 				const float DoorYaw = FMath::RadiansToDegrees(FMath::Atan2(-v, -u));
 				AddYurt(M, OE(u), ON(v), Z, 2.5f, 1.8f, 1.7f, Felt, ErtCol::Sty(FLinearColor(0.72f, 0.66f, 0.55f), ErtCol::StyleFelt), DoorYaw, ++K);
+				// Kigiz gilam eshik oldida (har 3-o'tovda, qizil yoki ko'k naqsh)
+				if (K % 3 == 0) { const float Ry = FMath::DegreesToRadians(DoorYaw); M.AddBox(W(OE(u) + FMath::Cos(Ry) * 3.3f, ON(v) + FMath::Sin(Ry) * 3.3f, Z + 0.03f), FVector(65, 45, 1.5f), (K % 2) ? FLinearColor(0.55f, 0.12f, 0.10f) : FLinearColor(0.18f, 0.24f, 0.48f), FRotator(0, DoorYaw, 0)); }
 			}
 		M.Commit(NewPart(TEXT("ObaYurts"), true), 0, true);
 	}
@@ -846,6 +848,11 @@ void AErtWorldBuilder::BuildOba()
 		M.AddCylinder(W(OE(12), ON(13), Z + 1.f), 0.08f, 0.08f, 2.f, 4, Wood, false);
 		M.AddCylinder(W(OE(14), ON(13), Z + 1.f), 0.08f, 0.08f, 2.f, 4, Wood, false);
 		M.AddCone(W(OE(13), ON(13), Z + 3.f), 1.5f, 0.9f, 8, Straw * 0.9f);
+		// Qozon-ochoq: uch tosh ustida qora qozon (katta o'tov yonida)
+		AddFire(M, OE(7), ON(-7), Z, true);
+		for (int32 q = 0; q < 3; ++q) { const float Aq = q * 2.094f; M.AddSphere(W(OE(7) + FMath::Cos(Aq) * 0.55f, ON(-7) + FMath::Sin(Aq) * 0.55f, Z + 0.15f), 0.2f, 6, Stone); }
+		M.AddCylinder(W(OE(7), ON(-7), Z + 0.35f), 0.34f, 0.44f, 0.42f, 12, FLinearColor(0.07f, 0.07f, 0.08f), false);
+		M.AddCylinder(W(OE(7), ON(-7), Z + 0.77f), 0.46f, 0.46f, 0.06f, 12, FLinearColor(0.16f, 0.16f, 0.17f), false);
 		// Gulxanlar
 		AddFire(M, OE(-16), ON(16), Z, true);
 		AddFire(M, OE(18), ON(18), Z, true);

@@ -93,14 +93,14 @@ void AErtHUD::DrawHUD()
 		else if (H->GetParryFlash() > 0.f) Text(TEXT("PARRY!"), SW * 0.5f - TextWidth(TEXT("PARRY!"), 1.6f * Sc, true) * 0.5f, SH * 0.42f, FLinearColor(1.f, 0.85f, 0.3f, H->GetParryFlash()), 1.6f * Sc, true, true);
 		else if (H->GetRiposteT() > 0.f) Text(TEXT("Zarba x2"), SW * 0.5f - TextWidth(TEXT("Zarba x2"), Sc, false) * 0.5f, SH * 0.46f, FLinearColor(1.f, 0.6f, 0.2f), Sc);
 		if (H->GetLockTarget()) Text(TEXT("LMB x3 seriya | LMB ushlab: og'ir | V: tepki | X: dodge | Q: qulfni ochish"), X + 280 * Sc, Y + 34 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
-		if (H->IsRiding() && H->GetHorse()) { Bar(X, Y - 40 * Sc, 160 * Sc, 8 * Sc, H->GetHorse()->Health / H->GetHorse()->MaxHealth, FLinearColor(0.55f, 0.35f, 0.15f)); Text(FString::Printf(TEXT("%s %d"), H->GetHorse()->IsCamel() ? TEXT("Tuya") : TEXT("Ot"), (int32)H->GetHorse()->Health), X + 166 * Sc, Y - 44 * Sc, White, 0.85f * Sc); }
+		if (H->IsRiding() && H->GetHorse()) { Bar(X, Y - 40 * Sc, 160 * Sc, 8 * Sc, H->GetHorse()->Health / H->GetHorse()->MaxHealth, FLinearColor(0.55f, 0.35f, 0.15f)); Text(FString::Printf(TEXT("%s %d  |  parvarish %d%%  tezlik +%d%%"), *H->GetHorse()->HorseName, (int32)H->GetHorse()->Health, (int32)(H->GetHorse()->Care * 100.f), (int32)(H->GetHorse()->Care * 12.f)), X + 166 * Sc, Y - 44 * Sc, White, 0.85f * Sc); }
 		if (H->IsRiding()) Text(TEXT("Otda: W yurish/yo'rtish, Shift chopish, A/D burilish, Space sakrash, E tushish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		else if (H->IsInBoat()) Text(TEXT("Qayiq: W eshkak, S orqaga, A/D burilish, E qirg'oqqa chiqish"), X, Y - 22 * Sc, FLinearColor(0.85f, 0.8f, 0.6f), 0.9f * Sc);
 		else if (H->NearestBoat(350.f)) Text(TEXT("[E] Qayiqqa o'tirish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (AErtLoot* Lt = H->NearestLoot(260.f)) Text(TEXT("[E] O'lja: ") + Lt->Describe(), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (H->NearestCarcass(260.f)) Text(TEXT("[E] Go'sht olish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		else if (AErtNpc* Np = H->NearestNpc(280.f)) Text(FString::Printf(TEXT("[E] %s bilan gaplashish"), *Np->GetDisplayName()), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
-		else if (AErtHorse* Nh = H->NearestHorse(320.f)) Text(Nh->IsCamel() ? TEXT("[E] Tuyaga minish") : TEXT("[E] Otga minish"), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
+		else if (AErtHorse* Nh = H->NearestHorse(320.f)) Text(FString::Printf(TEXT("[E] %s: minish   V: tarash   H: boqish (go'sht %d)   parvarish %d%%"), *Nh->HorseName, H->Meat, (int32)(Nh->Care * 100.f)), X, Y - 22 * Sc, FLinearColor(1.f, 0.85f, 0.35f), Sc);
 		if (H->GetHurtFlash() > 0.f)
 		{
 			FCanvasTileItem V(FVector2D(0, 0), FVector2D(SW, SH), FLinearColor(0.6f, 0.f, 0.f, 0.35f * H->GetHurtFlash())); V.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(V);

@@ -55,7 +55,21 @@ void AErtNpc::Tick(float Dt)
 	const bool bNight = GM && (GM->GetDayT() > 0.82f || GM->GetDayT() < 0.2f);
 	APawn* Pl = UGameplayStatics::GetPlayerPawn(this, 0);
 	const float DPl = Pl ? FVector::Dist2D(Pl->GetActorLocation(), GetActorLocation()) : 1e9f;
-	if (!bTalking && DPl > 350.f)
+	if (Chore && !bTalking)
+	{
+		ChoreT -= Dt; const FVector Goal = bAtB ? ChoreB : ChoreA; FVector To = Goal - GetActorLocation(); To.Z = 0;
+		if (To.Size() > 60.f)
+		{
+			Speed = Chore == 3 ? 230.f : 105.f; bBend = false;
+			FVector NewPos = GetActorLocation() + To.GetSafeNormal() * Speed * Dt;
+			FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(ErtNpcChore), true, this);
+			if (GetWorld()->LineTraceSingleByChannel(Hit, NewPos + FVector(0, 0, 300), NewPos - FVector(0, 0, 300), ECC_Visibility, Q)) NewPos.Z = Hit.ImpactPoint.Z + 92.f * GetActorScale3D().Z;
+			SetActorLocation(NewPos); SetActorRotation(FRotator(0, To.Rotation().Yaw, 0));
+		}
+		else if (ChoreT <= 0.f) { bAtB = !bAtB; ChoreT = Chore == 3 ? FMath::FRandRange(0.3f, 1.2f) : FMath::FRandRange(3.f, 7.f); if (Chore == 3) { const float A = FMath::FRandRange(0.f, 2.f * PI); (bAtB ? ChoreB : ChoreA) = HomePos + FVector(FMath::Cos(A), FMath::Sin(A), 0) * FMath::FRandRange(300.f, 900.f); } }
+		else { Speed = 0.f; bBend = (Chore == 2); }
+	}
+	else if (!bTalking && DPl > 350.f)
 	{
 		WanderT -= Dt;
 		if (WanderT <= 0.f)
@@ -99,5 +113,5 @@ void AErtNpc::Tick(float Dt)
 	}
 	const FRotator R = GetActorRotation();
 	SetActorRotation(FRotator(0, FMath::FixedTurn(R.Yaw, TargetYaw, 120.f * Dt), 0));
-	Body->Animate(Dt, Speed, false, false, 0.f, 0.f);
+	Body->Animate(Dt, Speed, false, bBend, 0.f, 0.f);
 }

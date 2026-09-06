@@ -1,566 +1,567 @@
 {
-  "id": "ep019_intro",
-  "episode": "EP019",
-  "level": "aleppo_road",
-  "music": "MUS_EP019",
-  "ambience": "Ambience.Spring.Clear",
-  "letterbox": true,
-  "fade_in": 1.2,
-  "fade_out": 1.0,
-  "time_of_day": "dusk",
-  "weather": "clear",
-  "duration": 0,
-  "actors": [
+ "id": "ep019_intro",
+ "episode": "EP019",
+ "level": "aleppo_road",
+ "music": "MUS_EP019",
+ "ambience": "Ambience.Spring.Clear",
+ "letterbox": true,
+ "fade_in": 1.2,
+ "fade_out": 1.0,
+ "time_of_day": "dusk",
+ "weather": "clear",
+ "duration": 0,
+ "actors": [
+  {
+   "id": "ertugrul",
+   "char": "ertugrul",
+   "model": "assets/models/ottoman/ottoman.obj",
+   "loc_name": "chr.ertugrul.name",
+   "scale": 1.82,
+   "tint": [
+    1.0,
+    0.95,
+    0.85
+   ],
+   "keys": [
     {
-      "id": "ertugrul",
-      "char": "ertugrul",
-      "model": "assets/models/ottoman/ottoman.obj",
-      "loc_name": "chr.ertugrul.name",
-      "scale": 1.82,
-      "tint": [
-        1.0,
-        0.95,
-        0.85
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            -2.8,
-            0.0,
-            23.2
-          ],
-          "yaw": 175,
-          "clip": "Sit"
-        },
-        {
-          "t": 6.0,
-          "pos": [
-            -2.8,
-            0.0,
-            23.2
-          ],
-          "yaw": 150,
-          "clip": "Listen"
-        },
-        {
-          "t": 11.0,
-          "pos": [
-            -2.2,
-            0.0,
-            25.8
-          ],
-          "yaw": 14,
-          "clip": "Walk"
-        },
-        {
-          "t": 16.0,
-          "pos": [
-            -1.4,
-            0.0,
-            28.6
-          ],
-          "yaw": 16,
-          "clip": "Idle"
-        },
-        {
-          "t": 21.0,
-          "pos": [
-            -1.4,
-            0.0,
-            28.6
-          ],
-          "yaw": 100,
-          "clip": "Talk"
-        },
-        {
-          "t": 26.0,
-          "pos": [
-            -0.6,
-            0.0,
-            31.2
-          ],
-          "yaw": 18,
-          "clip": "Walk"
-        },
-        {
-          "t": 31.0,
-          "pos": [
-            0.2,
-            0.0,
-            33.8
-          ],
-          "yaw": 175,
-          "clip": "Run"
-        },
-        {
-          "t": 36.0,
-          "pos": [
-            1.0,
-            0.0,
-            36.4
-          ],
-          "yaw": 160,
-          "clip": "Point"
-        },
-        {
-          "t": 40.0,
-          "pos": [
-            1.4,
-            0.0,
-            38.0
-          ],
-          "yaw": 150,
-          "clip": "Idle"
-        }
-      ]
+     "t": 0.0,
+     "pos": [
+      -2.8,
+      0.0,
+      23.2
+     ],
+     "yaw": 175,
+     "clip": "Sit"
     },
     {
-      "id": "kayqubad",
-      "char": "kayqubad",
-      "model": "assets/models/medieval+armored+warrior+3d+model.obj",
-      "loc_name": "chr.kayqubad.name",
-      "scale": 1.88,
-      "tint": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            1.6,
-            0.0,
-            21.6
-          ],
-          "yaw": 160,
-          "clip": "Sit"
-        },
-        {
-          "t": 6.0,
-          "pos": [
-            1.6,
-            0.0,
-            21.6
-          ],
-          "yaw": 160,
-          "clip": "Talk"
-        },
-        {
-          "t": 11.0,
-          "pos": [
-            1.2,
-            0.0,
-            24.2
-          ],
-          "yaw": -10,
-          "clip": "Walk"
-        },
-        {
-          "t": 16.0,
-          "pos": [
-            0.6,
-            0.0,
-            27.0
-          ],
-          "yaw": -12,
-          "clip": "Walk"
-        },
-        {
-          "t": 22.0,
-          "pos": [
-            0.0,
-            0.0,
-            29.8
-          ],
-          "yaw": -14,
-          "clip": "Idle"
-        },
-        {
-          "t": 27.0,
-          "pos": [
-            -0.6,
-            0.0,
-            32.2
-          ],
-          "yaw": -12,
-          "clip": "Walk"
-        },
-        {
-          "t": 32.0,
-          "pos": [
-            -1.0,
-            0.0,
-            34.4
-          ],
-          "yaw": -10,
-          "clip": "Idle"
-        },
-        {
-          "t": 37.0,
-          "pos": [
-            -1.4,
-            0.0,
-            36.2
-          ],
-          "yaw": -8,
-          "clip": "Idle"
-        }
-      ]
+     "t": 6.0,
+     "pos": [
+      -2.8,
+      0.0,
+      23.2
+     ],
+     "yaw": 150,
+     "clip": "Listen"
     },
     {
-      "id": "kopek",
-      "char": "kopek",
-      "model": "assets/models/ottoman+warrior+3d+model.obj",
-      "loc_name": "chr.kopek.name",
-      "scale": 1.84,
-      "tint": [
-        0.6,
-        0.6,
-        0.7
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            6.4,
-            0.0,
-            20.8
-          ],
-          "yaw": -150,
-          "clip": "Idle"
-        },
-        {
-          "t": 6.0,
-          "pos": [
-            5.8,
-            0.0,
-            23.6
-          ],
-          "yaw": -14,
-          "clip": "Walk"
-        },
-        {
-          "t": 12.0,
-          "pos": [
-            6.32,
-            0.0,
-            25.24
-          ],
-          "yaw": -16,
-          "clip": "Walk"
-        },
-        {
-          "t": 18.0,
-          "pos": [
-            4.41,
-            0.0,
-            31.82
-          ],
-          "yaw": -110,
-          "clip": "Talk"
-        },
-        {
-          "t": 24.0,
-          "pos": [
-            3.6,
-            0.0,
-            32.4
-          ],
-          "yaw": -14,
-          "clip": "Walk"
-        },
-        {
-          "t": 30.0,
-          "pos": [
-            3.2,
-            0.0,
-            34.8
-          ],
-          "yaw": -12,
-          "clip": "Idle"
-        },
-        {
-          "t": 35.0,
-          "pos": [
-            3.4,
-            0.0,
-            37.0
-          ],
-          "yaw": -115,
-          "clip": "Talk"
-        },
-        {
-          "t": 40.0,
-          "pos": [
-            3.8,
-            0.0,
-            39.0
-          ],
-          "yaw": -100,
-          "clip": "Idle"
-        }
-      ]
+     "t": 11.0,
+     "pos": [
+      -2.2,
+      0.0,
+      25.8
+     ],
+     "yaw": 14,
+     "clip": "Walk"
     },
     {
-      "id": "kaykhusraw",
-      "char": "kaykhusraw",
-      "model": "assets/models/medieval+armored+warrior+3d+model.obj",
-      "loc_name": "chr.kaykhusraw.name",
-      "scale": 1.84,
-      "tint": [
-        0.95,
-        0.95,
-        1.0
-      ],
-      "keys": [
-        {
-          "t": 0.0,
-          "pos": [
-            -7.2,
-            0.0,
-            20.4
-          ],
-          "yaw": 15,
-          "clip": "Sit"
-        },
-        {
-          "t": 7.0,
-          "pos": [
-            -7.2,
-            0.0,
-            20.4
-          ],
-          "yaw": 15,
-          "clip": "Idle"
-        },
-        {
-          "t": 12.0,
-          "pos": [
-            -8.36,
-            0.0,
-            20.87
-          ],
-          "yaw": 14,
-          "clip": "Walk"
-        },
-        {
-          "t": 18.0,
-          "pos": [
-            -6.0,
-            0.0,
-            28.82
-          ],
-          "yaw": 12,
-          "clip": "Walk"
-        },
-        {
-          "t": 24.0,
-          "pos": [
-            -5.4,
-            0.0,
-            29.2
-          ],
-          "yaw": 85,
-          "clip": "Talk"
-        },
-        {
-          "t": 30.0,
-          "pos": [
-            -5.0,
-            0.0,
-            31.8
-          ],
-          "yaw": 12,
-          "clip": "Walk"
-        },
-        {
-          "t": 35.0,
-          "pos": [
-            -4.6,
-            0.0,
-            34.2
-          ],
-          "yaw": 10,
-          "clip": "Idle"
-        },
-        {
-          "t": 40.0,
-          "pos": [
-            -4.2,
-            0.0,
-            36.4
-          ],
-          "yaw": 10,
-          "clip": "Idle"
-        }
-      ]
+     "t": 16.0,
+     "pos": [
+      -1.4,
+      0.0,
+      28.6
+     ],
+     "yaw": 16,
+     "clip": "Idle"
+    },
+    {
+     "t": 21.0,
+     "pos": [
+      -1.4,
+      0.0,
+      28.6
+     ],
+     "yaw": 100,
+     "clip": "Talk"
+    },
+    {
+     "t": 26.0,
+     "pos": [
+      -0.6,
+      0.0,
+      31.2
+     ],
+     "yaw": 18,
+     "clip": "Walk"
+    },
+    {
+     "t": 31.0,
+     "pos": [
+      0.2,
+      0.0,
+      33.8
+     ],
+     "yaw": 175,
+     "clip": "Run"
+    },
+    {
+     "t": 36.0,
+     "pos": [
+      1.0,
+      0.0,
+      36.4
+     ],
+     "yaw": 160,
+     "clip": "Point"
+    },
+    {
+     "t": 40.0,
+     "pos": [
+      1.4,
+      0.0,
+      38.0
+     ],
+     "yaw": 150,
+     "clip": "Idle"
     }
-  ],
-  "camera": [
+   ]
+  },
+  {
+   "id": "kayqubad",
+   "char": "kayqubad",
+   "model": "assets/models/medieval+armored+warrior+3d+model.obj",
+   "loc_name": "chr.kayqubad.name",
+   "scale": 1.88,
+   "tint": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "keys": [
     {
-      "t": 0.0,
-      "pos": [
-        -1.0,
-        3.2,
-        38.4
-      ],
-      "look": [
-        0.0,
-        1.6,
-        22.8
-      ],
-      "fov": 50
+     "t": 0.0,
+     "pos": [
+      1.6,
+      0.0,
+      21.6
+     ],
+     "yaw": 160,
+     "clip": "Sit"
     },
     {
-      "t": 5.0,
-      "pos": [
-        -4.6,
-        1.8,
-        27.4
-      ],
-      "look": [
-        0.4,
-        1.45,
-        22.6
-      ],
-      "fov": 38
+     "t": 6.0,
+     "pos": [
+      1.6,
+      0.0,
+      21.6
+     ],
+     "yaw": 160,
+     "clip": "Talk"
     },
     {
-      "t": 10.0,
-      "pos": [
-        4.39,
-        1.9,
-        31.13
-      ],
-      "look": [
-        -1.4,
-        1.4,
-        25.0
-      ],
-      "fov": 34
+     "t": 11.0,
+     "pos": [
+      1.2,
+      0.0,
+      24.2
+     ],
+     "yaw": -10,
+     "clip": "Walk"
     },
     {
-      "t": 15.0,
-      "pos": [
-        -8.0,
-        2.0,
-        31.6
-      ],
-      "look": [
-        -2.6,
-        1.5,
-        27.6
-      ],
-      "fov": 40
+     "t": 16.0,
+     "pos": [
+      0.6,
+      0.0,
+      27.0
+     ],
+     "yaw": -12,
+     "clip": "Walk"
     },
     {
-      "t": 20.0,
-      "pos": [
-        1.6,
-        1.8,
-        33.8
-      ],
-      "look": [
-        4.0,
-        1.5,
-        30.0
-      ],
-      "fov": 33
+     "t": 22.0,
+     "pos": [
+      0.0,
+      0.0,
+      29.8
+     ],
+     "yaw": -14,
+     "clip": "Idle"
     },
     {
-      "t": 25.0,
-      "pos": [
-        -3.0,
-        2.2,
-        35.6
-      ],
-      "look": [
-        -0.6,
-        1.5,
-        31.0
-      ],
-      "fov": 36
+     "t": 27.0,
+     "pos": [
+      -0.6,
+      0.0,
+      32.2
+     ],
+     "yaw": -12,
+     "clip": "Walk"
     },
     {
-      "t": 31.0,
-      "pos": [
-        2.8,
-        1.9,
-        39.6
-      ],
-      "look": [
-        -0.4,
-        1.45,
-        33.8
-      ],
-      "fov": 38
+     "t": 32.0,
+     "pos": [
+      -1.0,
+      0.0,
+      34.4
+     ],
+     "yaw": -10,
+     "clip": "Idle"
     },
     {
-      "t": 40.0,
-      "pos": [
-        -6.4,
-        4.3,
-        44.4
-      ],
-      "look": [
-        1.0,
-        1.35,
-        37.6
-      ],
-      "fov": 56
+     "t": 37.0,
+     "pos": [
+      -1.4,
+      0.0,
+      36.2
+     ],
+     "yaw": -8,
+     "clip": "Idle"
     }
-  ],
-  "lines": [
+   ]
+  },
+  {
+   "id": "kopek",
+   "char": "kopek",
+   "model": "assets/models/ottoman+warrior+3d+model.obj",
+   "loc_name": "chr.kopek.name",
+   "scale": 1.84,
+   "tint": [
+    0.6,
+    0.6,
+    0.7
+   ],
+   "keys": [
     {
-      "t": 1.5,
-      "actor": "kayqubad",
-      "loc": "cut.ep019_intro.01",
-      "vo": "ep019_intro_01",
-      "dur": 0
+     "t": 0.0,
+     "pos": [
+      6.4,
+      0.0,
+      20.8
+     ],
+     "yaw": -150,
+     "clip": "Idle"
     },
     {
-      "t": 7.0,
-      "actor": "ertugrul",
-      "loc": "cut.ep019_intro.02",
-      "vo": "ep019_intro_02",
-      "dur": 0
+     "t": 6.0,
+     "pos": [
+      5.8,
+      0.0,
+      23.6
+     ],
+     "yaw": -14,
+     "clip": "Walk"
     },
     {
-      "t": 13.0,
-      "actor": "kopek",
-      "loc": "cut.ep019_intro.03",
-      "vo": "ep019_intro_03",
-      "dur": 0
+     "t": 12.0,
+     "pos": [
+      6.32,
+      0.0,
+      25.24
+     ],
+     "yaw": -16,
+     "clip": "Walk"
     },
     {
-      "t": 19.0,
-      "actor": "kaykhusraw",
-      "loc": "cut.ep019_intro.04",
-      "vo": "ep019_intro_04",
-      "dur": 0
+     "t": 18.0,
+     "pos": [
+      4.41,
+      0.0,
+      31.82
+     ],
+     "yaw": -110,
+     "clip": "Talk"
     },
     {
-      "t": 24.6,
-      "actor": "kayqubad",
-      "loc": "cut.ep019_intro.05",
-      "vo": "ep019_intro_05",
-      "dur": 0
+     "t": 24.0,
+     "pos": [
+      3.6,
+      0.0,
+      32.4
+     ],
+     "yaw": -14,
+     "clip": "Walk"
     },
     {
-      "t": 29.4,
-      "actor": "ertugrul",
-      "loc": "cut.ep019_intro.06",
-      "vo": "ep019_intro_06",
-      "dur": 0
+     "t": 30.0,
+     "pos": [
+      3.2,
+      0.0,
+      34.8
+     ],
+     "yaw": -12,
+     "clip": "Idle"
     },
     {
-      "t": 35.0,
-      "actor": "kopek",
-      "loc": "cut.ep019_intro.07",
-      "vo": "ep019_intro_07",
-      "dur": 0
+     "t": 35.0,
+     "pos": [
+      3.4,
+      0.0,
+      37.0
+     ],
+     "yaw": -115,
+     "clip": "Talk"
+    },
+    {
+     "t": 40.0,
+     "pos": [
+      3.8,
+      0.0,
+      39.0
+     ],
+     "yaw": -100,
+     "clip": "Idle"
     }
-  ]
+   ]
+  },
+  {
+   "id": "kaykhusraw",
+   "char": "kaykhusraw",
+   "model": "assets/models/medieval+armored+warrior+3d+model.obj",
+   "loc_name": "chr.kaykhusraw.name",
+   "scale": 1.84,
+   "tint": [
+    0.95,
+    0.95,
+    1.0
+   ],
+   "keys": [
+    {
+     "t": 0.0,
+     "pos": [
+      -7.2,
+      0.0,
+      20.4
+     ],
+     "yaw": 15,
+     "clip": "Sit"
+    },
+    {
+     "t": 7.0,
+     "pos": [
+      -7.2,
+      0.0,
+      20.4
+     ],
+     "yaw": 15,
+     "clip": "Idle"
+    },
+    {
+     "t": 12.0,
+     "pos": [
+      -8.36,
+      0.0,
+      20.87
+     ],
+     "yaw": 14,
+     "clip": "Walk"
+    },
+    {
+     "t": 18.0,
+     "pos": [
+      -6.0,
+      0.0,
+      28.82
+     ],
+     "yaw": 12,
+     "clip": "Walk"
+    },
+    {
+     "t": 24.0,
+     "pos": [
+      -5.4,
+      0.0,
+      29.2
+     ],
+     "yaw": 85,
+     "clip": "Talk"
+    },
+    {
+     "t": 30.0,
+     "pos": [
+      -5.0,
+      0.0,
+      31.8
+     ],
+     "yaw": 12,
+     "clip": "Walk"
+    },
+    {
+     "t": 35.0,
+     "pos": [
+      -4.6,
+      0.0,
+      34.2
+     ],
+     "yaw": 10,
+     "clip": "Idle"
+    },
+    {
+     "t": 40.0,
+     "pos": [
+      -4.2,
+      0.0,
+      36.4
+     ],
+     "yaw": 10,
+     "clip": "Idle"
+    }
+   ]
+  }
+ ],
+ "camera": [
+  {
+   "t": 0.0,
+   "pos": [
+    -1.0,
+    3.2,
+    38.4
+   ],
+   "look": [
+    0.0,
+    1.6,
+    22.8
+   ],
+   "fov": 50
+  },
+  {
+   "t": 5.0,
+   "pos": [
+    -4.6,
+    1.8,
+    27.4
+   ],
+   "look": [
+    0.4,
+    1.45,
+    22.6
+   ],
+   "fov": 38
+  },
+  {
+   "t": 10.0,
+   "pos": [
+    4.39,
+    1.9,
+    31.13
+   ],
+   "look": [
+    -1.4,
+    1.4,
+    25.0
+   ],
+   "fov": 34
+  },
+  {
+   "t": 15.0,
+   "pos": [
+    -8.0,
+    2.0,
+    31.6
+   ],
+   "look": [
+    -2.6,
+    1.5,
+    27.6
+   ],
+   "fov": 40
+  },
+  {
+   "t": 20.0,
+   "pos": [
+    1.6,
+    1.8,
+    33.8
+   ],
+   "look": [
+    4.0,
+    1.5,
+    30.0
+   ],
+   "fov": 33
+  },
+  {
+   "t": 25.0,
+   "pos": [
+    -3.0,
+    2.2,
+    35.6
+   ],
+   "look": [
+    -0.6,
+    1.5,
+    31.0
+   ],
+   "fov": 36
+  },
+  {
+   "t": 31.0,
+   "pos": [
+    2.8,
+    1.9,
+    39.6
+   ],
+   "look": [
+    -0.4,
+    1.45,
+    33.8
+   ],
+   "fov": 38
+  },
+  {
+   "t": 40.0,
+   "pos": [
+    -6.4,
+    4.3,
+    44.4
+   ],
+   "look": [
+    1.0,
+    1.35,
+    37.6
+   ],
+   "fov": 56
+  }
+ ],
+ "lines": [
+  {
+   "t": 1.5,
+   "actor": "kayqubad",
+   "loc": "cut.ep019_intro.01",
+   "vo": "ep019_intro_01",
+   "dur": 0
+  },
+  {
+   "t": 7.0,
+   "actor": "ertugrul",
+   "loc": "cut.ep019_intro.02",
+   "vo": "ep019_intro_02",
+   "dur": 0
+  },
+  {
+   "t": 13.0,
+   "actor": "kopek",
+   "loc": "cut.ep019_intro.03",
+   "vo": "ep019_intro_03",
+   "dur": 0
+  },
+  {
+   "t": 19.0,
+   "actor": "kaykhusraw",
+   "loc": "cut.ep019_intro.04",
+   "vo": "ep019_intro_04",
+   "dur": 0
+  },
+  {
+   "t": 24.6,
+   "actor": "kayqubad",
+   "loc": "cut.ep019_intro.05",
+   "vo": "ep019_intro_05",
+   "dur": 0
+  },
+  {
+   "t": 29.4,
+   "actor": "ertugrul",
+   "loc": "cut.ep019_intro.06",
+   "vo": "ep019_intro_06",
+   "dur": 0
+  },
+  {
+   "t": 35.0,
+   "actor": "kopek",
+   "loc": "cut.ep019_intro.07",
+   "vo": "ep019_intro_07",
+   "dur": 0
+  }
+ ],
+ "intro_fly": 5.0
 }
