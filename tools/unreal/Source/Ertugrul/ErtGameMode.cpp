@@ -27,6 +27,7 @@
 #include "Engine/Engine.h"
 #include "ErtMission.h"
 #include "Engine/World.h"
+#include "Engine/Texture2D.h"
 #include "Kismet/GameplayStatics.h"
 #include "Misc/CommandLine.h"
 #include "Misc/FileHelper.h"
@@ -386,10 +387,11 @@ void AErtGameMode::Tick(float Dt)
 			{
 				const int32 Xi = X + dx, Yi = Y + dy;
 				if (Xi < 0 || Yi < 0 || Xi >= VisN || Yi >= VisN || dx * dx + dy * dy > 5) continue;
-				Visited[Yi * VisN + Xi] = 1;
+				if (!Visited[Yi * VisN + Xi]) { Visited[Yi * VisN + Xi] = 1; bFogDirty = true; }
 			}
 		}
 	}
+	if (bFogDirty && Menu == EErtMenu::Map) UpdateFogTex();
 	if (bWaypoint) if (APawn* P = UGameplayStatics::GetPlayerPawn(this, 0)) if (FVector::Dist2D(P->GetActorLocation(), Waypoint) < 400.f) ClearWaypoint();   // yetib keldi
 	// GPS: faol maqsadga yo'l
 	if (AErtGps* G = AErtGps::Get(GetWorld()))
@@ -747,4 +749,35 @@ void AErtGameMode::OnSkip()
 	if (Dialog.IsActive()) { EndDialog(); return; }
 	if (Cutscene && Cutscene->IsPlaying()) { Cutscene->Skip(); return; }
 	MenuToggle();
+}
+
+
+void AErtGameMode::UpdateFogTex()
+{
+	bFogDirty = false;
+	if (!FogTex)
+	{
+		FogTex = UTexture2D::CreateTransient(VisN, VisN, PF_B8G8R8A8);
+		FogTex->Filter = TF_Bilinear;
+		FogTex->SRGB = false;
+		FogTex->AddToRoot();
+	}
+	FTexture2DMipMap& Mip = FogTex->GetPlatformData()->Mips[0];
+	uint8* Data = (uint8*)Mip.BulkData.Lock(LOCK_READ_WRITE);
+	for (int32 y = 0; y < VisN; ++y)
+		for (int32 x = 0; x < VisN; ++x)
+		{
+			// Yumshoq chekka: qo'shni kashf qilingan hujayralar bo'lsa alfa kamayadi
+			float A = Visited[y * VisN + x] ? 0.f : 1.f;
+			if (A > 0.f)
+			{
+				int32 Nb = 0;
+				for (int32 dy = -1; dy <= 1; ++dy) for (int32 dx = -1; dx <= 1; ++dx) { const int32 X2 = x + dx, Y2 = y + dy; if (X2 >= 0 && Y2 >= 0 && X2 < VisN && Y2 < VisN && Visited[Y2 * VisN + X2]) ++Nb; }
+				A = FMath::Max(0.35f, 1.f - Nb * 0.12f);
+			}
+			uint8* P = Data + (y * VisN + x) * 4;
+			P[0] = 12; P[1] = 12; P[2] = 18; P[3] = (uint8)(A * 255.f);
+		}
+	Mip.BulkData.Unlock();
+	FogTex->UpdateResource();
 }

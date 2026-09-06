@@ -582,22 +582,22 @@ void AErtHUD::DrawMap(float SW, float SH, float Sc)
 		AErtWorldBuilder* W = Cast<AErtWorldBuilder>(UGameplayStatics::GetActorOfClass(GetWorld(), AErtWorldBuilder::StaticClass()));
 		auto Hz = [&](float E, float N) { return W ? W->HeightAt(E, N) : 0.f; };
 		auto Proj = [&](float E, float N, float& X, float& Y) { float U, V; const bool bIn = M3->Project(AErtWorldBuilder::PlanToWorld(E, N, Hz(E, N)), U, V); X = X0 + U * S; Y = Y0 + V * S; return bIn; };
-		// Kashf qilinmagan hududlar (fog of war): 50 m hujayralar
+		// Kashf qilinmagan hududlar (fog of war): 40x40 tekstura, dunyo burchaklari xaritaga proyeksiya (affin) - ikki uchburchak
 		if (GM)
 		{
-			for (int32 y = 0; y < AErtGameMode::VisN; ++y)
-				for (int32 x = 0; x < AErtGameMode::VisN; ++x)
-				{
-					if (GM->Visited[y * AErtGameMode::VisN + x]) continue;
-					const float E = -1000.f + (x + 0.5f) * 50.f, N = -1000.f + (y + 0.5f) * 50.f;
-					float X, Y; if (!Proj(E, N, X, Y)) continue;
-					// Hujayra o'qlari ekranda (burilish va egilishga mos): E o'qi va N o'qi proyeksiyasi
-					float Xe, Ye, Xn, Yn; Proj(E + 50.f, N, Xe, Ye); Proj(E, N + 50.f, Xn, Yn);
-					const FVector2D DE(Xe - X, Ye - Y), DN(Xn - X, Yn - Y);
-					const float Ang = FMath::RadiansToDegrees(FMath::Atan2(DE.Y, DE.X));
-					const float Le = DE.Size() * 1.12f, Ln = DN.Size() * 1.12f;
-					FCanvasTileItem F(FVector2D(X - Le * 0.5f, Y - Ln * 0.5f), FVector2D(Le, Ln), FLinearColor(0.05f, 0.05f, 0.08f, 0.6f)); F.BlendMode = SE_BLEND_Translucent; F.Rotation = FRotator(0, Ang, 0); F.PivotPoint = FVector2D(0.5f, 0.5f); Canvas->DrawItem(F);
-				}
+			if (!GM->FogTex) GM->UpdateFogTex();
+			if (GM->FogTex && GM->FogTex->GetResource())
+			{
+				auto Pt = [&](float E, float N) { float U, V; M3->Project(AErtWorldBuilder::PlanToWorld(E, N, 20.f), U, V); return FVector2D(X0 + U * S, Y0 + V * S); };
+				// Tekstura: x = E (-1000..1000), y = N (-1000..1000); UV (0,0) = (-1000,-1000)
+				const FVector2D P00 = Pt(-1000.f, -1000.f), P10 = Pt(1000.f, -1000.f), P11 = Pt(1000.f, 1000.f), P01 = Pt(-1000.f, 1000.f);
+				FCanvasUVTri T1, T2;
+				T1.V0_Pos = P00; T1.V0_UV = FVector2D(0, 0); T1.V1_Pos = P10; T1.V1_UV = FVector2D(1, 0); T1.V2_Pos = P11; T1.V2_UV = FVector2D(1, 1);
+				T2.V0_Pos = P00; T2.V0_UV = FVector2D(0, 0); T2.V1_Pos = P11; T2.V1_UV = FVector2D(1, 1); T2.V2_Pos = P01; T2.V2_UV = FVector2D(0, 1);
+				T1.V0_Color = T1.V1_Color = T1.V2_Color = T2.V0_Color = T2.V1_Color = T2.V2_Color = FLinearColor(1, 1, 1, 0.75f);
+				TArray<FCanvasUVTri> Tris; Tris.Add(T1); Tris.Add(T2);
+				FCanvasTriangleItem Fog(Tris, GM->FogTex->GetResource()); Fog.BlendMode = SE_BLEND_Translucent; Canvas->DrawItem(Fog);
+			}
 		}
 		// Viloyat nomlari (xira, katta)
 		const FLinearColor Region(0.95f, 0.9f, 0.75f, 0.35f);

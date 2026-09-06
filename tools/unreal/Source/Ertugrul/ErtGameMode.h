@@ -131,6 +131,10 @@ public:
 	TArray<uint8> Visited;
 	bool IsVisited(float E, float N) const { const int32 X = FMath::Clamp((int32)((E + 1000.f) / 50.f), 0, VisN - 1), Y = FMath::Clamp((int32)((N + 1000.f) / 50.f), 0, VisN - 1); return Visited.IsValidIndex(Y * VisN + X) && Visited[Y * VisN + X] != 0; }
 	float VisitT = 0.f;
+	/** Kashfiyot teksturasi (40x40, oq = kashf qilinmagan) - HUD xaritada affin proyeksiya bilan chiziladi */
+	UPROPERTY(Transient) TObjectPtr<class UTexture2D> FogTex;
+	bool bFogDirty = true;
+	void UpdateFogTex();
 	/** HUD xarita kvadrati (X0, Y0, S) - sichqoncha koordinatalari uchun */
 	FVector MapRect = FVector::ZeroVector;
 	FVector2D MapMouse = FVector2D(-1, -1);   // xarita ichidagi [0..1] sichqoncha, tashqarida -1
