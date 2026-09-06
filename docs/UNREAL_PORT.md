@@ -483,3 +483,6 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 
 ## Ertug'rul AssetHub modeli (2026-09-06)
 `D:\Yuklanadiganlar\ertugrul.glb` (1.5 mln uchburchak, 80 MB) va `ertugrul1.glb` (500 ming) → `/Game/ErtAssets/Chars/SM_ertugrul*` (Interchange, Nanite yoqilgan, 3 tekstura: bazaviy rang, metall/g'adir-budirlik, normal). Balandlik 116 cm → o'yinda 1.55 masshtab. Rig yo'q (skins=0) — Mixamo auto-rig kerak. Solishtiruv: docs/screens_ertugrul_compare.png (chap 1.5M, o'ng 500k) — 1.5M tanlandi (kaftan panellari, pat, yuz aniqroq). Metallic 0 ga tushirildi (charm/mo'yna).
+
+## Blender MCP (2026-09-06)
+Blender 4.2.3 portable: `D:\Blender\blender-4.2.3-windows-x64\blender.exe` (5.2.0 ham bor). Addon: `%APPDATA%\Blender Foundation\Blender\4.2\scripts\addons\blender_mcp_addon.py` (ahujasid/blender-mcp, yoqilgan). `.mcp.json` da `blender: uvx blender-mcp` (port 9876). Ishga tushirish: Blender ochiq + N panel → BlenderMCP → "Connect to Claude" (yoki `--python-expr` bilan `bpy.ops.blendermcp.start_server()`), keyin Claude Code ni qayta ishga tushirish. Vazifa: GLB → FBX konvertatsiya, decimate, Mixamo uchun tayyorlash, rig tekshiruvi.
