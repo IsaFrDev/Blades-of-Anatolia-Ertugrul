@@ -218,6 +218,8 @@ private:
 	int32 AutoLastPhase = -1, AutoTeleports = 0, AutoPhaseTeleports = 0;
 	float AutoBestDist = 1e9f, AutoNoProgT = 0.f;
 	int32 AutoShotN = 0;
+	// -ErtCam=E,N,Z,pitch,yaw : 6 s dan keyin shu nuqtaga teleport, skrinshot, chiqish (diagnostika)
+	TArray<float> CamShot; float CamShotT = -1.f;
 	FVector AutoLastPos = FVector::ZeroVector;
 	FString AutoEpisode;
 	void UpdateAutoPlay(float Dt);

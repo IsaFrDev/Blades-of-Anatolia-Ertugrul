@@ -457,6 +457,9 @@ void AErtCharacter::BeginPlay()
 		PC->SetControlRotation(FRotator(-12.f, GetActorRotation().Yaw, 0.f));
 	}
 	bAutoPlay = FParse::Param(FCommandLine::Get(), TEXT("ErtAutoPlay"));
+	{
+		FString CamArg; if (FParse::Value(FCommandLine::Get(), TEXT("-ErtCam="), CamArg, false)) { TArray<FString> Parts; CamArg.TrimQuotes().ParseIntoArray(Parts, TEXT(",")); if (Parts.Num() >= 5) { for (const FString& P : Parts) CamShot.Add(FCString::Atof(*P)); CamShotT = 0.f; } }
+	}
 	if (bAutoPlay) UE_LOG(LogErtugrul, Log, TEXT("[AutoPlay] yoqildi"));
 	if (FParse::Value(FCommandLine::Get(), TEXT("-ErtShot="), ShotDir))
 	{
@@ -1189,6 +1192,13 @@ void AErtCharacter::Tick(float Dt)
 	else if (Boom->SocketOffset != BoomBase) Boom->SocketOffset = BoomBase;
 	if (ShotT >= 0.f) UpdateShotScript(Dt);
 	if (bAutoPlay) UpdateAutoPlay(Dt);
+	if (CamShotT >= 0.f)
+	{
+		const float Prev = CamShotT; CamShotT += Dt;
+		if (Prev < 6.f && CamShotT >= 6.f) Teleport(CamShot[0], CamShot[1], CamShot[2], CamShot[3], CamShot[4]);
+		if (Prev < 8.f && CamShotT >= 8.f) { if (ShotDir.IsEmpty()) ShotDir = TEXT("D:/temp/claude/camshot"); TakeShot(TEXT("cam")); }
+		if (CamShotT >= 9.f) { CamShotT = -1.f; FPlatformMisc::RequestExit(false); }
+	}
 	if (bDead) { if (Horse) DismountHorse(); MoveInput = FVector2D::ZeroVector; if (bShowDebug) DrawDebug(); return; }
 	if (Boat)
 	{

@@ -449,3 +449,4 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Joy belgilari (Canvas chiziqlari): shahar (gumbaz+minora), qal'a (tishli), qishloq (uy), lager (chodir), ko'l (to'lqin), tog'; viloyat nomlari (Bitiniya, Rum Sultonligi, Shom, Mo'g'ul yerlari, Arman qirolligi); kursor ostidagi koordinata va balandlik; legenda.
 - `AErtMap3D`: `Center` surish, `PanPixels`, `Tilt`, `Unproject` (ekran -> dunyo, relyef sathi), pauzada ham tick.
 - 48/48 epizod avtomatik sinovdan o'tdi (docs/episode_report_full.txt).
+- Diagnostika: `-ErtCam=E,N,Z,pitch,yaw` (reja koordinatalari, m) - 6 s dan keyin shu nuqtaga teleport, 8 s da skrinshot (`D:/temp/claude/camshot/01_cam.png`), 9 s da chiqish. Skrinshot ssenariysida ketma-ket teleport+kadr past FPS da aralashishi mumkin (16_damascus aslida Halab bo'lib chiqqan) - shubhali kadrni shu opsiya bilan tekshiring.
