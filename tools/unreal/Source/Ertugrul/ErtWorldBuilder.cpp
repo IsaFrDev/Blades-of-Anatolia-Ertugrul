@@ -3228,7 +3228,7 @@ void AErtWorldBuilder::BuildLandmarks()
 	int32 N = 0;
 	// Ertug'rul Bey modeli (AssetHub/Blender, statik): oba markazi olovi yonida, keyinchalik skeletli versiya bilan almashadi
 	if (UStaticMesh* Hero = LoadObject<UStaticMesh>(nullptr, TEXT("/Game/ErtAssets/Chars/Hero/SM_ErtugrulHero1")))
-	{ const float HE = ObaE + 3.f, HN = ObaN - 6.f; FabPlace(Hero, HE, HN, HeightAt(HE, HN), 90.f, 1.85f, true, true); ++N; UE_LOG(LogErtugrul, Log, TEXT("Ertug'rul modeli obada (%.0f, %.0f)"), HE, HN); }
+	{ const float HE = ObaE + 24.f, HN = ObaN + 18.f; FabPlace(Hero, HE, HN, HeightAt(HE, HN), 180.f, 1.85f, true, true); /* gulxan (18,18) yonida, olovga qaragan */ ++N; UE_LOG(LogErtugrul, Log, TEXT("Ertug'rul modeli obada (%.0f, %.0f)"), HE, HN); }
 	auto Hz = [&](float E, float Nn) { return HeightAt(E, Nn); };
 	// Darvoza: Bagras qo'rg'on devori boshida (yo'lga qaragan), shahar janubiy kirishi, Karacahisar etagi
 	if (UStaticMesh* G = FErtFabLib::Pick(Fab.Gates, 0))

@@ -85,3 +85,42 @@ for p in EAL.list_assets(ROOT, recursive=True, include_folder=False):
     done += 1
     log("material: " + name)
 log("tayyor: %d mesh" % done)
+
+
+# Blender fabrikasi elementlari: har slot uchun o'z teksturasi (M_wood/M_cloth/M_hay/M_rock -> T_<key>_D/N)
+BLENDER_PROPS = ["SM_TetherPost_Wood", "SM_Trough_Wood", "SM_HayBale_01", "SM_Woodpile_01", "SM_Banner_Kayi", "SM_WeaponRack_Wood", "SM_FirePit_Stone"]
+for name in BLENDER_PROPS:
+    folder = ROOT + "/" + name
+    a = None
+    for p in EAL.list_assets(folder, recursive=True, include_folder=False):
+        x = EAL.load_asset(p)
+        if isinstance(x, unreal.StaticMesh): a = x
+    if a is None:
+        log("mesh yo'q: " + name); continue
+    mats = a.static_materials
+    for i in range(len(mats)):
+        sm = mats[i]; mi = sm.get_editor_property("material_interface")
+        key = (mi.get_name() if mi else "wood").replace("M_", "").split(".")[0].split("_")[0].lower()
+        if key not in ("wood", "cloth", "hay", "rock"): key = "wood"
+        color = find_tex(folder, "T_%s_D" % key); normal = find_tex(folder, "T_%s_N" % key)
+        if not color:
+            log("tekstura yo'q %s %s" % (name, key)); continue
+        color.set_editor_property("srgb", True); color.set_editor_property("compression_settings", unreal.TextureCompressionSettings.TC_DEFAULT)
+        if normal:
+            normal.set_editor_property("srgb", False); normal.set_editor_property("compression_settings", unreal.TextureCompressionSettings.TC_NORMALMAP); normal.set_editor_property("flip_green_channel", True)
+        mp = folder + "/M_%s_%s" % (name, key)
+        if EAL.does_asset_exist(mp): EAL.delete_asset(mp)
+        m = AT.create_asset("M_%s_%s" % (name, key), folder, unreal.Material, unreal.MaterialFactoryNew())
+        tc = MEL.create_material_expression(m, unreal.MaterialExpressionTextureSample, -600, 0); tc.set_editor_property("texture", color); tc.set_editor_property("sampler_type", unreal.MaterialSamplerType.SAMPLERTYPE_COLOR)
+        MEL.connect_material_property(tc, "RGB", unreal.MaterialProperty.MP_BASE_COLOR)
+        if normal:
+            tn = MEL.create_material_expression(m, unreal.MaterialExpressionTextureSample, -600, 300); tn.set_editor_property("texture", normal); tn.set_editor_property("sampler_type", unreal.MaterialSamplerType.SAMPLERTYPE_NORMAL)
+            MEL.connect_material_property(tn, "RGB", unreal.MaterialProperty.MP_NORMAL)
+        r = MEL.create_material_expression(m, unreal.MaterialExpressionConstant, -600, 600); r.set_editor_property("r", 0.85 if key in ("hay", "rock") else 0.75); MEL.connect_material_property(r, "", unreal.MaterialProperty.MP_ROUGHNESS)
+        met = MEL.create_material_expression(m, unreal.MaterialExpressionConstant, -600, 800); met.set_editor_property("r", 0.0); MEL.connect_material_property(met, "", unreal.MaterialProperty.MP_METALLIC)
+        if key == "cloth": m.set_editor_property("two_sided", True)
+        m.set_editor_property("used_with_instanced_static_meshes", True); m.set_editor_property("used_with_nanite", True)
+        MEL.recompile_material(m); EAL.save_asset(mp)
+        sm.set_editor_property("material_interface", m); mats[i] = sm
+    a.set_editor_property("static_materials", mats); EAL.save_asset(a.get_path_name())
+    log("blender prop material: " + name)
