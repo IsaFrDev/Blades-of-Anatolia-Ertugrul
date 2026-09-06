@@ -18,6 +18,7 @@ using namespace ErtMap;
 AErtMap3D::AErtMap3D()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bTickEvenWhenPaused = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 }
 
@@ -108,13 +109,40 @@ void AErtMap3D::UpdateCamera()
 {
 	if (!Capture) return;
 	const FRotator R(Pitch, Yaw, 0.f);
-	const FVector Center = Origin + FVector(0, 0, 400.f);
-	Capture->SetWorldLocation(Center - R.Vector() * 60000.f);
+	const FVector Cn = Origin + FVector(Center.X * K, Center.Y * K, 400.f);
+	Capture->SetWorldLocation(Cn - R.Vector() * 60000.f);
 	Capture->SetWorldRotation(R);
 	Capture->OrthoWidth = Ortho;
 }
 
-void AErtMap3D::Zoom(float Factor) { Ortho = FMath::Clamp(Ortho * Factor, 1200.f, 5200.f); UpdateCamera(); }
+void AErtMap3D::Zoom(float Factor) { Ortho = FMath::Clamp(Ortho * Factor, 500.f, 5200.f); UpdateCamera(); }
+
+void AErtMap3D::PanPixels(float Dx, float Dy, float S)
+{
+	if (S <= 1.f) return;
+	const float Yr = FMath::DegreesToRadians(Yaw);
+	const FVector2D Fwd(FMath::Cos(Yr), FMath::Sin(Yr)), Right(-FMath::Sin(Yr), FMath::Cos(Yr));
+	const float PerPx = Ortho / S / K;   // dunyo sm / piksel
+	Center += (-Right * Dx + Fwd * Dy / FMath::Max(0.3f, FMath::Abs(FMath::Sin(FMath::DegreesToRadians(Pitch))))) * PerPx;
+	const float Lim = 105000.f;
+	Center.X = FMath::Clamp(Center.X, -Lim, Lim); Center.Y = FMath::Clamp(Center.Y, -Lim, Lim);
+	UpdateCamera();
+}
+
+FVector AErtMap3D::Unproject(float U, float V) const
+{
+	if (!Capture) return FVector::ZeroVector;
+	const FRotator R = Capture->GetComponentRotation();
+	const FVector Right = FRotationMatrix(R).GetUnitAxis(EAxis::Y), Up = FRotationMatrix(R).GetUnitAxis(EAxis::Z), Fwd = R.Vector();
+	// Ortografik nur: kamera tekisligidagi nuqta + yo'nalish; miniatyura o'rtacha sathi (Origin.Z + 20 m * KZ) bilan kesishuv
+	const FVector P0 = Capture->GetComponentLocation() + Right * (U - 0.5f) * Ortho + Up * (0.5f - V) * Ortho;
+	const float PlaneZ = Origin.Z + 2000.f * KZ;
+	const float T = FMath::Abs(Fwd.Z) > 0.01f ? (PlaneZ - P0.Z) / Fwd.Z : 0.f;
+	const FVector Mini = P0 + Fwd * T;
+	FVector Wp((Mini.X - Origin.X) / K, (Mini.Y - Origin.Y) / K, 0.f);
+	if (World) Wp.Z = World->HeightAt(Wp.Y / 100.f, Wp.X / 100.f) * 100.f;
+	return Wp;
+}
 
 void AErtMap3D::SetActive(bool bOn)
 {

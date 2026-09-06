@@ -1,4 +1,5 @@
 #include "ErtCharacter.h"
+#include "ErtMap3D.h"
 #include "Ertugrul.h"
 #include "ErtHeroBody.h"
 #include "Camera/CameraComponent.h"
@@ -521,7 +522,9 @@ void AErtCharacter::UpdateShotScript(float Dt)
 	if (At(23.0f)) Teleport(-820.f, 300.f, 6.f + 25.f, -25.f, 0.f);
 	if (At(24.6f)) TakeShot(TEXT("river"));
 	if (At(24.7f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
+	if (At(24.75f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GM->SetWaypoint(AErtWorldBuilder::PlanToWorld(-560.f, 560.f, 20.f)); } if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) { M3->Zoom(0.55f); M3->SetCenter(FVector2D(GetActorLocation().X + 20000.f, GetActorLocation().Y + 15000.f)); } }
 	if (At(24.9f)) TakeShot(TEXT("map"));
+	if (At(25.3f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ClearWaypoint(); if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) { M3->Zoom(1.8f); M3->SetCenter(FVector2D::ZeroVector); } }
 	if (At(25.4f)) { if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->ToggleMap(); }
 	if (At(25.5f)) Teleport(150.f, -975.f, 6.f + 28.f, -22.f, 0.f);
 	if (At(26.6f)) TakeShot(TEXT("oasis"));

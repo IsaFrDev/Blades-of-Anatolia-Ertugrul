@@ -123,6 +123,19 @@ public:
 	/** 3D xarita aylantirish (chap/o'ng) */
 	void MapRotate(float DeltaYaw);
 	bool bGps = true;
+	// AC/GTA uslubidagi xarita: yo'l nuqtasi, kashf qilingan hududlar, sichqoncha boshqaruvi
+	FVector Waypoint = FVector::ZeroVector; bool bWaypoint = false;
+	void SetWaypoint(const FVector& W) { Waypoint = W; bWaypoint = true; }
+	void ClearWaypoint() { bWaypoint = false; }
+	static constexpr int32 VisN = 40;   // 50 m hujayralar (2000 m)
+	TArray<uint8> Visited;
+	bool IsVisited(float E, float N) const { const int32 X = FMath::Clamp((int32)((E + 1000.f) / 50.f), 0, VisN - 1), Y = FMath::Clamp((int32)((N + 1000.f) / 50.f), 0, VisN - 1); return Visited.IsValidIndex(Y * VisN + X) && Visited[Y * VisN + X] != 0; }
+	float VisitT = 0.f;
+	/** HUD xarita kvadrati (X0, Y0, S) - sichqoncha koordinatalari uchun */
+	FVector MapRect = FVector::ZeroVector;
+	FVector2D MapMouse = FVector2D(-1, -1);   // xarita ichidagi [0..1] sichqoncha, tashqarida -1
+	FVector2D LastMouse = FVector2D::ZeroVector; bool bDragging = false;
+	void MapInput(float Dt);
 private:
 	int32 SettingsRow = 0;
 	void SetPlayerInput(bool bEnabled, bool bHide);

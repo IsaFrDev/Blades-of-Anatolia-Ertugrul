@@ -37,6 +37,8 @@
 AErtGameMode::AErtGameMode()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bTickEvenWhenPaused = true;
+	Visited.SetNumZeroed(VisN * VisN);
 	DefaultPawnClass = AErtCharacter::StaticClass();
 	HUDClass = AErtHUD::StaticClass();
 }
@@ -255,6 +257,7 @@ void AErtGameMode::SaveGame()
 	R->SetNumberField(TEXT("mouse_sens"), MouseSens);
 	R->SetBoolField(TEXT("invert_y"), bInvertY);
 	R->SetNumberField(TEXT("gfx"), GfxPreset);
+	{ FString Vs; Vs.Reserve(Visited.Num()); for (uint8 V : Visited) Vs.AppendChar(V ? TEXT('1') : TEXT('0')); R->SetStringField(TEXT("visited"), Vs); }
 	{ TSharedPtr<FJsonObject> KO = MakeShared<FJsonObject>(); for (const auto& P : SavedKeys) KO->SetStringField(P.Key, P.Value); R->SetObjectField(TEXT("keys"), KO); }
 	if (AErtCharacter* H = Cast<AErtCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
@@ -281,6 +284,7 @@ void AErtGameMode::LoadGame()
 		R->TryGetNumberField(TEXT("honor"), Honor);
 		R->TryGetNumberField(TEXT("language"), Language);
 		R->TryGetNumberField(TEXT("gfx"), GfxPreset);
+		{ FString Vs; if (R->TryGetStringField(TEXT("visited"), Vs) && Vs.Len() == Visited.Num()) for (int32 i = 0; i < Vs.Len(); ++i) Visited[i] = Vs[i] == TEXT('1') ? 1 : 0; }
 		double D = 1.0; if (R->TryGetNumberField(TEXT("mouse_sens"), D)) MouseSens = (float)D;
 		R->TryGetBoolField(TEXT("invert_y"), bInvertY);
 		{ const TSharedPtr<FJsonObject>* KO = nullptr; if (R->TryGetObjectField(TEXT("keys"), KO)) for (const auto& P : (*KO)->Values) SavedKeys.Add(FString(P.Key.ToView()), P.Value->AsString()); ApplySavedKeys(); }
@@ -368,11 +372,31 @@ void AErtGameMode::SetTimeOfDay(const FString& Name)
 void AErtGameMode::Tick(float Dt)
 {
 	Super::Tick(Dt);
+	if (Menu == EErtMenu::Map) MapInput(Dt);
+	// Kashf qilingan hududlar (50 m hujayra, atrofi bilan)
+	VisitT += Dt;
+	if (VisitT > 0.5f)
+	{
+		VisitT = 0.f;
+		if (APawn* P = UGameplayStatics::GetPlayerPawn(this, 0))
+		{
+			const float E = P->GetActorLocation().Y / 100.f, N = P->GetActorLocation().X / 100.f;
+			const int32 X = (int32)((E + 1000.f) / 50.f), Y = (int32)((N + 1000.f) / 50.f);
+			for (int32 dy = -2; dy <= 2; ++dy) for (int32 dx = -2; dx <= 2; ++dx)
+			{
+				const int32 Xi = X + dx, Yi = Y + dy;
+				if (Xi < 0 || Yi < 0 || Xi >= VisN || Yi >= VisN || dx * dx + dy * dy > 5) continue;
+				Visited[Yi * VisN + Xi] = 1;
+			}
+		}
+	}
+	if (bWaypoint) if (APawn* P = UGameplayStatics::GetPlayerPawn(this, 0)) if (FVector::Dist2D(P->GetActorLocation(), Waypoint) < 400.f) ClearWaypoint();   // yetib keldi
 	// GPS: faol maqsadga yo'l
 	if (AErtGps* G = AErtGps::Get(GetWorld()))
 	{
 		FVector T = FVector::ZeroVector;
-		if (bGps && Director && Director->GetState() != EErtMissionState::Inactive)
+		if (bWaypoint) T = Waypoint;
+		else if (bGps && Director && Director->GetState() != EErtMissionState::Inactive)
 		{
 			// Yaqin tirik dushman bo'lsa yo'l kerak emas; aks holda birinchi marker
 			TArray<FVector> Ms; Director->GetMarkers(Ms);
@@ -479,6 +503,51 @@ void AErtGameMode::ToggleMap()
 	if (Menu == EErtMenu::Map) OpenMenu(EErtMenu::None);
 	else if (Menu == EErtMenu::None || Menu == EErtMenu::Pause) OpenMenu(EErtMenu::Map);
 	if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) M3->SetActive(Menu == EErtMenu::Map);
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0))
+	{
+		const bool bMap = Menu == EErtMenu::Map;
+		PC->bShowMouseCursor = bMap; PC->bEnableClickEvents = bMap;
+		if (bMap) { FInputModeGameAndUI Mode; Mode.SetHideCursorDuringCapture(false); Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); PC->SetInputMode(Mode); }
+		else PC->SetInputMode(FInputModeGameOnly());
+		bDragging = false;
+	}
+}
+
+void AErtGameMode::MapInput(float Dt)
+{
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	AErtMap3D* M3 = AErtMap3D::Get(GetWorld());
+	if (!PC || !M3) return;
+	const float S = MapRect.Z;
+	float MX = 0.f, MY = 0.f; const bool bHasMouse = PC->GetMousePosition(MX, MY);
+	MapMouse = FVector2D(-1, -1);
+	if (bHasMouse && S > 1.f && MX >= MapRect.X && MX <= MapRect.X + S && MY >= MapRect.Y && MY <= MapRect.Y + S) MapMouse = FVector2D((MX - MapRect.X) / S, (MY - MapRect.Y) / S);
+	// Surish: chap tugma bilan sudrash yoki WASD
+	if (PC->IsInputKeyDown(EKeys::LeftMouseButton) && bHasMouse)
+	{
+		if (bDragging) M3->PanPixels(MX - LastMouse.X, MY - LastMouse.Y, S);
+		bDragging = true; LastMouse = FVector2D(MX, MY);
+	}
+	else bDragging = false;
+	const float PanPx = 420.f * Dt;
+	if (PC->IsInputKeyDown(EKeys::W)) M3->PanPixels(0.f, PanPx, S);
+	if (PC->IsInputKeyDown(EKeys::S)) M3->PanPixels(0.f, -PanPx, S);
+	if (PC->IsInputKeyDown(EKeys::A)) M3->PanPixels(PanPx, 0.f, S);
+	if (PC->IsInputKeyDown(EKeys::D)) M3->PanPixels(-PanPx, 0.f, S);
+	if (PC->IsInputKeyDown(EKeys::Q)) M3->Rotate(-70.f * Dt);
+	if (PC->IsInputKeyDown(EKeys::E)) M3->Rotate(70.f * Dt);
+	if (PC->IsInputKeyDown(EKeys::Z)) M3->Tilt(-40.f * Dt);
+	if (PC->IsInputKeyDown(EKeys::X)) M3->Tilt(40.f * Dt);
+	if (PC->WasInputKeyJustPressed(EKeys::MouseScrollUp) || PC->WasInputKeyJustPressed(EKeys::Equals) || PC->WasInputKeyJustPressed(EKeys::Add)) M3->Zoom(0.8f);
+	if (PC->WasInputKeyJustPressed(EKeys::MouseScrollDown) || PC->WasInputKeyJustPressed(EKeys::Hyphen) || PC->WasInputKeyJustPressed(EKeys::Subtract)) M3->Zoom(1.25f);
+	if (PC->WasInputKeyJustPressed(EKeys::R)) { if (APawn* P = UGameplayStatics::GetPlayerPawn(this, 0)) M3->SetCenter(FVector2D(P->GetActorLocation().X, P->GetActorLocation().Y)); }
+	// Yo'l nuqtasi: o'ng tugma (mavjud nuqta yonida - o'chirish), Delete - o'chirish
+	if (PC->WasInputKeyJustPressed(EKeys::RightMouseButton) && MapMouse.X >= 0.f)
+	{
+		const FVector Wp = M3->Unproject(MapMouse.X, MapMouse.Y);
+		if (bWaypoint && FVector::Dist2D(Wp, Waypoint) < 3000.f) ClearWaypoint(); else SetWaypoint(Wp);
+	}
+	if (PC->WasInputKeyJustPressed(EKeys::Delete) || PC->WasInputKeyJustPressed(EKeys::BackSpace)) ClearWaypoint();
 }
 
 void AErtGameMode::MapRotate(float DeltaYaw) { if (AErtMap3D* M3 = AErtMap3D::Get(GetWorld())) M3->Rotate(DeltaYaw); }

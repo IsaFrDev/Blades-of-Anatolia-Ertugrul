@@ -441,3 +441,11 @@ Missiyalar/epizodlar, jang, kat-sahnalar (mavjud JSON), NPC, lokalizatsiya, ovoz
 - Relyef to'ri `CellM` 10 -> 5 m (1.09 mln uchburchak, 9.4 s qurilish).
 - `BuildRocks`: 700 tagacha qoya; tik yonbag'irlarda (Nm.z < 0.72, H > 30) 3-7 m li "cliff" meshlari qiyalikka moslab (35%), chuqur ko'milgan; Nm.z < 0.45 va shahar/qal'a atrofi (R+50 m) chiqarib tashlanadi (muallaq qoyalar xatosi tuzatildi).
 - Shader: qor chizig'i 75 -> 150 m, qoya qatlami kulrang (balandda to'qroq); Landscape eksportidagi qor qatlami ham 150 m.
+
+## AC/GTA uslubidagi xarita
+- Boshqaruv (M): sichqoncha sudrash - surish, g'ildirak - masshtab (500..5200), o'ng tugma - yo'l nuqtasi (yana bosilsa o'chadi), WASD surish, Q/E aylantirish, Z/X egish, R - o'yinchiga markazlash, Delete - yo'l nuqtasini o'chirish. Kursor xarita ochilganda ko'rinadi (`FInputModeGameAndUI`).
+- Yo'l nuqtasi (`AErtGameMode::Waypoint`): GPS lentasi va minimap/dunyo markeri (ko'k) shu nuqtaga; 4 m yetganda o'chadi. Missiya markeri ikkinchi o'rinda.
+- Kashf qilingan hududlar (`Visited`, 40x40 = 50 m hujayra, o'yinchi atrofi 2 hujayra): kashf qilinmagan joylar xaritada qorong'i, joy nomlari "?" bo'ladi; `ert_save.json` da `visited` sifatida saqlanadi.
+- Joy belgilari (Canvas chiziqlari): shahar (gumbaz+minora), qal'a (tishli), qishloq (uy), lager (chodir), ko'l (to'lqin), tog'; viloyat nomlari (Bitiniya, Rum Sultonligi, Shom, Mo'g'ul yerlari, Arman qirolligi); kursor ostidagi koordinata va balandlik; legenda.
+- `AErtMap3D`: `Center` surish, `PanPixels`, `Tilt`, `Unproject` (ekran -> dunyo, relyef sathi), pauzada ham tick.
+- 48/48 epizod avtomatik sinovdan o'tdi (docs/episode_report_full.txt).
