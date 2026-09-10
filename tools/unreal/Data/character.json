@@ -84,7 +84,7 @@
   "mesh": ""
  },
  "horse": {
-  "mesh": "/Game/ErtAssets/Horse/SK_Horse",
+  "mesh": "",
   "yaw": 0,
   "z": 0,
   "scale": 1.0,
@@ -105,7 +105,7 @@
    "jump": "/Game/ErtAssets/Horse/SK_HorseHorseRig_jump",
    "death": "/Game/ErtAssets/Horse/SK_HorseHorseRig_death"
   },
-  "_izoh": "Blender'dan ot FBX: mesh yo'lini va animatsiyalarni yozing; bo'sh bo'lsa protsedural ot"
+  "_izoh": "AssetHub ot GLB kelganda: ERT_HORSE=<glb> bl_horse_rig.py -> ue_import_horse.py -> mesh: /Game/ErtAssets/Horse/SK_Horse (anims allaqachon yozilgan)"
  },
  "camel": {
   "mesh": "",
