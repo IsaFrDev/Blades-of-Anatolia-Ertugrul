@@ -84,8 +84,8 @@
   "mesh": ""
  },
  "horse": {
-  "mesh": "",
-  "yaw": -90,
+  "mesh": "/Game/ErtAssets/Horse/SK_Horse",
+  "yaw": 0,
   "z": 0,
   "scale": 1.0,
   "walk_ref": 250,
@@ -98,12 +98,12 @@
   ],
   "saddle_socket": "",
   "anims": {
-   "idle": "",
-   "walk": "",
-   "trot": "",
-   "gallop": "",
-   "jump": "",
-   "death": ""
+   "idle": "/Game/ErtAssets/Horse/SK_HorseHorseRig_idle",
+   "walk": "/Game/ErtAssets/Horse/SK_HorseHorseRig_walk",
+   "trot": "/Game/ErtAssets/Horse/SK_HorseHorseRig_trot",
+   "gallop": "/Game/ErtAssets/Horse/SK_HorseHorseRig_gallop",
+   "jump": "/Game/ErtAssets/Horse/SK_HorseHorseRig_jump",
+   "death": "/Game/ErtAssets/Horse/SK_HorseHorseRig_death"
   },
   "_izoh": "Blender'dan ot FBX: mesh yo'lini va animatsiyalarni yozing; bo'sh bo'lsa protsedural ot"
  },
