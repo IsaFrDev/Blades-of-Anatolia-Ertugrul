@@ -595,6 +595,8 @@ void UErtHeroBody::SkelBuildCloak()
 			Cm.Commit(Seg, 0, false);
 			CloakSegs.Add(Seg); CloakPitch.Add(0.f); Par = Seg; Base = FVector(0, 0, -Ln);
 		}
+	if (CloakSegs.Num()) { UProceduralMeshComponent* S0 = CloakSegs[0]; const FProcMeshSection* Sec = S0->GetProcMeshSection(0);
+		UE_LOG(LogErtugrul, Log, TEXT("[Plash] skelet: %d bo'g'in, joy %s, owner %s, reg %d vis %d sections %d verts %d bounds %.0f parent %s mat %s"), CloakSegs.Num(), *S0->GetComponentLocation().ToCompactString(), *GetOwner()->GetName(), S0->IsRegistered() ? 1 : 0, S0->IsVisible() ? 1 : 0, S0->GetNumSections(), Sec ? Sec->ProcVertexBuffer.Num() : -1, S0->Bounds.SphereRadius, S0->GetAttachParent() ? *S0->GetAttachParent()->GetName() : TEXT("-"), S0->GetMaterial(0) ? *S0->GetMaterial(0)->GetName() : TEXT("null")); }
 }
 
 void UErtHeroBody::SkelBuildSword()

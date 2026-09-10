@@ -87,9 +87,9 @@ void AErtGameMode::BeginPlay()
 	Sun = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(this, ADirectionalLight::StaticClass()));
 	Sky = Cast<ASkyLight>(UGameplayStatics::GetActorOfClass(this, ASkyLight::StaticClass()));
 	// Quyosh nurlari (ekran-fazo light shaft: bulut va tog' orqasidan nur tolalari) - arzon, Intel GPU ga ham to'g'ri keladi
-	if (Sun && Sun->GetComponent())
+	if (Sun && Cast<UDirectionalLightComponent>(Sun->GetLightComponent()))
 	{
-		UDirectionalLightComponent* DL = Sun->GetComponent();
+		UDirectionalLightComponent* DL = Cast<UDirectionalLightComponent>(Sun->GetLightComponent());
 		DL->bEnableLightShaftBloom = true; DL->BloomScale = 0.35f; DL->BloomThreshold = 0.6f; DL->BloomMaxBrightness = 12.f; DL->BloomTint = FColor(255, 232, 200);
 		DL->bEnableLightShaftOcclusion = true; DL->OcclusionMaskDarkness = 0.08f; DL->OcclusionDepthRange = 120000.f;
 		DL->LightShaftOverrideDirection = FVector::ZeroVector;
@@ -509,7 +509,7 @@ void AErtGameMode::Tick(float Dt)
 	Sun->SetActorRotation(FRotator(-FMath::Max(Elev, 14.f), Yaw, 0.f));   // tunda oy nuri (14 gradus)
 	const float Day = FMath::Clamp((Elev + 4.f) / 16.f, 0.f, 1.f);
 	const FLinearColor SunCol = FMath::Lerp(FLinearColor(0.45f, 0.55f, 0.9f), FMath::Lerp(FLinearColor(1.f, 0.55f, 0.28f), FLinearColor(1.f, 0.96f, 0.9f), FMath::Clamp(Elev / 25.f, 0.f, 1.f)), Day);
-	if (UDirectionalLightComponent* DL = Sun->GetComponent())
+	if (UDirectionalLightComponent* DL = Cast<UDirectionalLightComponent>(Sun->GetLightComponent()))
 	{
 		DL->SetIntensity(FMath::Lerp(0.9f, 7.f, Day) * (1.f - 0.45f * (Weather ? (Weather->GetWeather() == TEXT("storm") || Weather->GetWeather() == TEXT("rain") ? 1.f : 0.f) : 0.f)));
 		DL->SetLightColor(SunCol);
