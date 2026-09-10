@@ -585,11 +585,11 @@ void UErtHeroBody::SkelBuildCloak()
 	CloakSegs.Reset(); CloakPitch.Reset();
 	if (!bCloak) return;
 		const FLinearColor CloakS2 = ErtCol::Sty(Cloak, ErtCol::StyleCloth);
-		USceneComponent* Par = Skel; FVector Base(-12.f, 0, 8.f);
+		USceneComponent* Par = GetOwner() ? GetOwner()->GetRootComponent() : Skel; FVector Base(-20.f, 0, 42.f);   // kapsula: orqada, ko'krak balandligi
 		for (int32 i = 0; i < 4; ++i)
 		{
 			UProceduralMeshComponent* Seg = MakePart(*FString::Printf(TEXT("SkCloak%d"), i), Par, Base);
-			if (i == 0) { Seg->AttachToComponent(Skel, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("spine_03")); Seg->SetRelativeLocation(FVector(-14.f, 0, 10.f)); CloakBaseRot = FRotator(0, 0, 90.f); Seg->SetRelativeRotation(CloakBaseRot); }
+			if (i == 0) CloakBaseRot = FRotator::ZeroRotator;
 			FErtMeshData Cm; const float Wd = 19.f + i * 1.5f, Ln = 18.f;
 			Cm.AddBox(FVector(0, 0, -Ln * 0.5f), FVector(1.1f, Wd, Ln * 0.5f), i == 3 ? ErtCol::Sty(Cloak * 0.85f, ErtCol::StyleCloth) : CloakS2, FRotator::ZeroRotator);
 			Cm.Commit(Seg, 0, false);
