@@ -55,11 +55,14 @@ void FErtFabLib::Scan()
 	IAssetRegistry& AR = ARM.Get();
 	// O'yin rejimida registr asinxron yuklanadi - bu yo'llarni sinxron skanerlaymiz
 	AR.ScanPathsSynchronous(ScanPaths, true);
+	// Paketlangan o'yinda registr oldindan tayyor (AssetRegistry.bin) va asinxron yuklanadi - tugashini kutamiz
+	if (AR.IsLoadingAssets()) { AR.WaitForCompletion(); UE_LOG(LogErtugrul, Log, TEXT("Fab: asset registri yuklanishi kutildi")); }
 	int32 Found = 0;
 	for (const FString& Root : ScanPaths)
 	{
 		TArray<FAssetData> Assets;
 		AR.GetAssetsByPath(FName(*Root), Assets, true);
+		if (Assets.Num() == 0) { TArray<FAssetData> AllSM; AR.GetAssetsByClass(FTopLevelAssetPath(TEXT("/Script/Engine"), TEXT("StaticMesh")), AllSM, true); for (const FAssetData& A : AllSM) if (A.PackagePath.ToString().StartsWith(Root)) Assets.Add(A); }
 		for (const FAssetData& A : Assets)
 		{
 			if (A.AssetClassPath.GetAssetName() != TEXT("StaticMesh")) continue;
