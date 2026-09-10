@@ -44,6 +44,7 @@ public:
 	void Feed() { Health = MaxHealth; Care = FMath::Min(1.f, Care + 0.35f); CareFxT = 2.5f; }
 	void Groom() { Care = FMath::Min(1.f, Care + 0.5f); CareFxT = 2.5f; }
 	bool bSaddled = false;   // egar (o'yinchi hunarmandchiligi)
+	float TrampleT = 0.f;   // chopib dushmanni bosib o'tish tekshiruvi (0.12 s)
 	float CareSpeed() const { return 1.f + 0.12f * Care + (bSaddled ? 0.08f : 0.f); }
 	float GetHealth() const { return Health; } float GetMaxHealth() const { return MaxHealth; }
 	bool IsSummoned() const { return SummonT > 0.f; }

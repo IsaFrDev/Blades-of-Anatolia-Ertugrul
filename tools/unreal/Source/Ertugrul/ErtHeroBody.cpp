@@ -98,10 +98,20 @@ void UErtHeroBody::Build(USceneComponent* Parent, float HalfH)
 	}
 	if (bCloak)
 	{
-		M.AddBox(FVector(-16.5f, 0, 12), FVector(1.2f, 18, 36), CloakS, FRotator(-5, 0, 0));
-		M.AddBox(FVector(-15.5f, 0, 45), FVector(3.f, 16, 3.f), CloakS);
-		M.AddBox(FVector(-16.f, 0, -18), FVector(1.5f, 19, 8), ErtCol::Sty(Cloak * 0.85f, ErtCol::StyleCloth), FRotator(-8, 0, 0));
+		M.AddBox(FVector(-15.5f, 0, 45), FVector(3.f, 16, 3.f), CloakS);   // yelka bandi
 		M.AddSphere(FVector(6, -16, 44), 1.8f, 6, TrimS); M.AddSphere(FVector(6, 16, 44), 1.8f, 6, TrimS);   // to'g'nog'ichlar
+		// Dinamik plash: 4 ta bo'g'in zanjiri (har biri oldingisiga bog'langan, Animate da tebranadi)
+		for (UProceduralMeshComponent* C : CloakSegs) if (C) C->DestroyComponent();
+		CloakSegs.Reset(); CloakPitch.Reset();
+		CloakBaseRot = FRotator::ZeroRotator; USceneComponent* Par = Torso; FVector Base(-16.f, 0, 44.f);
+		for (int32 i = 0; i < 4; ++i)
+		{
+			UProceduralMeshComponent* Seg = MakePart(*FString::Printf(TEXT("Cloak%d"), i), Par, Base);
+			FErtMeshData Cm; const float Wd = 18.f + i * 1.5f, Ln = 17.f;
+			Cm.AddBox(FVector(0, 0, -Ln * 0.5f), FVector(1.1f, Wd, Ln * 0.5f), i == 3 ? ErtCol::Sty(Cloak * 0.85f, ErtCol::StyleCloth) : CloakS, FRotator::ZeroRotator);
+			Cm.Commit(Seg, 0, false);
+			CloakSegs.Add(Seg); CloakPitch.Add(0.f); Par = Seg; Base = FVector(0, 0, -Ln);
+		}
 	}
 	if (bQuiver)
 	{
@@ -226,7 +236,7 @@ void UErtHeroBody::SetSwordTier(int32 Tier)
 {
 	if (!IsBuilt() || !bSwordInHand) return;
 	Steel = Tier >= 2 ? FLinearColor(0.55f, 0.62f, 0.75f) : FLinearColor(0.75f, 0.77f, 0.80f);
-	if (Skel) { SkelBuildSword(); return; }
+	if (Skel) { SkelBuildSword(); SkelBuildCloak(); return; }
 	FErtMeshData M;
 	const FLinearColor KaftanS = ErtCol::Sty(Kaftan, ErtCol::StyleCloth), TrousersS = ErtCol::Sty(Trousers, ErtCol::StyleCloth), LeatherS = ErtCol::Sty(Leather, ErtCol::StyleLeather), SkinS = ErtCol::Sty(Skin, ErtCol::StyleSkin), SteelS = ErtCol::Sty(Steel, ErtCol::StyleMetal), FurS = ErtCol::Sty(Fur, ErtCol::StyleFur), BeardS = ErtCol::Sty(Beard, ErtCol::StyleFur), TrimS = ErtCol::Sty(Trim, ErtCol::StyleMetal);
 	M.AddBox(FVector(0, 0, -13), FVector(5, 5, 13), KaftanS);
@@ -317,6 +327,19 @@ void UErtHeroBody::SetDead(float HalfH, int32 Variant)
 void UErtHeroBody::Animate(float Dt, float Speed, bool bInAir, bool bCrouched, float Lean, float SlopeDeg)
 {
 	if (!IsBuilt() || bDead) return;
+	// Dinamik plash: tezlik orqaga ko'taradi, tezlanish/tormoz silkitadi, shamol va yurish ritmi tebratadi; bo'g'inlar kechikib ergashadi
+	if (CloakSegs.Num())
+	{
+		const float Acc = FMath::Clamp((Speed - CloakPrevSpeed) / FMath::Max(Dt, 0.001f), -3000.f, 3000.f); CloakPrevSpeed = Speed;
+		const float Tm = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.f;
+		float Target = -8.f - FMath::Clamp(Speed / 600.f, 0.f, 1.3f) * 55.f - Acc * 0.006f + (bInAir ? -25.f : 0.f) + FMath::Sin(Tm * 2.3f) * 3.f + FMath::Sin(Tm * 5.1f + 1.f) * 1.5f * (0.3f + Speed / 400.f);
+		for (int32 i = 0; i < CloakSegs.Num(); ++i)
+		{
+			const float Want = (i == 0) ? Target : CloakPitch[i - 1] * 0.55f + FMath::Sin(Tm * 3.7f + i * 1.3f) * (2.f + Speed / 150.f);
+			CloakPitch[i] = FMath::FInterpTo(CloakPitch[i], Want, Dt, 9.f - i * 1.5f);
+			if (CloakSegs[i]) CloakSegs[i]->SetRelativeRotation(((i == 0) ? FQuat(CloakBaseRot) : FQuat::Identity) * FQuat(FRotator(CloakPitch[i], 0, FMath::Sin(Tm * 1.9f + i) * (1.f + Speed / 300.f))));
+		}
+	}
 	if (Skel) { SkelAnimate(Dt, Speed, bInAir, bCrouched); return; }
 	IdleT += Dt;
 	AttackT = FMath::Max(0.f, AttackT - Dt / (AttackKind == 2 ? 0.75f : 0.45f));
@@ -522,6 +545,7 @@ bool UErtHeroBody::TryBuildSkeletal(USceneComponent* Parent, float HalfH)
 		if ((*Sw)->TryGetArrayField(TEXT("rot"), L) && L->Num() == 3) SwordRot = FRotator((*L)[0]->AsNumber(), (*L)[1]->AsNumber(), (*L)[2]->AsNumber());
 	}
 	if (bSwordInHand) SkelBuildSword();
+	SkelBuildCloak();
 	SkelPlay(TEXT("idle"), true);
 	UE_LOG(LogErtugrul, Log, TEXT("Skeletli tana (%s): %s, %d animatsiya turi"), *Profile, *SM->GetName(), SkelAnims.Num());
 	return true;
@@ -552,6 +576,25 @@ void UErtHeroBody::SkelBuildShield(bool bHas)
 		M.AddSphere(FVector(0, 0, 1.5f), 6.f, 8, IronS, FVector(1, 1, 0.5f));
 		M.Commit(SkelShield, 0, false);
 	}
+}
+
+void UErtHeroBody::SkelBuildCloak()
+{
+	if (!Skel) return;
+	for (UProceduralMeshComponent* C : CloakSegs) if (C) C->DestroyComponent();
+	CloakSegs.Reset(); CloakPitch.Reset();
+	if (!bCloak) return;
+		const FLinearColor CloakS2 = ErtCol::Sty(Cloak, ErtCol::StyleCloth);
+		USceneComponent* Par = Skel; FVector Base(-12.f, 0, 8.f);
+		for (int32 i = 0; i < 4; ++i)
+		{
+			UProceduralMeshComponent* Seg = MakePart(*FString::Printf(TEXT("SkCloak%d"), i), Par, Base);
+			if (i == 0) { Seg->AttachToComponent(Skel, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("spine_03")); Seg->SetRelativeLocation(FVector(-14.f, 0, 10.f)); CloakBaseRot = FRotator(0, 0, 90.f); Seg->SetRelativeRotation(CloakBaseRot); }
+			FErtMeshData Cm; const float Wd = 19.f + i * 1.5f, Ln = 18.f;
+			Cm.AddBox(FVector(0, 0, -Ln * 0.5f), FVector(1.1f, Wd, Ln * 0.5f), i == 3 ? ErtCol::Sty(Cloak * 0.85f, ErtCol::StyleCloth) : CloakS2, FRotator::ZeroRotator);
+			Cm.Commit(Seg, 0, false);
+			CloakSegs.Add(Seg); CloakPitch.Add(0.f); Par = Seg; Base = FVector(0, 0, -Ln);
+		}
 }
 
 void UErtHeroBody::SkelBuildSword()

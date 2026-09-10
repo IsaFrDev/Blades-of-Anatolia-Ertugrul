@@ -2,6 +2,10 @@
 #include "Ertugrul.h"
 #include "ErtCharacter.h"
 #include "ErtEnemy.h"
+#include "ErtFx.h"
+#include "ErtAudio.h"
+#include "Kismet/GameplayStatics.h"
+#include "ErtEnemy.h"
 #include "ErtWorldBuilder.h"
 #include "ErtProcMesh.h"
 #include "Components/CapsuleComponent.h"
@@ -265,6 +269,26 @@ void AErtHorse::Tick(float Dt)
 	if (bDead) return;
 	if (!Rider && Health < MaxHealth) Health = FMath::Min(MaxHealth, Health + (3.f + 4.f * Care) * Dt);
 	Care = FMath::Max(0.f, Care - Dt / 900.f); CareFxT = FMath::Max(0.f, CareFxT - Dt);
+	// Chopib bosib o'tish: chavandoz bilan 550+ sm/s da oldindagi dushmanlar zarar oladi va uloqtiriladi
+	TrampleT -= Dt;
+	if (Rider && CurSpeed > 550.f && TrampleT <= 0.f)
+	{
+		TrampleT = 0.12f;
+		const FVector Ahead = GetActorLocation() + GetActorForwardVector() * 150.f;
+		TArray<AActor*> All; UGameplayStatics::GetAllActorsOfClass(this, AErtEnemy::StaticClass(), All);
+		for (AActor* A : All)
+		{
+			AErtEnemy* E = Cast<AErtEnemy>(A); if (!E || E->IsDead() || E->IsAnimal()) continue;
+			if (AErtCharacter* Rc = Cast<AErtCharacter>(Rider)) if (E->Team == 1) continue;   // ittifoqchilarni bosmaydi
+			if (FVector::Dist2D(E->GetActorLocation(), Ahead) > 170.f) continue;
+			const float Dmg = 18.f + CurSpeed * 0.03f;
+			E->ApplyHit(Dmg, Rider, true);
+			if (!E->IsDead()) E->LaunchCharacter(((E->GetActorLocation() - GetActorLocation()).GetSafeNormal2D() * 0.7f + GetActorForwardVector() * 0.5f) * 700.f + FVector(0, 0, 320.f), true, true);
+			AErtBurst::Blood(GetWorld(), E->GetActorLocation() + FVector(0, 0, 60.f), GetActorForwardVector() + FVector(0, 0, 0.4f), 1.2f);
+			FErtAudio::PlaySfx(GetWorld(), TEXT("hit"), E->GetActorLocation(), 0.9f, 0.7f);
+			CurSpeed *= 0.85f;   // urilishdan sekinlashadi
+		}
+	}
 	UCharacterMovementComponent* CM = GetCharacterMovement();
 	if (Rider)
 	{

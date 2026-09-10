@@ -85,6 +85,8 @@ private:
 	UPROPERTY(Transient) TObjectPtr<USceneComponent> Root;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> Pelvis;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> Torso;
+	UPROPERTY(Transient) TArray<TObjectPtr<UProceduralMeshComponent>> CloakSegs;   // dinamik plash bo'g'inlari (yelkadan pastga)
+	TArray<float> CloakPitch; float CloakPrevSpeed = 0.f; FRotator CloakBaseRot = FRotator::ZeroRotator;   // skelet: suyak o'qiga moslash
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> Head;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> UpperArmL;
 	UPROPERTY(Transient) TObjectPtr<UProceduralMeshComponent> UpperArmR;
@@ -115,6 +117,7 @@ private:
 public:
 	void SetSheathed(bool bOn); bool IsSheathed() const { return bSheathed; }
 	void SkelBuildShield(bool bHas);
+	void SkelBuildCloak();
 private:
 	bool TryBuildSkeletal(USceneComponent* Parent, float HalfH);
 	class UAnimSequence* SkelPick(const FString& Key, int32 Index = -1) const;

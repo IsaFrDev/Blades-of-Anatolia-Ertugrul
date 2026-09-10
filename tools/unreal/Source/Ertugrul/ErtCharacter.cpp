@@ -207,7 +207,11 @@ void AErtCharacter::DoAttack(int32 Kind, float DamageMul, bool bGuardBreak, floa
 			if (!E || Done.Contains(E) || E->IsAlly()) continue;
 			Done.Add(E);
 			// IJRO: gangigan yoki holdan toygan (<25%) raqib - bir zarbda
-			const bool bExecute = Kind != 3 && ((E->IsStaggered() && !E->IsBoss()) || E->GetHealth() < E->GetMaxHealth() * E->ExecuteThreshold());
+			// Yashirin zarba: dushman sezmagan va orqasidan (oldinga yo'nalishi bizga qarama-qarshi) bo'lsa - bir zarbada
+			const FVector ToMe = (GetActorLocation() - E->GetActorLocation()).GetSafeNormal2D();
+			const bool bStealthKill = Kind != 3 && !E->IsBoss() && !E->IsAlerted() && FVector::DotProduct(E->GetActorForwardVector(), ToMe) < -0.25f && FVector::Dist2D(E->GetActorLocation(), GetActorLocation()) < 210.f;
+			if (bStealthKill) { StealthKills++; if (AErtGameMode* GMs = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) { GMs->ShopMsg = TEXT("Yashirin zarba!"); GMs->ShopMsgT = 1.5f; } }
+			const bool bExecute = bStealthKill || (Kind != 3 && ((E->IsStaggered() && !E->IsBoss()) || E->GetHealth() < E->GetMaxHealth() * E->ExecuteThreshold()));
 			if (bExecute) { ExecuteFlash = 1.f; if (AErtGameMode* GM = Cast<AErtGameMode>(UGameplayStatics::GetGameMode(this))) GM->Rumble(0.9f, 0.25f); }
 			const float Dmg = bExecute ? 999.f : AttackDamage * WarriorMelee * DamageMul * (RiposteT > 0.f ? 2.f : 1.f);
 			const float HpBefore = E->GetHealth();
@@ -1466,6 +1470,7 @@ void AErtCharacter::SetWarrior(int32 W)
 	if (Body)
 	{
 		Body->bAxe = Warrior == 1;
+		Body->bCloak = true;   // dinamik plash (Ertug'rul qizil, Turg'ut jigarrang, Meryem ko'k)
 		if (Warrior == 1) { Body->Kaftan = FLinearColor(0.20f, 0.16f, 0.12f); Body->Trim = FLinearColor(0.55f, 0.45f, 0.25f); Body->Cloak = FLinearColor(0.25f, 0.12f, 0.08f); }
 		else if (Warrior == 2) { Body->Kaftan = FLinearColor(0.18f, 0.28f, 0.38f); Body->Trim = FLinearColor(0.85f, 0.75f, 0.45f); Body->Cloak = FLinearColor(0.15f, 0.22f, 0.32f); }
 		else { Body->Kaftan = FLinearColor(0.35f, 0.08f, 0.07f); Body->Trim = FLinearColor(0.85f, 0.70f, 0.25f); Body->Cloak = FLinearColor(0.35f, 0.08f, 0.07f); }
