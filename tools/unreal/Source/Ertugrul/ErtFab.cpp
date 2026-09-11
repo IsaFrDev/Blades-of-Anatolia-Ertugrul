@@ -58,15 +58,37 @@ void FErtFabLib::Scan()
 	// Paketlangan o'yinda registr oldindan tayyor (AssetRegistry.bin) va asinxron yuklanadi - tugashini kutamiz
 	if (AR.IsLoadingAssets()) { AR.WaitForCompletion(); UE_LOG(LogErtugrul, Log, TEXT("Fab: asset registri yuklanishi kutildi")); }
 	int32 Found = 0;
+	{	// Diagnostika: registr holati (paketda nima ko'rinadi)
+		TArray<FAssetData> All; AR.GetAllAssets(All, true);
+		TArray<FAssetData> SMs; AR.GetAssetsByClass(FTopLevelAssetPath(TEXT("/Script/Engine"), TEXT("StaticMesh")), SMs, true);
+		TArray<FAssetData> Ert; AR.GetAssetsByPath(FName(TEXT("/Game/ErtAssets")), Ert, true);
+		UE_LOG(LogErtugrul, Log, TEXT("Fab diag: registr jami %d, StaticMesh %d, /Game/ErtAssets %d, yuklanmoqda %d, misol %s"), All.Num(), SMs.Num(), Ert.Num(), AR.IsLoadingAssets() ? 1 : 0, SMs.Num() ? *SMs[0].GetObjectPathString() : TEXT("-"));
+	}
+	// Yozuvlar: registrdan (muharrir) + fab_manifest.json dan (paketda registr to'liq emas)
+	struct FEnt { FString Path, Name; };
+	TArray<FEnt> Ents; TSet<FString> Seen;
 	for (const FString& Root : ScanPaths)
 	{
 		TArray<FAssetData> Assets;
 		AR.GetAssetsByPath(FName(*Root), Assets, true);
-		if (Assets.Num() == 0) { TArray<FAssetData> AllSM; AR.GetAssetsByClass(FTopLevelAssetPath(TEXT("/Script/Engine"), TEXT("StaticMesh")), AllSM, true); for (const FAssetData& A : AllSM) if (A.PackagePath.ToString().StartsWith(Root)) Assets.Add(A); }
-		for (const FAssetData& A : Assets)
+		for (const FAssetData& A : Assets) { if (A.AssetClassPath.GetAssetName() != TEXT("StaticMesh")) continue; const FString P = A.GetObjectPathString(); if (!Seen.Contains(P)) { Seen.Add(P); Ents.Add({P, A.AssetName.ToString()}); } }
+	}
+	const int32 FromRegistry = Ents.Num();
+	{
+		FString MJ;
+		if (FFileHelper::LoadFileToString(MJ, *(FPaths::ProjectContentDir() / TEXT("Ertugrul/Data/fab_manifest.json"))))
 		{
-			if (A.AssetClassPath.GetAssetName() != TEXT("StaticMesh")) continue;
-			const FString Name = A.AssetName.ToString().ToLower();
+			TSharedPtr<FJsonObject> MR; const TSharedRef<TJsonReader<>> Rd = TJsonReaderFactory<>::Create(MJ);
+			const TArray<TSharedPtr<FJsonValue>>* Arr = nullptr;
+			if (FJsonSerializer::Deserialize(Rd, MR) && MR.IsValid() && MR->TryGetArrayField(TEXT("meshes"), Arr))
+				for (const TSharedPtr<FJsonValue>& V : *Arr) { const FString P = V->AsString(); if (Seen.Contains(P)) continue; Seen.Add(P); FString Nm = P; int32 Dot = -1; if (Nm.FindLastChar(TEXT('.'), Dot)) Nm = Nm.Mid(Dot + 1); Ents.Add({P, Nm}); }
+		}
+	}
+	UE_LOG(LogErtugrul, Log, TEXT("Fab: %d mesh yozuvi (registrdan %d, manifestdan %d)"), Ents.Num(), FromRegistry, Ents.Num() - FromRegistry);
+	{
+		for (const FEnt& A : Ents)
+		{
+			const FString Name = A.Name.ToLower();
 			TArray<UStaticMesh*>* Target = nullptr;
 			if (Name.Contains(TEXT("yurt")) || Name.Contains(TEXT("ger_"))) Target = &Yurts;
 			else if (Name.Contains(TEXT("tent"))) Target = &Tents;
@@ -86,7 +108,7 @@ void FErtFabLib::Scan()
 			if (Name.Contains(TEXT("_lod")) && !Name.EndsWith(TEXT("lod0"))) continue;
 			// Ko'p qismli importlarning qism-meshlari (SM_PH_x_1, _2 ...): buyumlar uchun faqat asosiy mesh
 			if (Target == &Props) { int32 Us = -1; if (Name.FindLastChar(TEXT('_'), Us) && Us + 1 < Name.Len() && FChar::IsDigit(Name[Us + 1]) && Name.Mid(Us + 1).IsNumeric() && Name.Mid(Us + 1).Len() <= 2 && !Name.Contains(TEXT("_0"))) continue; }
-			if (UStaticMesh* M = Cast<UStaticMesh>(A.GetAsset())) { M->AddToRoot(); Target->AddUnique(M); ++Found; }   // GC himoyasi
+			if (UStaticMesh* M = LoadObject<UStaticMesh>(nullptr, *A.Path)) { M->AddToRoot(); Target->AddUnique(M); ++Found; }   // GC himoyasi
 		}
 	}
 	UE_LOG(LogErtugrul, Log, TEXT("Fab kutubxonasi: daraxt %d, qarag'ay %d, qoya %d, buta %d, o't %d, buyum %d, to'nka %d; o'tov %d, uy %d, darvoza %d, quduq %d, arava %d, rasta %d, chodir %d (registrdan %d)"), Trees.Num(), Pines.Num(), Rocks.Num(), Bushes.Num(), Grass.Num(), Props.Num(), Stumps.Num(), Yurts.Num(), Houses.Num(), Gates.Num(), Wells.Num(), Carts.Num(), Stalls.Num(), Tents.Num(), Found);
